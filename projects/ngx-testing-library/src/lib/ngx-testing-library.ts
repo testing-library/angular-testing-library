@@ -15,10 +15,10 @@ export async function createComponent<T>(
   { detectChanges = true, declarations = [], providers = [], imports = [], schemas = [] }: Options,
 ): Promise<Result> {
   const isTemplate = typeof templateOrComponent === 'string';
-  const extraDeclarations = isTemplate ? [TestComponent] : [];
+  const testComponent = isTemplate ? [TestComponent] : [];
 
   TestBed.configureTestingModule({
-    declarations: [...declarations, ...extraDeclarations],
+    declarations: [...declarations, ...testComponent],
     providers: [...providers],
     imports: [...imports],
     schemas: [...schemas],
@@ -37,15 +37,16 @@ export async function createComponent<T>(
   let fixture;
   if (isTemplate) {
     fixture = TestBed.createComponent(TestComponent);
-    if (detectChanges) {
-      fixture.detectChanges();
-    }
   } else {
     const { component, parameters = [] } = <ComponentInput<T>>templateOrComponent;
     fixture = TestBed.createComponent(component);
     for (const key of Object.keys(parameters)) {
       fixture.componentInstance[key] = parameters[key];
     }
+  }
+
+  if (detectChanges) {
+    fixture.detectChanges();
   }
 
   // Currently this isn't perfect because the typings from dom-testing-library are for TS 2.8
