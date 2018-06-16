@@ -24,26 +24,11 @@ export async function createComponent<T>(
     schemas: [...schemas],
   });
 
-  if (isTemplate) {
-    TestBed.overrideComponent(TestComponent, {
-      set: {
-        template: <string>templateOrComponent,
-      },
-    });
-  }
+  const fixture = isTemplate
+    ? createTestComponentFixture(<string>templateOrComponent)
+    : createComponentFixture(<ComponentInput<T>>templateOrComponent);
 
   await TestBed.compileComponents();
-
-  let fixture;
-  if (isTemplate) {
-    fixture = TestBed.createComponent(TestComponent);
-  } else {
-    const { component, parameters = [] } = <ComponentInput<T>>templateOrComponent;
-    fixture = TestBed.createComponent(component);
-    for (const key of Object.keys(parameters)) {
-      fixture.componentInstance[key] = parameters[key];
-    }
-  }
 
   if (detectChanges) {
     fixture.detectChanges();
@@ -62,4 +47,22 @@ export async function createComponent<T>(
     detectChanges: (checkNoChanges?: boolean) => fixture.detectChanges(checkNoChanges),
     ...getQueriesForElement(fixture.nativeElement),
   };
+}
+
+function createTestComponentFixture(template: string) {
+  TestBed.overrideComponent(TestComponent, {
+    set: {
+      template: template,
+    },
+  });
+  return TestBed.createComponent(TestComponent);
+}
+
+function createComponentFixture<T>(componentInput: ComponentInput<T>) {
+  const { component, parameters = {} } = componentInput;
+  const fixture = TestBed.createComponent(component);
+  for (const key of Object.keys(parameters)) {
+    fixture.componentInstance[key] = parameters[key];
+  }
+  return fixture;
 }
