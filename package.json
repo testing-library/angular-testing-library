@@ -6,7 +6,6 @@
     "start": "ng serve",
     "build": "ng build --prod ngx-testing-library",
     "postbuild": "cp ./README.md ./dist/ngx-testing-library",
-    "pretest": "npm run build",
     "test": "npm run test:lib && npm run build && npm run test:app",
     "test:lib": "jest --config ./jest.lib.config.js",
     "test:app": "jest --config ./jest.app.config.js",
