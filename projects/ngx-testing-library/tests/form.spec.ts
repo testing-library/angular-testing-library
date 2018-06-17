@@ -45,13 +45,10 @@ export class LoginFormComponent {
 
 test('login form submits', async () => {
   const fakeUser = { username: 'jackiechan', password: 'hiya! 🥋' };
-  const { getComponentInstance, container, getByLabelText, getByText } = await createComponent(
-    `<login-form></login-form>`,
-    {
-      declarations: [LoginFormComponent],
-      imports: [ReactiveFormsModule],
-    },
-  );
+  const { getComponentInstance, getByLabelText, getByText } = await createComponent(`<login-form></login-form>`, {
+    declarations: [LoginFormComponent],
+    imports: [ReactiveFormsModule],
+  });
 
   const loginForm = getComponentInstance<LoginFormComponent>('login-form');
   loginForm.handleLogin.emit = jest.fn();

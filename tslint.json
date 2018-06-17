@@ -60,7 +60,6 @@
         "variable-declaration": "nospace"
       }
     ],
-    "unified-signatures": true,
     "variable-name": false,
     "whitespace": [true, "check-branch", "check-decl", "check-operator", "check-separator", "check-type"],
     "no-output-on-prefix": true,

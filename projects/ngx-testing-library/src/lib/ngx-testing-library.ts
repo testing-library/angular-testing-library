@@ -8,12 +8,12 @@ import { Options, Result, ComponentInput } from './models';
 @Component({ selector: 'test-component', template: '' })
 class TestComponent {}
 
-export async function createComponent(template: string, options: Options): Promise<Result>;
-export async function createComponent<T>(component: ComponentInput<T>, options: Options): Promise<Result>;
+export async function createComponent<T>(template: string, options: Options): Promise<Result<T>>;
+export async function createComponent<T>(component: ComponentInput<T>, options: Options): Promise<Result<T>>;
 export async function createComponent<T>(
   templateOrComponent: string | ComponentInput<T>,
   { detectChanges = true, declarations = [], providers = [], imports = [], schemas = [] }: Options,
-): Promise<Result> {
+): Promise<Result<T>> {
   const isTemplate = typeof templateOrComponent === 'string';
   const testComponent = isTemplate ? [TestComponent] : [];
 
@@ -39,12 +39,10 @@ export async function createComponent<T>(
     fixture,
     container: fixture.nativeElement,
     get: TestBed.get,
-    getComponentInstance: <C>(selectorOrComponent: string | C) =>
-      typeof selectorOrComponent === 'string'
-        ? fixture.debugElement.query(By.css(selectorOrComponent)).componentInstance
-        : fixture.componentInstance,
-    debug: () => console.log(prettyDOM(fixture.nativeElement)),
+    getComponentInstance: <C = T>(selector?: string) =>
+      selector ? fixture.debugElement.query(By.css(selector)).componentInstance : fixture.componentInstance,
     detectChanges: (checkNoChanges?: boolean) => fixture.detectChanges(checkNoChanges),
+    debug: () => console.log(prettyDOM(fixture.nativeElement)),
     ...getQueriesForElement(fixture.nativeElement),
   };
 }

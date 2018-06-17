@@ -1,9 +1,9 @@
 import { Type } from '@angular/core';
 
-export interface Result {
+export interface Result<T> {
   container: any;
   get: (token: any, notFoundValue?: any) => any;
-  getComponentInstance: <T>(selectorOrComponent: string | Type<T>) => T;
+  getComponentInstance: <I = T>(selector?: string) => I;
   debug: () => void;
   detectChanges: (checkNoChanges?: boolean) => void;
   fixture: any;

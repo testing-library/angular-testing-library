@@ -56,7 +56,7 @@ test('Counter actions - fireEvent', async () => {
 });
 
 test('Counter actions via component', async () => {
-  const { getComponentInstance } = await createComponent<CounterComponent>(
+  const { getComponentInstance } = await createComponent(
     {
       component: CounterComponent,
       parameters: {
@@ -68,7 +68,7 @@ test('Counter actions via component', async () => {
     },
   );
 
-  const counter = getComponentInstance(CounterComponent);
+  const counter = getComponentInstance();
   counter.increment();
   counter.increment();
   counter.increment();
@@ -79,7 +79,7 @@ test('Counter actions via component', async () => {
 });
 
 test('Counter actions via component without parameters', async () => {
-  const { getComponentInstance } = await createComponent<CounterComponent>(
+  const { getComponentInstance } = await createComponent(
     {
       component: CounterComponent,
     },
@@ -88,7 +88,7 @@ test('Counter actions via component without parameters', async () => {
     },
   );
 
-  const counter = getComponentInstance(CounterComponent);
+  const counter = getComponentInstance();
   counter.increment();
   counter.increment();
   counter.increment();
@@ -99,7 +99,7 @@ test('Counter actions via component without parameters', async () => {
 });
 
 test('Counter via component - test template', async () => {
-  const { getByText, detectChanges, getByTestId } = await createComponent<CounterComponent>(
+  const { getByText, detectChanges, getByTestId } = await createComponent(
     {
       component: CounterComponent,
       parameters: {
