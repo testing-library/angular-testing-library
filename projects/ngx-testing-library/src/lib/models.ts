@@ -1,12 +1,13 @@
 import { Type } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
 
 export interface Result<T> {
-  container: any;
-  get: (token: any, notFoundValue?: any) => any;
-  getComponentInstance: <I = T>(selector?: string) => I;
+  container: HTMLElement;
+  getFromTestBed: (token: any, notFoundValue?: any) => any;
+  getComponentInstance: <C = T>(selector?: string) => C;
   debug: () => void;
   detectChanges: (checkNoChanges?: boolean) => void;
-  fixture: any;
+  fixture: ComponentFixture<any>;
   queryByPlaceholderText: any;
   queryAllByPlaceholderText: any;
   getByPlaceholderText: any;

@@ -102,9 +102,9 @@ Runs `detectChanges` on the fixture.
 
 The Angular fixture.
 
-#### `get(token: any, notFoundValue?: any) => any`
+#### `getFromTestBed(token: any, notFoundValue?: any) => any`
 
-Is the Angular `TestBed.get` function.
+Calls the the Angular `TestBed.get` function.
 
 #### `getComponentInstance(selector?: string) => T`
 

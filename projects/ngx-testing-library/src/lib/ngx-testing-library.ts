@@ -38,7 +38,7 @@ export async function createComponent<T>(
   return {
     fixture,
     container: fixture.nativeElement,
-    get: TestBed.get,
+    getFromTestBed: TestBed.get,
     getComponentInstance: <C = T>(selector?: string) => {
       if (isTemplate && !selector) {
         throw new Error('When using the template syntax, you must provide a selector');
