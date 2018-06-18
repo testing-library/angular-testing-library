@@ -1,6 +1,6 @@
 # ngx-testing-library
 
-> Lightweight ulitity functions to test Angular components.
+> Lightweight utility functions to test Angular components.
 
 [![Styled with prettier][prettier-badge]][prettier]
 [![npm][npm-badge]][npm]
