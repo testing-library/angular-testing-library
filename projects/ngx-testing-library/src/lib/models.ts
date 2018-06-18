@@ -4,7 +4,6 @@ import { ComponentFixture } from '@angular/core/testing';
 export interface Result<T> {
   container: HTMLElement;
   getFromTestBed: (token: any, notFoundValue?: any) => any;
-  getComponentInstance: <C = T>(selector?: string) => C;
   debug: () => void;
   detectChanges: (checkNoChanges?: boolean) => void;
   fixture: ComponentFixture<any>;

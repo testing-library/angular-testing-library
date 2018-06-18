@@ -76,11 +76,15 @@ The second parameter in `createComponent` is the `options` parameter, which look
 }
 ```
 
-`detectChanges`: runs `detectChanges` on the fixture<br/>
-`declarations`: passed to the `TestBed`<br/>
-`providers`: passed to the `TestBed`<br/>
-`imports`: passed to the `TestBed`<br/>
-`schemas`: passed to the `TestBed`<br/>
+`detectChanges`: runs `detectChanges` on the fixture
+
+`declarations`: passed to the `TestBed`
+
+`providers`: passed to the `TestBed`
+
+`imports`: passed to the `TestBed`
+
+`schemas`: passed to the `TestBed`
 
 The `createComponent` function returns an object consisting all of the query functions from [dom-testing-library][dom-testing-library] and adds the following properties:
 
@@ -105,12 +109,6 @@ The Angular fixture.
 #### `getFromTestBed(token: any, notFoundValue?: any) => any`
 
 Calls the the Angular `TestBed.get` function.
-
-#### `getComponentInstance(selector?: string) => T`
-
-Gets the Angular component instance.
-
-The `selector` is required when the template syntax is being used, in order to get the component.
 
 ### `fireEvent`
 

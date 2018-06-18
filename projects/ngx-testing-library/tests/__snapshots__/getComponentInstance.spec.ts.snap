@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`template syntax throws an error when no selector is passed 1`] = `"When using the template syntax, you must provide a selector"`;

@@ -39,12 +39,6 @@ export async function createComponent<T>(
     fixture,
     container: fixture.nativeElement,
     getFromTestBed: TestBed.get,
-    getComponentInstance: <C = T>(selector?: string) => {
-      if (isTemplate && !selector) {
-        throw new Error('When using the template syntax, you must provide a selector');
-      }
-      return selector ? fixture.debugElement.query(By.css(selector)).componentInstance : fixture.componentInstance;
-    },
     detectChanges: (checkNoChanges?: boolean) => fixture.detectChanges(checkNoChanges),
     debug: () => console.log(prettyDOM(fixture.nativeElement)),
     ...getQueriesForElement(fixture.nativeElement),

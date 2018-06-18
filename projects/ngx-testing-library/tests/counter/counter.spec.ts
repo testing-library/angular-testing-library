@@ -36,45 +36,6 @@ test('Counter actions via template syntax', async () => {
 });
 
 test('Counter actions via component syntax', async () => {
-  const { getComponentInstance } = await createComponent(
-    {
-      component: CounterComponent,
-      parameters: {
-        counter: 10,
-      },
-    },
-    {
-      declarations: [CounterComponent],
-    },
-  );
-
-  const counter = getComponentInstance();
-  counter.increment();
-  expect(counter.counter).toBe(11);
-
-  counter.decrement();
-  expect(counter.counter).toBe(10);
-});
-
-test('Counter actions via component syntax without parameters', async () => {
-  const { getComponentInstance } = await createComponent(
-    {
-      component: CounterComponent,
-    },
-    {
-      declarations: [CounterComponent],
-    },
-  );
-
-  const counter = getComponentInstance();
-  counter.increment();
-  expect(counter.counter).toBe(1);
-
-  counter.decrement();
-  expect(counter.counter).toBe(0);
-});
-
-test('Counter actions via component syntax and dom-testing-library functions', async () => {
   const { getByText, detectChanges, getByTestId } = await createComponent(
     {
       component: CounterComponent,
@@ -96,4 +57,25 @@ test('Counter actions via component syntax and dom-testing-library functions', a
   detectChanges();
   expect(getByText('Current Count: 10')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 10');
+});
+
+test('Counter actions via component syntax without parameters', async () => {
+  const { getByText, detectChanges, getByTestId } = await createComponent(
+    {
+      component: CounterComponent,
+    },
+    {
+      declarations: [CounterComponent],
+    },
+  );
+
+  getByText('+').click();
+  detectChanges();
+  expect(getByText('Current Count: 1')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 1');
+
+  getByText('-').click();
+  detectChanges();
+  expect(getByText('Current Count: 0')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 0');
 });
