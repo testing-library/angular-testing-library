@@ -1,5 +1,5 @@
 import { Component, Input, Injectable } from '@angular/core';
-import { createComponent, fireEvent } from '../src/public_api';
+import { createComponent } from '../src/public_api';
 
 @Component({
   selector: 'fixture',

@@ -9,7 +9,7 @@ test(`matches snapshot`, async () => {
 });
 
 test(`should have a title`, async () => {
-  const { detectChanges, getByText } = await createComponent('<app-root></app-root>', {
+  const { getByText } = await createComponent('<app-root></app-root>', {
     declarations: [AppComponent],
   });
   expect(getByText('Welcome to app!')).toBeDefined();

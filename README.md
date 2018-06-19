@@ -86,7 +86,9 @@ The second parameter in `createComponent` is the `options` parameter, which look
 
 `schemas`: passed to the `TestBed`
 
-The `createComponent` function returns an object consisting all of the query functions from [dom-testing-library][dom-testing-library] and adds the following properties:
+The `createComponent` function returns an object consisting all of the query functions from [dom-testing-library][dom-testing-library], all the event functions exposed from `fireEvent`, and adds the following properties:
+
+> Every event runs `detectChanges` on the fixture.
 
 #### `container: HTMLElement`
 
@@ -98,10 +100,6 @@ All of the [dom-testing-library][dom-testing-library] query functions are binded
 
 Prints out the container.
 
-#### `detectChanges(checkNoChanges?: boolean) => void`
-
-Runs `detectChanges` on the fixture.
-
 #### `fixture: any`
 
 The Angular fixture.
@@ -109,16 +107,6 @@ The Angular fixture.
 #### `getFromTestBed(token: any, notFoundValue?: any) => any`
 
 Calls the the Angular `TestBed.get` function.
-
-### `fireEvent`
-
-Exposes the `fireEvent` from [dom-testing-library](dom-testing-library).
-
-```ts
-import { fireEvent } from 'ngx-testing-library';
-
-fireEvent.click(buttonNode);
-```
 
 ## Usage
 
@@ -161,7 +149,7 @@ import { AppComponent } from './app.component';
 import { createComponent } from 'ngx-testing-library';
 
 it(`should have as title 'my-awesome-app'`, async () => {
-  const { detectChanges, getByText } = await createComponent('<app-root></app-root>', {
+  const { getByText } = await createComponent('<app-root></app-root>', {
     declarations: [AppComponent],
   });
   expect(getByText('Welcome to my-awesome-app!')).toBeDefined();

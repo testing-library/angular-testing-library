@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { createComponent, fireEvent } from '../../src/public_api';
+import { createComponent } from '../../src/public_api';
 
 @Component({
   selector: 'counter',
@@ -20,23 +20,21 @@ export class CounterComponent {
 }
 
 test('Counter actions via template syntax', async () => {
-  const { detectChanges, getByText, getByTestId } = await createComponent('<counter [counter]="10"></counter>', {
+  const { getByText, getByTestId, click } = await createComponent('<counter [counter]="10"></counter>', {
     declarations: [CounterComponent],
   });
 
-  fireEvent.click(getByText('+'));
-  detectChanges();
+  click(getByText('+'));
   expect(getByText('Current Count: 11')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 11');
 
-  getByText('-').click();
-  detectChanges();
+  click(getByText('-'));
   expect(getByText('Current Count: 10')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 10');
 });
 
 test('Counter actions via component syntax', async () => {
-  const { getByText, detectChanges, getByTestId } = await createComponent(
+  const { getByText, getByTestId, click } = await createComponent(
     {
       component: CounterComponent,
       parameters: {
@@ -48,19 +46,17 @@ test('Counter actions via component syntax', async () => {
     },
   );
 
-  getByText('+').click();
-  detectChanges();
+  click(getByText('+'));
   expect(getByText('Current Count: 11')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 11');
 
-  getByText('-').click();
-  detectChanges();
+  click(getByText('-'));
   expect(getByText('Current Count: 10')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 10');
 });
 
 test('Counter actions via component syntax without parameters', async () => {
-  const { getByText, detectChanges, getByTestId } = await createComponent(
+  const { getByText, getByTestId, click } = await createComponent(
     {
       component: CounterComponent,
     },
@@ -69,13 +65,11 @@ test('Counter actions via component syntax without parameters', async () => {
     },
   );
 
-  getByText('+').click();
-  detectChanges();
+  click(getByText('+'));
   expect(getByText('Current Count: 1')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 1');
 
-  getByText('-').click();
-  detectChanges();
+  click(getByText('-'));
   expect(getByText('Current Count: 0')).toBeTruthy();
   expect(getByTestId('count').textContent).toBe('Current Count: 0');
 });

@@ -1,7 +1,7 @@
 import { Component, NgModule, Type } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { getQueriesForElement, prettyDOM } from 'dom-testing-library';
+import { getQueriesForElement, prettyDOM, fireEvent } from 'dom-testing-library';
 
 import { Options, Result, ComponentInput } from './models';
 
@@ -34,13 +34,21 @@ export async function createComponent<T>(
     fixture.detectChanges();
   }
 
-  // Currently this isn't perfect because the typings from dom-testing-library are for TS 2.8
+  const eventsWithChangeDetection = Object.keys(fireEvent).reduce((events, key) => {
+    events[key] = (element: HTMLElement, options?: {}) => {
+      const result = fireEvent[key](element, options);
+      fixture.detectChanges();
+      return result;
+    };
+    return events;
+  }, {});
+
   return {
     fixture,
     container: fixture.nativeElement,
     getFromTestBed: TestBed.get,
-    detectChanges: (checkNoChanges?: boolean) => fixture.detectChanges(checkNoChanges),
     debug: () => console.log(prettyDOM(fixture.nativeElement)),
+    ...eventsWithChangeDetection,
     ...getQueriesForElement(fixture.nativeElement),
   };
 }
