@@ -7,8 +7,8 @@
     "build": "ng build --prod ngx-testing-library",
     "postbuild": "cp ./README.md ./dist/ngx-testing-library",
     "test": "npm run test:lib && npm run build && npm run test:app",
-    "test:lib": "jest --config ./jest.lib.config.js",
-    "test:app": "jest --config ./jest.app.config.js",
+    "test:lib": "jest --config ./projects/jest.lib.config.js",
+    "test:app": "jest --config ./src/jest.app.config.js",
     "precommit": "lint-staged",
     "lint": "ng lint",
     "e2e": "ng e2e"
