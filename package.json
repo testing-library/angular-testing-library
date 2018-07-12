@@ -41,7 +41,7 @@
     "@angular/language-service": "^6.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
-    "dom-testing-library": "^2.5.0",
+    "dom-testing-library": "^3.0.0",
     "husky": "^0.14.3",
     "jest": "^23.1.0",
     "jest-preset-angular": "^5.2.2",
