@@ -110,7 +110,7 @@ Calls the the Angular `TestBed.get` function.
 
 ## Usage
 
-You can find some examples in the [tests folder](https://github.com/tdeschryver/ngx-testing-library/tree/master/projects/ngx-testing-library/tests).
+You can find some examples in the [tests folder](https://github.com/timdeschryver/ngx-testing-library/tree/master/projects/ngx-testing-library/tests).
 
 Here is how "default" specifications are written with `ngx-testing-library`.
 
@@ -177,7 +177,7 @@ MIT
 [npm-badge]: https://img.shields.io/npm/v/ngx-testing-library.svg
 [npm]: https://www.npmjs.com/package/ngx-testing-library
 [license-badge]: https://img.shields.io/npm/l/ngx-testing-library.svg?style=flat-square
-[license]: https://github.com/tdeschryver/ngx-testing-library/blob/master/LICENSE
+[license]: https://github.com/timdeschryver/ngx-testing-library/blob/master/LICENSE
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/tdeschryver/ngx-testing-library/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/timdeschryver/ngx-testing-library/blob/master/CODE_OF_CONDUCT.md
 [dom-testing-library]: https://github.com/kentcdodds/dom-testing-library
