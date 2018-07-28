@@ -79,7 +79,7 @@ jobs:
           key: *dist_key
       - run:
          name: release
-         command: cd dist/ngx-testing-library && npm run semantic-release || true
+         command: npm run semantic-release || true
 
 workflows:
   version: 2

@@ -1,19 +1,18 @@
-import { Component, NgModule, Type } from '@angular/core';
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { getQueriesForElement, prettyDOM, fireEvent } from 'dom-testing-library';
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { getQueriesForElement, prettyDOM, fireEvent, FireFunction, FireObject } from 'dom-testing-library';
 
-import { Options, Result, ComponentInput } from './models';
+import { Options, RenderResult, ComponentInput } from './models';
 
 @Component({ selector: 'test-component', template: '' })
 class TestComponent {}
 
-export async function createComponent<T>(template: string, options: Options): Promise<Result<T>>;
-export async function createComponent<T>(component: ComponentInput<T>, options: Options): Promise<Result<T>>;
+export async function createComponent<T>(template: string, options: Options): Promise<RenderResult>;
+export async function createComponent<T>(component: ComponentInput<T>, options: Options): Promise<RenderResult>;
 export async function createComponent<T>(
   templateOrComponent: string | ComponentInput<T>,
   { detectChanges = true, declarations = [], providers = [], imports = [], schemas = [] }: Options,
-): Promise<Result<T>> {
+): Promise<RenderResult> {
   const isTemplate = typeof templateOrComponent === 'string';
   const testComponent = isTemplate ? [TestComponent] : [];
 
@@ -34,21 +33,24 @@ export async function createComponent<T>(
     fixture.detectChanges();
   }
 
-  const eventsWithChangeDetection = Object.keys(fireEvent).reduce((events, key) => {
-    events[key] = (element: HTMLElement, options?: {}) => {
-      const result = fireEvent[key](element, options);
-      fixture.detectChanges();
-      return result;
-    };
-    return events;
-  }, {});
+  const eventsWithDetectChanges = Object.keys(fireEvent).reduce(
+    (events, key) => {
+      events[key] = (element: HTMLElement, options?: {}) => {
+        const result = fireEvent[key](element, options);
+        fixture.detectChanges();
+        return result;
+      };
+      return events;
+    },
+    {} as FireObject,
+  );
 
   return {
     fixture,
     container: fixture.nativeElement,
     getFromTestBed: TestBed.get,
     debug: () => console.log(prettyDOM(fixture.nativeElement)),
-    ...eventsWithChangeDetection,
+    ...eventsWithDetectChanges,
     ...getQueriesForElement(fixture.nativeElement),
   };
 }

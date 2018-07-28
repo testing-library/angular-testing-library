@@ -3,7 +3,7 @@
 exports[`matches snapshot 1`] = `
 <div
   id="root0"
-  ng-version="6.0.4"
+  ng-version="6.1.0"
 >
   <app-root>
     <div
