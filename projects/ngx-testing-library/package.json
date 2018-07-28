@@ -1,6 +1,6 @@
 {
   "name": "ngx-testing-library",
-  "version": "0.0.5",
+  "version": "0.0.0-semantically-released",
   "description": "Test your Angular components with the dom-testing-library",
   "repository": {
     "type": "git",

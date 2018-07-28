@@ -1,0 +1,107 @@
+version: 2
+
+job_defaults: &job_defaults
+  docker:
+    - image: circleci/node:latest
+  working_directory: ~/project/repo
+
+cache_key: &cache_key ngx-testing-library-deps-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+dist_key: &dist_key ngx-testing-library-dist
+
+jobs:
+  install:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run:
+          name: install-dependencies
+          command: npm ci
+      - save_cache:
+          key: *cache_key
+          paths:
+            - node_modules
+
+  lint:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run:
+          name: lint
+          command: npm run lint
+
+  test-lib:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run:
+          name: test
+          command: npm run test
+
+  build-lib:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run:
+          name: test
+          command: npm run build
+      - save_cache:
+          key: *dist_key
+          paths:
+              - dist
+
+  test-app:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - restore_cache:
+          key: *dist_key
+      - run:
+          name: test
+          command: npm run test:app
+
+  release:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - restore_cache:
+          key: *dist_key
+      - run:
+         name: release
+         command: cd dist/ngx-testing-library && npm run semantic-release || true
+
+workflows:
+  version: 2
+  build-test-release:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - test-lib:
+          requires:
+            - install
+      - build-lib:
+          requires:
+            - lint
+            - test-lib
+      - test-app:
+          requires:
+            - build-lib
+      - release:
+          requires:
+            - test-app
+          filters:
+            branches:
+              only: master

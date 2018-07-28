@@ -1,17 +1,16 @@
 {
   "name": "ngx-testing-library-app",
-  "version": "0.0.0",
+  "version": "0.0.0-semantically-released",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod ngx-testing-library",
     "postbuild": "cp ./README.md ./dist/ngx-testing-library",
-    "test": "npm run test:lib && npm run build && npm run test:app",
-    "test:lib": "jest --config ./projects/jest.lib.config.js",
+    "test": "jest --config ./projects/jest.lib.config.js",
     "test:app": "jest --config ./src/jest.app.config.js",
     "precommit": "lint-staged",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "semantic-release": "semantic-release"
   },
   "lint-staged": {
     "*.{ts,json,md}": [
@@ -53,6 +52,7 @@
     "tsickle": ">=0.25.5",
     "tslib": "^1.7.1",
     "tslint": "~5.9.1",
-    "typescript": "^2.7.2"
+    "typescript": "^2.7.2",
+    "semantic-release": "^15.8.1"
   }
 }
