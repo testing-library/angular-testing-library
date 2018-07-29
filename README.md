@@ -2,8 +2,9 @@
 
 > Lightweight utility functions to test Angular components.
 
-[![Styled with prettier][prettier-badge]][prettier]
+[![Build status][build-badge]][build]
 [![npm][npm-badge]][npm]
+[![Styled with prettier][prettier-badge]][prettier]
 [![MIT License][license-badge]][license]
 [![Code of Conduct][coc-badge]][coc]
 
@@ -112,7 +113,7 @@ Calls the the Angular `TestBed.get` function.
 
 You can find some examples in the [tests folder](https://github.com/timdeschryver/ngx-testing-library/tree/master/projects/ngx-testing-library/tests).
 
-Here is how "default" specifications are written with `ngx-testing-library`.
+Here is how the "default" specifications can be written with `ngx-testing-library`.
 
 Before:
 
@@ -133,7 +134,7 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('my-awesome-app');
   }));
 
-  it('should render title in a h1 tag', async(() => {
+  it(`should render title in a h1 tag`, async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
@@ -145,8 +146,8 @@ describe('AppComponent', () => {
 After:
 
 ```ts
-import { AppComponent } from './app.component';
 import { createComponent } from 'ngx-testing-library';
+import { AppComponent } from './app.component';
 
 it(`should have as title 'my-awesome-app'`, async () => {
   const { getByText } = await createComponent('<app-root></app-root>', {
@@ -172,6 +173,8 @@ it(`should render title in a h1 tag`, async () => {
 
 MIT
 
+[build-badge]: https://circleci.com/gh/timdeschryver/ngx-testing-library/tree/master.svg?style=shield
+[build]: https://circleci.com/gh/timdeschryver/ngx-testing-library/tree/master
 [prettier-badge]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
 [prettier]: https://github.com/prettier/prettier
 [npm-badge]: https://img.shields.io/npm/v/ngx-testing-library.svg
