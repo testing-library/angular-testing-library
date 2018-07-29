@@ -1,11 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { getQueriesForElement, prettyDOM, fireEvent, FireFunction, FireObject } from 'dom-testing-library';
+import { getQueriesForElement, prettyDOM, fireEvent, FireObject } from 'dom-testing-library';
 
 import { Options, RenderResult, ComponentInput } from './models';
 
 @Component({ selector: 'test-component', template: '' })
-class TestComponent {}
+class TestComponent implements OnInit {
+  constructor(private elemtRef: ElementRef) {}
+
+  ngOnInit() {
+    this.elemtRef.nativeElement.removeAttribute('ng-version');
+  }
+}
 
 export async function createComponent<T>(template: string, options: Options): Promise<RenderResult>;
 export async function createComponent<T>(component: ComponentInput<T>, options: Options): Promise<RenderResult>;
