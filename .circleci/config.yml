@@ -6,7 +6,7 @@ job_defaults: &job_defaults
   working_directory: ~/project/repo
 
 cache_key: &cache_key ngx-testing-library-deps-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-dist_key: &dist_key ngx-testing-library-dist
+dist_key: &dist_key ngx-testing-library-dist-{{ .Revision }}
 
 jobs:
   install:
