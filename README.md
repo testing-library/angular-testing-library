@@ -4,6 +4,7 @@
 
 [![Build status][build-badge]][build]
 [![npm][npm-badge]][npm]
+[![Semantically released][sr-badge]][sr]
 [![Styled with prettier][prettier-badge]][prettier]
 [![MIT License][license-badge]][license]
 [![Code of Conduct][coc-badge]][coc]
@@ -14,8 +15,13 @@
 - [Why](#why)
 - [What](#what)
 - [How](#how)
+  - [`createComponent`](#createcomponent)
+    - [`container: HTMLElement`](#container-htmlelement)
+    - [`debug() => void`](#debug--void)
+    - [`fixture: any`](#fixture-any)
+    - [`getFromTestBed(token: any, notFoundValue?: any) => any`](#getfromtestbedtoken-any-notfoundvalue-any--any)
 - [Usage](#usage)
-- [Licence](#license)
+- [LICENSE](#license)
 
 ## Installation
 
@@ -31,7 +37,7 @@ Install `ngx-testing-library` from [npm] and add it your `devDependencies`:
 ## What
 
 ngx-testing-library is an Angular adapter around [dom-testing-library][dom-testing-library],
-which provides lightweight ulitity functions to test UI components. Your tests will work with actual DOM nodes.
+which provides lightweight utility functions to test UI components. Your tests will work with actual DOM nodes.
 
 ## How
 
@@ -175,6 +181,8 @@ MIT
 
 [build-badge]: https://circleci.com/gh/timdeschryver/ngx-testing-library/tree/master.svg?style=shield
 [build]: https://circleci.com/gh/timdeschryver/ngx-testing-library/tree/master
+[sr-badge]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+[sr]: https://github.com/semantic-release/semantic-release
 [prettier-badge]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
 [prettier]: https://github.com/prettier/prettier
 [npm-badge]: https://img.shields.io/npm/v/ngx-testing-library.svg
