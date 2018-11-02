@@ -1,7 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/ngx-testing-library",
-  "deleteDestPath": false,
+  "dest": "../../dist/@angular-extensions/testing-library",
   "lib": {
     "entryFile": "src/public_api.ts"
   },

@@ -1,5 +1,5 @@
 import { AppComponent } from './app.component';
-import { createComponent } from 'ngx-testing-library';
+import { createComponent } from '@angular-extensions/testing-library';
 
 test(`matches snapshot`, async () => {
   const { container } = await createComponent('<app-root></app-root>', {

@@ -6,7 +6,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './form.component.html',
 })
 export class LoginFormComponent {
-  @Output() handleLogin = new EventEmitter<{ username: string; password: string }>();
+  @Output()
+  handleLogin = new EventEmitter<{ username: string; password: string }>();
 
   loginForm: FormGroup;
   constructor(private fb: FormBuilder) {

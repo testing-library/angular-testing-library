@@ -1,10 +1,10 @@
 {
-  "name": "ngx-testing-library",
+  "name": "@angular-extensions/testing-library",
   "version": "0.0.0-semantically-released",
   "description": "Test your Angular components with the dom-testing-library",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/timdeschryver/ngx-testing-library.git"
+    "url": "git+https://github.com/angular-extensions/testing-library.git"
   },
   "keywords": [
     "angular",
@@ -13,14 +13,15 @@
     "typescript",
     "angular2",
     "test",
-    "dom-testing-library"
+    "dom-testing-library",
+    "angular-extensions"
   ],
   "author": "Tim Deschryver",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tdeschrtimdeschryveryver/ngx-testing-library/issues"
+    "url": "https://github.com/angular-extensions/testing-library/issues"
   },
-  "homepage": "https://github.com/timdeschryver/ngx-testing-library#readme",
+  "homepage": "https://github.com/angular-extensions/testing-library#readme",
   "peerDependencies": {
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0"

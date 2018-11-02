@@ -1,4 +1,4 @@
-# ngx-testing-library
+# testing-library
 
 > Lightweight utility functions to test Angular components.
 
@@ -25,9 +25,9 @@
 
 ## Installation
 
-Install `ngx-testing-library` from [npm] and add it your `devDependencies`:
+Install `@angular-extensions/testing-library` from [npm] and add it your `devDependencies`:
 
-`npm install ngx-testing-library --save-dev`
+`npm install @angular-extensions/testing-library --save-dev`
 
 ## Why
 
@@ -36,7 +36,7 @@ Install `ngx-testing-library` from [npm] and add it your `devDependencies`:
 
 ## What
 
-ngx-testing-library is an Angular adapter around [dom-testing-library][dom-testing-library],
+`@angular-extensions/testing-library` is an Angular adapter around [dom-testing-library][dom-testing-library],
 which provides lightweight utility functions to test UI components. Your tests will work with actual DOM nodes.
 
 ## How
@@ -50,7 +50,7 @@ This method can be used in two ways:
 Based on a template:
 
 ```ts
-import { createComponent } from 'ngx-testing-library';
+import { createComponent } from '@angular-extensions/testing-library';
 
 createComponent('<my-component [prop]="1"></my-component>', options);
 ```
@@ -58,7 +58,7 @@ createComponent('<my-component [prop]="1"></my-component>', options);
 Based on a component type:
 
 ```ts
-import { createComponent } from 'ngx-testing-library';
+import { createComponent } from '@angular-extensions/testing-library';
 
 createComponent(
   {
@@ -117,9 +117,9 @@ Calls the the Angular `TestBed.get` function.
 
 ## Usage
 
-You can find some examples in the [tests folder](https://github.com/timdeschryver/ngx-testing-library/tree/master/projects/ngx-testing-library/tests).
+You can find some examples in the [tests folder](https://github.com/angular-extensions/testing-library/tree/master/projects/testing-library/tests).
 
-Here is how the "default" specifications can be written with `ngx-testing-library`.
+Here is how the "default" specifications can be written with `@angular-extensions/testing-library`.
 
 Before:
 
@@ -152,7 +152,7 @@ describe('AppComponent', () => {
 After:
 
 ```ts
-import { createComponent } from 'ngx-testing-library';
+import { createComponent } from '@angular-extensions/testing-library';
 import { AppComponent } from './app.component';
 
 it(`should have as title 'my-awesome-app'`, async () => {
@@ -179,16 +179,16 @@ it(`should render title in a h1 tag`, async () => {
 
 MIT
 
-[build-badge]: https://circleci.com/gh/timdeschryver/ngx-testing-library/tree/master.svg?style=shield
-[build]: https://circleci.com/gh/timdeschryver/ngx-testing-library/tree/master
+[build-badge]: https://circleci.com/gh/angular-extensions/testing-library/tree/master.svg?style=shield
+[build]: https://circleci.com/gh/angular-extensions/testing-library/tree/master
 [sr-badge]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [sr]: https://github.com/semantic-release/semantic-release
 [prettier-badge]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
 [prettier]: https://github.com/prettier/prettier
-[npm-badge]: https://img.shields.io/npm/v/ngx-testing-library.svg
-[npm]: https://www.npmjs.com/package/ngx-testing-library
-[license-badge]: https://img.shields.io/npm/l/ngx-testing-library.svg?style=flat-square
-[license]: https://github.com/timdeschryver/ngx-testing-library/blob/master/LICENSE
+[npm-badge]: https://img.shields.io/npm/v/testing-library.svg
+[npm]: https://www.npmjs.com/package/testing-library
+[license-badge]: https://img.shields.io/npm/l/testing-library.svg?style=flat-square
+[license]: https://github.com/angular-extensions/testing-library/blob/master/LICENSE
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/timdeschryver/ngx-testing-library/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/angular-extensions/testing-library/blob/master/CODE_OF_CONDUCT.md
 [dom-testing-library]: https://github.com/kentcdodds/dom-testing-library
