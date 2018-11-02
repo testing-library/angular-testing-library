@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-testing-library-app": {
+    "testing-library-app": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-testing-library-app",
+            "outputPath": "dist/testing-library-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -45,18 +45,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-testing-library-app:build"
+            "browserTarget": "testing-library-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-testing-library-app:build:production"
+              "browserTarget": "testing-library-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-testing-library-app:build"
+            "browserTarget": "testing-library-app:build"
           }
         },
         "lint": {
@@ -68,33 +68,33 @@
         }
       }
     },
-    "ngx-testing-library": {
-      "root": "projects/ngx-testing-library",
-      "sourceRoot": "projects/ngx-testing-library/src",
+    "testing-library": {
+      "root": "projects/testing-library",
+      "sourceRoot": "projects/testing-library/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ngx-testing-library/tsconfig.lib.json",
-            "project": "projects/ngx-testing-library/ng-package.json"
+            "tsConfig": "projects/testing-library/tsconfig.lib.json",
+            "project": "projects/testing-library/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-testing-library/ng-package.prod.json"
+              "project": "projects/testing-library/ng-package.prod.json"
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["projects/ngx-testing-library/tsconfig.lib.json", "./tsconfig.spec.json"],
+            "tsConfig": ["projects/testing-library/tsconfig.lib.json", "./tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "ngx-testing-library-app"
+  "defaultProject": "testing-library-app"
 }

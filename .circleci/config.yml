@@ -5,8 +5,8 @@ job_defaults: &job_defaults
     - image: circleci/node:latest
   working_directory: ~/project/repo
 
-cache_key: &cache_key ngx-testing-library-deps-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-dist_key: &dist_key ngx-testing-library-dist-{{ .Revision }}
+cache_key: &cache_key testing-library-deps-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+dist_key: &dist_key testing-library-dist-{{ .Revision }}
 
 jobs:
   install:
