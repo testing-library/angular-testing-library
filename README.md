@@ -185,9 +185,9 @@ MIT
 [sr]: https://github.com/semantic-release/semantic-release
 [prettier-badge]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
 [prettier]: https://github.com/prettier/prettier
-[npm-badge]: https://img.shields.io/npm/v/testing-library.svg
-[npm]: https://www.npmjs.com/package/testing-library
-[license-badge]: https://img.shields.io/npm/l/testing-library.svg?style=flat-square
+[npm-badge]: https://img.shields.io/npm/v/@angular-extensions/testing-library.svg
+[npm]: https://www.npmjs.com/package/@angular-extensions/testing-library
+[license-badge]: https://img.shields.io/npm/l/@angular-extensions/testing-library.svg?style=flat-square
 [license]: https://github.com/angular-extensions/testing-library/blob/master/LICENSE
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
 [coc]: https://github.com/angular-extensions/testing-library/blob/master/CODE_OF_CONDUCT.md
