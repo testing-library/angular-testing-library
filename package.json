@@ -21,9 +21,6 @@
   "release": {
     "pkgRoot": "dist/@angular-extensions/testing-library"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@angular/animations": "^7.0.0",
     "@angular/common": "^7.0.0",
