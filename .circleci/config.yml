@@ -5,7 +5,7 @@ job_defaults: &job_defaults
     - image: circleci/node:latest
   working_directory: ~/project/repo
 
-cache_key: &cache_key testing-library-deps-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+cache_key: &cache_key testing-library-deps-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
 dist_key: &dist_key testing-library-dist-{{ .Revision }}
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
           key: *cache_key
       - run:
           name: install-dependencies
-          command: npm ci
+          command: yarn
       - save_cache:
           key: *cache_key
           paths:
@@ -31,7 +31,7 @@ jobs:
           key: *cache_key
       - run:
           name: lint
-          command: npm run lint
+          command: yarn lint
 
   test-lib:
     <<: *job_defaults
@@ -41,7 +41,7 @@ jobs:
           key: *cache_key
       - run:
           name: test
-          command: npm run test
+          command: yarn test
 
   build-lib:
     <<: *job_defaults
@@ -51,7 +51,7 @@ jobs:
           key: *cache_key
       - run:
           name: test
-          command: npm run build
+          command: yarn build
       - save_cache:
           key: *dist_key
           paths:
@@ -67,7 +67,7 @@ jobs:
           key: *dist_key
       - run:
           name: test
-          command: npm run test:app
+          command: yarn test:app
 
   release:
     <<: *job_defaults
@@ -79,7 +79,7 @@ jobs:
           key: *dist_key
       - run:
          name: release
-         command: npm run semantic-release || true
+         command: yarn semantic-release || true
 
 workflows:
   version: 2
