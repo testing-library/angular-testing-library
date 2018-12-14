@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { getQueriesForElement, prettyDOM, fireEvent, FireObject } from 'dom-testing-library';
+import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from 'dom-testing-library';
 
 import { Options, RenderResult, ComponentInput } from './models';
 
@@ -48,7 +48,7 @@ export async function createComponent<T>(
       };
       return events;
     },
-    {} as FireObject,
+    {} as FireFunction & FireObject,
   );
 
   return {
