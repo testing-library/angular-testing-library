@@ -1,6 +1,10 @@
-# testing-library
+# @angular-extensions/testing-library
 
-> Lightweight utility functions to test Angular components.
+Lightweight utility functions to test Angular components.
+
+[**Read The Docs**](https://testing-library.com/angular) | [Edit the docs](https://github.com/alexkrolick/testing-library-docs) 
+
+<hr />
 
 [![Build status][build-badge]][build]
 [![npm][npm-badge]][npm]
@@ -191,4 +195,4 @@ MIT
 [license]: https://github.com/angular-extensions/testing-library/blob/master/LICENSE
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
 [coc]: https://github.com/angular-extensions/testing-library/blob/master/CODE_OF_CONDUCT.md
-[dom-testing-library]: https://github.com/kentcdodds/dom-testing-library
+[dom-testing-library]: https://testing-library.com/
