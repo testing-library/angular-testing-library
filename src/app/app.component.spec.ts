@@ -1,5 +1,7 @@
 import { AppComponent } from './app.component';
-import { createComponent } from '@angular-extensions/testing-library';
+import { createComponent, configureJestSetup } from '@angular-extensions/testing-library';
+
+configureJestSetup();
 
 test(`matches snapshot`, async () => {
   const { container } = await createComponent('<app-root></app-root>', {
