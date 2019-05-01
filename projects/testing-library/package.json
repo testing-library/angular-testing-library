@@ -27,7 +27,7 @@
     "@angular/core": "^7.0.0"
   },
   "dependencies": {
-    "dom-testing-library": "^3.11.1"
+    "dom-testing-library": "^4.0.1"
   },
   "publishConfig": {
     "access": "public"

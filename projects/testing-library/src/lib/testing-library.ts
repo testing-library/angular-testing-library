@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from 'dom-testing-library';
 
-import { Options, RenderResult, ComponentInput } from './models';
+import { RenderResult, Options, ComponentInput } from './models';
 
 @Component({ selector: 'test-component', template: '' })
 class TestComponent implements OnInit {
@@ -55,9 +55,9 @@ export async function render<T>(
     fixture,
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
-    ...eventsWithDetectChanges,
     ...getQueriesForElement(fixture.nativeElement),
-  };
+    ...eventsWithDetectChanges,
+  } as any;
 }
 
 function createTestComponentFixture(template: string) {
