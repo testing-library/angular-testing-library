@@ -1,11 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { createComponent } from '../../src/public_api';
+import { render } from '../../src/public_api';
 
 @Component({
   selector: 'counter',
   template: `
-    <button (click)="decrement()">-</button>
-    <span data-testid="count">Current Count: {{ counter }}</span>
+    <button (click)="decrement()">-</button> <span data-testid="count">Current Count: {{ counter }}</span>
     <button (click)="increment()">+</button>
   `,
 })
@@ -21,7 +20,7 @@ export class CounterComponent {
 }
 
 test('Counter actions via template syntax', async () => {
-  const { getByText, getByTestId, click } = await createComponent('<counter [counter]="10"></counter>', {
+  const { getByText, getByTestId, click } = await render('<counter [counter]="10"></counter>', {
     declarations: [CounterComponent],
   });
 
@@ -35,7 +34,7 @@ test('Counter actions via template syntax', async () => {
 });
 
 test('Counter actions via component syntax', async () => {
-  const { getByText, getByTestId, click } = await createComponent(
+  const { getByText, getByTestId, click } = await render(
     {
       component: CounterComponent,
       parameters: {
@@ -57,7 +56,7 @@ test('Counter actions via component syntax', async () => {
 });
 
 test('Counter actions via component syntax without parameters', async () => {
-  const { getByText, getByTestId, click } = await createComponent(
+  const { getByText, getByTestId, click } = await render(
     {
       component: CounterComponent,
     },
