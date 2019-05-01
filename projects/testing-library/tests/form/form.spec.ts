@@ -1,5 +1,5 @@
 import { ReactiveFormsModule } from '@angular/forms';
-import { createComponent } from '../../src/public_api';
+import { render } from '../../src/public_api';
 import { LoginFormComponent } from './form.component';
 
 test('login form submits using the component syntax', async () => {
@@ -8,7 +8,7 @@ test('login form submits using the component syntax', async () => {
     emit: jest.fn(),
   };
 
-  const { container, getByLabelText, getByText, input, submit } = await createComponent(
+  const { container, getByLabelText, getByText, input, submit } = await render(
     {
       component: LoginFormComponent,
       parameters: {

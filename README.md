@@ -24,7 +24,7 @@ Lightweight utility functions to test Angular components.
 - [Why](#why)
 - [What](#what)
 - [How](#how)
-  - [`createComponent`](#createcomponent)
+  - [`render`](#render)
     - [`container: HTMLElement`](#container-htmlelement)
     - [`debug(element: HTMLElement) => void`](#debug--void)
     - [`fixture: any`](#fixture-any)
@@ -49,26 +49,26 @@ which provides lightweight utility functions to test UI components. Your tests w
 
 ## How
 
-### `createComponent`
+### `render`
 
-This library only consists of one function, `createComponent` which is used to setup the Angular `TestBed` and creates the component fixture.
+This library only consists of one function, `render` which is used to setup the Angular `TestBed` and creates the component fixture.
 
 This method can be used in two ways:
 
 Based on a template:
 
 ```ts
-import { createComponent } from '@angular-extensions/testing-library';
+import { render } from '@angular-extensions/testing-library';
 
-createComponent('<my-component [prop]="1"></my-component>', options);
+render('<my-component [prop]="1"></my-component>', options);
 ```
 
 Based on a component type:
 
 ```ts
-import { createComponent } from '@angular-extensions/testing-library';
+import { render } from '@angular-extensions/testing-library';
 
-createComponent(
+render(
   {
     component: MyComponent,
     parameters: {
@@ -79,7 +79,7 @@ createComponent(
 );
 ```
 
-The second parameter in `createComponent` is the `options` parameter, which looks like this:
+The second parameter in `render` is the `options` parameter, which looks like this:
 
 ```ts
 {
@@ -101,7 +101,7 @@ The second parameter in `createComponent` is the `options` parameter, which look
 
 `schemas`: passed to the `TestBed`
 
-The `createComponent` function returns an object consisting all of the query functions from [dom-testing-library][dom-testing-library], all the event functions exposed from `fireEvent`, and adds the following properties:
+The `render` function returns an object consisting all of the query functions from [dom-testing-library][dom-testing-library], all the event functions exposed from `fireEvent`, and adds the following properties:
 
 > Every event runs `detectChanges` on the fixture.
 
@@ -139,13 +139,13 @@ describe('AppComponent', () => {
   }));
 
   it(`should have as title 'my-awesome-app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.render(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('my-awesome-app');
   }));
 
   it(`should render title in a h1 tag`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.render(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain('Welcome to my-awesome-app!');
@@ -156,18 +156,18 @@ describe('AppComponent', () => {
 After:
 
 ```ts
-import { createComponent } from '@angular-extensions/testing-library';
+import { render } from '@angular-extensions/testing-library';
 import { AppComponent } from './app.component';
 
 it(`should have as title 'my-awesome-app'`, async () => {
-  const { getByText } = await createComponent('<app-root></app-root>', {
+  const { getByText } = await render('<app-root></app-root>', {
     declarations: [AppComponent],
   });
   expect(getByText('Welcome to my-awesome-app!')).toBeDefined();
 });
 
 it(`should render title in a h1 tag`, async () => {
-  const { container } = await createComponent(
+  const { container } = await render(
     {
       component: AppComponent,
     },

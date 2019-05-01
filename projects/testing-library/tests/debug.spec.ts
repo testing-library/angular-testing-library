@@ -1,15 +1,17 @@
 import { Component, Input } from '@angular/core';
-import { createComponent } from '../src/public_api';
+import { render } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
-  template: `<p>rawr</p>`,
+  template: `
+    <p>rawr</p>
+  `,
 })
 class FixtureComponent {}
 
 test('debug', async () => {
   jest.spyOn(console, 'log').mockImplementation(() => {});
-  const { debug } = await createComponent('<fixture></fixture>', {
+  const { debug } = await render('<fixture></fixture>', {
     declarations: [FixtureComponent],
   });
   debug();

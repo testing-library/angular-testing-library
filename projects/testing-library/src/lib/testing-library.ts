@@ -13,9 +13,9 @@ class TestComponent implements OnInit {
   }
 }
 
-export async function createComponent<T>(template: string, options: Options): Promise<RenderResult>;
-export async function createComponent<T>(component: ComponentInput<T>, options: Options): Promise<RenderResult>;
-export async function createComponent<T>(
+export async function render<T>(template: string, options: Options): Promise<RenderResult>;
+export async function render<T>(component: ComponentInput<T>, options: Options): Promise<RenderResult>;
+export async function render<T>(
   templateOrComponent: string | ComponentInput<T>,
   { detectChanges = true, declarations = [], providers = [], imports = [], schemas = [] }: Options,
 ): Promise<RenderResult> {
