@@ -2,15 +2,20 @@
 
 Lightweight utility functions to test Angular components.
 
-[**Read The Docs**](https://testing-library.com/angular) | [Edit the docs](https://github.com/alexkrolick/testing-library-docs) 
+[**Read The Docs**](https://testing-library.com/angular) | [Edit the docs](https://github.com/alexkrolick/testing-library-docs)
 
 <hr />
 
 [![Build status][build-badge]][build]
+
 [![npm][npm-badge]][npm]
+
 [![Semantically released][sr-badge]][sr]
+
 [![Styled with prettier][prettier-badge]][prettier]
+
 [![MIT License][license-badge]][license]
+
 [![Code of Conduct][coc-badge]][coc]
 
 ## Table of Contents
@@ -23,7 +28,6 @@ Lightweight utility functions to test Angular components.
     - [`container: HTMLElement`](#container-htmlelement)
     - [`debug() => void`](#debug--void)
     - [`fixture: any`](#fixture-any)
-    - [`getFromTestBed(token: any, notFoundValue?: any) => any`](#getfromtestbedtoken-any-notfoundvalue-any--any)
 - [Usage](#usage)
 - [LICENSE](#license)
 
@@ -114,10 +118,6 @@ Prints out the container.
 #### `fixture: any`
 
 The Angular fixture.
-
-#### `getFromTestBed(token: any, notFoundValue?: any) => any`
-
-Calls the the Angular `TestBed.get` function.
 
 ## Usage
 
