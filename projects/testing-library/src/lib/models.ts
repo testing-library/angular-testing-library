@@ -6,16 +6,18 @@ export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in ke
 
 export interface RenderResult extends RenderResultQueries, FireObject {
   container: HTMLElement;
-  debug: (element: HTMLElement) => void;
+  debug: (element?: HTMLElement) => void;
   fixture: ComponentFixture<any>;
 }
 
-export interface Options {
+export interface RenderOptions<W = any, Q extends Queries = typeof queries> {
   detectChanges?: boolean;
   declarations: any[];
   providers?: any[];
   imports?: any[];
   schemas?: any[];
+  queries?: Q;
+  wrapper?: Type<W>;
 }
 
 export interface ComponentInput<T> {

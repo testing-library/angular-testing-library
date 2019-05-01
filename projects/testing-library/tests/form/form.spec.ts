@@ -23,7 +23,7 @@ test('login form submits using the component syntax', async () => {
 
   const usernameNode = getByLabelText(/username/i) as HTMLInputElement;
   const passwordNode = getByLabelText(/password/i) as HTMLInputElement;
-  const submitButtonNode = getByText(/submit/i);
+  const submitButtonNode = getByText(/submit/i) as HTMLButtonElement;
   const formNode = container.querySelector('form');
 
   input(usernameNode, {

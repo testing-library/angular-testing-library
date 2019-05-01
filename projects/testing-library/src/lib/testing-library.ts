@@ -1,11 +1,11 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from 'dom-testing-library';
 
-import { RenderResult, Options, ComponentInput } from './models';
+import { RenderResult, RenderOptions, ComponentInput } from './models';
 
-@Component({ selector: 'test-component', template: '' })
-class TestComponent implements OnInit {
+@Component({ selector: 'wrapper-component', template: '' })
+class WrapperComponent implements OnInit {
   constructor(private elemtRef: ElementRef) {}
 
   ngOnInit() {
@@ -13,14 +13,22 @@ class TestComponent implements OnInit {
   }
 }
 
-export async function render<T>(template: string, options: Options): Promise<RenderResult>;
-export async function render<T>(component: ComponentInput<T>, options: Options): Promise<RenderResult>;
+export async function render<T>(template: string, renderOptions: RenderOptions): Promise<RenderResult>;
+export async function render<T>(component: ComponentInput<T>, renderOptions: RenderOptions): Promise<RenderResult>;
 export async function render<T>(
   templateOrComponent: string | ComponentInput<T>,
-  { detectChanges = true, declarations = [], providers = [], imports = [], schemas = [] }: Options,
+  {
+    detectChanges = true,
+    declarations = [],
+    imports = [],
+    providers = [],
+    schemas = [],
+    queries,
+    wrapper = WrapperComponent,
+  }: RenderOptions,
 ): Promise<RenderResult> {
   const isTemplate = typeof templateOrComponent === 'string';
-  const testComponent = isTemplate ? [TestComponent] : [];
+  const testComponent = isTemplate ? [wrapper] : [];
 
   TestBed.configureTestingModule({
     declarations: [...declarations, ...testComponent],
@@ -30,7 +38,7 @@ export async function render<T>(
   });
 
   const fixture = isTemplate
-    ? createTestComponentFixture(<string>templateOrComponent)
+    ? createWrapperComponentFixture(wrapper, <string>templateOrComponent)
     : createComponentFixture(<ComponentInput<T>>templateOrComponent);
 
   await TestBed.compileComponents();
@@ -55,20 +63,26 @@ export async function render<T>(
     fixture,
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
-    ...getQueriesForElement(fixture.nativeElement),
+    ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
   } as any;
 }
 
-function createTestComponentFixture(template: string) {
-  TestBed.overrideComponent(TestComponent, {
+/**
+ * Creates the wrapper component and sets its the template to the to-be-tested component
+ */
+function createWrapperComponentFixture<T>(wrapper: Type<T>, template: string) {
+  TestBed.overrideComponent(wrapper, {
     set: {
       template: template,
     },
   });
-  return TestBed.createComponent(TestComponent);
+  return TestBed.createComponent(wrapper);
 }
 
+/**
+ * Creates the components and sets its properties via the provided properties from `componentInput`
+ */
 function createComponentFixture<T>(componentInput: ComponentInput<T>) {
   const { component, parameters = {} } = componentInput;
   const fixture = TestBed.createComponent(component);

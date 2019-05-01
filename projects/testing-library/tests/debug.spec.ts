@@ -5,6 +5,7 @@ import { render } from '../src/public_api';
   selector: 'fixture',
   template: `
     <p>rawr</p>
+    <button data-testid="btn">I'm a button</button>
   `,
 })
 class FixtureComponent {}
@@ -14,7 +15,23 @@ test('debug', async () => {
   const { debug } = await render('<fixture></fixture>', {
     declarations: [FixtureComponent],
   });
+
   debug();
+
   expect(console.log).toBeCalledWith(expect.stringContaining('rawr'));
+  (<any>console.log).mockRestore();
+});
+
+test('debug allows to be called with an element', async () => {
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+  const { debug, getByTestId } = await render('<fixture></fixture>', {
+    declarations: [FixtureComponent],
+  });
+  const btn = getByTestId('btn');
+
+  debug(btn);
+
+  expect(console.log).not.toBeCalledWith(expect.stringContaining('rawr'));
+  expect(console.log).toBeCalledWith(expect.stringContaining(`I'm a button`));
   (<any>console.log).mockRestore();
 });
