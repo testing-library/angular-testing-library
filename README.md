@@ -26,7 +26,7 @@ Lightweight utility functions to test Angular components.
 - [How](#how)
   - [`createComponent`](#createcomponent)
     - [`container: HTMLElement`](#container-htmlelement)
-    - [`debug() => void`](#debug--void)
+    - [`debug(element: HTMLElement) => void`](#debug--void)
     - [`fixture: any`](#fixture-any)
 - [Usage](#usage)
 - [LICENSE](#license)
@@ -111,7 +111,7 @@ The DOM node containing the Angular component.
 
 All of the [dom-testing-library][dom-testing-library] query functions are binded to this container.
 
-#### `debug() => void`
+#### `debug(element: HTMLElement) => void`
 
 Prints out the container.
 

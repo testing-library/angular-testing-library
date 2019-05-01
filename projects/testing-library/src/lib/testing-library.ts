@@ -54,7 +54,7 @@ export async function createComponent<T>(
   return {
     fixture,
     container: fixture.nativeElement,
-    debug: () => console.log(prettyDOM(fixture.nativeElement)),
+    debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     ...eventsWithDetectChanges,
     ...getQueriesForElement(fixture.nativeElement),
   };
