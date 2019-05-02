@@ -1,8 +1,9 @@
-import { Component, OnInit, ElementRef, Type } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { Component, OnInit, ElementRef, Type, DebugElement } from '@angular/core';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from 'dom-testing-library';
 
-import { RenderResult, RenderOptions, ComponentInput } from './models';
+import { RenderResult, RenderOptions } from './models';
+import { By } from '@angular/platform-browser';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent implements OnInit {
@@ -13,10 +14,8 @@ class WrapperComponent implements OnInit {
   }
 }
 
-export async function render<T>(template: string, renderOptions: RenderOptions): Promise<RenderResult>;
-export async function render<T>(component: ComponentInput<T>, renderOptions: RenderOptions): Promise<RenderResult>;
 export async function render<T>(
-  templateOrComponent: string | ComponentInput<T>,
+  templateOrComponent: string | Type<T>,
   {
     detectChanges = true,
     declarations = [],
@@ -25,7 +24,8 @@ export async function render<T>(
     schemas = [],
     queries,
     wrapper = WrapperComponent,
-  }: RenderOptions,
+    componentProperties = {},
+  }: RenderOptions<T>,
 ): Promise<RenderResult> {
   const isTemplate = typeof templateOrComponent === 'string';
   const testComponent = isTemplate ? [wrapper] : [];
@@ -38,8 +38,8 @@ export async function render<T>(
   });
 
   const fixture = isTemplate
-    ? createWrapperComponentFixture(wrapper, <string>templateOrComponent)
-    : createComponentFixture(<ComponentInput<T>>templateOrComponent);
+    ? createWrapperComponentFixture(templateOrComponent as string, { wrapper, componentProperties })
+    : createComponentFixture(templateOrComponent as Type<T>, { componentProperties });
 
   await TestBed.compileComponents();
 
@@ -71,23 +71,63 @@ export async function render<T>(
 /**
  * Creates the wrapper component and sets its the template to the to-be-tested component
  */
-function createWrapperComponentFixture<T>(wrapper: Type<T>, template: string) {
+function createWrapperComponentFixture<T>(
+  template: string,
+  {
+    wrapper,
+    componentProperties,
+  }: {
+    wrapper: RenderOptions<T>['wrapper'];
+    componentProperties: RenderOptions<T>['componentProperties'];
+  },
+): ComponentFixture<any> {
   TestBed.overrideComponent(wrapper, {
     set: {
       template: template,
     },
   });
-  return TestBed.createComponent(wrapper);
+
+  const fixture = TestBed.createComponent(wrapper);
+  // get the component selector, e.g. <foo color="green"> and <foo> results in foo
+  const componentSelector = template.match(/\<(.*?)\ /) || template.match(/\<(.*?)\>/);
+  if (!componentSelector) {
+    throw Error(`Template ${template} is not valid.`);
+  }
+
+  const sut = fixture.debugElement.query(By.css(componentSelector[1]));
+  setComponentProperties(sut, { componentProperties });
+  return fixture;
 }
 
 /**
- * Creates the components and sets its properties via the provided properties from `componentInput`
+ * Creates the components and sets its properties
  */
-function createComponentFixture<T>(componentInput: ComponentInput<T>) {
-  const { component, parameters = {} } = componentInput;
+function createComponentFixture<T>(
+  component: Type<T>,
+  {
+    componentProperties = {},
+  }: {
+    componentProperties: RenderOptions<T>['componentProperties'];
+  },
+): ComponentFixture<T> {
   const fixture = TestBed.createComponent(component);
-  for (const key of Object.keys(parameters)) {
-    fixture.componentInstance[key] = parameters[key];
+  setComponentProperties(fixture, { componentProperties });
+  return fixture;
+}
+
+/**
+ * Set the component properties
+ */
+function setComponentProperties<T>(
+  fixture: ComponentFixture<T> | DebugElement,
+  {
+    componentProperties = {},
+  }: {
+    componentProperties: RenderOptions<T>['componentProperties'];
+  },
+) {
+  for (const key of Object.keys(componentProperties)) {
+    fixture.componentInstance[key] = componentProperties[key];
   }
   return fixture;
 }

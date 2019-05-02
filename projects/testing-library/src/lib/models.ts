@@ -10,17 +10,13 @@ export interface RenderResult extends RenderResultQueries, FireObject {
   fixture: ComponentFixture<any>;
 }
 
-export interface RenderOptions<W = any, Q extends Queries = typeof queries> {
+export interface RenderOptions<C, Q extends Queries = typeof queries> {
   detectChanges?: boolean;
   declarations: any[];
   providers?: any[];
   imports?: any[];
   schemas?: any[];
+  componentProperties?: Partial<C>;
   queries?: Q;
-  wrapper?: Type<W>;
-}
-
-export interface ComponentInput<T> {
-  component: Type<T>;
-  parameters?: Partial<T>;
+  wrapper?: Type<any>;
 }

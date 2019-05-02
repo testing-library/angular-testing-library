@@ -8,18 +8,13 @@ test('login form submits using the component syntax', async () => {
     emit: jest.fn(),
   };
 
-  const { container, getByLabelText, getByText, input, submit } = await render(
-    {
-      component: LoginFormComponent,
-      parameters: {
-        handleLogin: handleLogin as any,
-      },
+  const { container, getByLabelText, getByText, input, submit } = await render(LoginFormComponent, {
+    declarations: [LoginFormComponent],
+    imports: [ReactiveFormsModule],
+    componentProperties: {
+      handleLogin: handleLogin as any,
     },
-    {
-      declarations: [LoginFormComponent],
-      imports: [ReactiveFormsModule],
-    },
-  );
+  });
 
   const usernameNode = getByLabelText(/username/i) as HTMLInputElement;
   const passwordNode = getByLabelText(/password/i) as HTMLInputElement;
