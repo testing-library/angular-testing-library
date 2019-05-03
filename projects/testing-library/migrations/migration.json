@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "migration-4.0.0": {
+      "version": "4.0.0",
+      "description": "Align API to *-testing-libraries",
+      "factory": "./4_0_0"
+    }
+  }
+}

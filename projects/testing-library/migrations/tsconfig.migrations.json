@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true,
+    "outDir": "../../../dist/@angular-extensions/testing-library/migrations",
+    "noLib": false,
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "removeComments": true,
+    "lib": ["es6"]
+  },
+  "include": ["."]
+}
