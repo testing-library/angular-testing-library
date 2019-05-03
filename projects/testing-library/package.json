@@ -27,9 +27,14 @@
     "@angular/core": "^7.0.0"
   },
   "dependencies": {
-    "dom-testing-library": "^4.0.1"
+    "dom-testing-library": "^4.0.1",
+    "@phenomnomnominal/tsquery": "^3.0.0",
+    "tslint": "^5.16.0"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "ng-update": {
+    "migrations": "./migrations/migration.json"
   }
 }
