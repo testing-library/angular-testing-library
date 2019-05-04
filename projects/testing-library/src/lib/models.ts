@@ -12,7 +12,7 @@ export interface RenderResult extends RenderResultQueries, FireObject {
 
 export interface RenderOptions<C, Q extends Queries = typeof queries> {
   detectChanges?: boolean;
-  declarations: any[];
+  declarations?: any[];
   providers?: any[];
   imports?: any[];
   schemas?: any[];

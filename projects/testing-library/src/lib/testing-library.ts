@@ -28,10 +28,10 @@ export async function render<T>(
   }: RenderOptions<T>,
 ): Promise<RenderResult> {
   const isTemplate = typeof templateOrComponent === 'string';
-  const testComponent = isTemplate ? [wrapper] : [];
+  const componentDeclarations = isTemplate ? [wrapper] : [templateOrComponent];
 
   TestBed.configureTestingModule({
-    declarations: [...declarations, ...testComponent],
+    declarations: [...declarations, ...componentDeclarations],
     providers: [...providers],
     imports: [...imports],
     schemas: [...schemas],
