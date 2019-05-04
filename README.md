@@ -1,198 +1,245 @@
-# @angular-extensions/testing-library
+<div align="center">
+<h1>@angular-extensions/testing-library</h1>
 
-Lightweight utility functions to test Angular components.
+<a href="https://www.emojione.com/emoji/1f994">
+  <img
+    height="80"
+    width="80"
+    alt="hedgehog"
+    src="https://raw.githubusercontent.com/angular-extensions/testing-library/master/other/hedgehog.png"
+  />
+</a>
 
-[**Read The Docs**](https://testing-library.com/angular) | [Edit the docs](https://github.com/alexkrolick/testing-library-docs)
+<p>Simple and complete Angular testing utilities that encourage good testing
+practices.</p>
+
+<br />
+
+[**Read The Docs**](https://testing-library.com/angular) |
+[Edit the docs](https://github.com/alexkrolick/testing-library-docs)
+
+<br />
+</div>
 
 <hr />
 
-[![Build status][build-badge]][build]
-
-[![npm][npm-badge]][npm]
-
-[![Semantically released][sr-badge]][sr]
-
-[![Styled with prettier][prettier-badge]][prettier]
-
+<!-- prettier-ignore-start -->
+[![Build Status][build-badge]][build]
+[![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![Code of Conduct][coc-badge]][coc]
+[![PRs Welcome][prs-badge]][prs] [![Code of Conduct][coc-badge]][coc]
+[![Join the community on Spectrum][spectrum-badge]][spectrum]
+
+[![Watch on GitHub][github-watch-badge]][github-watch]
+[![Star on GitHub][github-star-badge]][github-star]
+[![Tweet][twitter-badge]][twitter]
+<!-- prettier-ignore-end -->
+
+<div align="center">
+  <a href="https://testingjavascript.com">
+    <img
+      width="500"
+      alt="TestingJavaScript.com Learn the smart, efficient way to test any JavaScript application."
+      src="https://raw.githubusercontent.com/testing-library/react-testing-library/master/other/testingjavascript.jpg"
+    />
+  </a>
+</div>
 
 ## Table of Contents
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [The problem](#the-problem)
+- [This solution](#this-solution)
+- [Example](#example)
 - [Installation](#installation)
-- [Why](#why)
-- [What](#what)
-- [How](#how)
-  - [`render`](#render)
-    - [`container: HTMLElement`](#container-htmlelement)
-    - [`debug(element: HTMLElement) => void`](#debug--void)
-    - [`fixture: any`](#fixture-any)
-- [Usage](#usage)
+- [Guiding Principles](#guiding-principles)
+- [Docs](#docs)
+- [Issues](#issues)
+  - [🐛 Bugs](#-bugs)
+  - [💡 Feature Requests](#-feature-requests)
+  - [❓ Questions](#-questions)
 - [LICENSE](#license)
 
-## Installation
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Install `@angular-extensions/testing-library` from [npm] and add it your `devDependencies`:
+## The problem
 
-`npm install @angular-extensions/testing-library --save-dev`
+You want to write maintainable tests for your Angular components. As a part of
+this goal, you want your tests to avoid including implementation details of your
+components and rather focus on making your tests give you the confidence for
+which they are intended. As part of this, you want your testbase to be
+maintainable in the long run so refactors of your components (changes to
+implementation but not functionality) don't break your tests and slow you and
+your team down.
 
-## Why
+## This solution
 
-- test your UI components the way your users are using it
-- making your tests resilient to implementation changes
+The `@angular-extensions/testing-library` is a very lightweight solution for testing Angular
+components. It provides light utility functions on top of `Angular` and
+`dom-testing-library`, in a way that encourages better testing practices. Its
+primary guiding principle is:
 
-## What
+> [The more your tests resemble the way your software is used, the more
+> confidence they can give you.][guiding-principle]
 
-`@angular-extensions/testing-library` is an Angular adapter around [dom-testing-library][dom-testing-library],
-which provides lightweight utility functions to test UI components. Your tests will work with actual DOM nodes.
+## Example
 
-## How
-
-### `render`
-
-This library only consists of one function, `render` which is used to setup the Angular `TestBed` and creates the component fixture.
-
-This method can be used in two ways:
-
-Based on a template:
-
-```ts
-import { render } from '@angular-extensions/testing-library';
-
-render('<my-component [prop]="1"></my-component>', options);
-```
-
-Based on a component type:
+counter.component.ts
 
 ```ts
-import { render } from '@angular-extensions/testing-library';
+@Component({
+  selector: 'counter',
+  template: `
+    <button (click)="decrement()">-</button>
+    <span data-testid="count">Current Count: {{ counter }}</span>
+    <button (click)="increment()">+</button>
+  `,
+})
+export class CounterComponent {
+  @Input() counter = 0;
 
-render(
-  {
-    component: MyComponent,
-    parameters: {
-      prop: 1,
-    },
-  },
-  options,
-);
-```
+  increment() {
+    this.counter += 1;
+  }
 
-The second parameter in `render` is the `options` parameter, which looks like this:
-
-```ts
-{
-  detectChanges?: boolean = true;
-  declarations: any[] = [];
-  providers?: any[] = [];
-  imports?: any[] = [];
-  schemas?: any[] = [];
+  decrement() {
+    this.counter -= 1;
+  }
 }
 ```
 
-`detectChanges`: runs `detectChanges` on the fixture
+counter.component.spec.ts
 
-`declarations`: passed to the `TestBed`
-
-`providers`: passed to the `TestBed`
-
-`imports`: passed to the `TestBed`
-
-`schemas`: passed to the `TestBed`
-
-The `render` function returns an object consisting all of the query functions from [dom-testing-library][dom-testing-library], all the event functions exposed from `fireEvent`, and adds the following properties:
-
-> Every event runs `detectChanges` on the fixture.
-
-#### `container: HTMLElement`
-
-The DOM node containing the Angular component.
-
-All of the [dom-testing-library][dom-testing-library] query functions are binded to this container.
-
-#### `debug(element: HTMLElement) => void`
-
-Prints out the container.
-
-#### `fixture: any`
-
-The Angular fixture.
-
-## Usage
-
-You can find some examples in the [tests folder](https://github.com/angular-extensions/testing-library/tree/master/projects/testing-library/tests).
-
-Here is how the "default" specifications can be written with `@angular-extensions/testing-library`.
-
-Before:
-
-```ts
-import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-
-describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [AppComponent],
-    }).compileComponents();
-  }));
-
-  it(`should have as title 'my-awesome-app'`, async(() => {
-    const fixture = TestBed.render(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('my-awesome-app');
-  }));
-
-  it(`should render title in a h1 tag`, async(() => {
-    const fixture = TestBed.render(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to my-awesome-app!');
-  }));
-});
-```
-
-After:
-
-```ts
+```javascript
 import { render } from '@angular-extensions/testing-library';
-import { AppComponent } from './app.component';
+import CounterComponent from './counter.component.ts';
 
-it(`should have as title 'my-awesome-app'`, async () => {
-  const { getByText } = await render('<app-root></app-root>', {
-    declarations: [AppComponent],
+describe('Counter', () => {
+  test('should render counter', async () => {
+    const { getByText } = await render(CounterComponent, { componentProperties: { counter: 5 } });
+
+    expect(getByText('Current Count: 5'));
   });
-  expect(getByText('Welcome to my-awesome-app!')).toBeDefined();
-});
 
-it(`should render title in a h1 tag`, async () => {
-  const { container } = await render(
-    {
-      component: AppComponent,
-    },
-    {
-      declarations: [AppComponent],
-    },
-  );
-  expect(container.querySelector('h1').textContent).toContain('Welcome to my-awesome-app!');
+  test('should increment the counter on click', async () => {
+    const { getByText, click } = await render(CounterComponent, { componentProperties: { counter: 5 } });
+
+    click(getByText('+'));
+
+    expect(getByText('Current Count: 6'));
+  });
 });
 ```
+
+## Installation
+
+This module is distributed via [npm][npm] which is bundled with [node][node] and
+should be installed as one of your project's `devDependencies`:
+
+```bash
+npm install @angular-extensions/testing-library --save-dev
+```
+
+You may also be interested in installing `jest-dom` so you can use
+[the custom jest matchers](https://github.com/gnapse/jest-dom#readme).
+
+> [**Docs**](https://testing-library.com/angular)
+
+## Guiding Principles
+
+> [The more your tests resemble the way your software is used, the more
+> confidence they can give you.][guiding-principle]
+
+We try to only expose methods and utilities that encourage you to write tests
+that closely resemble how your Angular components are used.
+
+Utilities are included in this project based on the following guiding
+principles:
+
+1.  If it relates to rendering components, it deals with DOM nodes rather than
+    component instances, nor should it encourage dealing with component
+    instances.
+2.  It should be generally useful for testing individual Angular components or
+    full Angular applications.
+3.  Utility implementations and APIs should be simple and flexible.
+
+At the end of the day, what we want is for this library to be pretty
+light-weight, simple, and understandable.
+
+## Docs
+
+[**Read The Docs**](https://testing-library.com/angular) |
+[Edit the docs](https://github.com/alexkrolick/testing-library-docs)
+
+## Issues
+
+_Looking to contribute? Look for the [Good First Issue][good-first-issue]
+label._
+
+### 🐛 Bugs
+
+Please file an issue for bugs, missing documentation, or unexpected behavior.
+
+[**See Bugs**][bugs]
+
+### 💡 Feature Requests
+
+Please file an issue to suggest new features. Vote on feature requests by adding
+a 👍. This helps maintainers prioritize what to work on.
+
+[**See Feature Requests**][requests]
+
+### ❓ Questions
+
+For questions related to using the library, please visit a support community
+instead of filing an issue on GitHub.
+
+- [Spectrum][spectrum]
+- [Stack Overflow][stackoverflow]
 
 ## LICENSE
 
 MIT
 
+<!--
+Links:
+-->
+
+<!-- prettier-ignore-start -->
+
+[npm]: https://www.npmjs.com/
+[node]: https://nodejs.org
 [build-badge]: https://circleci.com/gh/angular-extensions/testing-library/tree/master.svg?style=shield
 [build]: https://circleci.com/gh/angular-extensions/testing-library/tree/master
-[sr-badge]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
-[sr]: https://github.com/semantic-release/semantic-release
-[prettier-badge]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
-[prettier]: https://github.com/prettier/prettier
-[npm-badge]: https://img.shields.io/npm/v/@angular-extensions/testing-library.svg
-[npm]: https://www.npmjs.com/package/@angular-extensions/testing-library
+[version-badge]: https://img.shields.io/npm/v/@angular-extensions/testing-library.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@angular-extensions/testing-library
+[downloads-badge]: https://img.shields.io/npm/dm/@angular-extensions/testing-library.svg?style=flat-square
+[npmtrends]: http://www.npmtrends.com/@angular-extensions/testing-library
+[spectrum-badge]: https://withspectrum.github.io/badge/badge.svg
+[spectrum]: https://spectrum.chat/testing-library
 [license-badge]: https://img.shields.io/npm/l/@angular-extensions/testing-library.svg?style=flat-square
 [license]: https://github.com/angular-extensions/testing-library/blob/master/LICENSE
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com
+[donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
 [coc]: https://github.com/angular-extensions/testing-library/blob/master/CODE_OF_CONDUCT.md
-[dom-testing-library]: https://testing-library.com/
+[github-watch-badge]: https://img.shields.io/github/watchers/angular-extensions/testing-library.svg?style=social
+[github-watch]: https://github.com/angular-extensions/testing-library/watchers
+[github-star-badge]: https://img.shields.io/github/stars/angular-extensions/testing-library.svg?style=social
+[github-star]: https://github.com/angular-extensions/testing-library/stargazers
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20🦔%20@angular-extensions/testing-library%20by%20%40tim_deschryver%20https%3A%2F%2Fgithub.com%2F@angular-extensions/testing-library
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/angular-extensions/testing-library.svg?style=social
+[emojis]: https://github.com/all-contributors/all-contributors#emoji-key
+[all-contributors]: https://github.com/all-contributors/all-contributors
+[set-immediate]: https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
+[guiding-principle]: https://twitter.com/kentcdodds/status/977018512689455106
+[bugs]: https://github.com/angular-extensions/testing-library/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Acreated-desc
+[requests]: https://github.com/angular-extensions/testing-library/issues?q=is%3Aissue+sort%3Areactions-%2B1-desc+label%3Aenhancement+is%3Aopen
+[good-first-issue]: https://github.com/angular-extensions/testing-library/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"good+first+issue"+
+[stackoverflow]: https://stackoverflow.com/questions/tagged/angular-testing-library
+
+<!-- prettier-ignore-end -->
