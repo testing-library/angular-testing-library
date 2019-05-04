@@ -53,6 +53,20 @@ test('Counter actions via template syntax with parameters', async () => {
 test('Counter actions via component syntax', async () => {
   const { getByText, getByTestId, click } = await render(CounterComponent, {
     declarations: [CounterComponent],
+  });
+
+  click(getByText('+'));
+  expect(getByText('Current Count: 1')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 1');
+
+  click(getByText('-'));
+  expect(getByText('Current Count: 0')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 0');
+});
+
+test('Counter actions via component syntax with parameters', async () => {
+  const { getByText, getByTestId, click } = await render(CounterComponent, {
+    declarations: [CounterComponent],
     componentProperties: {
       counter: 10,
     },
@@ -67,16 +81,18 @@ test('Counter actions via component syntax', async () => {
   expect(getByTestId('count').textContent).toBe('Current Count: 10');
 });
 
-test('Counter actions via component syntax without parameters', async () => {
+test('Counter actions via component syntax without declaration', async () => {
   const { getByText, getByTestId, click } = await render(CounterComponent, {
-    declarations: [CounterComponent],
+    componentProperties: {
+      counter: 10,
+    },
   });
 
   click(getByText('+'));
-  expect(getByText('Current Count: 1')).toBeTruthy();
-  expect(getByTestId('count').textContent).toBe('Current Count: 1');
+  expect(getByText('Current Count: 11')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 11');
 
   click(getByText('-'));
-  expect(getByText('Current Count: 0')).toBeTruthy();
-  expect(getByTestId('count').textContent).toBe('Current Count: 0');
+  expect(getByText('Current Count: 10')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 10');
 });
