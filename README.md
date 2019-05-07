@@ -1,5 +1,4 @@
 <div align="center">
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 <h1>@angular-extensions/testing-library</h1>
 
 <a href="https://www.emojione.com/emoji/1f994">
@@ -7,7 +6,7 @@
     height="80"
     width="80"
     alt="hedgehog"
-    src="https://raw.githubusercontent.com/angular-extensions/testing-library/master/other/hedgehog.png"
+    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/master/other/hedgehog.png"
   />
 </a>
 
@@ -17,7 +16,7 @@ practices.</p>
 <br />
 
 [**Read The Docs**](https://testing-library.com/angular) |
-[Edit the docs](https://github.com/alexkrolick/testing-library-docs)
+[Edit the docs](https://github.com/testing-library/testing-library-docs)
 
 <br />
 </div>
@@ -26,9 +25,11 @@ practices.</p>
 
 <!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
+[![Code Coverage][coverage-badge]][coverage]
 [![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs] [![Code of Conduct][coc-badge]][coc]
 [![Join the community on Spectrum][spectrum-badge]][spectrum]
 
@@ -57,6 +58,7 @@ practices.</p>
 - [Example](#example)
 - [Installation](#installation)
 - [Guiding Principles](#guiding-principles)
+- [Contributors](#contributors)
 - [Docs](#docs)
 - [Issues](#issues)
   - [🐛 Bugs](#-bugs)
@@ -78,9 +80,9 @@ your team down.
 
 ## This solution
 
-The `@angular-extensions/testing-library` is a very lightweight solution for testing Angular
-components. It provides light utility functions on top of `Angular` and
-`dom-testing-library`, in a way that encourages better testing practices. Its
+The `@angular-extensions/testing-library` is a very lightweight solution for
+testing Angular components. It provides light utility functions on top of `Angular`
+and `dom-testing-library`, in a way that encourages better testing practices. Its
 primary guiding principle is:
 
 > [The more your tests resemble the way your software is used, the more
@@ -145,7 +147,7 @@ npm install @angular-extensions/testing-library --save-dev
 ```
 
 You may also be interested in installing `jest-dom` so you can use
-[the custom jest matchers](https://github.com/gnapse/jest-dom#readme).
+[the custom jest matchers](https://github.com/testing-library/jest-dom#readme).
 
 > [**Docs**](https://testing-library.com/angular)
 
@@ -170,10 +172,23 @@ principles:
 At the end of the day, what we want is for this library to be pretty
 light-weight, simple, and understandable.
 
+## Contributors
+
+Thanks goes to these people ([emoji key][emojis]):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="http://timdeschryver.dev"><img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;" alt="Tim Deschryver"/><br /><sub><b>Tim Deschryver</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Documentation">📖</a> <a href="#infra-timdeschryver" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Tests">⚠️</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors][all-contributors] specification.
+Contributions of any kind welcome!
+
 ## Docs
 
 [**Read The Docs**](https://testing-library.com/angular) |
-[Edit the docs](https://github.com/alexkrolick/testing-library-docs)
+[Edit the docs](https://github.com/testing-library/testing-library-docs)
 
 ## Issues
 
@@ -213,8 +228,10 @@ Links:
 
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]: https://circleci.com/gh/angular-extensions/testing-library/tree/master.svg?style=shield
-[build]: https://circleci.com/gh/angular-extensions/testing-library/tree/master
+[build-badge]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master.svg?style=shield
+[build]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master
+[coverage]: https://codecov.io/github/testing-library/angular-testing-library
+[coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/angular-testing-library.svg?style=flat-square
 [version-badge]: https://img.shields.io/npm/v/@angular-extensions/testing-library.svg?style=flat-square
 [package]: https://www.npmjs.com/package/@angular-extensions/testing-library
 [downloads-badge]: https://img.shields.io/npm/dm/@angular-extensions/testing-library.svg?style=flat-square
@@ -222,37 +239,26 @@ Links:
 [spectrum-badge]: https://withspectrum.github.io/badge/badge.svg
 [spectrum]: https://spectrum.chat/testing-library
 [license-badge]: https://img.shields.io/npm/l/@angular-extensions/testing-library.svg?style=flat-square
-[license]: https://github.com/angular-extensions/testing-library/blob/master/LICENSE
+[license]: https://github.com/testing-library/angular-testing-library/blob/master/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
 [donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/angular-extensions/testing-library/blob/master/CODE_OF_CONDUCT.md
-[github-watch-badge]: https://img.shields.io/github/watchers/angular-extensions/testing-library.svg?style=social
-[github-watch]: https://github.com/angular-extensions/testing-library/watchers
-[github-star-badge]: https://img.shields.io/github/stars/angular-extensions/testing-library.svg?style=social
-[github-star]: https://github.com/angular-extensions/testing-library/stargazers
+[coc]: https://github.com/testing-library/angular-testing-library/blob/master/CODE_OF_CONDUCT.md
+[github-watch-badge]: https://img.shields.io/github/watchers/testing-library/angular-testing-library.svg?style=social
+[github-watch]: https://github.com/testing-library/angular-testing-library/watchers
+[github-star-badge]: https://img.shields.io/github/stars/testing-library/angular-testing-library.svg?style=social
+[github-star]: https://github.com/testing-library/angular-testing-library/stargazers
 [twitter]: https://twitter.com/intent/tweet?text=Check%20out%20🦔%20@angular-extensions/testing-library%20by%20%40tim_deschryver%20https%3A%2F%2Fgithub.com%2F@angular-extensions/testing-library
-[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/angular-extensions/testing-library.svg?style=social
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/testing-library/angular-testing-library.svg?style=social
 [emojis]: https://github.com/all-contributors/all-contributors#emoji-key
 [all-contributors]: https://github.com/all-contributors/all-contributors
 [set-immediate]: https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
 [guiding-principle]: https://twitter.com/kentcdodds/status/977018512689455106
-[bugs]: https://github.com/angular-extensions/testing-library/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Acreated-desc
-[requests]: https://github.com/angular-extensions/testing-library/issues?q=is%3Aissue+sort%3Areactions-%2B1-desc+label%3Aenhancement+is%3Aopen
-[good-first-issue]: https://github.com/angular-extensions/testing-library/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"good+first+issue"+
+[bugs]: https://github.com/testing-library/angular-testing-library/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Acreated-desc
+[requests]: https://github.com/testing-library/angular-testing-library/issues?q=is%3Aissue+sort%3Areactions-%2B1-desc+label%3Aenhancement+is%3Aopen
+[good-first-issue]: https://github.com/testing-library/angular-testing-library/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3A"good+first+issue"+
 [stackoverflow]: https://stackoverflow.com/questions/tagged/angular-testing-library
+[contributors-badge]: https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square
 
 <!-- prettier-ignore-end -->
-
-## Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<table><tr><td align="center"><a href="http://timdeschryver.dev"><img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;" alt="Tim Deschryver"/><br /><sub><b>Tim Deschryver</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Documentation">📖</a> <a href="#infra-timdeschryver" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Tests">⚠️</a></td></tr></table>
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
