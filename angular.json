@@ -94,6 +94,33 @@
           }
         }
       }
+    },
+    "jest-utils": {
+      "root": "projects/jest-utils",
+      "sourceRoot": "projects/jest-utils/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/jest-utils/tsconfig.lib.json",
+            "project": "projects/jest-utils/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/jest-utils/ng-package.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["projects/jest-utils/tsconfig.lib.json", "./tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
     }
   },
   "defaultProject": "testing-library-app"
