@@ -1,9 +1,8 @@
 import { Component, OnInit, ElementRef, Type, DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from 'dom-testing-library';
-
 import { RenderResult, RenderOptions } from './models';
-import { By } from '@angular/platform-browser';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent implements OnInit {
