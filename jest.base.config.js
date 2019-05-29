@@ -1,12 +1,20 @@
 module.exports = {
   preset: 'jest-preset-angular',
   rootDir: '../',
-  setupTestFrameworkScriptFile: '<rootDir>/test.ts',
+  setupFilesAfterEnv: ['<rootDir>/test.ts'],
   testURL: 'http://localhost',
   globals: {
     'ts-jest': {
-      tsConfigFile: './tsconfig.spec.json',
+      tsConfig: './tsconfig.spec.json',
+      stringifyContentPathRegex: '\\.html$',
+      astTransformers: [require.resolve('jest-preset-angular/InlineHtmlStripStylesTransformer')],
     },
-    __TRANSFORM_HTML__: true,
   },
+  transform: {
+    '^.+\\.(ts|js|html)$': 'ts-jest',
+  },
+  snapshotSerializers: [
+    'jest-preset-angular/AngularSnapshotSerializer.js',
+    'jest-preset-angular/HTMLCommentSerializer.js',
+  ],
 };
