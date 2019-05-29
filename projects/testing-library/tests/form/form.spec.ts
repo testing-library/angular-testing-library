@@ -1,5 +1,6 @@
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { render } from '../../src/public_api';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { LoginFormComponent } from './form.component';
 
 test('login form submits using the component syntax', async () => {
@@ -9,7 +10,6 @@ test('login form submits using the component syntax', async () => {
   };
 
   const { container, getByLabelText, getByText, input, submit } = await render(LoginFormComponent, {
-    declarations: [LoginFormComponent],
     imports: [ReactiveFormsModule],
     componentProperties: {
       handleLogin: handleLogin as any,
