@@ -15,7 +15,9 @@ class WrapperComponent implements OnInit {
 
 export async function render<T>(
   templateOrComponent: string | Type<T>,
-  {
+  renderOptions: RenderOptions<T> = {},
+): Promise<RenderResult> {
+  const {
     detectChanges = true,
     declarations = [],
     imports = [],
@@ -24,8 +26,8 @@ export async function render<T>(
     queries,
     wrapper = WrapperComponent,
     componentProperties = {},
-  }: RenderOptions<T>,
-): Promise<RenderResult> {
+  } = renderOptions;
+
   const isTemplate = typeof templateOrComponent === 'string';
   const componentDeclarations = isTemplate ? [wrapper] : [templateOrComponent];
 
