@@ -31,10 +31,17 @@ export async function render<T>(
 
   TestBed.configureTestingModule({
     declarations: [...declarations, ...componentDeclarations],
-    providers: [...providers],
     imports: [...imports],
     schemas: [...schemas],
   });
+
+  if (providers) {
+    // override services this way to have the service overridden at the component level
+    providers.forEach(p => {
+      const { provide, ...provider } = p;
+      TestBed.overrideProvider(provide, provider);
+    });
+  }
 
   const fixture = isTemplate
     ? createWrapperComponentFixture(templateOrComponent as string, { wrapper, componentProperties })
