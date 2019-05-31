@@ -1,6 +1,6 @@
 import { AppComponent } from './app.component';
-import { render } from '@angular-extensions/testing-library';
-import { configureJestSetup } from '@angular-extensions/testing-library/jest-utils';
+import { render } from '@testing-library/angular';
+import { configureJestSetup } from '@testing-library/angular/jest-utils';
 
 configureJestSetup();
 

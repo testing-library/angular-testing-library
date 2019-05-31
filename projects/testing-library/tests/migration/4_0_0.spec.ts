@@ -9,7 +9,7 @@ describe('Migration to version 4.0.0', () => {
     {
       description: 'template syntax',
       input: virtualFs.stringToFileBuffer(`
-        import { createComponent } from '@angular-extensions/testing-library';
+        import { createComponent } from '@testing-library/angular';
         import { HomeComponent } from './home.component';
 
         async function setup() {
@@ -18,7 +18,7 @@ describe('Migration to version 4.0.0', () => {
           });
         }`),
       expected: `
-        import { render } from '@angular-extensions/testing-library';
+        import { render } from '@testing-library/angular';
         import { HomeComponent } from './home.component';
 
         async function setup() {
@@ -30,7 +30,7 @@ describe('Migration to version 4.0.0', () => {
     {
       description: 'component syntax',
       input: virtualFs.stringToFileBuffer(`
-        import { createComponent } from '@angular-extensions/testing-library';
+        import { createComponent } from '@testing-library/angular';
         import { HomeComponent } from './home.component';
 
         async function setup() {
@@ -44,7 +44,7 @@ describe('Migration to version 4.0.0', () => {
           );
         }`),
       expected: `
-        import { render } from '@angular-extensions/testing-library';
+        import { render } from '@testing-library/angular';
         import { HomeComponent } from './home.component';
 
         async function setup() {
@@ -59,7 +59,7 @@ describe('Migration to version 4.0.0', () => {
     {
       description: 'component syntax with properties',
       input: virtualFs.stringToFileBuffer(`
-        import { createComponent } from '@angular-extensions/testing-library';
+        import { createComponent } from '@testing-library/angular';
         import { HomeComponent } from './home.component';
 
         async function setup() {
@@ -77,7 +77,7 @@ describe('Migration to version 4.0.0', () => {
           );
         }`),
       expected: `
-        import { render } from '@angular-extensions/testing-library';
+        import { render } from '@testing-library/angular';
         import { HomeComponent } from './home.component';
 
         async function setup() {

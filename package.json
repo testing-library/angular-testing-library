@@ -1,5 +1,5 @@
 {
-  "name": "@angular-extensions/testing-library-app",
+  "name": "@testing-library/angular-app",
   "version": "0.0.0-semantically-released",
   "scripts": {
     "ng": "ng",
@@ -8,8 +8,8 @@
     "build": "npm run build:library && npm run build:library:jest-utils && npm run build:migrations && npm run build:readme",
     "build:library": "ng build --prod testing-library",
     "build:library:jest-utils": "ng build --prod jest-utils",
-    "build:migrations": "tsc -p ./projects/testing-library/migrations/tsconfig.migrations.json && cp ./projects/testing-library/migrations/migration.json ./dist/@angular-extensions/testing-library/migrations",
-    "build:readme": "cp ./README.md ./dist/@angular-extensions/testing-library",
+    "build:migrations": "tsc -p ./projects/testing-library/migrations/tsconfig.migrations.json && cp ./projects/testing-library/migrations/migration.json ./dist/@testing-library/angular/migrations",
+    "build:readme": "cp ./README.md ./dist/@testing-library/angular",
     "test": "jest --config ./projects/jest.lib.config.js",
     "test:app": "jest --config ./src/jest.app.config.js",
     "precommit": "lint-staged",
@@ -23,7 +23,7 @@
     ]
   },
   "release": {
-    "pkgRoot": "dist/@angular-extensions/testing-library"
+    "pkgRoot": "dist/@testing-library/angular"
   },
   "dependencies": {
     "@angular/animations": "^8.0.0",
@@ -35,8 +35,8 @@
     "@angular/platform-browser-dynamic": "^8.0.0",
     "@angular/router": "^8.0.0",
     "@phenomnomnominal/tsquery": "^3.0.0",
+    "@testing-library/dom": "^5.0.1",
     "core-js": "^3.1.3",
-    "dom-testing-library": "^4.1.1",
     "rxjs": "^6.5.2",
     "tslint": "^5.16.0",
     "zone.js": "~0.9.1"
@@ -47,8 +47,8 @@
     "@angular/cli": "~8.0.0",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
-    "@types/node": "~12.0.3",
     "@types/jest": "~24.0.11",
+    "@types/node": "~12.0.3",
     "codelyzer": "^5.0.1",
     "husky": "^2.3.0",
     "jest": "^24.1.0",

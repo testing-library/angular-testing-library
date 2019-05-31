@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, Type, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from 'dom-testing-library';
+import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from '@testing-library/dom';
 import { RenderResult, RenderOptions } from './models';
 
 @Component({ selector: 'wrapper-component', template: '' })
