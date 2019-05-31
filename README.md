@@ -1,5 +1,5 @@
 <div align="center">
-<h1>@angular-extensions/testing-library</h1>
+<h1>@testing-library/angular</h1>
 
 <a href="https://www.emojione.com/emoji/1f994">
   <img
@@ -80,9 +80,9 @@ your team down.
 
 ## This solution
 
-The `@angular-extensions/testing-library` is a very lightweight solution for
+The `@testing-library/angular` is a very lightweight solution for
 testing Angular components. It provides light utility functions on top of `Angular`
-and `dom-testing-library`, in a way that encourages better testing practices. Its
+and `@testing-library/dom`, in a way that encourages better testing practices. Its
 primary guiding principle is:
 
 > [The more your tests resemble the way your software is used, the more
@@ -117,7 +117,7 @@ export class CounterComponent {
 counter.component.spec.ts
 
 ```javascript
-import { render } from '@angular-extensions/testing-library';
+import { render } from '@testing-library/angular';
 import CounterComponent from './counter.component.ts';
 
 describe('Counter', () => {
@@ -143,7 +143,7 @@ This module is distributed via [npm][npm] which is bundled with [node][node] and
 should be installed as one of your project's `devDependencies`:
 
 ```bash
-npm install @angular-extensions/testing-library --save-dev
+npm install @testing-library/angular --save-dev
 ```
 
 You may also be interested in installing `jest-dom` so you can use
@@ -232,13 +232,13 @@ Links:
 [build]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master
 [coverage]: https://codecov.io/github/testing-library/angular-testing-library
 [coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/angular-testing-library.svg?style=flat-square
-[version-badge]: https://img.shields.io/npm/v/@angular-extensions/testing-library.svg?style=flat-square
-[package]: https://www.npmjs.com/package/@angular-extensions/testing-library
-[downloads-badge]: https://img.shields.io/npm/dm/@angular-extensions/testing-library.svg?style=flat-square
-[npmtrends]: http://www.npmtrends.com/@angular-extensions/testing-library
+[version-badge]: https://img.shields.io/npm/v/@testing-library/angular.svg?style=flat-square
+[package]: https://www.npmjs.com/package/@testing-library/angular
+[downloads-badge]: https://img.shields.io/npm/dm/@testing-library/angular.svg?style=flat-square
+[npmtrends]: http://www.npmtrends.com/@testing-library/angular
 [spectrum-badge]: https://withspectrum.github.io/badge/badge.svg
 [spectrum]: https://spectrum.chat/testing-library
-[license-badge]: https://img.shields.io/npm/l/@angular-extensions/testing-library.svg?style=flat-square
+[license-badge]: https://img.shields.io/npm/l/@testing-library/angular.svg?style=flat-square
 [license]: https://github.com/testing-library/angular-testing-library/blob/master/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
@@ -249,7 +249,7 @@ Links:
 [github-watch]: https://github.com/testing-library/angular-testing-library/watchers
 [github-star-badge]: https://img.shields.io/github/stars/testing-library/angular-testing-library.svg?style=social
 [github-star]: https://github.com/testing-library/angular-testing-library/stargazers
-[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20🦔%20@angular-extensions/testing-library%20by%20%40tim_deschryver%20https%3A%2F%2Fgithub.com%2F@angular-extensions/testing-library
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20🦔%20@testing-library/angular%20by%20%40tim_deschryver%20https%3A%2F%2Fgithub.com%2F@testing-library/angular
 [twitter-badge]: https://img.shields.io/twitter/url/https/github.com/testing-library/angular-testing-library.svg?style=social
 [emojis]: https://github.com/all-contributors/all-contributors#emoji-key
 [all-contributors]: https://github.com/all-contributors/all-contributors
