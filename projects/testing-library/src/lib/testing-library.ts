@@ -32,15 +32,18 @@ export async function render<T>(
   TestBed.configureTestingModule({
     declarations: [...declarations, ...componentDeclarations],
     imports: [...imports],
+    providers: [...providers],
     schemas: [...schemas],
   });
 
   if (providers) {
     // override services this way to have the service overridden at the component level
-    providers.forEach(p => {
-      const { provide, ...provider } = p;
-      TestBed.overrideProvider(provide, provider);
-    });
+    providers
+      .reduce((acc, provider) => acc.concat(provider), [])
+      .forEach(p => {
+        const { provide, ...provider } = p;
+        TestBed.overrideProvider(provide, provider);
+      });
   }
 
   const fixture = isTemplate

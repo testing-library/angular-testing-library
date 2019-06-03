@@ -511,6 +511,11 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
+"@ngrx/store@^8.0.0-rc.0":
+  version "8.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-8.0.0-rc.0.tgz#3ec0ca8986fb3cb2b246cab0c851833a21f9a134"
+  integrity sha512-TL+2BERGH4DET8sIW1D02wkmKxlnVXWezm1OkQJd2Q/6h6MwZBd8SeDpuiEIUHr2/1BPUyPNe1bj+vemeiwWrw==
+
 "@ngtools/json-schema@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@ngtools/json-schema/-/json-schema-1.1.0.tgz#c3a0c544d62392acc2813a42c8a0dc6f58f86922"
