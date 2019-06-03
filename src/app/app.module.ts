@@ -3,11 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, StoreModule.forRoot(reducers, { metaReducers })],
+  imports: [BrowserModule, StoreModule.forRoot({})],
   providers: [],
   bootstrap: [AppComponent],
 })
