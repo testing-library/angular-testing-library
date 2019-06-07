@@ -5,6 +5,11 @@
       "version": "4.0.0",
       "description": "Align API to *-testing-libraries",
       "factory": "./4_0_0"
+    },
+    "migration-5.1.2": {
+      "version": "5.1.2",
+      "description": "Migrate to @testing-library",
+      "factory": "./5_1_2"
     }
   }
 }
