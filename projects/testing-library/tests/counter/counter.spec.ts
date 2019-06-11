@@ -65,6 +65,18 @@ test('Counter actions via component syntax', async () => {
   expect(getByTestId('count').textContent).toBe('Current Count: 0');
 });
 
+test('Counter actions via component syntax without render options', async () => {
+  const { getByText, getByTestId, click } = await render(CounterComponent);
+
+  click(getByText('+'));
+  expect(getByText('Current Count: 1')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 1');
+
+  click(getByText('-'));
+  expect(getByText('Current Count: 0')).toBeTruthy();
+  expect(getByTestId('count').textContent).toBe('Current Count: 0');
+});
+
 test('Counter actions via component syntax with parameters', async () => {
   const { getByText, getByTestId, click } = await render(CounterComponent, {
     declarations: [CounterComponent],
