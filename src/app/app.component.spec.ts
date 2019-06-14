@@ -1,7 +1,9 @@
-import { AppComponent } from './app.component';
+import { TestBed } from '@angular/core/testing';
+import { Store } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import { configureJestSetup } from '@testing-library/angular/jest-utils';
-import { provideMockStore } from '@ngrx/store/testing';
+import { AppComponent } from './app.component';
 
 configureJestSetup();
 
@@ -27,4 +29,12 @@ test(`should render title in a h1 tag`, async () => {
     providers: [provideMockStore()],
   });
   expect(container.querySelector('h1').textContent).toContain('Welcome to app!');
+});
+
+test(`should be able to get the Store`, async () => {
+  await render('<app-root></app-root>', {
+    declarations: [AppComponent],
+    providers: [provideMockStore()],
+  });
+  expect(TestBed.get(Store)).toBeDefined();
 });
