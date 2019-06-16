@@ -28,6 +28,7 @@ export async function render<T>(
     queries,
     wrapper = WrapperComponent,
     componentProperties = {},
+    componentProviders = [],
   } = renderOptions;
 
   const isTemplate = typeof templateOrComponent === 'string';
@@ -40,9 +41,8 @@ export async function render<T>(
     schemas: [...schemas],
   });
 
-  if (providers) {
-    // override services this way to have the service overridden at the component level
-    providers
+  if (componentProviders) {
+    componentProviders
       .reduce((acc, provider) => acc.concat(provider), [])
       .forEach(p => {
         const { provide, ...provider } = p;

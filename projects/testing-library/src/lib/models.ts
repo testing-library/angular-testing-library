@@ -17,6 +17,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   imports?: any[];
   schemas?: any[];
   componentProperties?: Partial<C>;
+  componentProviders?: any[];
   queries?: Q;
   wrapper?: Type<any>;
 }
