@@ -20,4 +20,9 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   componentProviders?: any[];
   queries?: Q;
   wrapper?: Type<any>;
+  /**
+   * Exclude the component to be automatically be added as a declaration
+   * This is needed when the component is declared in an imported module
+   */
+  excludeComponentDeclaration?: boolean;
 }
