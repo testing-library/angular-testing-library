@@ -29,10 +29,16 @@ export async function render<T>(
     wrapper = WrapperComponent,
     componentProperties = {},
     componentProviders = [],
+    excludeComponentDeclaration = false,
   } = renderOptions;
 
   const isTemplate = typeof templateOrComponent === 'string';
-  const componentDeclarations = isTemplate ? [wrapper] : [templateOrComponent];
+  const componentDeclarations = declareComponents({
+    templateOrComponent,
+    wrapper,
+    isTemplate,
+    excludeComponentDeclaration,
+  });
 
   TestBed.configureTestingModule({
     declarations: [...declarations, ...componentDeclarations],
@@ -143,4 +149,16 @@ function setComponentProperties<T>(
     fixture.componentInstance[key] = componentProperties[key];
   }
   return fixture;
+}
+
+function declareComponents({ isTemplate, wrapper, excludeComponentDeclaration, templateOrComponent }) {
+  if (isTemplate) {
+    return [wrapper];
+  }
+
+  if (excludeComponentDeclaration) {
+    return [];
+  }
+
+  return [templateOrComponent];
 }
