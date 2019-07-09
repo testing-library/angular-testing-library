@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Component } from '@angular/core';
 import { render } from '../../src/public_api';
-import { TestBed } from '@angular/core/testing';
 
 // tslint:disable: no-use-before-declare
 test('shows the service value', async () => {
