@@ -13,8 +13,8 @@ class WrapperComponent implements OnInit {
   }
 }
 
-export async function render<T>(template: string, renderOptions: RenderOptions<T>);
-export async function render<T>(component: Type<T>, renderOptions?: RenderOptions<T>);
+export async function render<T>(template: string, renderOptions: RenderOptions<T>): Promise<RenderResult>;
+export async function render<T>(component: Type<T>, renderOptions?: RenderOptions<T>): Promise<RenderResult>;
 export async function render<T>(
   templateOrComponent: string | Type<T>,
   renderOptions: RenderOptions<T> = {},
