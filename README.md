@@ -29,7 +29,7 @@ practices.</p>
 [![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs] [![Code of Conduct][coc-badge]][coc]
 [![Join the community on Spectrum][spectrum-badge]][spectrum]
 
@@ -178,7 +178,14 @@ Thanks goes to these people ([emoji key][emojis]):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="http://timdeschryver.dev"><img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;" alt="Tim Deschryver"/><br /><sub><b>Tim Deschryver</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Documentation">📖</a> <a href="#infra-timdeschryver" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Tests">⚠️</a></td><td align="center"><a href="https://michaeldeboey.be"><img src="https://avatars3.githubusercontent.com/u/6643991?v=4" width="100px;" alt="Michaël De Boey"/><br /><sub><b>Michaël De Boey</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=MichaelDeBoey" title="Documentation">📖</a></td><td align="center"><a href="https://github.com/flakolefluk"><img src="https://avatars0.githubusercontent.com/u/11986564?v=4" width="100px;" alt="Ignacio Le Fluk"/><br /><sub><b>Ignacio Le Fluk</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=flakolefluk" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=flakolefluk" title="Tests">⚠️</a></td></tr></table>
+<table>
+  <tr>
+    <td align="center"><a href="http://timdeschryver.dev"><img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;" alt="Tim Deschryver"/><br /><sub><b>Tim Deschryver</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Documentation">📖</a> <a href="#infra-timdeschryver" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=timdeschryver" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://michaeldeboey.be"><img src="https://avatars3.githubusercontent.com/u/6643991?v=4" width="100px;" alt="Michaël De Boey"/><br /><sub><b>Michaël De Boey</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=MichaelDeBoey" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/flakolefluk"><img src="https://avatars0.githubusercontent.com/u/11986564?v=4" width="100px;" alt="Ignacio Le Fluk"/><br /><sub><b>Ignacio Le Fluk</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=flakolefluk" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=flakolefluk" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://hu.linkedin.com/pub/tamas-szabo/57/a4b/242"><img src="https://avatars0.githubusercontent.com/u/3720079?v=4" width="100px;" alt="Tamás Szabó"/><br /><sub><b>Tamás Szabó</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=szabototo89" title="Code">💻</a></td>
+  </tr>
+</table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
