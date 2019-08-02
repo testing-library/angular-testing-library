@@ -1,7 +1,8 @@
-import { createMock, provideMock, Mock } from '../../src/jest-utils';
-import { render } from '../../src/public_api';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
+import { createMock, provideMock, Mock } from '../src/public_api';
+import { render } from '../../testing-library/src/public_api';
 
 class FixtureService {
   constructor(private foo: string, public bar: string) {}
