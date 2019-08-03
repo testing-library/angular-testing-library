@@ -1,7 +1,10 @@
 import { TestBed, getTestBed, ComponentFixture } from '@angular/core/testing';
 import 'jest';
 
-// Ref: https://github.com/angular/angular/issues/12409
+/**
+ * Use with caution, this might brake some tests
+ * Ref: https://github.com/angular/angular/issues/12409
+ */
 export function configureJestSetup() {
   const testBedApi: any = getTestBed();
   const originReset = TestBed.resetTestingModule;
