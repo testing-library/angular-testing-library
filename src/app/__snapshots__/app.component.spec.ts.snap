@@ -58,6 +58,30 @@ exports[`matches snapshot 1`] = `
     <button>
       Greet
     </button>
+    <form
+      class="ng-untouched ng-pristine ng-invalid"
+      ng-reflect-form="[object Object]"
+      novalidate=""
+    >
+      <label>
+         Name: 
+        <input
+          class="ng-untouched ng-pristine ng-invalid"
+          formcontrolname="name"
+          ng-reflect-name="name"
+          type="text"
+        />
+      </label>
+      <label>
+         Age: 
+        <input
+          class="ng-untouched ng-pristine ng-valid"
+          formcontrolname="age"
+          ng-reflect-name="age"
+          type="number"
+        />
+      </label>
+    </form>
   </app-root>
 </div>
 `;

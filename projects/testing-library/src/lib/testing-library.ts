@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from '@testing-library/dom';
 import { RenderResult, RenderOptions } from './models';
+import { createType } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent implements OnInit {
@@ -84,6 +85,7 @@ export async function render<T>(
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
+    type: createType(eventsWithDetectChanges),
   } as any;
 }
 
