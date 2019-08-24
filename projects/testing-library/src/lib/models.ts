@@ -1,10 +1,11 @@
 import { Type } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { FireObject, Queries, queries, BoundFunction } from '@testing-library/dom';
+import { UserEvents } from './user-events';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
 
-export interface RenderResult extends RenderResultQueries, FireObject {
+export interface RenderResult extends RenderResultQueries, FireObject, UserEvents {
   container: HTMLElement;
   debug: (element?: HTMLElement) => void;
   fixture: ComponentFixture<any>;

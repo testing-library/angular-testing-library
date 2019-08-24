@@ -4,4 +4,5 @@
 
 export * from './lib/models';
 export * from './lib/testing-library';
+export * from './lib/user-events';
 export * from '@testing-library/dom';

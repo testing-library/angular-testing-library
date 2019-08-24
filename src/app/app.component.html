@@ -21,3 +21,15 @@
 </ul>
 
 <button (click)="greet()">Greet</button>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>
+    Name:
+    <input type="text" formControlName="name" />
+  </label>
+
+  <label>
+    Age:
+    <input type="number" formControlName="age" />
+  </label>
+</form>
