@@ -34,9 +34,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class AppComponent {
   isOpen = true;
   title = 'app';
+
+  colors = ['red', 'blue', 'yellow', 'pink'];
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     age: ['', [Validators.min(18), Validators.max(28)]],
+    favoriteColor: [],
   });
 
   constructor(private store: Store<any>, private greetService: GreetService, private fb: FormBuilder) {}

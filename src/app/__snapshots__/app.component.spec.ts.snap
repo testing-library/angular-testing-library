@@ -112,6 +112,48 @@ exports[`matches snapshot 1`] = `
           type="number"
         />
       </label>
+      <label
+        class="ng-tns-c0-0"
+        for="color"
+      >
+        Favorite color:
+      </label>
+      <select
+        class="ng-tns-c0-0 ng-untouched ng-pristine ng-valid"
+        formcontrolname="favoriteColor"
+        id="color"
+        ng-reflect-name="favoriteColor"
+      >
+        
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="red"
+          value="0: red"
+        >
+          red
+        </option>
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="blue"
+          value="1: blue"
+        >
+          blue
+        </option>
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="yellow"
+          value="2: yellow"
+        >
+          yellow
+        </option>
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="pink"
+          value="3: pink"
+        >
+          pink
+        </option>
+      </select>
     </form>
     <div
       class="ng-tns-c0-0"

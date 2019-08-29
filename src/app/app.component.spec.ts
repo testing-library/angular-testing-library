@@ -70,6 +70,7 @@ describe('Forms', () => {
 
     const nameInput = component.getByLabelText('Name:');
     const ageInput = component.getByLabelText('Age:');
+    const colorInput = component.getByLabelText('Favorite color:');
 
     const nameValue = appComponent.form.get('name');
     const ageValue = appComponent.form.get('age');
@@ -89,6 +90,14 @@ describe('Forms', () => {
     component.type(ageInput, '20');
     expect(ageValue.valid).toBe(true);
 
+    component.selectOptions(colorInput, 'ink', { exact: false });
+    component.selectOptions(colorInput, /YELLOW/i);
+
     expect(appComponent.form.valid).toBe(true);
+    expect(appComponent.form.value).toEqual({
+      name: 'Bob',
+      age: 20,
+      favoriteColor: 'yellow',
+    });
   });
 });

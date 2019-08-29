@@ -32,6 +32,11 @@
     Age:
     <input type="number" formControlName="age" />
   </label>
+
+  <label for="color">Favorite color:</label>
+  <select formControlName="favoriteColor" id="color">
+    <option *ngFor="let color of colors" [ngValue]="color">{{ color }}</option>
+  </select>
 </form>
 
 <div>
