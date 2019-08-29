@@ -4,26 +4,41 @@ exports[`matches snapshot 1`] = `
 <div
   id="root0"
 >
-  <app-root>
+  <app-root
+    class="ng-tns-c0-0"
+  >
     <div
+      class="ng-tns-c0-0"
       style="text-align:center"
     >
-      <h1>
+      <h1
+        class="ng-tns-c0-0"
+      >
         Welcome to app!
       </h1>
       <img
         alt="Angular Logo"
+        class="ng-tns-c0-0"
         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
         width="300"
       />
     </div>
-    <h2>
+    <h2
+      class="ng-tns-c0-0"
+    >
       Here are some links to help you start:
     </h2>
-    <ul>
-      <li>
-        <h2>
+    <ul
+      class="ng-tns-c0-0"
+    >
+      <li
+        class="ng-tns-c0-0"
+      >
+        <h2
+          class="ng-tns-c0-0"
+        >
           <a
+            class="ng-tns-c0-0"
             href="https://angular.io/tutorial"
             rel="noopener"
             target="_blank"
@@ -32,9 +47,14 @@ exports[`matches snapshot 1`] = `
           </a>
         </h2>
       </li>
-      <li>
-        <h2>
+      <li
+        class="ng-tns-c0-0"
+      >
+        <h2
+          class="ng-tns-c0-0"
+        >
           <a
+            class="ng-tns-c0-0"
             href="https://github.com/angular/angular-cli/wiki"
             rel="noopener"
             target="_blank"
@@ -43,9 +63,14 @@ exports[`matches snapshot 1`] = `
           </a>
         </h2>
       </li>
-      <li>
-        <h2>
+      <li
+        class="ng-tns-c0-0"
+      >
+        <h2
+          class="ng-tns-c0-0"
+        >
           <a
+            class="ng-tns-c0-0"
             href="https://blog.angular.io/"
             rel="noopener"
             target="_blank"
@@ -55,33 +80,58 @@ exports[`matches snapshot 1`] = `
         </h2>
       </li>
     </ul>
-    <button>
+    <button
+      class="ng-tns-c0-0"
+    >
       Greet
     </button>
     <form
-      class="ng-untouched ng-pristine ng-invalid"
+      class="ng-tns-c0-0 ng-untouched ng-pristine ng-invalid"
       ng-reflect-form="[object Object]"
       novalidate=""
     >
-      <label>
+      <label
+        class="ng-tns-c0-0"
+      >
          Name: 
         <input
-          class="ng-untouched ng-pristine ng-invalid"
+          class="ng-tns-c0-0 ng-untouched ng-pristine ng-invalid"
           formcontrolname="name"
           ng-reflect-name="name"
           type="text"
         />
       </label>
-      <label>
+      <label
+        class="ng-tns-c0-0"
+      >
          Age: 
         <input
-          class="ng-untouched ng-pristine ng-valid"
+          class="ng-tns-c0-0 ng-untouched ng-pristine ng-valid"
           formcontrolname="age"
           ng-reflect-name="age"
           type="number"
         />
       </label>
     </form>
+    <div
+      class="ng-tns-c0-0"
+    >
+      <button
+        class="ng-tns-c0-0"
+      >
+        Toggle Open/Close
+      </button>
+      <div
+        class="open-close-container ng-trigger ng-trigger-openClose"
+        style="height:200px;opacity:1;background-color:yellow;0:height;1:opacity;2:background-color;"
+      >
+        <p
+          class="ng-tns-c0-0"
+        >
+          The box is now Open!
+        </p>
+      </div>
+    </div>
   </app-root>
 </div>
 `;
