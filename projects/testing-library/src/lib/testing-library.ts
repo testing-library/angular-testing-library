@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, Type, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from '@testing-library/dom';
 import { RenderResult, RenderOptions } from './models';
@@ -43,7 +44,7 @@ export async function render<T>(
 
   TestBed.configureTestingModule({
     declarations: [...declarations, ...componentDeclarations],
-    imports: [...imports],
+    imports: addAutoImports(imports),
     providers: [...providers],
     schemas: [...schemas],
   });
@@ -163,4 +164,12 @@ function declareComponents({ isTemplate, wrapper, excludeComponentDeclaration, t
   }
 
   return [templateOrComponent];
+}
+
+function addAutoImports(imports: any[]) {
+  if (imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1) {
+    return imports;
+  }
+
+  return [...imports, NoopAnimationsModule];
 }
