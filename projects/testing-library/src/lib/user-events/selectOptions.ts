@@ -19,10 +19,6 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
   }
 
   function selectOption(select: HTMLSelectElement, index: number, matcher: Matcher, options?: SelectorMatcherOptions) {
-    if (!select.multiple && index > 0) {
-      return;
-    }
-
     // fallback to document.body, because libraries as Angular Material will have their custom select component
     const option = (queryByText(select, matcher, options) ||
       getByText(document.body, matcher, options)) as HTMLOptionElement;
@@ -60,7 +56,9 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
     clickElement(selectElement);
 
     const values = Array.isArray(matcher) ? matcher : [matcher];
-    values.forEach((val, index) => selectOption(selectElement, index, val, matcherOptions));
+    values
+      .filter((_, index) => index === 0 || selectElement.multiple)
+      .forEach((val, index) => selectOption(selectElement, index, val, matcherOptions));
 
     if (wasAnotherElementFocused) {
       fireEvent.blur(focusedElement);
