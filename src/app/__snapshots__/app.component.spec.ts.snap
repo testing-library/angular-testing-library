@@ -112,6 +112,265 @@ exports[`matches snapshot 1`] = `
           type="number"
         />
       </label>
+      <label
+        class="ng-tns-c0-0"
+        for="color"
+      >
+        Favorite color:
+      </label>
+      <select
+        class="ng-tns-c0-0 ng-untouched ng-pristine ng-valid"
+        formcontrolname="color"
+        id="color"
+        ng-reflect-name="color"
+      >
+        
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="red"
+          value="0: red"
+        >
+          red
+        </option>
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="blue"
+          value="1: blue"
+        >
+          blue
+        </option>
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="yellow"
+          value="2: yellow"
+        >
+          yellow
+        </option>
+        <option
+          class="ng-tns-c0-0 ng-star-inserted"
+          ng-reflect-ng-value="pink"
+          value="3: pink"
+        >
+          pink
+        </option>
+      </select>
+      <h4
+        class="ng-tns-c0-0"
+      >
+        mat select
+      </h4>
+      <mat-form-field
+        class="mat-form-field ng-tns-c1-1 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid _mat-animation-noopable"
+      >
+        <div
+          class="mat-form-field-wrapper"
+        >
+          <div
+            class="mat-form-field-flex"
+          >
+            
+            
+            <div
+              class="mat-form-field-infix"
+            >
+              <mat-select
+                aria-disabled="false"
+                aria-invalid="false"
+                aria-labelledby="mat-form-field-label-1"
+                aria-multiselectable="false"
+                aria-required="false"
+                class="mat-select ng-tns-c2-2 ng-tns-c0-0 ng-untouched ng-pristine ng-valid mat-select-empty ng-star-inserted"
+                formcontrolname="animal"
+                id="mat-select-0"
+                ng-reflect-name="animal"
+                role="listbox"
+                tabindex="0"
+              >
+                <div
+                  aria-hidden="true"
+                  cdk-overlay-origin=""
+                  class="mat-select-trigger"
+                >
+                  <div
+                    class="mat-select-value"
+                    ng-reflect-ng-switch="true"
+                  >
+                    
+                    <span
+                      class="mat-select-placeholder ng-tns-c2-2 ng-star-inserted"
+                    >
+                       
+                    </span>
+                    
+                  </div>
+                  <div
+                    class="mat-select-arrow-wrapper"
+                  >
+                    <div
+                      class="mat-select-arrow"
+                    />
+                  </div>
+                </div>
+                
+              </mat-select>
+              <span
+                class="mat-form-field-label-wrapper"
+              >
+                
+                <label
+                  aria-owns="mat-select-0"
+                  class="mat-form-field-label ng-tns-c1-1 mat-empty mat-form-field-empty ng-star-inserted"
+                  for="mat-select-0"
+                  id="mat-form-field-label-1"
+                  ng-reflect-disabled="true"
+                  ng-reflect-ng-switch="true"
+                >
+                  
+                  
+                  <mat-label
+                    class="ng-tns-c0-0 ng-star-inserted"
+                  >
+                    Favorite animal:
+                  </mat-label>
+                  
+                  
+                </label>
+              </span>
+            </div>
+            
+          </div>
+          
+          <div
+            class="mat-form-field-underline ng-tns-c1-1 ng-star-inserted"
+          >
+            <span
+              class="mat-form-field-ripple"
+            />
+          </div>
+          <div
+            class="mat-form-field-subscript-wrapper"
+            ng-reflect-ng-switch="hint"
+          >
+            
+            
+            <div
+              class="mat-form-field-hint-wrapper ng-tns-c1-1 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+              style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+            >
+              
+              <div
+                class="mat-form-field-hint-spacer"
+              />
+            </div>
+          </div>
+        </div>
+      </mat-form-field>
+      <h4
+        class="ng-tns-c0-0"
+      >
+        native html select
+      </h4>
+      <mat-form-field
+        class="mat-form-field ng-tns-c1-3 mat-primary mat-form-field-type-mat-native-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid _mat-animation-noopable"
+      >
+        <div
+          class="mat-form-field-wrapper"
+        >
+          <div
+            class="mat-form-field-flex"
+          >
+            
+            
+            <div
+              class="mat-form-field-infix"
+            >
+              <select
+                aria-invalid="false"
+                aria-required="false"
+                class="mat-input-element mat-form-field-autofill-control ng-tns-c0-0 cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid"
+                formcontrolname="car"
+                id="mat-input-0"
+                matnativecontrol=""
+                ng-reflect-name="car"
+              >
+                <option
+                  class="ng-tns-c0-0"
+                  label="--select something --"
+                />
+                <option
+                  class="ng-tns-c0-0"
+                  ng-reflect-value="saab"
+                  value="saab"
+                >
+                  Saab
+                </option>
+                <option
+                  class="ng-tns-c0-0"
+                  ng-reflect-value="mercedes"
+                  value="mercedes"
+                >
+                  Mercedes
+                </option>
+                <option
+                  class="ng-tns-c0-0"
+                  ng-reflect-value="audi"
+                  value="audi"
+                >
+                  Audi
+                </option>
+              </select>
+              <span
+                class="mat-form-field-label-wrapper"
+              >
+                
+                <label
+                  aria-owns="mat-input-0"
+                  class="mat-form-field-label ng-tns-c1-3 mat-empty mat-form-field-empty ng-star-inserted"
+                  for="mat-input-0"
+                  id="mat-form-field-label-3"
+                  ng-reflect-disabled="true"
+                  ng-reflect-ng-switch="true"
+                >
+                  
+                  
+                  <mat-label
+                    class="ng-tns-c0-0 ng-star-inserted"
+                  >
+                    Select your car:
+                  </mat-label>
+                  
+                  
+                </label>
+              </span>
+            </div>
+            
+          </div>
+          
+          <div
+            class="mat-form-field-underline ng-tns-c1-3 ng-star-inserted"
+          >
+            <span
+              class="mat-form-field-ripple"
+            />
+          </div>
+          <div
+            class="mat-form-field-subscript-wrapper"
+            ng-reflect-ng-switch="hint"
+          >
+            
+            
+            <div
+              class="mat-form-field-hint-wrapper ng-tns-c1-3 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+              style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+            >
+              
+              <div
+                class="mat-form-field-hint-spacer"
+              />
+            </div>
+          </div>
+        </div>
+      </mat-form-field>
     </form>
     <div
       class="ng-tns-c0-0"

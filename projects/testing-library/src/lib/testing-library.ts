@@ -4,7 +4,7 @@ import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from '@testing-library/dom';
 import { RenderResult, RenderOptions } from './models';
-import { createType } from './user-events';
+import { createType, createSelectOptions } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent implements OnInit {
@@ -87,6 +87,7 @@ export async function render<T>(
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
     type: createType(eventsWithDetectChanges),
+    selectOptions: createSelectOptions(eventsWithDetectChanges),
   } as any;
 }
 

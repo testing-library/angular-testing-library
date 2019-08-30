@@ -32,6 +32,33 @@
     Age:
     <input type="number" formControlName="age" />
   </label>
+
+  <label for="color">Favorite color:</label>
+  <select formControlName="color" id="color">
+    <option *ngFor="let color of colors" [ngValue]="color">{{ color }}</option>
+  </select>
+
+  <h4>mat select</h4>
+  <mat-form-field>
+    <mat-label>Favorite animal:</mat-label>
+    <mat-select formControlName="animal">
+      <mat-option>--</mat-option>
+      <mat-option *ngFor="let animal of animals" [value]="animal">
+        {{ animal.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <h4>native html select</h4>
+  <mat-form-field>
+    <mat-label>Select your car:</mat-label>
+    <select matNativeControl formControlName="car">
+      <option label="--select something --"></option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+  </mat-form-field>
 </form>
 
 <div>
