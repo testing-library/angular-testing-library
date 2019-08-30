@@ -44,7 +44,11 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
     matcherOptions?: SelectorMatcherOptions,
   ) {
     const selectElement = element as HTMLSelectElement;
-    Array.from(selectElement.selectedOptions).forEach(option => (option.selected = false));
+
+    if (selectElement.selectedOptions) {
+      Array.from(selectElement.selectedOptions).forEach(option => (option.selected = false));
+    }
+
     const focusedElement = document.activeElement;
     const wasAnotherElementFocused = focusedElement !== document.body && focusedElement !== selectElement;
 

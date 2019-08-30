@@ -8,11 +8,12 @@ import { provideMock } from '@testing-library/angular/jest-utils';
 import { AppComponent } from './app.component';
 import { GreetService } from './greet.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from './material.mode';
 
 test(`matches snapshot`, async () => {
   const { container } = await render('<app-root></app-root>', {
     declarations: [AppComponent],
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, MaterialModule],
     providers: [provideMockStore()],
   });
   expect(container).toMatchSnapshot();
@@ -21,7 +22,7 @@ test(`matches snapshot`, async () => {
 test(`should have a title`, async () => {
   const { getByText } = await render('<app-root></app-root>', {
     declarations: [AppComponent],
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, MaterialModule],
     providers: [provideMockStore()],
   });
   expect(getByText('Welcome to app!')).toBeDefined();
@@ -30,7 +31,7 @@ test(`should have a title`, async () => {
 test(`should render title in a h1 tag`, async () => {
   const { container } = await render('<app-root></app-root>', {
     declarations: [AppComponent],
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, MaterialModule],
     providers: [provideMockStore()],
   });
   expect(container.querySelector('h1').textContent).toContain('Welcome to app!');
@@ -39,7 +40,7 @@ test(`should render title in a h1 tag`, async () => {
 test(`should be able to get the Store`, async () => {
   await render('<app-root></app-root>', {
     declarations: [AppComponent],
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, MaterialModule],
     providers: [provideMockStore()],
   });
   expect(TestBed.get<Store<any>>(Store)).toBeDefined();
@@ -48,7 +49,7 @@ test(`should be able to get the Store`, async () => {
 test(`should provide a mock greet service`, async () => {
   const component = await render(AppComponent, {
     declarations: [AppComponent],
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, MaterialModule],
     providers: [provideMockStore(), provideMock(GreetService)],
   });
   const service: GreetService = TestBed.get<GreetService>(GreetService);
@@ -61,7 +62,7 @@ test(`should provide a mock greet service`, async () => {
 describe('Forms', () => {
   test(`should have form validations`, async () => {
     const component = await render(AppComponent, {
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, MaterialModule],
       providers: [provideMockStore()],
     });
 
@@ -71,6 +72,8 @@ describe('Forms', () => {
     const nameInput = component.getByLabelText('Name:');
     const ageInput = component.getByLabelText('Age:');
     const colorInput = component.getByLabelText('Favorite color:');
+    const animalInput = component.getByLabelText('Favorite animal:');
+    const carInput = component.getByLabelText(/car/);
 
     const nameValue = appComponent.form.get('name');
     const ageValue = appComponent.form.get('age');
@@ -92,12 +95,16 @@ describe('Forms', () => {
 
     component.selectOptions(colorInput, 'ink', { exact: false });
     component.selectOptions(colorInput, /YELLOW/i);
+    component.selectOptions(animalInput, 'Cow');
+    component.selectOptions(carInput, 'Audi');
 
     expect(appComponent.form.valid).toBe(true);
     expect(appComponent.form.value).toEqual({
       name: 'Bob',
       age: 20,
-      favoriteColor: 'yellow',
+      color: 'yellow',
+      animal: { name: 'Cow', sound: 'Moo!' },
+      car: 'audi',
     });
   });
 });

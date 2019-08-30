@@ -36,10 +36,19 @@ export class AppComponent {
   title = 'app';
 
   colors = ['red', 'blue', 'yellow', 'pink'];
+  animals = [
+    { name: 'Dog', sound: 'Woof!' },
+    { name: 'Cat', sound: 'Meow!' },
+    { name: 'Cow', sound: 'Moo!' },
+    { name: 'Fox', sound: 'Wa-pa-pa-pa-pa-pa-pow!' },
+  ];
+
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     age: ['', [Validators.min(18), Validators.max(28)]],
-    favoriteColor: [],
+    color: [],
+    animal: [],
+    car: [],
   });
 
   constructor(private store: Store<any>, private greetService: GreetService, private fb: FormBuilder) {}
