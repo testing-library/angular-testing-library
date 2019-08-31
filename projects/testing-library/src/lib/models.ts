@@ -8,15 +8,17 @@ export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in ke
 export interface RenderResult extends RenderResultQueries, FireObject, UserEvents {
   /**
    * @description
-   * The HTML of the rendered component
+   * The containing DOM node of your rendered Angular Component.
+   * This is a regular DOM node, so you can call container.querySelector etc. to inspect the children.
    */
   container: HTMLElement;
   /**
    * @description
-   * Prints out the component's HTML with syntax highlighting
+   * Prints out the component's DOM with syntax highlighting.
+   * Accepts an optional parameter, to print out a specific DOM node.
    *
    * @param
-   * element: The to be printed HTML element, if not provided it will log the whole component's HTML
+   * element: The to be printed HTML element, if not provided it will log the whole component's DOM
    */
   debug: (element?: HTMLElement) => void;
   /**

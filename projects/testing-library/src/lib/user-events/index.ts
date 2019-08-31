@@ -5,11 +5,11 @@ import { createSelectOptions } from './selectOptions';
 export interface UserEvents {
   /**
    * @description
-   * Types a value in an input field just like the user would do
+   * Types a value in an input field with the same interactions as the user would do.
    *
    * @argument
    * element: HTMLElement - the form field to type in
-   * value: string - the value to type in
+   * value: string | number - the value to type in
    *
    * @example
    * component.type(component.getByLabelText('Firstname'), 'Tim')
@@ -20,7 +20,7 @@ export interface UserEvents {
 
   /**
    * @description
-   * Select an option(s) from a select just like the user would do
+   * Select an option(s) from a select field with the same interactions as the user would do.
    *
    * @argument
    * element: HTMLElement - the select box to select an option in

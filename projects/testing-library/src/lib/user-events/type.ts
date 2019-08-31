@@ -9,7 +9,7 @@ function wait(time) {
 export interface TypeOptions {
   /**
    * @description
-   * Write the text at once rather than on character at a time
+   * Types the text at once rather than on character at a time
    *
    * @default
    * false
