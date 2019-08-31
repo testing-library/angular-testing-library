@@ -86,7 +86,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    *
    * @example
    * const component = render(AppComponent, {
-   *  providers: [
+   *  imports: [
    *    AppSharedModule,
    *    MaterialModule,
    *  ]
@@ -104,7 +104,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    *
    * @example
    * const component = render(AppComponent, {
-   *  imports: [
+   *  schemas: [
    *    NO_ERRORS_SCHEMA,
    *  ]
    * })
@@ -160,7 +160,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   queries?: Q;
   /**
    * @description
-   *  An Angular component to wrap the component in
+   * An Angular component to wrap the component in.
    *
    * @default
    * `WrapperComponent`, an empty component that strips the `ng-version` attribute
