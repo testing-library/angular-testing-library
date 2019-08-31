@@ -6,6 +6,25 @@ function wait(time) {
   });
 }
 
+export interface TypeOptions {
+  /**
+   * @description
+   * Write the text at once rather than on character at a time
+   *
+   * @default
+   * false
+   */
+  allAtOnce?: boolean;
+  /**
+   * @description
+   * Number of milliseconds until the next character is typed
+   *
+   * @default
+   * 0
+   */
+  delay?: number;
+}
+
 // implementation from https://github.com/testing-library/user-event
 export function createType(fireEvent: FireFunction & FireObject) {
   function createFireChangeEvent(value: string) {
@@ -17,7 +36,8 @@ export function createType(fireEvent: FireFunction & FireObject) {
     };
   }
 
-  return async function type(element: HTMLElement, value: string, { allAtOnce = false, delay = 0 } = {}) {
+  return async function type(element: HTMLElement, value: string, options?: TypeOptions) {
+    const { allAtOnce = false, delay = 0 } = options || {};
     const initialValue = (element as HTMLInputElement).value;
 
     if (allAtOnce) {
