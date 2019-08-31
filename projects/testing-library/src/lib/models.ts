@@ -39,7 +39,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * true
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  detectChanges: false
    * })
    */
@@ -54,7 +54,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * []
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  declarations: [ CustomerDetailComponent, ButtonComponent ]
    * })
    */
@@ -69,7 +69,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * []
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  providers: [
    *    CustomersService,
    *    {
@@ -91,7 +91,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * `[NoopAnimationsModule]`
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  imports: [
    *    AppSharedModule,
    *    MaterialModule,
@@ -110,7 +110,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * []
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  schemas: [
    *    NO_ERRORS_SCHEMA,
    *  ]
@@ -125,7 +125,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * {}
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  componentProperties: {
    *    counterValue: 10,
    *    send: (value) => { ... }
@@ -143,7 +143,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * []
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  componentProviders: [
    *    AppComponentService
    *  ]
@@ -161,7 +161,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * import * as customQueries from 'custom-queries'
    * import { queries } from '@testing-library/angular'
    *
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  queries: { ...queries, ...customQueries }
    * })
    */
@@ -174,7 +174,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * `WrapperComponent`, an empty component that strips the `ng-version` attribute
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  wrapper: CustomWrapperComponent
    * })
    */
@@ -188,7 +188,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * false
    *
    * @example
-   * const component = render(AppComponent, {
+   * const component = await render(AppComponent, {
    *  imports: [AppModule], // a module that includes AppComponent
    *  excludeComponentDeclaration: true
    * })
