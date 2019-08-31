@@ -20,7 +20,6 @@ class WrapperComponent implements OnInit {
 }
 
 test('allows for a custom wrapper', async () => {
-  jest.spyOn(console, 'log').mockImplementation(() => {});
   const { getByText } = await render('<fixture></fixture>', {
     declarations: [FixtureComponent],
     wrapper: WrapperComponent,
