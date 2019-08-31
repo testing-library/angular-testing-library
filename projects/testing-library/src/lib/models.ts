@@ -23,7 +23,8 @@ export interface RenderResult extends RenderResultQueries, FireObject, UserEvent
   debug: (element?: HTMLElement) => void;
   /**
    * @description
-   * The Angular `ComponentFixture` of the component
+   * The Angular `ComponentFixture` of the component.
+   *
    * For more info see https://angular.io/api/core/testing/ComponentFixture
    */
   fixture: ComponentFixture<any>;
@@ -45,7 +46,8 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   detectChanges?: boolean;
   /**
    * @description
-   * A collection of components, directives and pipes needed to render the component, for example, nested components of the component
+   * A collection of components, directives and pipes needed to render the component, for example, nested components of the component.
+   *
    * For more info see https://angular.io/api/core/NgModule#declarations
    *
    * @default
@@ -59,7 +61,8 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   declarations?: any[];
   /**
    * @description
-   * A collection of providers needed to render the component via Dependency Injection, for example, injectable services or tokens
+   * A collection of providers needed to render the component via Dependency Injection, for example, injectable services or tokens.
+   *
    * For more info see https://angular.io/api/core/NgModule#providers
    *
    * @default
@@ -79,11 +82,12 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   providers?: any[];
   /**
    * @description
-   * A collection of imports needed to render the component, for example, shared modules
+   * A collection of imports needed to render the component, for example, shared modules.
+   * Adds `NoopAnimationsModule` by default if `BrowserAnimationsModule` isn't added to the collection.
+   *
    * For more info see https://angular.io/api/core/NgModule#imports
    *
    * @default
-   * Adds `NoopAnimationsModule` by default if `BrowserAnimationsModule` isn't added to the collection:
    * `[NoopAnimationsModule]`
    *
    * @example
@@ -98,7 +102,8 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   /**
    * @description
    * A collection of schemas needed to render the component.
-   * Allowed value are `NO_ERRORS_SCHEMA` and `CUSTOM_ELEMENTS_SCHEMA`.
+   * Allowed values are `NO_ERRORS_SCHEMA` and `CUSTOM_ELEMENTS_SCHEMA`.
+   *
    * For more info see https://angular.io/api/core/NgModule#schemas
    *
    * @default
@@ -130,7 +135,8 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   componentProperties?: Partial<C>;
   /**
    * @description
-   * A collection of providers to inject dependencies of the component
+   * A collection of providers to inject dependencies of the component.
+   *
    * For more info see https://angular.io/api/core/Directive#providers
    *
    * @default
