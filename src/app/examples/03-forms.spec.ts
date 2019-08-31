@@ -27,7 +27,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(component.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
-  component.type(scoreControl, '7');
+  component.type(scoreControl, 7);
   expect(scoreControl).toBeValid();
 
   expect(errors).not.toBeInTheDocument();

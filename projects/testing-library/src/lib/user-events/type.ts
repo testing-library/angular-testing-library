@@ -36,7 +36,7 @@ export function createType(fireEvent: FireFunction & FireObject) {
     };
   }
 
-  return async function type(element: HTMLElement, value: string, options?: TypeOptions) {
+  return async function type(element: HTMLElement, value: string | number, options?: TypeOptions) {
     const { allAtOnce = false, delay = 0 } = options || {};
     const initialValue = (element as HTMLInputElement).value;
 
@@ -46,9 +46,10 @@ export function createType(fireEvent: FireFunction & FireObject) {
       return;
     }
 
+    const text = value.toString();
     let actuallyTyped = '';
-    for (let index = 0; index < value.length; index++) {
-      const char = value[index];
+    for (let index = 0; index < text.length; index++) {
+      const char = text[index];
       const key = char;
       const keyCode = char.charCodeAt(0);
 
