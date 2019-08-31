@@ -10,11 +10,15 @@ export const selectItems = createSelector(
   selector: 'app-fixture',
   template: `
     <ul>
-      <li *ngFor="let item of items | async">{{ item }}</li>
+      <li *ngFor="let item of items | async" (click)="send(item)">{{ item }}</li>
     </ul>
   `,
 })
 export class WithNgRxMockStoreComponent {
   items = this.store.pipe(select(selectItems));
   constructor(private store: Store<any>) {}
+
+  send(item: string) {
+    this.store.dispatch({ type: '[Item List] send', item });
+  }
 }

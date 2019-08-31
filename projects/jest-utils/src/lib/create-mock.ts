@@ -32,6 +32,6 @@ export function createMock<T>(type: Type<T>): Mock<T> {
 export function provideMock<T>(type: Type<T>): Provider {
   return {
     provide: type,
-    useFactory: () => createMock(type),
+    useValue: createMock(type),
   };
 }

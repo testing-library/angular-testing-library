@@ -116,7 +116,7 @@ export class CounterComponent {
 
 counter.component.spec.ts
 
-```javascript
+```typescript
 import { render } from '@testing-library/angular';
 import CounterComponent from './counter.component.ts';
 
@@ -136,6 +136,8 @@ describe('Counter', () => {
   });
 });
 ```
+
+[See more examples](https://github.com/testing-library/angular-testing-library/tree/master/src/app/examples)
 
 ## Installation
 
