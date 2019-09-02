@@ -20,22 +20,24 @@ class FixtureComponent implements OnInit {
   }
 }
 
-test('allows detecting changes directly', async () => {
-  const { getByTestId, type } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+describe('detectChanges', () => {
+  test('does not recognize change if execution is delayed', async () => {
+    const { getByTestId, type } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
-  type(getByTestId('input'), 'What a great day!');
-  expect(getByTestId('button').innerHTML).toBe('Button');
-});
-
-test('allows detecting changes directly', fakeAsync(async () => {
-  const { getByTestId, type, detectChanges } = await render(FixtureComponent, {
-    imports: [ReactiveFormsModule],
+    type(getByTestId('input'), 'What a great day!');
+    expect(getByTestId('button').innerHTML).toBe('Button');
   });
 
-  type(getByTestId('input'), 'What a great day!');
+  test('exposes detectChanges triggering a change detection cycle', fakeAsync(async () => {
+    const { getByTestId, type, detectChanges } = await render(FixtureComponent, {
+      imports: [ReactiveFormsModule],
+    });
 
-  tick(500);
-  detectChanges();
+    type(getByTestId('input'), 'What a great day!');
 
-  expect(getByTestId('button').innerHTML).toBe('Button updated after 400ms');
-}));
+    tick(500);
+    detectChanges();
+
+    expect(getByTestId('button').innerHTML).toBe('Button updated after 400ms');
+  }));
+});
