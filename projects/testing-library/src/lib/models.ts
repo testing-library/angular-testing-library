@@ -1,6 +1,6 @@
 import { Type } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
-import { FireObject, Queries, queries, BoundFunction } from '@testing-library/dom';
+import { BoundFunction, FireObject, Queries, queries } from '@testing-library/dom';
 import { UserEvents } from './user-events';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
@@ -21,6 +21,7 @@ export interface RenderResult extends RenderResultQueries, FireObject, UserEvent
    * element: The to be printed HTML element, if not provided it will log the whole component's DOM
    */
   debug: (element?: HTMLElement) => void;
+  detectChanges: () => void;
   /**
    * @description
    * The Angular `ComponentFixture` of the component.
