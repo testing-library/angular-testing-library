@@ -21,6 +21,12 @@ export interface RenderResult extends RenderResultQueries, FireObject, UserEvent
    * element: The to be printed HTML element, if not provided it will log the whole component's DOM
    */
   debug: (element?: HTMLElement) => void;
+  /**
+   * @description
+   * Trigger a change detection cycle for the component.
+   *
+   * For more info see https://angular.io/api/core/testing/ComponentFixture#detectChanges
+   */
   detectChanges: () => void;
   /**
    * @description
