@@ -1,10 +1,10 @@
-import { Component, OnInit, ElementRef, Type, DebugElement } from '@angular/core';
+import { Component, DebugElement, ElementRef, OnInit, Type } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { getQueriesForElement, prettyDOM, fireEvent, FireObject, FireFunction } from '@testing-library/dom';
-import { RenderResult, RenderOptions } from './models';
-import { createType, createSelectOptions } from './user-events';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { fireEvent, FireFunction, FireObject, getQueriesForElement, prettyDOM } from '@testing-library/dom';
+import { RenderOptions, RenderResult } from './models';
+import { createSelectOptions, createType } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent implements OnInit {
@@ -84,6 +84,7 @@ export async function render<T>(
     fixture,
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
+    detectChanges: () => fixture.detectChanges(),
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
     type: createType(eventsWithDetectChanges),
