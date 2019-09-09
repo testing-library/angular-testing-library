@@ -80,7 +80,7 @@ describe('updates the value', () => {
     assertType(component, () => component.fixture.componentInstance.value.nativeElement.value);
   });
 
-  function assertType(component: RenderResult, value: () => string) {
+  function assertType(component: RenderResult<any>, value: () => string) {
     const input = '@testing-library/angular';
     const inputControl = component.getByTestId('input') as HTMLInputElement;
     component.type(inputControl, input);

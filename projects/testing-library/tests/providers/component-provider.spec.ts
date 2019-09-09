@@ -9,14 +9,6 @@ test('shows the service value', async () => {
   getByText('foo');
 });
 
-test('shows the service value with template syntax', async () => {
-  const { getByText } = await render('<fixture-component></fixture-component>', {
-    declarations: [FixtureComponent],
-  });
-
-  getByText('foo');
-});
-
 test('shows the provided service value', async () => {
   const { getByText } = await render(FixtureComponent, {
     componentProviders: [
@@ -35,8 +27,7 @@ test('shows the provided service value', async () => {
 });
 
 test('shows the provided service value with template syntax', async () => {
-  const { getByText } = await render('<fixture-component></fixture-component>', {
-    declarations: [FixtureComponent],
+  const { getByText } = await render(FixtureComponent, {
     componentProviders: [
       {
         provide: Service,

@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Type, DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, FireObject, Queries, queries } from '@testing-library/dom';
@@ -6,7 +6,10 @@ import { UserEvents } from './user-events';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
 
-export interface RenderResult extends RenderResultQueries, FireObject, UserEvents {
+export interface RenderResult<ComponentType, WrapperType = ComponentType>
+  extends RenderResultQueries,
+    FireObject,
+    UserEvents {
   /**
    * @description
    * The containing DOM node of your rendered Angular Component.
@@ -31,11 +34,19 @@ export interface RenderResult extends RenderResultQueries, FireObject, UserEvent
   detectChanges: () => void;
   /**
    * @description
-   * The Angular `ComponentFixture` of the component.
+   * The Angular `ComponentFixture` of the component or the wrapper.
+   * If a template is provided, it will be the fixture of the wrapper.
    *
    * For more info see https://angular.io/api/core/testing/ComponentFixture
    */
-  fixture: ComponentFixture<any>;
+  fixture: ComponentFixture<WrapperType>;
+  /**
+   * @description
+   * The Angular `DebugElement` of the component.
+   *
+   * For more info see https://angular.io/api/core/DebugElement
+   */
+  debugElement: DebugElement;
   /**
    * @description
    * Navigates to the href of the element or to the path.
@@ -44,7 +55,7 @@ export interface RenderResult extends RenderResultQueries, FireObject, UserEvent
   navigate: (elementOrPath: Element | string, basePath?: string) => Promise<boolean>;
 }
 
-export interface RenderOptions<C, Q extends Queries = typeof queries> {
+export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
   /**
    * @description
    * Will call detectChanges when the component is compiled
@@ -146,7 +157,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    *  }
    * })
    */
-  componentProperties?: Partial<C>;
+  componentProperties?: Partial<ComponentType>;
   /**
    * @description
    * A collection of providers to inject dependencies of the component.
@@ -182,19 +193,6 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
   queries?: Q;
   /**
    * @description
-   * An Angular component to wrap the component in.
-   *
-   * @default
-   * `WrapperComponent`, an empty component that strips the `ng-version` attribute
-   *
-   * @example
-   * const component = await render(AppComponent, {
-   *  wrapper: CustomWrapperComponent
-   * })
-   */
-  wrapper?: Type<any>;
-  /**
-   * @description
    * Exclude the component to be automatically be added as a declaration.
    * This is needed when the component is declared in an imported module.
    *
@@ -208,6 +206,7 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * })
    */
   excludeComponentDeclaration?: boolean;
+
   /**
    * @description
    * The route configuration to set up the router service via `RouterTestingModule.withRoutes`.
@@ -215,19 +214,49 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    *
    * @example
    * const component = await render(AppComponent, {
-   *  declarations: [ChildComponent],
-   *  routes: [
-   *    {
-   *      path: '',
-   *      children: [
-   *         {
-   *            path: 'child/:id',
-   *            component: ChildComponent
-   *          }
-   *      ]
-   *    }
-   *  ]
+    *  declarations: [ChildComponent],
+    *  routes: [
+    *    {
+    *      path: '',
+    *      children: [
+    *         {
+    *            path: 'child/:id',
+    *            component: ChildComponent
+    *          }
+    *      ]
+    *    }
+    *  ]
+    * })
+    */
+   routes?: Routes;
+}
+
+export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Queries = typeof queries>
+  extends RenderComponentOptions<DirectiveType, Q> {
+  /**
+   * @description
+   * The template to render the directive.
+   * This template will override the template from the WrapperComponent.
+   *
+   * @example
+   * const component = await render(SpoilerDirective, {
+   *  template: `<div spoiler message='SPOILER'></div>`
    * })
    */
-  routes?: Routes;
+  template: string;
+  /**
+   * @description
+   * An Angular component to wrap the component in.
+   * The template will be overridden with the `template` option.
+   *
+   * @default
+   * `WrapperComponent`, an empty component that strips the `ng-version` attribute
+   *
+   * @example
+   * const component = await render(SpoilerDirective, {
+   *  template: `<div spoiler message='SPOILER'></div>`
+   *  wrapper: CustomWrapperComponent
+   * })
+   */
+  wrapper?: Type<WrapperType>;
 }

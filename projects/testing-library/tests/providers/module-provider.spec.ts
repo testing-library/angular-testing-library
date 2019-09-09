@@ -12,8 +12,7 @@ test('shows the service value', async () => {
 });
 
 test('shows the service value with template syntax', async () => {
-  const { getByText } = await render('<fixture-component></fixture-component>', {
-    declarations: [FixtureComponent],
+  const { getByText } = await render(FixtureComponent, {
     providers: [Service],
   });
 
@@ -38,8 +37,7 @@ test('shows the provided service value', async () => {
 });
 
 test('shows the provided service value with template syntax', async () => {
-  const { getByText } = await render('<fixture-component></fixture-component>', {
-    declarations: [FixtureComponent],
+  const { getByText } = await render(FixtureComponent, {
     providers: [
       {
         provide: Service,

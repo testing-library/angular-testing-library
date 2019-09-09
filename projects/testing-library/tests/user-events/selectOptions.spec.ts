@@ -99,7 +99,7 @@ describe('selectOption: single', () => {
     assertSelectOptions(component, () => component.fixture.componentInstance.value.nativeElement.value);
   });
 
-  function assertSelectOptions(component: RenderResult, value: () => string) {
+  function assertSelectOptions(component: RenderResult<any>, value: () => string) {
     const inputControl = component.getByTestId('select') as HTMLSelectElement;
     component.selectOptions(inputControl, /apples/i);
     component.selectOptions(inputControl, 'Oranges');
@@ -129,7 +129,7 @@ describe('selectOption: multiple', () => {
       `,
     })
     class FixtureComponent {
-      value: string;
+      value: string[];
     }
 
     const component = await render(FixtureComponent, {
@@ -222,7 +222,7 @@ describe('selectOption: multiple', () => {
     expect((component.getByTestId('lemons') as HTMLOptionElement).selected).toBe(true);
   });
 
-  function assertSelectOptions(component: RenderResult, value: () => string) {
+  function assertSelectOptions(component: RenderResult<any>, value: () => string[]) {
     const inputControl = component.getByTestId('select') as HTMLSelectElement;
     component.selectOptions(inputControl, /apples/i);
     component.selectOptions(inputControl, ['Oranges', 'Lemons']);
