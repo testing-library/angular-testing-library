@@ -1,7 +1,9 @@
-import { Component, DebugElement, ElementRef, OnInit, Type } from '@angular/core';
+import { Component, DebugElement, ElementRef, OnInit, Type, NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { fireEvent, FireFunction, FireObject, getQueriesForElement, prettyDOM } from '@testing-library/dom';
 import { RenderOptions, RenderResult } from './models';
 import { createSelectOptions, createType } from './user-events';
@@ -32,6 +34,7 @@ export async function render<T>(
     componentProperties = {},
     componentProviders = [],
     excludeComponentDeclaration = false,
+    routes,
   } = renderOptions;
 
   const isTemplate = typeof templateOrComponent === 'string';
@@ -44,7 +47,7 @@ export async function render<T>(
 
   TestBed.configureTestingModule({
     declarations: [...declarations, ...componentDeclarations],
-    imports: addAutoImports(imports),
+    imports: addAutoImports({ imports, routes }),
     providers: [...providers],
     schemas: [...schemas],
   });
@@ -80,6 +83,20 @@ export async function render<T>(
     {} as FireFunction & FireObject,
   );
 
+  let router = routes ? (TestBed.get<Router>(Router) as Router) : null;
+  const zone = TestBed.get<NgZone>(NgZone) as NgZone;
+
+  async function navigate(elementOrPath: Element | string, basePath = '') {
+    if (!router) {
+      router = TestBed.get<Router>(Router) as Router;
+    }
+
+    const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
+
+    await zone.run(() => router.navigate([basePath + href]));
+    fixture.detectChanges();
+  }
+
   return {
     fixture,
     container: fixture.nativeElement,
@@ -89,6 +106,7 @@ export async function render<T>(
     ...eventsWithDetectChanges,
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
+    navigate,
   } as any;
 }
 
@@ -168,10 +186,16 @@ function declareComponents({ isTemplate, wrapper, excludeComponentDeclaration, t
   return [templateOrComponent];
 }
 
-function addAutoImports(imports: any[]) {
-  if (imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1) {
-    return imports;
-  }
+function addAutoImports({ imports, routes }: Pick<RenderOptions<any>, 'imports' | 'routes'>) {
+  const animations = () => {
+    const animationIsDefined =
+      imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
+    return animationIsDefined ? [] : [NoopAnimationsModule];
+  };
 
-  return [...imports, NoopAnimationsModule];
+  const routing = () => {
+    return routes ? [RouterTestingModule.withRoutes(routes)] : [];
+  };
+
+  return [...imports, ...animations(), ...routing()];
 }

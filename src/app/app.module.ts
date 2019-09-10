@@ -20,6 +20,7 @@ import { MaterialFormsComponent } from './examples/04-forms-with-material';
 import { ComponentWithProviderComponent } from './examples/05-component-provider';
 import { WithNgRxStoreComponent, reducer } from './examples/06-with-ngrx-store';
 import { WithNgRxMockStoreComponent } from './examples/07-with-ngrx-mock-store';
+import { MasterComponent, DetailComponent, HiddenDetailComponent } from './examples/09-router';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,9 @@ import { WithNgRxMockStoreComponent } from './examples/07-with-ngrx-mock-store';
     ComponentWithProviderComponent,
     WithNgRxStoreComponent,
     WithNgRxMockStoreComponent,
+    MasterComponent,
+    DetailComponent,
+    HiddenDetailComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
+import { Routes } from '@angular/router';
 import { BoundFunction, FireObject, Queries, queries } from '@testing-library/dom';
 import { UserEvents } from './user-events';
 
@@ -35,6 +36,12 @@ export interface RenderResult extends RenderResultQueries, FireObject, UserEvent
    * For more info see https://angular.io/api/core/testing/ComponentFixture
    */
   fixture: ComponentFixture<any>;
+  /**
+   * @description
+   * Navigates to the href of the element or to the path.
+   *
+   */
+  navigate: (elementOrPath: Element | string, basePath?: string) => Promise<boolean>;
 }
 
 export interface RenderOptions<C, Q extends Queries = typeof queries> {
@@ -201,4 +208,26 @@ export interface RenderOptions<C, Q extends Queries = typeof queries> {
    * })
    */
   excludeComponentDeclaration?: boolean;
+  /**
+   * @description
+   * The route configuration to set up the router service via `RouterTestingModule.withRoutes`.
+   * For more info see https://angular.io/api/router/Routes.
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *  declarations: [ChildComponent],
+   *  routes: [
+   *    {
+   *      path: '',
+   *      children: [
+   *         {
+   *            path: 'child/:id',
+   *            component: ChildComponent
+   *          }
+   *      ]
+   *    }
+   *  ]
+   * })
+   */
+  routes?: Routes;
 }
