@@ -1,0 +1,38 @@
+import { OnInit, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-master',
+  template: `
+    <a [routerLink]="'./detail/one'">Load one</a> | <a [routerLink]="'./detail/two'">Load two</a> |
+    <a [routerLink]="'./detail/three'">Load three</a> |
+
+    <hr />
+
+    <router-outlet></router-outlet>
+  `,
+})
+export class MasterComponent {}
+
+@Component({
+  selector: 'app-detail',
+  template: `
+    <h2>Detail {{ id | async }}</h2>
+
+    <a [routerLink]="'../..'">Back to parent</a>
+    <a routerLink="/hidden-detail">hidden x</a>
+  `,
+})
+export class DetailComponent {
+  id = this.route.paramMap.pipe(map(params => params.get('id')));
+  constructor(private route: ActivatedRoute) {}
+}
+
+@Component({
+  selector: 'app-detail-hidden',
+  template: `
+    You found the treasure!
+  `,
+})
+export class HiddenDetailComponent {}

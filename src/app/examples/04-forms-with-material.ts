@@ -34,6 +34,22 @@ import { FormBuilder, Validators, ReactiveFormsModule, ValidationErrors } from '
       </div>
     </form>
   `,
+  styles: [
+    `
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      form > * {
+        width: 100%;
+      }
+
+      [role='alert'] {
+        color: red;
+      }
+    `,
+  ],
 })
 export class MaterialFormsComponent {
   colors = [{ id: 'R', value: 'Red' }, { id: 'B', value: 'Blue' }, { id: 'G', value: 'Green' }];
