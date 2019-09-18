@@ -214,21 +214,21 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *
    * @example
    * const component = await render(AppComponent, {
-    *  declarations: [ChildComponent],
-    *  routes: [
-    *    {
-    *      path: '',
-    *      children: [
-    *         {
-    *            path: 'child/:id',
-    *            component: ChildComponent
-    *          }
-    *      ]
-    *    }
-    *  ]
-    * })
-    */
-   routes?: Routes;
+   *  declarations: [ChildComponent],
+   *  routes: [
+   *    {
+   *      path: '',
+   *      children: [
+   *         {
+   *            path: 'child/:id',
+   *            component: ChildComponent
+   *          }
+   *      ]
+   *    }
+   *  ]
+   * })
+   */
+  routes?: Routes;
 }
 
 export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Queries = typeof queries>
@@ -259,4 +259,5 @@ export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Qu
    * })
    */
   wrapper?: Type<WrapperType>;
+  componentProperties?: Partial<any>;
 }
