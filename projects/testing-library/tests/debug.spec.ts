@@ -12,9 +12,7 @@ class FixtureComponent {}
 
 test('debug', async () => {
   jest.spyOn(console, 'log').mockImplementation(() => {});
-  const { debug } = await render('<fixture></fixture>', {
-    declarations: [FixtureComponent],
-  });
+  const { debug } = await render(FixtureComponent);
 
   debug();
 
@@ -24,9 +22,7 @@ test('debug', async () => {
 
 test('debug allows to be called with an element', async () => {
   jest.spyOn(console, 'log').mockImplementation(() => {});
-  const { debug, getByTestId } = await render('<fixture></fixture>', {
-    declarations: [FixtureComponent],
-  });
+  const { debug, getByTestId } = await render(FixtureComponent);
   const btn = getByTestId('btn');
 
   debug(btn);

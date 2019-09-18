@@ -1,28 +1,35 @@
-import { Component, DebugElement, ElementRef, OnInit, Type, NgZone } from '@angular/core';
+import { Component, ElementRef, OnInit, Type, NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { fireEvent, FireFunction, FireObject, getQueriesForElement, prettyDOM } from '@testing-library/dom';
-import { RenderOptions, RenderResult } from './models';
+import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent implements OnInit {
-  constructor(private elemtRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
-    this.elemtRef.nativeElement.removeAttribute('ng-version');
+    this.elementRef.nativeElement.removeAttribute('ng-version');
   }
 }
 
-export async function render<T>(template: string, renderOptions: RenderOptions<T>): Promise<RenderResult>;
-export async function render<T>(component: Type<T>, renderOptions?: RenderOptions<T>): Promise<RenderResult>;
-export async function render<T>(
-  templateOrComponent: string | Type<T>,
-  renderOptions: RenderOptions<T> = {},
-): Promise<RenderResult> {
+export async function render<ComponentType>(
+  component: Type<ComponentType>,
+  renderOptions?: RenderComponentOptions<ComponentType>,
+): Promise<RenderResult<ComponentType, ComponentType>>;
+export async function render<DirectiveType, WrapperType = WrapperComponent>(
+  component: Type<DirectiveType>,
+  renderOptions?: RenderDirectiveOptions<DirectiveType, WrapperType>,
+): Promise<RenderResult<DirectiveType, WrapperType>>;
+
+export async function render<SutType, WrapperType = SutType>(
+  sut: Type<SutType>,
+  renderOptions: RenderComponentOptions<SutType> | RenderDirectiveOptions<SutType, WrapperType> = {},
+): Promise<RenderResult<SutType>> {
   const {
     detectChanges = true,
     declarations = [],
@@ -30,24 +37,17 @@ export async function render<T>(
     providers = [],
     schemas = [],
     queries,
+    template,
     wrapper = WrapperComponent,
     componentProperties = {},
     componentProviders = [],
     excludeComponentDeclaration = false,
-    routes,
-  } = renderOptions;
-
-  const isTemplate = typeof templateOrComponent === 'string';
-  const componentDeclarations = declareComponents({
-    templateOrComponent,
-    wrapper,
-    isTemplate,
-    excludeComponentDeclaration,
-  });
+    routes
+  } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
   TestBed.configureTestingModule({
-    declarations: [...declarations, ...componentDeclarations],
-    imports: addAutoImports({ imports, routes }),
+    declarations: addAutoDeclarations(sut, { declarations, excludeComponentDeclaration, template, wrapper }),
+    imports: addAutoImports({imports, routes}),
     providers: [...providers],
     schemas: [...schemas],
   });
@@ -61,9 +61,8 @@ export async function render<T>(
       });
   }
 
-  const fixture = isTemplate
-    ? createWrapperComponentFixture(templateOrComponent as string, { wrapper, componentProperties })
-    : createComponentFixture(templateOrComponent as Type<T>, { componentProperties });
+  const fixture = createComponentFixture(sut, { template, wrapper });
+  setComponentProperties(fixture, { componentProperties });
 
   await TestBed.compileComponents();
 
@@ -93,12 +92,16 @@ export async function render<T>(
 
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
 
-    await zone.run(() => router.navigate([basePath + href]));
+    let result;
+    await zone.run(() => result = router.navigate([basePath + href]));
     fixture.detectChanges();
+    return result;
   }
+  const debugElement = fixture.debugElement.query(By.directive(sut));
 
   return {
     fixture,
+    debugElement,
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     detectChanges: () => fixture.detectChanges(),
@@ -107,66 +110,23 @@ export async function render<T>(
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
     navigate,
-  } as any;
+  };
 }
 
-/**
- * Creates the wrapper component and sets its the template to the to-be-tested component
- */
-function createWrapperComponentFixture<T>(
-  template: string,
-  {
-    wrapper,
-    componentProperties,
-  }: {
-    wrapper: RenderOptions<T>['wrapper'];
-    componentProperties: RenderOptions<T>['componentProperties'];
-  },
-): ComponentFixture<any> {
-  TestBed.overrideComponent(wrapper, {
-    set: {
-      template: template,
-    },
-  });
-
-  const fixture = TestBed.createComponent(wrapper);
-  // get the component selector, e.g. <foo color="green"> and <foo> results in foo
-  const componentSelector = template.match(/\<(.*?)\ /) || template.match(/\<(.*?)\>/);
-  if (!componentSelector) {
-    throw Error(`Template ${template} is not valid.`);
+function createComponentFixture<SutType>(
+  component: Type<SutType>,
+  { template, wrapper }: Pick<RenderDirectiveOptions<SutType, any>, 'template' | 'wrapper'>,
+): ComponentFixture<SutType> {
+  if (template) {
+    TestBed.overrideTemplate(wrapper, template);
+    return TestBed.createComponent(wrapper);
   }
-
-  const sut = fixture.debugElement.query(By.css(componentSelector[1]));
-  setComponentProperties(sut, { componentProperties });
-  return fixture;
+  return TestBed.createComponent(component);
 }
 
-/**
- * Creates the components and sets its properties
- */
-function createComponentFixture<T>(
-  component: Type<T>,
-  {
-    componentProperties = {},
-  }: {
-    componentProperties: RenderOptions<T>['componentProperties'];
-  },
-): ComponentFixture<T> {
-  const fixture = TestBed.createComponent(component);
-  setComponentProperties(fixture, { componentProperties });
-  return fixture;
-}
-
-/**
- * Set the component properties
- */
-function setComponentProperties<T>(
-  fixture: ComponentFixture<T> | DebugElement,
-  {
-    componentProperties = {},
-  }: {
-    componentProperties: RenderOptions<T>['componentProperties'];
-  },
+function setComponentProperties<SutType>(
+  fixture: ComponentFixture<SutType>,
+  { componentProperties = {} }: Pick<RenderDirectiveOptions<SutType, any>, 'componentProperties'>,
 ) {
   for (const key of Object.keys(componentProperties)) {
     fixture.componentInstance[key] = componentProperties[key];
@@ -174,19 +134,30 @@ function setComponentProperties<T>(
   return fixture;
 }
 
-function declareComponents({ isTemplate, wrapper, excludeComponentDeclaration, templateOrComponent }) {
-  if (isTemplate) {
-    return [wrapper];
-  }
+function addAutoDeclarations<SutType>(
+  component: Type<SutType>,
+  {
+    declarations,
+    excludeComponentDeclaration,
+    template,
+    wrapper,
+  }: Pick<
+    RenderDirectiveOptions<SutType, any>,
+    'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'
+  >,
+) {
+  const wrappers = () => {
+    return template ? [wrapper] : [];
+  };
 
-  if (excludeComponentDeclaration) {
-    return [];
-  }
+  const components = () => {
+    return excludeComponentDeclaration ? [] : [component];
+  };
 
-  return [templateOrComponent];
+  return [...declarations, ...wrappers(), ...components()];
 }
 
-function addAutoImports({ imports, routes }: Pick<RenderOptions<any>, 'imports' | 'routes'>) {
+function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>) {
   const animations = () => {
     const animationIsDefined =
       imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
