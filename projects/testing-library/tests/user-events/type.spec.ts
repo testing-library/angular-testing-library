@@ -178,7 +178,7 @@ describe('options', () => {
   });
 });
 
-test('should not type when event.preventDefault() is called', async () => {
+test('does not type when event.preventDefault() is called', async () => {
   @Component({
     selector: 'fixture',
     template: `
@@ -217,5 +217,29 @@ test('should not type when event.preventDefault() is called', async () => {
   component.blur(inputControl);
   expect(componentProperties.onChange).toBeCalledTimes(0);
 
+  expect(inputControl.value).toBe('');
+});
+
+test('can clear an input field', async () => {
+  @Component({
+    selector: 'fixture',
+    template: `
+      <input type="text" data-testid="input" [value]="initialValue" />
+    `,
+  })
+  class FixtureComponent {
+    @Input() initialValue = '';
+  }
+
+  const component = await render(FixtureComponent, {
+    componentProperties: {
+      initialValue: 'an initial value',
+    },
+  });
+
+  const inputControl = component.getByTestId('input') as HTMLInputElement;
+  expect(inputControl.value).toBe('an initial value');
+
+  component.type(inputControl, '');
   expect(inputControl.value).toBe('');
 });

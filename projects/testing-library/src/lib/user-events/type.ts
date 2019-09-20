@@ -40,7 +40,7 @@ export function createType(fireEvent: FireFunction & FireObject) {
     const { allAtOnce = false, delay = 0 } = options || {};
     const initialValue = (element as HTMLInputElement).value;
 
-    if (allAtOnce) {
+    if (allAtOnce || value === '') {
       fireEvent.input(element, { target: { value } });
       element.addEventListener('blur', createFireChangeEvent(initialValue));
       return;
