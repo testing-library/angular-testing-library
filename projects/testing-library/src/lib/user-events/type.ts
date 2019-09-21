@@ -38,11 +38,18 @@ export function createType(fireEvent: FireFunction & FireObject) {
 
   return async function type(element: HTMLElement, value: string | number, options?: TypeOptions) {
     const { allAtOnce = false, delay = 0 } = options || {};
-    const initialValue = (element as HTMLInputElement).value;
+    const inputElement = element as HTMLInputElement;
+    const initialValue = inputElement.value;
+
+    if (inputElement.disabled) {
+      return;
+    }
 
     if (allAtOnce || value === '') {
-      fireEvent.input(element, { target: { value } });
-      element.addEventListener('blur', createFireChangeEvent(initialValue));
+      if (!inputElement.readOnly) {
+        fireEvent.input(inputElement, { target: { value } });
+      }
+      inputElement.addEventListener('blur', createFireChangeEvent(initialValue));
       return;
     }
 
@@ -57,14 +64,14 @@ export function createType(fireEvent: FireFunction & FireObject) {
         await wait(delay);
       }
 
-      const downEvent = fireEvent.keyDown(element, {
+      const downEvent = fireEvent.keyDown(inputElement, {
         key: key,
         keyCode: keyCode,
         which: keyCode,
       });
 
       if (downEvent) {
-        const pressEvent = fireEvent.keyPress(element, {
+        const pressEvent = fireEvent.keyPress(inputElement, {
           key: key,
           keyCode,
           charCode: keyCode,
@@ -72,23 +79,25 @@ export function createType(fireEvent: FireFunction & FireObject) {
 
         if (pressEvent) {
           actuallyTyped += key;
-          fireEvent.input(element, {
-            target: {
-              value: actuallyTyped,
-            },
-            bubbles: true,
-            cancelable: true,
-          });
+          if (!inputElement.readOnly) {
+            fireEvent.input(inputElement, {
+              target: {
+                value: actuallyTyped,
+              },
+              bubbles: true,
+              cancelable: true,
+            });
+          }
         }
       }
 
-      fireEvent.keyUp(element, {
+      fireEvent.keyUp(inputElement, {
         key: key,
         keyCode: keyCode,
         which: keyCode,
       });
     }
 
-    element.addEventListener('blur', createFireChangeEvent(initialValue));
+    inputElement.addEventListener('blur', createFireChangeEvent(initialValue));
   };
 }
