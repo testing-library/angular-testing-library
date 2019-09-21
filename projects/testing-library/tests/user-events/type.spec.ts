@@ -178,13 +178,15 @@ describe('options', () => {
   });
 });
 
-test('does not type when event.preventDefault() is called', async () => {
+describe('does not type when ', () => {
   @Component({
     selector: 'fixture',
     template: `
       <input
         type="text"
         data-testid="input"
+        [disabled]="disabled"
+        [readonly]="readonly"
         (input)="onInput($event)"
         (change)="onChange($event)"
         (keydown)="onKeyDown($event)"
@@ -194,6 +196,9 @@ test('does not type when event.preventDefault() is called', async () => {
     `,
   })
   class FixtureComponent {
+    @Input() disabled = false;
+    @Input() readonly = false;
+
     onInput($event) {}
     onChange($event) {}
     onKeyDown($event) {}
@@ -201,23 +206,76 @@ test('does not type when event.preventDefault() is called', async () => {
     onKeyUp($event) {}
   }
 
-  const componentProperties = {
-    onChange: jest.fn(),
-    onKeyDown: jest.fn().mockImplementation(event => event.preventDefault()),
-  };
+  test('input is disabled', async () => {
+    const componentEvents = {
+      onInput: jest.fn(),
+      onChange: jest.fn(),
+      onKeyDown: jest.fn(),
+      onKeyPress: jest.fn(),
+      onKeyUp: jest.fn(),
+    };
 
-  const component = await render(FixtureComponent, { componentProperties });
+    const component = await render(FixtureComponent, {
+      componentProperties: {
+        disabled: true,
+        ...componentEvents,
+      },
+    });
 
-  const inputControl = component.getByTestId('input') as HTMLInputElement;
-  const inputValue = 'foobar';
-  component.type(inputControl, inputValue);
+    const inputControl = component.getByTestId('input') as HTMLInputElement;
+    component.type(inputControl, 'Hello');
 
-  expect(componentProperties.onKeyDown).toHaveBeenCalledTimes(inputValue.length);
+    Object.values(componentEvents).forEach(evt => expect(evt).not.toHaveBeenCalled());
+    expect(inputControl.value).toBe('');
+  });
 
-  component.blur(inputControl);
-  expect(componentProperties.onChange).toBeCalledTimes(0);
+  test('input is readonly', async () => {
+    const componentEvents = {
+      onInput: jest.fn(),
+      onChange: jest.fn(),
+      onKeyDown: jest.fn(),
+      onKeyPress: jest.fn(),
+      onKeyUp: jest.fn(),
+    };
 
-  expect(inputControl.value).toBe('');
+    const component = await render(FixtureComponent, {
+      componentProperties: {
+        readonly: true,
+        ...componentEvents,
+      },
+    });
+
+    const inputControl = component.getByTestId('input') as HTMLInputElement;
+    const value = 'Hello';
+    component.type(inputControl, value);
+
+    expect(componentEvents.onInput).not.toHaveBeenCalled();
+    expect(componentEvents.onChange).not.toHaveBeenCalled();
+    expect(componentEvents.onKeyDown).toHaveBeenCalledTimes(value.length);
+    expect(componentEvents.onKeyPress).toHaveBeenCalledTimes(value.length);
+    expect(componentEvents.onKeyUp).toHaveBeenCalledTimes(value.length);
+    expect(inputControl.value).toBe('');
+  });
+
+  test('event.preventDefault() is called', async () => {
+    const componentProperties = {
+      onChange: jest.fn(),
+      onKeyDown: jest.fn().mockImplementation(event => event.preventDefault()),
+    };
+
+    const component = await render(FixtureComponent, { componentProperties });
+
+    const inputControl = component.getByTestId('input') as HTMLInputElement;
+    const inputValue = 'foobar';
+    component.type(inputControl, inputValue);
+
+    expect(componentProperties.onKeyDown).toHaveBeenCalledTimes(inputValue.length);
+
+    component.blur(inputControl);
+    expect(componentProperties.onChange).toBeCalledTimes(0);
+
+    expect(inputControl.value).toBe('');
+  });
 });
 
 test('can clear an input field', async () => {
