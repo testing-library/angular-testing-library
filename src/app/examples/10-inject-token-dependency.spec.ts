@@ -7,9 +7,9 @@ test('injects data into the component', async () => {
     providers: [
       {
         provide: DATA,
-        useValue: { text: 'Hello boys and girls'}
-      }
-    ]
+        useValue: { text: 'Hello boys and girls' },
+      },
+    ],
   });
 
   expect(component.getByText(/Hello boys and girls/i)).toBeInTheDocument();
