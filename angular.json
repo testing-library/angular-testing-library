@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "testing-library-app"
+  "defaultProject": "testing-library-app",
+  "cli": {
+    "analytics": false
+  }
 }

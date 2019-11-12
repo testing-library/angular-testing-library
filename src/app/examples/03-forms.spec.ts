@@ -20,6 +20,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(nameControl).toBeInvalid();
   component.type(nameControl, 'Tim');
   component.type(scoreControl, '12');
+  component.blur(scoreControl);
   component.selectOptions(colorControl, 'Green');
 
   expect(component.queryByText('name is required')).not.toBeInTheDocument();
@@ -28,6 +29,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
 
   expect(scoreControl).toBeInvalid();
   component.type(scoreControl, 7);
+  component.blur(scoreControl);
   expect(scoreControl).toBeValid();
 
   expect(errors).not.toBeInTheDocument();

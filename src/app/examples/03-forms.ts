@@ -33,7 +33,7 @@ export class FormsComponent {
   colors = [{ id: 'R', value: 'Red' }, { id: 'B', value: 'Blue' }, { id: 'G', value: 'Green' }];
   form = this.formBuilder.group({
     name: ['', Validators.required],
-    score: [0, [Validators.min(1), Validators.max(10)]],
+    score: [0, { validators: [Validators.min(1), Validators.max(10)], updateOn: 'blur' }],
     color: ['', Validators.required],
   });
 
