@@ -31,7 +31,7 @@ export async function render<SutType, WrapperType = SutType>(
   renderOptions: RenderComponentOptions<SutType> | RenderDirectiveOptions<SutType, WrapperType> = {},
 ): Promise<RenderResult<SutType>> {
   const {
-    detectChanges = true,
+    detectChanges: detectChangesOnRender = true,
     declarations = [],
     imports = [],
     providers = [],
@@ -42,12 +42,12 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentProviders = [],
     excludeComponentDeclaration = false,
-    routes
+    routes,
   } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, { declarations, excludeComponentDeclaration, template, wrapper }),
-    imports: addAutoImports({imports, routes}),
+    imports: addAutoImports({ imports, routes }),
     providers: [...providers],
     schemas: [...schemas],
   });
@@ -66,15 +66,24 @@ export async function render<SutType, WrapperType = SutType>(
 
   await TestBed.compileComponents();
 
-  if (detectChanges) {
-    fixture.detectChanges();
+  let isAlive = true;
+  fixture.componentRef.onDestroy(() => (isAlive = false));
+
+  function detectChanges() {
+    if (isAlive) {
+      fixture.detectChanges();
+    }
+  }
+
+  if (detectChangesOnRender) {
+    detectChanges();
   }
 
   const eventsWithDetectChanges = Object.keys(fireEvent).reduce(
     (events, key) => {
       events[key] = (element: HTMLElement, options?: {}) => {
         const result = fireEvent[key](element, options);
-        fixture.detectChanges();
+        detectChanges();
         return result;
       };
       return events;
@@ -93,8 +102,8 @@ export async function render<SutType, WrapperType = SutType>(
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
 
     let result;
-    await zone.run(() => result = router.navigate([basePath + href]));
-    fixture.detectChanges();
+    await zone.run(() => (result = router.navigate([basePath + href])));
+    detectChanges();
     return result;
   }
   const debugElement = fixture.debugElement.query(By.directive(sut));
@@ -104,7 +113,7 @@ export async function render<SutType, WrapperType = SutType>(
     debugElement,
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
-    detectChanges: () => fixture.detectChanges(),
+    detectChanges,
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
     type: createType(eventsWithDetectChanges),

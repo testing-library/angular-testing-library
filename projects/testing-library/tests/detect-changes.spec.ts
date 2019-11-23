@@ -40,4 +40,13 @@ describe('detectChanges', () => {
 
     expect(getByTestId('button').innerHTML).toBe('Button updated after 400ms');
   }));
+
+  test('does not throw on a destroyed fixture', async () => {
+    const { getByTestId, type, fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+
+    fixture.destroy();
+
+    type(getByTestId('input'), 'What a great day!');
+    expect(getByTestId('button').innerHTML).toBe('Button');
+  });
 });
