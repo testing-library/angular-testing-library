@@ -2,7 +2,7 @@ version: 2
 
 job_defaults: &job_defaults
   docker:
-    - image: circleci/node:latest
+    - image: circleci/node:12.9.1
   working_directory: ~/project/repo
 
 cache_key: &cache_key angular-testing-library-deps-cache-{{ checksum "yarn.lock" }}
