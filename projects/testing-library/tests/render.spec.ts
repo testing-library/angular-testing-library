@@ -25,7 +25,7 @@ test('creates queries and events', async () => {
 })
 export class FixtureModule {}
 describe('excludeComponentDeclaration', () => {
-  test('should not throw if component is declared in an import', async () => {
+  test('will throw if component is declared in an import', async () => {
     await render(FixtureComponent, {
       imports: [FixtureModule],
       excludeComponentDeclaration: true,
@@ -34,13 +34,13 @@ describe('excludeComponentDeclaration', () => {
 });
 
 describe('animationModule', () => {
-  test('should add NoopAnimationsModule by default', async () => {
+  test('adds NoopAnimationsModule by default', async () => {
     await render(FixtureComponent);
     const noopAnimationsModule = TestBed.get<NoopAnimationsModule>(NoopAnimationsModule);
     expect(noopAnimationsModule).toBeDefined();
   });
 
-  test('should not add NoopAnimationsModule if BrowserAnimationsModule is an import', async () => {
+  test('does not add NoopAnimationsModule if BrowserAnimationsModule is an import', async () => {
     await render(FixtureComponent, {
       imports: [BrowserAnimationsModule],
     });

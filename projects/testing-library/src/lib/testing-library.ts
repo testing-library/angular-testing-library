@@ -91,10 +91,14 @@ export async function render<SutType, WrapperType = SutType>(
     {} as FireFunction & FireObject,
   );
 
+  const rerender = (rerenderedProperties: Partial<SutType>) => {
+    setComponentProperties(fixture, { componentProperties: rerenderedProperties });
+    detectChanges();
+  };
+
   let router = routes ? (TestBed.get<Router>(Router) as Router) : null;
   const zone = TestBed.get<NgZone>(NgZone) as NgZone;
-
-  async function navigate(elementOrPath: Element | string, basePath = '') {
+  const navigate = async (elementOrPath: Element | string, basePath = '') => {
     if (!router) {
       router = TestBed.get<Router>(Router) as Router;
     }
@@ -105,20 +109,20 @@ export async function render<SutType, WrapperType = SutType>(
     await zone.run(() => (result = router.navigate([basePath + href])));
     detectChanges();
     return result;
-  }
-  const debugElement = fixture.debugElement.query(By.directive(sut));
+  };
 
   return {
     fixture,
-    debugElement,
+    detectChanges,
+    navigate,
+    rerender,
+    debugElement: fixture.debugElement.query(By.directive(sut)),
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
-    detectChanges,
-    ...getQueriesForElement(fixture.nativeElement, queries),
-    ...eventsWithDetectChanges,
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
-    navigate,
+    ...getQueriesForElement(fixture.nativeElement, queries),
+    ...eventsWithDetectChanges,
   };
 }
 

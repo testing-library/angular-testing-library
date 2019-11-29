@@ -34,6 +34,11 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
   detectChanges: () => void;
   /**
    * @description
+   * Re-render the same component with different props.
+   */
+  rerender: (componentProperties: Partial<ComponentType>) => void;
+  /**
+   * @description
    * The Angular `ComponentFixture` of the component or the wrapper.
    * If a template is provided, it will be the fixture of the wrapper.
    *
