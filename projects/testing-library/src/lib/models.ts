@@ -1,7 +1,15 @@
 import { Type, DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import { BoundFunction, FireObject, Queries, queries, waitForElement } from '@testing-library/dom';
+import {
+  BoundFunction,
+  FireObject,
+  Queries,
+  queries,
+  waitForElement,
+  waitForElementToBeRemoved,
+  waitForDomChange,
+} from '@testing-library/dom';
 import { UserEvents } from './user-events';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
@@ -60,6 +68,13 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
   rerender: (componentProperties: Partial<ComponentType>) => void;
   /**
    * @description
+   * Wait for the DOM to change.
+   *
+   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitfordomchange
+   */
+  waitForDomChange: typeof waitForDomChange;
+  /**
+   * @description
    * Wait for DOM elements to appear, disappear, or change.
    *
    * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitforelement
@@ -69,9 +84,9 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    * @description
    * Wait for the removal of element(s) from the DOM.
    *
-   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitForElementToBeRemoved
+   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitforelementtoberemoved
    */
-  waitForElementToBeRemoved: typeof waitForElement;
+  waitForElementToBeRemoved: typeof waitForElementToBeRemoved;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {

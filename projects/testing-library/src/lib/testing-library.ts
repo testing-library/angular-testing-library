@@ -10,6 +10,7 @@ import {
   FireObject,
   getQueriesForElement,
   prettyDOM,
+  waitForDomChange,
   waitForElement,
   waitForElementToBeRemoved,
 } from '@testing-library/dom';
@@ -119,6 +120,17 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
+  function componentWaitForDomChange<Result>(options?: {
+    container?: HTMLElement;
+    timeout?: number;
+    mutationObserverOptions?: MutationObserverInit;
+  }): Promise<Result> {
+    const interval = setInterval(detectChanges, 10);
+    return waitForDomChange<Result>({ container: fixture.nativeElement, ...options }).finally(() =>
+      clearInterval(interval),
+    );
+  }
+
   function componentWaitForElement<Result>(
     callback: () => Result,
     options?: {
@@ -157,6 +169,7 @@ export async function render<SutType, WrapperType = SutType>(
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
+    waitForDomChange: componentWaitForDomChange,
     waitForElement: componentWaitForElement,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
     ...getQueriesForElement(fixture.nativeElement, queries),
