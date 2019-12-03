@@ -4,7 +4,15 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { fireEvent, FireFunction, FireObject, getQueriesForElement, prettyDOM } from '@testing-library/dom';
+import {
+  fireEvent,
+  FireFunction,
+  FireObject,
+  getQueriesForElement,
+  prettyDOM,
+  waitForElement,
+  waitForElementToBeRemoved,
+} from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType } from './user-events';
 
@@ -111,6 +119,34 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
+  function componentWaitForElement<Result>(
+    callback: () => Result,
+    options?: {
+      container?: HTMLElement;
+      timeout?: number;
+      mutationObserverOptions?: MutationObserverInit;
+    },
+  ): Promise<Result> {
+    const interval = setInterval(detectChanges, 10);
+    return waitForElement(callback, { container: fixture.nativeElement, ...options }).finally(() =>
+      clearInterval(interval),
+    );
+  }
+
+  function componentWaitForElementToBeRemoved<Result>(
+    callback: () => Result,
+    options?: {
+      container?: HTMLElement;
+      timeout?: number;
+      mutationObserverOptions?: MutationObserverInit;
+    },
+  ): Promise<Result> {
+    const interval = setInterval(detectChanges, 10);
+    return waitForElementToBeRemoved(callback, { container: fixture.nativeElement, ...options }).finally(() =>
+      clearInterval(interval),
+    );
+  }
+
   return {
     fixture,
     detectChanges,
@@ -121,6 +157,8 @@ export async function render<SutType, WrapperType = SutType>(
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
+    waitForElement: componentWaitForElement,
+    waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
   };
