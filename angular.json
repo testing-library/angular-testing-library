@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/testing-library-app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -24,6 +25,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -82,7 +89,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/testing-library/ng-package.prod.json"
+              "project": "projects/testing-library/ng-package.prod.json",
+              "tsConfig": "projects/testing-library/tsconfig.lib.prod.json"
             }
           }
         },
@@ -109,7 +117,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/jest-utils/ng-package.prod.json"
+              "project": "projects/jest-utils/ng-package.prod.json",
+              "tsConfig": "projects/jest-utils/tsconfig.lib.prod.json"
             }
           }
         },
