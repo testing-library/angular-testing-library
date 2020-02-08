@@ -18,13 +18,7 @@ import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './
 import { createSelectOptions, createType } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
-class WrapperComponent implements OnInit {
-  constructor(private elementRef: ElementRef) {}
-
-  ngOnInit() {
-    this.elementRef.nativeElement.removeAttribute('ng-version');
-  }
-}
+class WrapperComponent {}
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -52,6 +46,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProviders = [],
     excludeComponentDeclaration = false,
     routes,
+    removeAngularAttributes = true,
   } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
   TestBed.configureTestingModule({
@@ -72,6 +67,14 @@ export async function render<SutType, WrapperType = SutType>(
 
   const fixture = createComponentFixture(sut, { template, wrapper });
   setComponentProperties(fixture, { componentProperties });
+
+  if (removeAngularAttributes) {
+    fixture.nativeElement.removeAttribute('ng-version');
+    const idAttribute = fixture.nativeElement.getAttribute('id');
+    if (idAttribute && idAttribute.startsWith('root')) {
+      fixture.nativeElement.removeAttribute('id');
+    }
+  }
 
   await TestBed.compileComponents();
 
