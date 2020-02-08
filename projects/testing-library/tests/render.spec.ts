@@ -20,6 +20,24 @@ test('creates queries and events', async () => {
   component.click(component.getByText('button'));
 });
 
+describe('removeAngularAttributes', () => {
+  test('should remove angular attribute', async () => {
+    await render(FixtureComponent);
+
+    expect(document.querySelector('[ng-version]')).toBeNull();
+    expect(document.querySelector('[id]')).toBeNull();
+  });
+
+  test('can be disabled', async () => {
+    await render(FixtureComponent, {
+      removeAngularAttributes: false,
+    });
+
+    expect(document.querySelector('[ng-version]')).not.toBeNull();
+    expect(document.querySelector('[id]')).not.toBeNull();
+  });
+});
+
 @NgModule({
   declarations: [FixtureComponent],
 })
