@@ -123,15 +123,13 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWaitForDomChange<Result>(options?: {
+  function componentWaitForDomChange(options?: {
     container?: HTMLElement;
     timeout?: number;
     mutationObserverOptions?: MutationObserverInit;
-  }): Promise<Result> {
+  }): Promise<void> {
     const interval = setInterval(detectChanges, 10);
-    return waitForDomChange<Result>({ container: fixture.nativeElement, ...options }).finally(() =>
-      clearInterval(interval),
-    );
+    return waitForDomChange({ container: fixture.nativeElement, ...options }).finally(() => clearInterval(interval));
   }
 
   function componentWaitForElement<Result>(
