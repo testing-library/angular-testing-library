@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Type, NgZone } from '@angular/core';
+import { Component, Type, NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,7 +15,7 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
-import { createSelectOptions, createType } from './user-events';
+import { createSelectOptions, createType, tab } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
@@ -170,6 +170,7 @@ export async function render<SutType, WrapperType = SutType>(
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
+    tab,
     waitForDomChange: componentWaitForDomChange,
     waitForElement: componentWaitForElement,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,

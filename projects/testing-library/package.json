@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@testing-library/dom": "^6.12.2",
+    "@testing-library/user-event": "^8.1.0",
     "@phenomnomnominal/tsquery": "^3.0.0",
     "tslint": "^5.16.0"
   },
