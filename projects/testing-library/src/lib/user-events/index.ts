@@ -1,6 +1,7 @@
 import { fireEvent } from '@testing-library/dom';
 import { createType } from './type';
 import { createSelectOptions } from './selectOptions';
+import { tab } from './tab';
 
 export interface UserEvents {
   /**
@@ -31,9 +32,22 @@ export interface UserEvents {
    * component.selectOptions(component.getByLabelText('Fruit'), ['Blueberry'. 'Grape'])
    */
   selectOptions: ReturnType<typeof createSelectOptions>;
+
+  /**
+   * @description
+   * Fires a tab event changing the document.activeElement in the same way the browser does.
+   *
+   * @argument
+   * shift: can be set to true to invert tab direction (default false)
+   * focusTrap: a container element to restrict the tabbing within (default document)
+   *
+   * @example
+   * component.tab()
+   */
+  tab: typeof tab;
 }
 
 const type = createType(fireEvent);
 const selectOptions = createSelectOptions(fireEvent);
 
-export { createType, type, createSelectOptions, selectOptions };
+export { createType, type, createSelectOptions, selectOptions, tab };
