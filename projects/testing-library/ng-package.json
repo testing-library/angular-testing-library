@@ -5,5 +5,10 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@testing-library/dom", "@phenomnomnominal/tsquery", "tslint"]
+  "whitelistedNonPeerDependencies": [
+    "@testing-library/dom",
+    "@testing-library/user-event",
+    "@phenomnomnominal/tsquery",
+    "tslint"
+  ]
 }
