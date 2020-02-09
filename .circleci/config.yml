@@ -81,6 +81,18 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
+  release-next:
+    <<: *job_defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - restore_cache:
+          key: *dist_key
+      - run:
+          name: release
+          command: yarn semantic-release --branch next || true
+
 workflows:
   version: 2
   build-test-release:
@@ -104,4 +116,12 @@ workflows:
             - test-app
           filters:
             branches:
-              only: master
+              only:
+                - master
+      - release-next:
+          requires:
+            - test-app
+          filters:
+            branches:
+              only:
+                - next
