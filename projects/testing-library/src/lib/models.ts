@@ -269,11 +269,11 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * Removes the Angular attributes (ng-version, and id) from the fixture.
    *
    * @default
-   * `false`
+   * `true`
    *
    * @example
    * const component = await render(AppComponent, {
-   *  removeAngularAttributes: true
+   *  removeAngularAttributes: false
    * })
    */
   removeAngularAttributes?: boolean;
