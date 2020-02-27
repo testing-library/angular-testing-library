@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "types": [],
+    "types": ["./types", "@types/node"],
     "lib": ["dom", "es2015", "es2018.promise"]
   },
   "angularCompilerOptions": {
