@@ -20,6 +20,8 @@ import { createSelectOptions, createType, tab } from './user-events';
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
 
+const mountedContainers = new Set();
+
 export async function render<ComponentType>(
   component: Type<ComponentType>,
   renderOptions?: RenderComponentOptions<ComponentType>,
@@ -74,6 +76,7 @@ export async function render<SutType, WrapperType = SutType>(
     if (idAttribute && idAttribute.startsWith('root')) {
       fixture.nativeElement.removeAttribute('id');
     }
+    mountedContainers.add(fixture.nativeElement);
   }
 
   await TestBed.compileComponents();
@@ -235,4 +238,21 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
   };
 
   return [...imports, ...animations(), ...routing()];
+}
+
+function cleanup() {
+  mountedContainers.forEach(cleanupAtContainer);
+}
+
+function cleanupAtContainer(container) {
+  if (container.parentNode === document.body) {
+    document.body.removeChild(container);
+  }
+  mountedContainers.delete(container);
+}
+
+if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
+  afterEach(async () => {
+    cleanup();
+  });
 }
