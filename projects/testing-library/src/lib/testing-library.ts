@@ -76,10 +76,10 @@ export async function render<SutType, WrapperType = SutType>(
     if (idAttribute && idAttribute.startsWith('root')) {
       fixture.nativeElement.removeAttribute('id');
     }
+    mountedContainers.add(fixture.nativeElement);
   }
 
   await TestBed.compileComponents();
-  mountedContainers.add(fixture.nativeElement);
 
   let isAlive = true;
   fixture.componentRef.onDestroy(() => (isAlive = false));
