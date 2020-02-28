@@ -78,29 +78,20 @@ test('overrides output properties', async () => {
   expect(clicked).toHaveBeenCalledWith('off');
 });
 
-test('should remove angular attributes', async () => {
-  await render(OnOffDirective, {
-    template: '<div onOff (clicked)="clicked($event)"></div>',
-  });
-
-  expect(document.querySelector('[ng-version]')).toBeNull();
-  expect(document.querySelector('[id]')).toBeNull();
-});
-
 describe('removeAngularAttributes', () => {
   test('should remove angular attributes', async () => {
     await render(OnOffDirective, {
       template: '<div onOff (clicked)="clicked($event)"></div>',
+      removeAngularAttributes: true,
     });
 
     expect(document.querySelector('[ng-version]')).toBeNull();
     expect(document.querySelector('[id]')).toBeNull();
   });
 
-  test('can be disabled', async () => {
+  test('is disabled by default', async () => {
     await render(OnOffDirective, {
       template: '<div onOff (clicked)="clicked($event)"></div>',
-      removeAngularAttributes: false,
     });
 
     expect(document.querySelector('[ng-version]')).not.toBeNull();
