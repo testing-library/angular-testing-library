@@ -48,7 +48,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProviders = [],
     excludeComponentDeclaration = false,
     routes,
-    removeAngularAttributes = true,
+    removeAngularAttributes = false,
   } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
   TestBed.configureTestingModule({

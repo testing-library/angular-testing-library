@@ -22,13 +22,15 @@ test('creates queries and events', async () => {
 
 describe('removeAngularAttributes', () => {
   test('should remove angular attribute', async () => {
-    await render(FixtureComponent);
+    await render(FixtureComponent, {
+      removeAngularAttributes: true,
+    });
 
     expect(document.querySelector('[ng-version]')).toBeNull();
     expect(document.querySelector('[id]')).toBeNull();
   });
 
-  test('can be disabled', async () => {
+  test('is disabled by default', async () => {
     await render(FixtureComponent, {
       removeAngularAttributes: false,
     });
