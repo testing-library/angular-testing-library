@@ -20,7 +20,7 @@ import { createSelectOptions, createType, tab } from './user-events';
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
 
-const mountedContainers = new Set();
+let cleanup: () => void;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -75,11 +75,11 @@ export async function render<SutType, WrapperType = SutType>(
     const idAttribute = fixture.nativeElement.getAttribute('id');
     if (idAttribute && idAttribute.startsWith('root')) {
       fixture.nativeElement.removeAttribute('id');
+      cleanup = () => fixture.nativeElement.setAttribute('id', idAttribute);
     }
   }
 
   await TestBed.compileComponents();
-  mountedContainers.add(fixture.nativeElement);
 
   let isAlive = true;
   fixture.componentRef.onDestroy(() => (isAlive = false));
@@ -240,19 +240,11 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
   return [...imports, ...animations(), ...routing()];
 }
 
-function cleanup() {
-  mountedContainers.forEach(cleanupAtContainer);
-}
-
-function cleanupAtContainer(container) {
-  if (container.parentNode === document.body) {
-    document.body.removeChild(container);
-  }
-  mountedContainers.delete(container);
-}
-
 if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
-  afterEach(async () => {
-    cleanup();
+  afterEach(() => {
+    if (cleanup) {
+      cleanup();
+      cleanup = null;
+    }
   });
 }
