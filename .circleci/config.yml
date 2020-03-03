@@ -41,7 +41,7 @@ jobs:
           key: *cache_key
       - run:
           name: test
-          command: yarn test
+          command: yarn test --maxWorkers=1 --ci
 
   build-lib:
     <<: *job_defaults
@@ -67,7 +67,7 @@ jobs:
           key: *dist_key
       - run:
           name: test
-          command: yarn test:app
+          command: yarn test:app --maxWorkers=1 --ci
 
   release:
     <<: *job_defaults
