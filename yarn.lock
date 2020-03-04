@@ -1224,10 +1224,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@ngrx/store@^8.0.0-rc.0":
-  version "8.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-8.0.0-rc.0.tgz#3ec0ca8986fb3cb2b246cab0c851833a21f9a134"
-  integrity sha512-TL+2BERGH4DET8sIW1D02wkmKxlnVXWezm1OkQJd2Q/6h6MwZBd8SeDpuiEIUHr2/1BPUyPNe1bj+vemeiwWrw==
+"@ngrx/store@^9.0.0-rc.0":
+  version "9.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-9.0.0-rc.0.tgz#49c07feecbf6b5ed929382716170e0be4e5627c3"
+  integrity sha512-+KghtX8QZ1maweTGtyV1CtI8N3jDQXrxf5hMngOVR9Bu6KuLl/RbnSSPTAGSK3wbVZ13CYebN3OECVhz1FDuzQ==
 
 "@ngtools/webpack@9.0.3":
   version "9.0.3"
