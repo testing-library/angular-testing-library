@@ -1,9 +1,9 @@
-import { render } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 
 import { DataInjectedComponent, DATA } from './10-inject-token-dependency';
 
 test('injects data into the component', async () => {
-  const component = await render(DataInjectedComponent, {
+  await render(DataInjectedComponent, {
     providers: [
       {
         provide: DATA,
@@ -12,5 +12,5 @@ test('injects data into the component', async () => {
     ],
   });
 
-  expect(component.getByText(/Hello boys and girls/i)).toBeInTheDocument();
+  expect(screen.getByText(/Hello boys and girls/i)).toBeInTheDocument();
 });
