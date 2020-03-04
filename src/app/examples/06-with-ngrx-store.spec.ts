@@ -1,10 +1,10 @@
-import { render } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { StoreModule } from '@ngrx/store';
 
 import { WithNgRxStoreComponent, reducer } from './06-with-ngrx-store';
 
 test('works with ngrx store', async () => {
-  const component = await render(WithNgRxStoreComponent, {
+  const { click } = await render(WithNgRxStoreComponent, {
     imports: [
       StoreModule.forRoot(
         {
@@ -17,16 +17,16 @@ test('works with ngrx store', async () => {
     ],
   });
 
-  const incrementControl = component.getByText('Increment');
-  const decrementControl = component.getByText('Decrement');
-  const valueControl = component.getByTestId('value');
+  const incrementControl = screen.getByText('Increment');
+  const decrementControl = screen.getByText('Decrement');
+  const valueControl = screen.getByTestId('value');
 
   expect(valueControl.textContent).toBe('0');
 
-  component.click(incrementControl);
-  component.click(incrementControl);
+  click(incrementControl);
+  click(incrementControl);
   expect(valueControl.textContent).toBe('20');
 
-  component.click(decrementControl);
+  click(decrementControl);
   expect(valueControl.textContent).toBe('10');
 });

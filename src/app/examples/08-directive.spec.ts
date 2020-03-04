@@ -1,29 +1,29 @@
-import { render } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 
 import { SpoilerDirective } from './08-directive';
 
 test('it is possible to test directives', async () => {
-  const component = await render(SpoilerDirective, {
+  const { mouseOver, mouseLeave, debugElement } = await render(SpoilerDirective, {
     template: `<div appSpoiler></div>`,
   });
 
-  expect(component.queryByText('I am visible now...')).not.toBeInTheDocument();
-  expect(component.queryByText('SPOILER')).toBeInTheDocument();
+  expect(screen.queryByText('I am visible now...')).not.toBeInTheDocument();
+  expect(screen.queryByText('SPOILER')).toBeInTheDocument();
 
-  component.mouseOver(component.debugElement.nativeElement);
-  expect(component.queryByText('SPOILER')).not.toBeInTheDocument();
-  expect(component.queryByText('I am visible now...')).toBeInTheDocument();
+  mouseOver(debugElement.nativeElement);
+  expect(screen.queryByText('SPOILER')).not.toBeInTheDocument();
+  expect(screen.queryByText('I am visible now...')).toBeInTheDocument();
 
-  component.mouseLeave(component.debugElement.nativeElement);
-  expect(component.queryByText('SPOILER')).toBeInTheDocument();
-  expect(component.queryByText('I am visible now...')).not.toBeInTheDocument();
+  mouseLeave(debugElement.nativeElement);
+  expect(screen.queryByText('SPOILER')).toBeInTheDocument();
+  expect(screen.queryByText('I am visible now...')).not.toBeInTheDocument();
 });
 
 test('it is possible to test directives with props', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  const component = await render(SpoilerDirective, {
+  const { mouseOver, mouseLeave } = await render(SpoilerDirective, {
     template: `<div appSpoiler [hidden]="hidden" [visible]="visible"></div>`,
     componentProperties: {
       hidden,
@@ -31,34 +31,34 @@ test('it is possible to test directives with props', async () => {
     },
   });
 
-  expect(component.queryByText(visible)).not.toBeInTheDocument();
-  expect(component.queryByText(hidden)).toBeInTheDocument();
+  expect(screen.queryByText(visible)).not.toBeInTheDocument();
+  expect(screen.queryByText(hidden)).toBeInTheDocument();
 
-  component.mouseOver(component.queryByText(hidden));
-  expect(component.queryByText(hidden)).not.toBeInTheDocument();
-  expect(component.queryByText(visible)).toBeInTheDocument();
+  mouseOver(screen.queryByText(hidden));
+  expect(screen.queryByText(hidden)).not.toBeInTheDocument();
+  expect(screen.queryByText(visible)).toBeInTheDocument();
 
-  component.mouseLeave(component.queryByText(visible));
-  expect(component.queryByText(hidden)).toBeInTheDocument();
-  expect(component.queryByText(visible)).not.toBeInTheDocument();
+  mouseLeave(screen.queryByText(visible));
+  expect(screen.queryByText(hidden)).toBeInTheDocument();
+  expect(screen.queryByText(visible)).not.toBeInTheDocument();
 });
 
 test('it is possible to test directives with props in template', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  const component = await render(SpoilerDirective, {
+  const { mouseLeave, mouseOver } = await render(SpoilerDirective, {
     template: `<div appSpoiler hidden="${hidden}" visible="${visible}"></div>`,
   });
 
-  expect(component.queryByText(visible)).not.toBeInTheDocument();
-  expect(component.queryByText(hidden)).toBeInTheDocument();
+  expect(screen.queryByText(visible)).not.toBeInTheDocument();
+  expect(screen.queryByText(hidden)).toBeInTheDocument();
 
-  component.mouseOver(component.queryByText(hidden));
-  expect(component.queryByText(hidden)).not.toBeInTheDocument();
-  expect(component.queryByText(visible)).toBeInTheDocument();
+  mouseOver(screen.queryByText(hidden));
+  expect(screen.queryByText(hidden)).not.toBeInTheDocument();
+  expect(screen.queryByText(visible)).toBeInTheDocument();
 
-  component.mouseLeave(component.queryByText(visible));
-  expect(component.queryByText(hidden)).toBeInTheDocument();
-  expect(component.queryByText(visible)).not.toBeInTheDocument();
+  mouseLeave(screen.queryByText(visible));
+  expect(screen.queryByText(hidden)).toBeInTheDocument();
+  expect(screen.queryByText(visible)).not.toBeInTheDocument();
 });
