@@ -6,6 +6,7 @@ import {
   FireObject,
   Queries,
   queries,
+  wait,
   waitForElement,
   waitForElementToBeRemoved,
   waitForDomChange,
@@ -67,6 +68,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    */
   rerender: (componentProperties: Partial<ComponentType>) => void;
   /**
+   * @deprecated `waitForDomChange` has been deprecated. Use `wait` instead: https://testing-library.com/docs/dom-testing-library/api-async#wait.
    * @description
    * Wait for the DOM to change.
    *
@@ -74,6 +76,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    */
   waitForDomChange: typeof waitForDomChange;
   /**
+   * @deprecated `waitForElement` has been deprecated. Use a `find*` query (preferred: https://testing-library.com/docs/dom-testing-library/api-queries#findby) or use `wait` instead (it's the same API, so you can find/replace): https://testing-library.com/docs/dom-testing-library/api-async#wait
    * @description
    * Wait for DOM elements to appear, disappear, or change.
    *
@@ -87,6 +90,13 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitforelementtoberemoved
    */
   waitForElementToBeRemoved: typeof waitForElementToBeRemoved;
+  /**
+   * @description
+   * When in need to wait for non-deterministic periods of time you can use wait, to wait for your expectations to pass.
+   *
+   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#wait
+   */
+  wait: typeof wait;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {

@@ -13,6 +13,7 @@ import {
   waitForDomChange,
   waitForElement,
   waitForElementToBeRemoved,
+  wait,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
@@ -111,11 +112,11 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   };
 
-  let router = routes ? (TestBed.get<Router>(Router) as Router) : null;
-  const zone = TestBed.get<NgZone>(NgZone) as NgZone;
+  let router = routes ? TestBed.inject(Router) : null;
+  const zone = TestBed.inject(NgZone);
   const navigate = async (elementOrPath: Element | string, basePath = '') => {
     if (!router) {
-      router = TestBed.get<Router>(Router) as Router;
+      router = TestBed.inject(Router);
     }
 
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
@@ -126,41 +127,75 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWaitForDomChange(options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    mutationObserverOptions?: MutationObserverInit;
-  }): Promise<void> {
-    const interval = setInterval(detectChanges, 10);
-    return waitForDomChange({ container: fixture.nativeElement, ...options }).finally(() => clearInterval(interval));
+  function componentWait(
+    callback: () => void,
+    options: {
+      container?: HTMLElement;
+      timeout?: number;
+      interval?: number;
+      mutationObserverOptions?: {
+        subtree: boolean;
+        childList: boolean;
+        attributes: boolean;
+        characterData: boolean;
+      };
+    } = { container: fixture.nativeElement, interval: 50 },
+  ): Promise<void> {
+    const interval = setInterval(detectChanges, options.interval);
+    return wait(callback, options).finally(() => clearInterval(interval));
+  }
+
+  function componentWaitForDomChange(
+    options: {
+      container?: HTMLElement;
+      timeout?: number;
+      interval?: number;
+      mutationObserverOptions?: {
+        subtree: boolean;
+        childList: boolean;
+        attributes: boolean;
+        characterData: boolean;
+      };
+    } = { container: fixture.nativeElement, interval: 50 },
+  ): Promise<void> {
+    const interval = setInterval(detectChanges, options.interval);
+    return waitForDomChange(options).finally(() => clearInterval(interval));
   }
 
   function componentWaitForElement<Result>(
     callback: () => Result,
-    options?: {
+    options: {
       container?: HTMLElement;
       timeout?: number;
-      mutationObserverOptions?: MutationObserverInit;
-    },
+      interval?: number;
+      mutationObserverOptions?: {
+        subtree: boolean;
+        childList: boolean;
+        attributes: boolean;
+        characterData: boolean;
+      };
+    } = { container: fixture.nativeElement, interval: 50 },
   ): Promise<Result> {
-    const interval = setInterval(detectChanges, 10);
-    return waitForElement(callback, { container: fixture.nativeElement, ...options }).finally(() =>
-      clearInterval(interval),
-    );
+    const interval = setInterval(detectChanges, options.interval);
+    return waitForElement(callback, options).finally(() => clearInterval(interval));
   }
 
   function componentWaitForElementToBeRemoved<Result>(
     callback: () => Result,
-    options?: {
+    options: {
       container?: HTMLElement;
       timeout?: number;
-      mutationObserverOptions?: MutationObserverInit;
-    },
+      interval?: number;
+      mutationObserverOptions?: {
+        subtree: boolean;
+        childList: boolean;
+        attributes: boolean;
+        characterData: boolean;
+      };
+    } = { container: fixture.nativeElement, interval: 50 },
   ): Promise<Result> {
-    const interval = setInterval(detectChanges, 10);
-    return waitForElementToBeRemoved(callback, { container: fixture.nativeElement, ...options }).finally(() =>
-      clearInterval(interval),
-    );
+    const interval = setInterval(detectChanges, options.interval);
+    return waitForElementToBeRemoved(callback, options).finally(() => clearInterval(interval));
   }
 
   return {
@@ -174,6 +209,7 @@ export async function render<SutType, WrapperType = SutType>(
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
     tab,
+    wait: componentWait,
     waitForDomChange: componentWaitForDomChange,
     waitForElement: componentWaitForElement,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
