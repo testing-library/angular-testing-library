@@ -128,7 +128,7 @@ export async function render<SutType, WrapperType = SutType>(
   };
 
   function componentWait(
-    callback: () => void,
+    callback,
     options: {
       container?: HTMLElement;
       timeout?: number;
@@ -162,7 +162,7 @@ export async function render<SutType, WrapperType = SutType>(
     return waitForDomChange(options).finally(() => clearInterval(interval));
   }
 
-  function componentWaitForElement<Result>(
+  function componentWaitForElement<Result = HTMLElement>(
     callback: () => Result,
     options: {
       container?: HTMLElement;
@@ -180,7 +180,7 @@ export async function render<SutType, WrapperType = SutType>(
     return waitForElement(callback, options).finally(() => clearInterval(interval));
   }
 
-  function componentWaitForElementToBeRemoved<Result>(
+  function componentWaitForElementToBeRemoved<Result = HTMLElement>(
     callback: () => Result,
     options: {
       container?: HTMLElement;
