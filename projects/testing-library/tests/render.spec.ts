@@ -56,7 +56,7 @@ describe('excludeComponentDeclaration', () => {
 describe('animationModule', () => {
   test('adds NoopAnimationsModule by default', async () => {
     await render(FixtureComponent);
-    const noopAnimationsModule = TestBed.get<NoopAnimationsModule>(NoopAnimationsModule);
+    const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
     expect(noopAnimationsModule).toBeDefined();
   });
 
@@ -65,9 +65,9 @@ describe('animationModule', () => {
       imports: [BrowserAnimationsModule],
     });
 
-    const browserAnimationsModule = TestBed.get<BrowserAnimationsModule>(BrowserAnimationsModule);
+    const browserAnimationsModule = TestBed.inject(BrowserAnimationsModule);
     expect(browserAnimationsModule).toBeDefined();
 
-    expect(() => TestBed.get<NoopAnimationsModule>(NoopAnimationsModule)).toThrow();
+    expect(() => TestBed.inject(NoopAnimationsModule)).toThrow();
   });
 });
