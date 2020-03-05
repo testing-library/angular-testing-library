@@ -1525,10 +1525,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@testing-library/dom@^7.0.0-beta.3":
-  version "7.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.0.0-beta.3.tgz#ff6a970e362451ba811de6218726ba6286bb49e9"
-  integrity sha512-RDSQ+j10SGgLKt5K6TkRSH6/mGnaDWvaEkMxN6c20c0o6ZhqDntyB/XUHk4WDvAQMFGoul2SeKfg9dLvC7dZZA==
+"@testing-library/dom@^7.0.0-beta.4":
+  version "7.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.0.0-beta.4.tgz#611dc2110552e41d0ae8720a09261e229d77e991"
+  integrity sha512-Lv+wttj/aVnSvykV9Qw5BK60Na5IAjz75Sy5TYxdFLCakaCj4VXAtveg2pACqI6Dh0aqKF0oThq9KJKEhccUXw==
   dependencies:
     "@babel/runtime" "^7.8.4"
     "@types/testing-library__dom" "^6.12.1"
