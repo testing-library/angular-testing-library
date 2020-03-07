@@ -117,20 +117,20 @@ export class CounterComponent {
 counter.component.spec.ts
 
 ```typescript
-import { render } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import CounterComponent from './counter.component.ts';
 
 describe('Counter', () => {
   test('should render counter', async () => {
-    const { getByText } = await render(CounterComponent, { componentProperties: { counter: 5 } });
+    await render(CounterComponent, { componentProperties: { counter: 5 } });
 
-    expect(getByText('Current Count: 5'));
+    expect(screen.getByText('Current Count: 5'));
   });
 
   test('should increment the counter on click', async () => {
-    const { getByText, click } = await render(CounterComponent, { componentProperties: { counter: 5 } });
+    const { click } = await render(CounterComponent, { componentProperties: { counter: 5 } });
 
-    click(getByText('+'));
+    click(screen.getByText('+'));
 
     expect(getByText('Current Count: 6'));
   });
@@ -194,6 +194,7 @@ Thanks goes to these people ([emoji key][emojis]):
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
