@@ -1,16 +1,7 @@
 import { Type, DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import {
-  BoundFunction,
-  FireObject,
-  Queries,
-  queries,
-  wait,
-  waitForElement,
-  waitForElementToBeRemoved,
-  waitForDomChange,
-} from '@testing-library/dom';
+import { BoundFunction, FireObject, Queries, queries, waitFor, waitForElementToBeRemoved } from '@testing-library/dom';
 import { UserEvents } from './user-events';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
@@ -68,22 +59,6 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    */
   rerender: (componentProperties: Partial<ComponentType>) => void;
   /**
-   * @deprecated `waitForDomChange` has been deprecated. Use `wait` instead: https://testing-library.com/docs/dom-testing-library/api-async#wait.
-   * @description
-   * Wait for the DOM to change.
-   *
-   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitfordomchange
-   */
-  waitForDomChange: typeof waitForDomChange;
-  /**
-   * @deprecated `waitForElement` has been deprecated. Use a `find*` query (preferred: https://testing-library.com/docs/dom-testing-library/api-queries#findby) or use `wait` instead (it's the same API, so you can find/replace): https://testing-library.com/docs/dom-testing-library/api-async#wait
-   * @description
-   * Wait for DOM elements to appear, disappear, or change.
-   *
-   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitforelement
-   */
-  waitForElement: typeof waitForElement;
-  /**
    * @description
    * Wait for the removal of element(s) from the DOM.
    *
@@ -92,11 +67,11 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
   waitForElementToBeRemoved: typeof waitForElementToBeRemoved;
   /**
    * @description
-   * When in need to wait for non-deterministic periods of time you can use wait, to wait for your expectations to pass.
+   * When in need to wait for any period of time you can use waitFor, to wait for your expectations to pass.
    *
-   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#wait
+   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitFor
    */
-  wait: typeof wait;
+  waitFor: typeof waitFor;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
