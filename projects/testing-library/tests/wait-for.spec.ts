@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { render } from '../src/public_api';
 import { timer } from 'rxjs';
+import { render } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
@@ -17,21 +17,23 @@ class FixtureComponent {
   }
 }
 
-test('waits for element to be visible', async () => {
-  const { getByTestId, click, waitForElement, getByText } = await render(FixtureComponent);
+test('waits for assertion to become true', async () => {
+  const { queryByText, getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
+
+  expect(queryByText('Success')).toBeNull();
 
   click(getByTestId('button'));
 
-  await waitForElement(() => getByText('Success'));
+  await waitFor(() => getByText('Success'));
   getByText('Success');
 });
 
 test('allows to override options', async () => {
-  const { getByTestId, click, waitForElement, getByText } = await render(FixtureComponent);
+  const { getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
 
   click(getByTestId('button'));
 
-  await expect(waitForElement(() => getByText('Success'), { timeout: 200 })).rejects.toThrow(
+  await expect(waitFor(() => getByText('Success'), { timeout: 200 })).rejects.toThrow(
     /Unable to find an element with the text: Success/i,
   );
 });

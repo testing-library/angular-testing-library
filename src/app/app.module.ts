@@ -22,6 +22,10 @@ import { WithNgRxStoreComponent, reducer } from './examples/06-with-ngrx-store';
 import { WithNgRxMockStoreComponent } from './examples/07-with-ngrx-mock-store';
 import { MasterComponent, DetailComponent, HiddenDetailComponent } from './examples/09-router';
 
+function reducerItems() {
+  return ['One', 'Two', 'Three'];
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,9 +55,7 @@ import { MasterComponent, DetailComponent, HiddenDetailComponent } from './examp
     AppRoutingModule,
     StoreModule.forRoot({
       value: reducer,
-      items: function() {
-        return ['One', 'Two', 'Three'];
-      },
+      items: reducerItems,
     }),
   ],
   bootstrap: [AppComponent],

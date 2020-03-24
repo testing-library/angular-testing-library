@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Type, NgZone } from '@angular/core';
+import { Component, Type, NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,21 +10,16 @@ import {
   FireObject,
   getQueriesForElement,
   prettyDOM,
-  waitForDomChange,
-  waitForElement,
+  waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
-import { createSelectOptions, createType } from './user-events';
+import { createSelectOptions, createType, tab } from './user-events';
 
 @Component({ selector: 'wrapper-component', template: '' })
-class WrapperComponent implements OnInit {
-  constructor(private elementRef: ElementRef) {}
+class WrapperComponent {}
 
-  ngOnInit() {
-    this.elementRef.nativeElement.removeAttribute('ng-version');
-  }
-}
+const mountedContainers = new Set();
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -52,6 +47,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProviders = [],
     excludeComponentDeclaration = false,
     routes,
+    removeAngularAttributes = false,
   } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
   TestBed.configureTestingModule({
@@ -72,6 +68,15 @@ export async function render<SutType, WrapperType = SutType>(
 
   const fixture = createComponentFixture(sut, { template, wrapper });
   setComponentProperties(fixture, { componentProperties });
+
+  if (removeAngularAttributes) {
+    fixture.nativeElement.removeAttribute('ng-version');
+    const idAttribute = fixture.nativeElement.getAttribute('id');
+    if (idAttribute && idAttribute.startsWith('root')) {
+      fixture.nativeElement.removeAttribute('id');
+    }
+    mountedContainers.add(fixture.nativeElement);
+  }
 
   await TestBed.compileComponents();
 
@@ -105,11 +110,11 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   };
 
-  let router = routes ? (TestBed.get<Router>(Router) as Router) : null;
-  const zone = TestBed.get<NgZone>(NgZone) as NgZone;
+  let router = routes ? TestBed.inject(Router) : null;
+  const zone = TestBed.inject(NgZone);
   const navigate = async (elementOrPath: Element | string, basePath = '') => {
     if (!router) {
-      router = TestBed.get<Router>(Router) as Router;
+      router = TestBed.inject(Router);
     }
 
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
@@ -120,43 +125,40 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWaitForDomChange<Result>(options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    mutationObserverOptions?: MutationObserverInit;
-  }): Promise<Result> {
-    const interval = setInterval(detectChanges, 10);
-    return waitForDomChange<Result>({ container: fixture.nativeElement, ...options }).finally(() =>
-      clearInterval(interval),
-    );
-  }
-
-  function componentWaitForElement<Result>(
-    callback: () => Result,
-    options?: {
+  function componentWaitFor<T>(
+    callback,
+    options: {
       container?: HTMLElement;
       timeout?: number;
-      mutationObserverOptions?: MutationObserverInit;
-    },
-  ): Promise<Result> {
-    const interval = setInterval(detectChanges, 10);
-    return waitForElement(callback, { container: fixture.nativeElement, ...options }).finally(() =>
-      clearInterval(interval),
-    );
+      interval?: number;
+      mutationObserverOptions?: {
+        subtree: boolean;
+        childList: boolean;
+        attributes: boolean;
+        characterData: boolean;
+      };
+    } = { container: fixture.nativeElement, interval: 50 },
+  ): Promise<T> {
+    const interval = setInterval(detectChanges, options.interval);
+    return waitFor<T>(callback, options).finally(() => clearInterval(interval));
   }
 
-  function componentWaitForElementToBeRemoved<Result>(
-    callback: () => Result,
-    options?: {
+  function componentWaitForElementToBeRemoved<T>(
+    callback: () => T,
+    options: {
       container?: HTMLElement;
       timeout?: number;
-      mutationObserverOptions?: MutationObserverInit;
-    },
-  ): Promise<Result> {
-    const interval = setInterval(detectChanges, 10);
-    return waitForElementToBeRemoved(callback, { container: fixture.nativeElement, ...options }).finally(() =>
-      clearInterval(interval),
-    );
+      interval?: number;
+      mutationObserverOptions?: {
+        subtree: boolean;
+        childList: boolean;
+        attributes: boolean;
+        characterData: boolean;
+      };
+    } = { container: fixture.nativeElement, interval: 50 },
+  ): Promise<T> {
+    const interval = setInterval(detectChanges, options.interval);
+    return waitForElementToBeRemoved<T>(callback, options).finally(() => clearInterval(interval));
   }
 
   return {
@@ -169,8 +171,8 @@ export async function render<SutType, WrapperType = SutType>(
     debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
-    waitForDomChange: componentWaitForDomChange,
-    waitForElement: componentWaitForElement,
+    tab,
+    waitFor: componentWaitFor,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,
@@ -233,4 +235,21 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
   };
 
   return [...imports, ...animations(), ...routing()];
+}
+
+function cleanup() {
+  mountedContainers.forEach(cleanupAtContainer);
+}
+
+function cleanupAtContainer(container) {
+  if (container.parentNode === document.body) {
+    document.body.removeChild(container);
+  }
+  mountedContainers.delete(container);
+}
+
+if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
+  afterEach(async () => {
+    cleanup();
+  });
 }

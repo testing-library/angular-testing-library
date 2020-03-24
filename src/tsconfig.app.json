@@ -2,7 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "types": []
+    "types": [],
+    "allowJs": true
   },
-  "exclude": ["**/test.ts", "**/*.spec.ts"]
+  "files": ["main.ts", "polyfills.ts"]
 }

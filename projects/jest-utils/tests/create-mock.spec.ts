@@ -35,7 +35,7 @@ it('provides a mock service', async () => {
   const { click, getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
-  const service = TestBed.get<FixtureService>(FixtureService);
+  const service = TestBed.inject(FixtureService);
 
   click(getByText('Print'));
   expect(service.print).toHaveBeenCalledTimes(1);
@@ -46,7 +46,7 @@ it('is possible to write a mock implementation', async done => {
     providers: [provideMock(FixtureService)],
   });
 
-  const service = TestBed.get<FixtureService>(FixtureService) as Mock<FixtureService>;
+  const service = TestBed.inject(FixtureService) as Mock<FixtureService>;
   service.print.mockImplementation(() => done());
 
   click(getByText('Print'));

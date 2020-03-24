@@ -41,7 +41,7 @@ jobs:
           key: *cache_key
       - run:
           name: test
-          command: yarn test
+          command: yarn test --maxWorkers=1 --ci
 
   build-lib:
     <<: *job_defaults
@@ -67,7 +67,7 @@ jobs:
           key: *dist_key
       - run:
           name: test
-          command: yarn test:app
+          command: yarn test:app --maxWorkers=1 --ci
 
   release:
     <<: *job_defaults
@@ -81,7 +81,7 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
-  release-next:
+  release-beta:
     <<: *job_defaults
     steps:
       - checkout
@@ -91,7 +91,7 @@ jobs:
           key: *dist_key
       - run:
           name: release
-          command: yarn semantic-release --branch next || true
+          command: yarn semantic-release || true
 
 workflows:
   version: 2
@@ -118,10 +118,10 @@ workflows:
             branches:
               only:
                 - master
-      - release-next:
+      - release-beta:
           requires:
             - test-app
           filters:
             branches:
               only:
-                - next
+                - beta
