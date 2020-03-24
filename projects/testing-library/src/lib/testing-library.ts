@@ -10,10 +10,8 @@ import {
   FireObject,
   getQueriesForElement,
   prettyDOM,
-  waitForDomChange,
-  waitForElement,
+  waitFor,
   waitForElementToBeRemoved,
-  wait,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
@@ -127,7 +125,7 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWait(
+  function componentWaitFor<T>(
     callback,
     options: {
       container?: HTMLElement;
@@ -140,12 +138,13 @@ export async function render<SutType, WrapperType = SutType>(
         characterData: boolean;
       };
     } = { container: fixture.nativeElement, interval: 50 },
-  ): Promise<void> {
+  ): Promise<T> {
     const interval = setInterval(detectChanges, options.interval);
-    return wait(callback, options).finally(() => clearInterval(interval));
+    return waitFor<T>(callback, options).finally(() => clearInterval(interval));
   }
 
-  function componentWaitForDomChange(
+  function componentWaitForElementToBeRemoved<T>(
+    callback: () => T,
     options: {
       container?: HTMLElement;
       timeout?: number;
@@ -157,45 +156,9 @@ export async function render<SutType, WrapperType = SutType>(
         characterData: boolean;
       };
     } = { container: fixture.nativeElement, interval: 50 },
-  ): Promise<void> {
+  ): Promise<T> {
     const interval = setInterval(detectChanges, options.interval);
-    return waitForDomChange(options).finally(() => clearInterval(interval));
-  }
-
-  function componentWaitForElement<Result = HTMLElement>(
-    callback: () => Result,
-    options: {
-      container?: HTMLElement;
-      timeout?: number;
-      interval?: number;
-      mutationObserverOptions?: {
-        subtree: boolean;
-        childList: boolean;
-        attributes: boolean;
-        characterData: boolean;
-      };
-    } = { container: fixture.nativeElement, interval: 50 },
-  ): Promise<Result> {
-    const interval = setInterval(detectChanges, options.interval);
-    return waitForElement(callback, options).finally(() => clearInterval(interval));
-  }
-
-  function componentWaitForElementToBeRemoved<Result = HTMLElement>(
-    callback: () => Result,
-    options: {
-      container?: HTMLElement;
-      timeout?: number;
-      interval?: number;
-      mutationObserverOptions?: {
-        subtree: boolean;
-        childList: boolean;
-        attributes: boolean;
-        characterData: boolean;
-      };
-    } = { container: fixture.nativeElement, interval: 50 },
-  ): Promise<Result> {
-    const interval = setInterval(detectChanges, options.interval);
-    return waitForElementToBeRemoved(callback, options).finally(() => clearInterval(interval));
+    return waitForElementToBeRemoved<T>(callback, options).finally(() => clearInterval(interval));
   }
 
   return {
@@ -209,9 +172,7 @@ export async function render<SutType, WrapperType = SutType>(
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
     tab,
-    wait: componentWait,
-    waitForDomChange: componentWaitForDomChange,
-    waitForElement: componentWaitForElement,
+    waitFor: componentWaitFor,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
     ...getQueriesForElement(fixture.nativeElement, queries),
     ...eventsWithDetectChanges,

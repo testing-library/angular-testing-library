@@ -18,22 +18,22 @@ class FixtureComponent {
 }
 
 test('waits for assertion to become true', async () => {
-  const { queryByText, getByTestId, click, wait, getByText } = await render(FixtureComponent);
+  const { queryByText, getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
 
   expect(queryByText('Success')).toBeNull();
 
   click(getByTestId('button'));
 
-  await wait(() => getByText('Success'));
+  await waitFor(() => getByText('Success'));
   getByText('Success');
 });
 
 test('allows to override options', async () => {
-  const { getByTestId, click, wait, getByText } = await render(FixtureComponent);
+  const { getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
 
   click(getByTestId('button'));
 
-  await expect(wait(() => getByText('Success'), { timeout: 200 })).rejects.toThrow(
+  await expect(waitFor(() => getByText('Success'), { timeout: 200 })).rejects.toThrow(
     /Unable to find an element with the text: Success/i,
   );
 });
