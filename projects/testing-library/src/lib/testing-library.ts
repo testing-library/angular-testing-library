@@ -137,10 +137,12 @@ export async function render<SutType, WrapperType = SutType>(
         attributes: boolean;
         characterData: boolean;
       };
-    } = { container: fixture.nativeElement, interval: 50 },
+    } = { container: fixture.nativeElement },
   ): Promise<T> {
-    const interval = setInterval(detectChanges, options.interval);
-    return waitFor<T>(callback, options).finally(() => clearInterval(interval));
+    return waitFor<T>(() => {
+      detectChanges();
+      return callback();
+    }, options);
   }
 
   function componentWaitForElementToBeRemoved<T>(
@@ -155,10 +157,12 @@ export async function render<SutType, WrapperType = SutType>(
         attributes: boolean;
         characterData: boolean;
       };
-    } = { container: fixture.nativeElement, interval: 50 },
+    } = { container: fixture.nativeElement },
   ): Promise<T> {
-    const interval = setInterval(detectChanges, options.interval);
-    return waitForElementToBeRemoved<T>(callback, options).finally(() => clearInterval(interval));
+    return waitForElementToBeRemoved<T>(() => {
+      detectChanges();
+      return callback();
+    }, options);
   }
 
   return {
