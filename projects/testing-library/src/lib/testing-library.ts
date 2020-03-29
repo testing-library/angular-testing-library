@@ -5,21 +5,20 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  fireEvent,
   FireFunction,
   FireObject,
   getQueriesForElement,
   prettyDOM,
   waitFor,
   waitForElementToBeRemoved,
+  fireEvent as dtlFireEvent,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
-
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
 
-const mountedContainers = new Set();
+const mountedFixtures = new Set<ComponentFixture<any>>();
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -75,8 +74,9 @@ export async function render<SutType, WrapperType = SutType>(
     if (idAttribute && idAttribute.startsWith('root')) {
       fixture.nativeElement.removeAttribute('id');
     }
-    mountedContainers.add(fixture.nativeElement);
   }
+
+  mountedFixtures.add(fixture);
 
   await TestBed.compileComponents();
 
@@ -93,10 +93,10 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   }
 
-  const eventsWithDetectChanges = Object.keys(fireEvent).reduce(
+  const eventsWithDetectChanges = Object.keys(dtlFireEvent).reduce(
     (events, key) => {
       events[key] = (element: HTMLElement, options?: {}) => {
-        const result = fireEvent[key](element, options);
+        const result = dtlFireEvent[key](element, options);
         detectChanges();
         return result;
       };
@@ -238,14 +238,14 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
 }
 
 function cleanup() {
-  mountedContainers.forEach(cleanupAtContainer);
+  mountedFixtures.forEach(cleanupAtFixture);
 }
 
-function cleanupAtContainer(container) {
-  if (container.parentNode === document.body) {
-    document.body.removeChild(container);
+function cleanupAtFixture(fixture) {
+  if (!fixture.nativeElement.getAttribute('ng-version') && fixture.nativeElement.parentNode === document.body) {
+    document.body.removeChild(fixture.nativeElement);
   }
-  mountedContainers.delete(container);
+  mountedFixtures.delete(fixture);
 }
 
 if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
@@ -253,3 +253,21 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
     cleanup();
   });
 }
+
+export * from '@testing-library/dom';
+
+const fireEvent = Object.keys(dtlFireEvent).reduce(
+  (events, key) => {
+    events[key] = (element: HTMLElement, options?: {}) => {
+      const result = dtlFireEvent[key](element, options);
+      mountedFixtures.forEach(fixture => {
+        fixture.detectChanges();
+      });
+      return result;
+    };
+    return events;
+  },
+  {} as FireFunction & FireObject,
+);
+
+export { fireEvent };
