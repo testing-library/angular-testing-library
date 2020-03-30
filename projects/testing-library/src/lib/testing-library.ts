@@ -12,6 +12,8 @@ import {
   waitFor,
   waitForElementToBeRemoved,
   fireEvent as dtlFireEvent,
+  screen as dtlScreen,
+  queries as dtlQueries,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
@@ -178,7 +180,7 @@ export async function render<SutType, WrapperType = SutType>(
     tab,
     waitFor: componentWaitFor,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
-    ...getQueriesForElement(fixture.nativeElement, queries),
+    ...replaceFindWithFindAndDetectChanges(fixture.nativeElement, getQueriesForElement(fixture.nativeElement, queries)),
     ...eventsWithDetectChanges,
   };
 }
@@ -241,6 +243,30 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
   return [...imports, ...animations(), ...routing()];
 }
 
+// for the findBy queries we first want to run a change detection cycle
+function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
+  return Object.keys(originalQueriesForContainer).reduce(
+    (newQueries, key) => {
+      if (key.startsWith('find')) {
+        const getByQuery = dtlQueries[key.replace('find', 'get')];
+        newQueries[key] = async (text, options, waitForOptions) => {
+          // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
+          const result = await waitFor(() => {
+            detectChangesForMountedFixtures();
+            return getByQuery(container, text, options);
+          }, waitForOptions);
+          return result;
+        };
+      } else {
+        newQueries[key] = originalQueriesForContainer[key];
+      }
+
+      return newQueries;
+    },
+    {} as T,
+  );
+}
+
 function cleanup() {
   mountedFixtures.forEach(cleanupAtFixture);
 }
@@ -258,20 +284,24 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
   });
 }
 
+function detectChangesForMountedFixtures() {
+  mountedFixtures.forEach(fixture => fixture.detectChanges());
+}
+
 export * from '@testing-library/dom';
 
 const fireEvent = Object.keys(dtlFireEvent).reduce(
   (events, key) => {
     events[key] = (element: HTMLElement, options?: {}) => {
       const result = dtlFireEvent[key](element, options);
-      mountedFixtures.forEach(fixture => {
-        fixture.detectChanges();
-      });
+      detectChangesForMountedFixtures();
       return result;
     };
     return events;
   },
-  {} as FireFunction & FireObject,
+  {} as typeof dtlFireEvent,
 );
 
-export { fireEvent };
+const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
+
+export { fireEvent, screen };
