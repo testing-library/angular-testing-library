@@ -3,9 +3,9 @@ import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, FireObject, Queries, queries, waitFor, waitForElementToBeRemoved } from '@testing-library/dom';
 import { UserEvents } from './user-events';
+import { OptionsReceived } from 'pretty-format';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
-
 export interface RenderResult<ComponentType, WrapperType = ComponentType>
   extends RenderResultQueries,
     FireObject,
@@ -24,7 +24,11 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    * @param
    * element: The to be printed HTML element, if not provided it will log the whole component's DOM
    */
-  debug: (element?: HTMLElement) => void;
+  debug: (
+    element?: Element | HTMLDocument | (Element | HTMLDocument)[],
+    maxLength?: number,
+    options?: OptionsReceived,
+  ) => void;
   /**
    * @description
    * Trigger a change detection cycle for the component.

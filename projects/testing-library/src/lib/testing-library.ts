@@ -17,6 +17,7 @@ import {
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
+
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
 
@@ -174,7 +175,10 @@ export async function render<SutType, WrapperType = SutType>(
     rerender,
     debugElement: fixture.debugElement.query(By.directive(sut)),
     container: fixture.nativeElement,
-    debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
+    debug: (element = fixture.nativeElement, maxLength, options) =>
+      Array.isArray(element)
+        ? element.forEach(e => console.log(prettyDOM(e, maxLength, options)))
+        : console.log(prettyDOM(element, maxLength, options)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
     tab,
