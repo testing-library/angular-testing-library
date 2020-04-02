@@ -5,13 +5,15 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  fireEvent,
   FireFunction,
   FireObject,
   getQueriesForElement,
   prettyDOM,
   waitFor,
   waitForElementToBeRemoved,
+  fireEvent as dtlFireEvent,
+  screen as dtlScreen,
+  queries as dtlQueries,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
@@ -19,7 +21,7 @@ import { createSelectOptions, createType, tab } from './user-events';
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
 
-const mountedContainers = new Set();
+const mountedFixtures = new Set<ComponentFixture<any>>();
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -75,8 +77,9 @@ export async function render<SutType, WrapperType = SutType>(
     if (idAttribute && idAttribute.startsWith('root')) {
       fixture.nativeElement.removeAttribute('id');
     }
-    mountedContainers.add(fixture.nativeElement);
   }
+
+  mountedFixtures.add(fixture);
 
   await TestBed.compileComponents();
 
@@ -93,10 +96,10 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   }
 
-  const eventsWithDetectChanges = Object.keys(fireEvent).reduce(
+  const eventsWithDetectChanges = Object.keys(dtlFireEvent).reduce(
     (events, key) => {
       events[key] = (element: HTMLElement, options?: {}) => {
-        const result = fireEvent[key](element, options);
+        const result = dtlFireEvent[key](element, options);
         detectChanges();
         return result;
       };
@@ -137,10 +140,12 @@ export async function render<SutType, WrapperType = SutType>(
         attributes: boolean;
         characterData: boolean;
       };
-    } = { container: fixture.nativeElement, interval: 50 },
+    } = { container: fixture.nativeElement },
   ): Promise<T> {
-    const interval = setInterval(detectChanges, options.interval);
-    return waitFor<T>(callback, options).finally(() => clearInterval(interval));
+    return waitFor<T>(() => {
+      detectChanges();
+      return callback();
+    }, options);
   }
 
   function componentWaitForElementToBeRemoved<T>(
@@ -155,10 +160,12 @@ export async function render<SutType, WrapperType = SutType>(
         attributes: boolean;
         characterData: boolean;
       };
-    } = { container: fixture.nativeElement, interval: 50 },
+    } = { container: fixture.nativeElement },
   ): Promise<T> {
-    const interval = setInterval(detectChanges, options.interval);
-    return waitForElementToBeRemoved<T>(callback, options).finally(() => clearInterval(interval));
+    return waitForElementToBeRemoved<T>(() => {
+      detectChanges();
+      return callback();
+    }, options);
   }
 
   return {
@@ -168,13 +175,16 @@ export async function render<SutType, WrapperType = SutType>(
     rerender,
     debugElement: fixture.debugElement.query(By.directive(sut)),
     container: fixture.nativeElement,
-    debug: (element = fixture.nativeElement) => console.log(prettyDOM(element)),
+    debug: (element = fixture.nativeElement, maxLength, options) =>
+      Array.isArray(element)
+        ? element.forEach(e => console.log(prettyDOM(e, maxLength, options)))
+        : console.log(prettyDOM(element, maxLength, options)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
     tab,
     waitFor: componentWaitFor,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
-    ...getQueriesForElement(fixture.nativeElement, queries),
+    ...replaceFindWithFindAndDetectChanges(fixture.nativeElement, getQueriesForElement(fixture.nativeElement, queries)),
     ...eventsWithDetectChanges,
   };
 }
@@ -237,15 +247,39 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
   return [...imports, ...animations(), ...routing()];
 }
 
-function cleanup() {
-  mountedContainers.forEach(cleanupAtContainer);
+// for the findBy queries we first want to run a change detection cycle
+function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
+  return Object.keys(originalQueriesForContainer).reduce(
+    (newQueries, key) => {
+      if (key.startsWith('find')) {
+        const getByQuery = dtlQueries[key.replace('find', 'get')];
+        newQueries[key] = async (text, options, waitForOptions) => {
+          // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
+          const result = await waitFor(() => {
+            detectChangesForMountedFixtures();
+            return getByQuery(container, text, options);
+          }, waitForOptions);
+          return result;
+        };
+      } else {
+        newQueries[key] = originalQueriesForContainer[key];
+      }
+
+      return newQueries;
+    },
+    {} as T,
+  );
 }
 
-function cleanupAtContainer(container) {
-  if (container.parentNode === document.body) {
-    document.body.removeChild(container);
+function cleanup() {
+  mountedFixtures.forEach(cleanupAtFixture);
+}
+
+function cleanupAtFixture(fixture) {
+  if (!fixture.nativeElement.getAttribute('ng-version') && fixture.nativeElement.parentNode === document.body) {
+    document.body.removeChild(fixture.nativeElement);
   }
-  mountedContainers.delete(container);
+  mountedFixtures.delete(fixture);
 }
 
 if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
@@ -253,3 +287,25 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
     cleanup();
   });
 }
+
+function detectChangesForMountedFixtures() {
+  mountedFixtures.forEach(fixture => fixture.detectChanges());
+}
+
+export * from '@testing-library/dom';
+
+const fireEvent = Object.keys(dtlFireEvent).reduce(
+  (events, key) => {
+    events[key] = (element: HTMLElement, options?: {}) => {
+      const result = dtlFireEvent[key](element, options);
+      detectChangesForMountedFixtures();
+      return result;
+    };
+    return events;
+  },
+  {} as typeof dtlFireEvent,
+);
+
+const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
+
+export { fireEvent, screen };
