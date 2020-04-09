@@ -1,4 +1,3 @@
-import { fireEvent } from '@testing-library/dom';
 import { createType } from './type';
 import { createSelectOptions } from './selectOptions';
 import { tab } from './tab';
@@ -47,7 +46,4 @@ export interface UserEvents {
   tab: typeof tab;
 }
 
-const type = createType(fireEvent);
-const selectOptions = createSelectOptions(fireEvent);
-
-export { createType, type, createSelectOptions, selectOptions, tab };
+export { createType, createSelectOptions, tab };

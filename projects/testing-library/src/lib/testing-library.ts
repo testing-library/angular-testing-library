@@ -292,8 +292,6 @@ function detectChangesForMountedFixtures() {
   mountedFixtures.forEach(fixture => fixture.detectChanges());
 }
 
-export * from '@testing-library/dom';
-
 const fireEvent = Object.keys(dtlFireEvent).reduce(
   (events, key) => {
     events[key] = (element: HTMLElement, options?: {}) => {
@@ -307,5 +305,81 @@ const fireEvent = Object.keys(dtlFireEvent).reduce(
 );
 
 const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
+
+// manually export otherwise we get the following error while running Jest tests
+// TypeError: Cannot set property fireEvent of [object Object] which has only a getter
+// exports.fireEvent = fireEvent;
+export {
+  buildQueries,
+  configure,
+  getByLabelText,
+  getAllByLabelText,
+  queryByLabelText,
+  queryAllByLabelText,
+  findByLabelText,
+  findAllByLabelText,
+  getByPlaceholderText,
+  getAllByPlaceholderText,
+  queryByPlaceholderText,
+  queryAllByPlaceholderText,
+  findByPlaceholderText,
+  findAllByPlaceholderText,
+  getByText,
+  getAllByText,
+  queryByText,
+  queryAllByText,
+  findByText,
+  findAllByText,
+  getByAltText,
+  getAllByAltText,
+  queryByAltText,
+  queryAllByAltText,
+  findByAltText,
+  findAllByAltText,
+  getByTitle,
+  getAllByTitle,
+  queryByTitle,
+  queryAllByTitle,
+  findByTitle,
+  findAllByTitle,
+  getByDisplayValue,
+  getAllByDisplayValue,
+  queryByDisplayValue,
+  queryAllByDisplayValue,
+  findByDisplayValue,
+  findAllByDisplayValue,
+  getByRole,
+  getAllByRole,
+  queryByRole,
+  queryAllByRole,
+  findByRole,
+  findAllByRole,
+  getByTestId,
+  getAllByTestId,
+  queryByTestId,
+  queryAllByTestId,
+  findByTestId,
+  findAllByTestId,
+  createEvent,
+  getDefaultNormalizer,
+  getElementError,
+  getNodeText,
+  getQueriesForElement,
+  getRoles,
+  isInaccessible,
+  logDOM,
+  logRoles,
+  prettyDOM,
+  queries,
+  queryAllByAttribute,
+  queryByAttribute,
+  queryHelpers,
+  wait,
+  waitFor,
+  waitForDomChange,
+  waitForElement,
+  waitForElementToBeRemoved,
+  within,
+} from '@testing-library/dom';
 
 export { fireEvent, screen };
