@@ -292,6 +292,7 @@ function detectChangesForMountedFixtures() {
   mountedFixtures.forEach(fixture => fixture.detectChanges());
 }
 
+// wrap dom-fireEvent with a change detection cycle
 const fireEvent = Object.keys(dtlFireEvent).reduce(
   (events, key) => {
     events[key] = (element: HTMLElement, options?: {}) => {
@@ -305,6 +306,13 @@ const fireEvent = Object.keys(dtlFireEvent).reduce(
 );
 
 const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
+
+// wrap user-events with the correct fireEvents
+const userEvent = {
+  type: createType(fireEvent),
+  selectOptions: createSelectOptions(fireEvent),
+  tab: tab,
+};
 
 // manually export otherwise we get the following error while running Jest tests
 // TypeError: Cannot set property fireEvent of [object Object] which has only a getter
@@ -382,4 +390,4 @@ export {
   within,
 } from '@testing-library/dom';
 
-export { fireEvent, screen };
+export { fireEvent, screen, userEvent };

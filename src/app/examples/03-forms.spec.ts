@@ -1,10 +1,10 @@
 import { ReactiveFormsModule } from '@angular/forms';
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen, fireEvent, userEvent } from '@testing-library/angular';
 
 import { FormsComponent } from './03-forms';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
-  const { type, selectOptions } = await render(FormsComponent, {
+  await render(FormsComponent, {
     imports: [ReactiveFormsModule],
   });
 
@@ -18,17 +18,17 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(errors).toContainElement(screen.queryByText('color is required'));
 
   expect(nameControl).toBeInvalid();
-  type(nameControl, 'Tim');
-  type(scoreControl, '12');
+  userEvent.type(nameControl, 'Tim');
+  userEvent.type(scoreControl, '12');
   fireEvent.blur(scoreControl);
-  selectOptions(colorControl, 'Green');
+  userEvent.selectOptions(colorControl, 'Green');
 
   expect(screen.queryByText('name is required')).not.toBeInTheDocument();
   expect(screen.queryByText('score must be lesser than 10')).toBeInTheDocument();
   expect(screen.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
-  type(scoreControl, 7);
+  userEvent.type(scoreControl, 7);
   fireEvent.blur(scoreControl);
   expect(scoreControl).toBeValid();
 
