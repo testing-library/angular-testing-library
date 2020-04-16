@@ -20,12 +20,16 @@ export class MasterComponent {}
   template: `
     <h2>Detail {{ id | async }}</h2>
 
+    <p>{{ text | async }} {{ subtext | async }}</p>
+
     <a [routerLink]="'../..'">Back to parent</a>
     <a routerLink="/hidden-detail">hidden x</a>
   `,
 })
 export class DetailComponent {
   id = this.route.paramMap.pipe(map(params => params.get('id')));
+  text = this.route.queryParams.pipe(map(params => params['text']));
+  subtext = this.route.queryParams.pipe(map(params => params['subtext']));
   constructor(private route: ActivatedRoute) {}
 }
 
