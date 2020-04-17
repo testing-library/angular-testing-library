@@ -121,9 +121,28 @@ export async function render<SutType, WrapperType = SutType>(
     }
 
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
+    const [path, params] = (basePath + href).split('?');
+    const queryParams = params
+      ? params.split('&').reduce((qp, q) => {
+          const [key, value] = q.split('=');
+          qp[key] = value;
+          return qp;
+        }, {})
+      : undefined;
+
+    const doNavigate = () =>
+      router.navigate([path], {
+        queryParams,
+      });
 
     let result;
-    await zone.run(() => (result = router.navigate([basePath + href])));
+
+    if (zone) {
+      await zone.run(() => (result = doNavigate()));
+    } else {
+      result = doNavigate();
+    }
+
     detectChanges();
     return result;
   };

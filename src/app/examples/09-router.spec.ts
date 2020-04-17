@@ -73,8 +73,10 @@ test('it can navigate to routes with a base path', async () => {
   await navigate(screen.getByText(/Back to parent/));
   expect(screen.queryByText(/Detail three/i)).not.toBeInTheDocument();
 
-  await navigate('base/detail/two'); // possible to just use strings
+  await navigate('base/detail/two?text=Hello&subtext=World'); // possible to just use strings
   expect(screen.queryByText(/Detail two/i)).toBeInTheDocument();
+  expect(screen.queryByText(/Hello World/i)).toBeInTheDocument();
+
   await navigate('/hidden-detail', basePath);
   expect(screen.queryByText(/You found the treasure!/i)).toBeInTheDocument();
 });
