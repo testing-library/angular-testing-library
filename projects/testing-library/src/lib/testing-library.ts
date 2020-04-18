@@ -9,8 +9,8 @@ import {
   FireObject,
   getQueriesForElement,
   prettyDOM,
-  waitFor,
-  waitForElementToBeRemoved,
+  waitFor as dtlWaitFor,
+  waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
   fireEvent as dtlFireEvent,
   screen as dtlScreen,
   queries as dtlQueries,
@@ -153,38 +153,22 @@ export async function render<SutType, WrapperType = SutType>(
       container?: HTMLElement;
       timeout?: number;
       interval?: number;
-      mutationObserverOptions?: {
-        subtree: boolean;
-        childList: boolean;
-        attributes: boolean;
-        characterData: boolean;
-      };
+      mutationObserverOptions?: MutationObserverInit;
     } = { container: fixture.nativeElement },
   ): Promise<T> {
-    return waitFor<T>(() => {
-      detectChanges();
-      return callback();
-    }, options);
+    return waitForWrapper(detectChanges, callback, options);
   }
 
   function componentWaitForElementToBeRemoved<T>(
-    callback: () => T,
+    callback: (() => T) | T,
     options: {
       container?: HTMLElement;
       timeout?: number;
       interval?: number;
-      mutationObserverOptions?: {
-        subtree: boolean;
-        childList: boolean;
-        attributes: boolean;
-        characterData: boolean;
-      };
+      mutationObserverOptions?: MutationObserverInit;
     } = { container: fixture.nativeElement },
   ): Promise<T> {
-    return waitForElementToBeRemoved<T>(() => {
-      detectChanges();
-      return callback();
-    }, options);
+    return waitForElementToBeRemovedWrapper(detectChanges, callback, options);
   }
 
   return {
@@ -266,28 +250,57 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
   return [...imports, ...animations(), ...routing()];
 }
 
-// for the findBy queries we first want to run a change detection cycle
-function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
-  return Object.keys(originalQueriesForContainer).reduce(
-    (newQueries, key) => {
-      if (key.startsWith('find')) {
-        const getByQuery = dtlQueries[key.replace('find', 'get')];
-        newQueries[key] = async (text, options, waitForOptions) => {
-          // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
-          const result = await waitFor(() => {
-            detectChangesForMountedFixtures();
-            return getByQuery(container, text, options);
-          }, waitForOptions);
-          return result;
-        };
-      } else {
-        newQueries[key] = originalQueriesForContainer[key];
-      }
+/**
+ * Wrap waitFor to poke the Angular change detection cycle before invoking the callback
+ */
+async function waitForWrapper<T>(
+  detectChanges: () => void,
+  callback: () => T,
+  options?: {
+    container?: HTMLElement;
+    timeout?: number;
+    interval?: number;
+    mutationObserverOptions?: MutationObserverInit;
+  },
+): Promise<T> {
+  return await dtlWaitFor(() => {
+    detectChanges();
+    return callback();
+  }, options);
+}
 
-      return newQueries;
-    },
-    {} as T,
-  );
+/**
+ * Wrap waitForElementToBeRemovedWrapper to poke the Angular change detection cycle before invoking the callback
+ */
+async function waitForElementToBeRemovedWrapper<T>(
+  detectChanges: () => void,
+  callback: (() => T) | T,
+  options?: {
+    container?: HTMLElement;
+    timeout?: number;
+    interval?: number;
+    mutationObserverOptions?: MutationObserverInit;
+  },
+): Promise<T> {
+  let cb;
+  if (typeof callback !== 'function') {
+    const elements = (Array.isArray(callback) ? callback : [callback]) as HTMLElement[];
+    const getRemainingElements = elements.map(element => {
+      let parent = element.parentElement;
+      while (parent.parentElement) {
+        parent = parent.parentElement;
+      }
+      return () => (parent.contains(element) ? element : null);
+    });
+    cb = () => getRemainingElements.map(c => c()).filter(Boolean);
+  } else {
+    cb = callback;
+  }
+
+  return await dtlWaitForElementToBeRemoved(() => {
+    detectChanges();
+    return cb();
+  }, options);
 }
 
 function cleanup() {
@@ -307,11 +320,43 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
   });
 }
 
+/**
+ * Wrap findBy queries to poke the Angular change detection cycle
+ */
+function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
+  return Object.keys(originalQueriesForContainer).reduce(
+    (newQueries, key) => {
+      if (key.startsWith('find')) {
+        const getByQuery = dtlQueries[key.replace('find', 'get')];
+        newQueries[key] = async (text, options, waitForOptions) => {
+          // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
+          const result = await waitForWrapper(
+            detectChangesForMountedFixtures,
+            () => getByQuery(container, text, options),
+            waitForOptions,
+          );
+          return result;
+        };
+      } else {
+        newQueries[key] = originalQueriesForContainer[key];
+      }
+
+      return newQueries;
+    },
+    {} as T,
+  );
+}
+
+/**
+ * Call detectChanges for all fixtures
+ */
 function detectChangesForMountedFixtures() {
   mountedFixtures.forEach(fixture => fixture.detectChanges());
 }
 
-// wrap dom-fireEvent with a change detection cycle
+/**
+ * Wrap dom-fireEvent to poke the Angular change detection cycle after an event is fired
+ */
 const fireEvent = Object.keys(dtlFireEvent).reduce(
   (events, key) => {
     events[key] = (element: HTMLElement, options?: {}) => {
@@ -324,18 +369,55 @@ const fireEvent = Object.keys(dtlFireEvent).reduce(
   {} as typeof dtlFireEvent,
 );
 
+/**
+ * Re-export screen with patched queries
+ */
 const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
 
-// wrap user-events with the correct fireEvents
+/**
+ * Re-export waitFor with patched waitFor
+ */
+async function waitFor<T>(
+  callback: () => T,
+  options?: {
+    container?: HTMLElement;
+    timeout?: number;
+    interval?: number;
+    mutationObserverOptions?: MutationObserverInit;
+  },
+): Promise<T> {
+  return waitForWrapper(detectChangesForMountedFixtures, callback, options);
+}
+
+/**
+ * Re-export waitForElementToBeRemoved with patched waitForElementToBeRemoved
+ */
+async function waitForElementToBeRemoved<T>(
+  callback: (() => T) | T,
+  options?: {
+    container?: HTMLElement;
+    timeout?: number;
+    interval?: number;
+    mutationObserverOptions?: MutationObserverInit;
+  },
+): Promise<T> {
+  return waitForElementToBeRemovedWrapper(detectChangesForMountedFixtures, callback, options);
+}
+
+/**
+ * Re-export userEvent with the patched fireEvent
+ */
 const userEvent = {
   type: createType(fireEvent),
   selectOptions: createSelectOptions(fireEvent),
   tab: tab,
 };
 
-// manually export otherwise we get the following error while running Jest tests
-// TypeError: Cannot set property fireEvent of [object Object] which has only a getter
-// exports.fireEvent = fireEvent;
+/**
+ * Manually export otherwise we get the following error while running Jest tests
+ * TypeError: Cannot set property fireEvent of [object Object] which has only a getter
+ * exports.fireEvent = fireEvent
+ */
 export {
   buildQueries,
   configure,
@@ -401,12 +483,7 @@ export {
   queryAllByAttribute,
   queryByAttribute,
   queryHelpers,
-  wait,
-  waitFor,
-  waitForDomChange,
-  waitForElement,
-  waitForElementToBeRemoved,
   within,
 } from '@testing-library/dom';
 
-export { fireEvent, screen, userEvent };
+export { fireEvent, screen, userEvent, waitFor, waitForElementToBeRemoved };

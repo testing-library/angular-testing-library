@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { timer } from 'rxjs';
-import { render } from '../src/public_api';
+import { render, screen, fireEvent, waitFor as waitForATL } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
@@ -17,23 +17,48 @@ class FixtureComponent {
   }
 }
 
-test('waits for assertion to become true', async () => {
-  const { queryByText, getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
+describe('from import', () => {
+  test('waits for assertion to become true', async () => {
+    await render(FixtureComponent);
 
-  expect(queryByText('Success')).toBeNull();
+    expect(screen.queryByText('Success')).toBeNull();
 
-  click(getByTestId('button'));
+    fireEvent.click(screen.getByTestId('button'));
 
-  await waitFor(() => getByText('Success'));
-  getByText('Success');
+    await waitForATL(() => screen.getByText('Success'));
+    screen.getByText('Success');
+  });
+
+  test('allows to override options', async () => {
+    await render(FixtureComponent);
+
+    fireEvent.click(screen.getByTestId('button'));
+
+    await expect(waitForATL(() => screen.getByText('Success'), { timeout: 200 })).rejects.toThrow(
+      /Unable to find an element with the text: Success/i,
+    );
+  });
 });
 
-test('allows to override options', async () => {
-  const { getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
+describe('from render', () => {
+  test('waits for assertion to become true', async () => {
+    const { queryByText, getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
 
-  click(getByTestId('button'));
+    expect(queryByText('Success')).toBeNull();
 
-  await expect(waitFor(() => getByText('Success'), { timeout: 200 })).rejects.toThrow(
-    /Unable to find an element with the text: Success/i,
-  );
+    click(getByTestId('button'));
+
+    await waitFor(() => getByText('Success'));
+    getByText('Success');
+  });
+
+  test('allows to override options', async () => {
+    const { getByTestId, click, waitFor, getByText } = await render(FixtureComponent);
+
+    click(getByTestId('button'));
+
+    await expect(waitFor(() => getByText('Success'), { timeout: 200 })).rejects.toThrow(
+      /Unable to find an element with the text: Success/i,
+    );
+  });
 });
