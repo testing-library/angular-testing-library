@@ -14,6 +14,7 @@ import {
   fireEvent as dtlFireEvent,
   screen as dtlScreen,
   queries as dtlQueries,
+  waitForOptions,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
@@ -147,26 +148,13 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWaitFor<T>(
-    callback,
-    options: {
-      container?: HTMLElement;
-      timeout?: number;
-      interval?: number;
-      mutationObserverOptions?: MutationObserverInit;
-    } = { container: fixture.nativeElement },
-  ): Promise<T> {
+  function componentWaitFor<T>(callback, options: waitForOptions = { container: fixture.nativeElement }): Promise<T> {
     return waitForWrapper(detectChanges, callback, options);
   }
 
   function componentWaitForElementToBeRemoved<T>(
     callback: (() => T) | T,
-    options: {
-      container?: HTMLElement;
-      timeout?: number;
-      interval?: number;
-      mutationObserverOptions?: MutationObserverInit;
-    } = { container: fixture.nativeElement },
+    options: waitForOptions = { container: fixture.nativeElement },
   ): Promise<T> {
     return waitForElementToBeRemovedWrapper(detectChanges, callback, options);
   }
@@ -255,13 +243,8 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
  */
 async function waitForWrapper<T>(
   detectChanges: () => void,
-  callback: () => T,
-  options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    interval?: number;
-    mutationObserverOptions?: MutationObserverInit;
-  },
+  callback: () => T extends Promise<any> ? never : T,
+  options?: waitForOptions,
 ): Promise<T> {
   return await dtlWaitFor(() => {
     detectChanges();
@@ -275,12 +258,7 @@ async function waitForWrapper<T>(
 async function waitForElementToBeRemovedWrapper<T>(
   detectChanges: () => void,
   callback: (() => T) | T,
-  options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    interval?: number;
-    mutationObserverOptions?: MutationObserverInit;
-  },
+  options?: waitForOptions,
 ): Promise<T> {
   let cb;
   if (typeof callback !== 'function') {
@@ -328,12 +306,12 @@ function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, original
     (newQueries, key) => {
       if (key.startsWith('find')) {
         const getByQuery = dtlQueries[key.replace('find', 'get')];
-        newQueries[key] = async (text, options, waitForOptions) => {
+        newQueries[key] = async (text, options, waitOptions) => {
           // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
           const result = await waitForWrapper(
             detectChangesForMountedFixtures,
             () => getByQuery(container, text, options),
-            waitForOptions,
+            waitOptions,
           );
           return result;
         };
@@ -377,30 +355,14 @@ const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
 /**
  * Re-export waitFor with patched waitFor
  */
-async function waitFor<T>(
-  callback: () => T,
-  options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    interval?: number;
-    mutationObserverOptions?: MutationObserverInit;
-  },
-): Promise<T> {
+async function waitFor<T>(callback: () => T extends Promise<any> ? never : T, options?: waitForOptions): Promise<T> {
   return waitForWrapper(detectChangesForMountedFixtures, callback, options);
 }
 
 /**
  * Re-export waitForElementToBeRemoved with patched waitForElementToBeRemoved
  */
-async function waitForElementToBeRemoved<T>(
-  callback: (() => T) | T,
-  options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    interval?: number;
-    mutationObserverOptions?: MutationObserverInit;
-  },
-): Promise<T> {
+async function waitForElementToBeRemoved<T>(callback: (() => T) | T, options?: waitForOptions): Promise<T> {
   return waitForElementToBeRemovedWrapper(detectChangesForMountedFixtures, callback, options);
 }
 

@@ -24,19 +24,19 @@ test('it can navigate to routes', async () => {
 
   expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
 
-  await navigate(screen.getByText(/Load one/));
-  expect(screen.queryByText(/Detail one/i)).toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /load one/i }));
+  expect(screen.queryByRole('heading', { name: /Detail one/i })).toBeInTheDocument();
 
-  await navigate(screen.getByText(/Load three/));
-  expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
-  expect(screen.queryByText(/Detail three/i)).toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /load three/i }));
+  expect(screen.queryByRole('heading', { name: /Detail one/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: /Detail three/i })).toBeInTheDocument();
 
-  await navigate(screen.getByText(/Back to parent/));
-  expect(screen.queryByText(/Detail three/i)).not.toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /back to parent/i }));
+  expect(screen.queryByRole('heading', { name: /Detail three/i })).not.toBeInTheDocument();
 
-  await navigate(screen.getByText(/Load two/));
-  expect(screen.queryByText(/Detail two/i)).toBeInTheDocument();
-  await navigate(screen.getByText(/hidden x/));
+  await navigate(screen.getByRole('link', { name: /load two/i }));
+  expect(screen.queryByRole('heading', { name: /Detail two/i })).toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /hidden x/i }));
   expect(screen.queryByText(/You found the treasure!/i)).toBeInTheDocument();
 });
 
@@ -61,21 +61,22 @@ test('it can navigate to routes with a base path', async () => {
     ],
   });
 
-  expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: /Detail one/i })).not.toBeInTheDocument();
 
-  await navigate(screen.getByText(/Load one/), basePath);
-  expect(screen.queryByText(/Detail one/i)).toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /load one/i }), basePath);
+  expect(screen.queryByRole('heading', { name: /Detail one/i })).toBeInTheDocument();
 
-  await navigate(screen.getByText(/Load three/), basePath);
-  expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
-  expect(screen.queryByText(/Detail three/i)).toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /load three/i }), basePath);
+  expect(screen.queryByRole('heading', { name: /Detail one/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: /Detail three/i })).toBeInTheDocument();
 
-  await navigate(screen.getByText(/Back to parent/));
-  expect(screen.queryByText(/Detail three/i)).not.toBeInTheDocument();
+  await navigate(screen.getByRole('link', { name: /back to parent/i }));
+  expect(screen.queryByRole('heading', { name: /Detail three/i })).not.toBeInTheDocument();
 
-  await navigate('base/detail/two?text=Hello&subtext=World'); // possible to just use strings
-  expect(screen.queryByText(/Detail two/i)).toBeInTheDocument();
-  expect(screen.queryByText(/Hello World/i)).toBeInTheDocument();
+  // It's possible to just use strings
+  await navigate('base/detail/two?text=Hello&subtext=World');
+  expect(screen.queryByRole('heading', { name: /Detail two/i })).toBeInTheDocument();
+  expect(screen.getByText(/Hello World/i)).toBeInTheDocument();
 
   await navigate('/hidden-detail', basePath);
   expect(screen.queryByText(/You found the treasure!/i)).toBeInTheDocument();

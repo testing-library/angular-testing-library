@@ -4,7 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, ValidationErrors } from '
 @Component({
   selector: 'app-fixture',
   template: `
-    <form [formGroup]="form" data-testid="my-form">
+    <form [formGroup]="form" name="form">
       <div>
         <label for="name">Name</label>
         <input type="text" id="name" name="name" formControlName="name" required />

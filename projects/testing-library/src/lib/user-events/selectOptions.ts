@@ -1,11 +1,4 @@
-import {
-  FireFunction,
-  FireObject,
-  Matcher,
-  getByText,
-  SelectorMatcherOptions,
-  queryByText,
-} from '@testing-library/dom';
+import { FireFunction, FireObject, Matcher, screen, ByRoleOptions } from '@testing-library/dom';
 
 // implementation from https://github.com/testing-library/user-event
 export function createSelectOptions(fireEvent: FireFunction & FireObject) {
@@ -18,10 +11,16 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
     fireEvent.click(element);
   }
 
-  function selectOption(select: HTMLSelectElement, index: number, matcher: Matcher, options?: SelectorMatcherOptions) {
-    // fallback to document.body, because libraries as Angular Material will have their custom select component
-    const option = (queryByText(select, matcher, options) ||
-      getByText(document.body, matcher, options)) as HTMLOptionElement;
+  function selectOption(select: HTMLSelectElement, index: number, options: Matcher | ByRoleOptions) {
+    const query =
+      typeof options === 'string'
+        ? (({ name: new RegExp(options, 'i') } as unknown) as ByRoleOptions)
+        : options instanceof RegExp
+        ? (({ name: options } as unknown) as ByRoleOptions)
+        : typeof options === 'function'
+        ? (({ name: options } as unknown) as ByRoleOptions)
+        : options;
+    const option = screen.getByRole('option', query) as HTMLOptionElement;
 
     fireEvent.mouseOver(option);
     fireEvent.mouseMove(option);
@@ -36,8 +35,7 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
 
   return async function selectOptions(
     element: HTMLElement,
-    matcher: Matcher | Matcher[],
-    matcherOptions?: SelectorMatcherOptions,
+    options: Matcher | ByRoleOptions | ((Matcher | ByRoleOptions)[]),
   ) {
     const selectElement = element as HTMLSelectElement;
 
@@ -55,10 +53,10 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
 
     clickElement(selectElement);
 
-    const values = Array.isArray(matcher) ? matcher : [matcher];
+    const values = Array.isArray(options) ? options : [options];
     values
       .filter((_, index) => index === 0 || selectElement.multiple)
-      .forEach((val, index) => selectOption(selectElement, index, val, matcherOptions));
+      .forEach((val, index) => selectOption(selectElement, index, val));
 
     if (wasAnotherElementFocused) {
       fireEvent.blur(focusedElement);

@@ -4,7 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, ValidationErrors } from '
 @Component({
   selector: 'app-fixture',
   template: `
-    <form [formGroup]="form" data-testid="my-form">
+    <form [formGroup]="form" name="form">
       <mat-form-field>
         <input matInput placeholder="Name" name="name" formControlName="name" required />
       </mat-form-field>

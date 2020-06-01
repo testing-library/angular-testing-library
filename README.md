@@ -97,7 +97,7 @@ counter.component.ts
   selector: 'counter',
   template: `
     <button (click)="decrement()">-</button>
-    <span data-testid="count">Current Count: {{ counter }}</span>
+    <span>Current Count: {{ counter }}</span>
     <button (click)="increment()">+</button>
   `,
 })
@@ -117,8 +117,8 @@ export class CounterComponent {
 counter.component.spec.ts
 
 ```typescript
-import { render, screen } from '@testing-library/angular';
-import CounterComponent from './counter.component.ts';
+import { render, screen, fireEvent } from '@testing-library/angular';
+import { CounterComponent } from './counter.component.ts';
 
 describe('Counter', () => {
   test('should render counter', async () => {
@@ -128,11 +128,12 @@ describe('Counter', () => {
   });
 
   test('should increment the counter on click', async () => {
-    const { click } = await render(CounterComponent, { componentProperties: { counter: 5 } });
+    await render(CounterComponent, { componentProperties: { counter: 5 } });
 
-    click(screen.getByText('+'));
+    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    fireEvent.click(incrementControl);
 
-    expect(getByText('Current Count: 6'));
+    expect(screen.getByText('Current Count: 6'));
   });
 });
 ```
@@ -194,6 +195,7 @@ Thanks goes to these people ([emoji key][emojis]):
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.

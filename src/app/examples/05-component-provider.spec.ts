@@ -14,8 +14,8 @@ test('renders the current value and can increment and decrement', async () => {
     ],
   });
 
-  const incrementControl = screen.getByText('Increment');
-  const decrementControl = screen.getByText('Decrement');
+  const incrementControl = screen.getByRole('button', { name: /increment/i });
+  const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
   expect(valueControl.textContent).toBe('0');
@@ -44,8 +44,8 @@ test('renders the current value and can increment and decrement with a mocked je
     ],
   });
 
-  const incrementControl = screen.getByText('Increment');
-  const decrementControl = screen.getByText('Decrement');
+  const incrementControl = screen.getByRole('button', { name: /increment/i });
+  const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
   expect(valueControl.textContent).toBe('50');
@@ -63,8 +63,8 @@ test('renders the current value and can increment and decrement with provideMock
     componentProviders: [provideMock(CounterService)],
   });
 
-  const incrementControl = screen.getByText('Increment');
-  const decrementControl = screen.getByText('Decrement');
+  const incrementControl = screen.getByRole('button', { name: /increment/i });
+  const decrementControl = screen.getByRole('button', { name: /decrement/i });
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);

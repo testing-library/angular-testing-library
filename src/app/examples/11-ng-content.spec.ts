@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/angular';
 
 import { CellComponent } from './11-ng-content';
 
-test('it is posible to test ng-content without selector', async () => {
+test('it is possible to test ng-content without selector', async () => {
   const projection = 'it should be showed into a p element!';
 
   TestBed.overrideComponent(CellComponent, { set: { selector: 'cell' } });

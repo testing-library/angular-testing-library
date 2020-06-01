@@ -9,9 +9,9 @@ test('is possible to fill in a form and verify error messages (with the help of 
     imports: [ReactiveFormsModule, MaterialModule],
   });
 
-  const nameControl = screen.getByPlaceholderText('Name');
-  const scoreControl = screen.getByPlaceholderText(/score/i);
-  const colorControl = screen.getByPlaceholderText('color', { exact: false });
+  const nameControl = screen.getByLabelText(/name/i);
+  const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
+  const colorControl = screen.getByRole('listbox', { name: /color/i });
   const errors = screen.getByRole('alert');
 
   expect(errors).toContainElement(screen.queryByText('name is required'));
@@ -35,7 +35,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(nameControl).toHaveValue('Tim');
   expect(scoreControl).toHaveValue(7);
 
-  const form = screen.getByTestId('my-form');
+  const form = screen.getByRole('form');
   expect(form).toHaveFormValues({
     name: 'Tim',
     score: 7,
