@@ -14,9 +14,9 @@ test('is possible to set input and listen for output', async () => {
     },
   });
 
-  const incrementControl = screen.getByText('Increment');
+  const incrementControl = screen.getByRole('button', { name: /increment/i });
+  const sendControl = screen.getByRole('button', { name: /send/i });
   const valueControl = screen.getByTestId('value');
-  const sendControl = screen.getByText('Send');
 
   expect(valueControl.textContent).toBe('47');
 

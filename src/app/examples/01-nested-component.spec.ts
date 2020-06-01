@@ -7,8 +7,8 @@ test('renders the current value and can increment and decrement', async () => {
     declarations: [NestedButtonComponent, NestedValueComponent],
   });
 
-  const incrementControl = screen.getByText('Increment');
-  const decrementControl = screen.getByText('Decrement');
+  const incrementControl = screen.getByRole('button', { name: /increment/i });
+  const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
   expect(valueControl.textContent).toBe('0');

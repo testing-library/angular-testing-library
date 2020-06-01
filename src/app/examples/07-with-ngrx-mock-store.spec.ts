@@ -21,8 +21,7 @@ test('works with provideMockStore', async () => {
   const store = TestBed.inject(MockStore);
   store.dispatch = jest.fn();
 
-  screen.getByText('Four');
-  fireEvent.click(screen.getByText('Seven'));
+  fireEvent.click(screen.getByRole('listitem', { name: /seven/i }));
 
   expect(store.dispatch).toBeCalledWith({ type: '[Item List] send', item: 'Seven' });
 });
