@@ -344,7 +344,15 @@ function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, original
  * Call detectChanges for all fixtures
  */
 function detectChangesForMountedFixtures() {
-  mountedFixtures.forEach(fixture => fixture.detectChanges());
+  mountedFixtures.forEach(fixture => {
+    try {
+      fixture.detectChanges();
+    } catch (err) {
+      if (!err.message.startsWith('ViewDestroyedError')) {
+        throw err;
+      }
+    }
+  });
 }
 
 /**
