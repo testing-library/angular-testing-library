@@ -7,22 +7,28 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   FireFunction,
   FireObject,
-  getQueriesForElement,
-  prettyDOM,
+  getQueriesForElement as dtlGetQueriesForElement,
+  prettyDOM as dtlPrettyDOM,
   waitFor as dtlWaitFor,
   waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
   fireEvent as dtlFireEvent,
   screen as dtlScreen,
   queries as dtlQueries,
-  waitForOptions,
+  waitForOptions as dtlWaitForOptions,
+  configure as dtlConfigure,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { createSelectOptions, createType, tab } from './user-events';
 
-@Component({ selector: 'wrapper-component', template: '' })
-class WrapperComponent {}
-
 const mountedFixtures = new Set<ComponentFixture<any>>();
+
+dtlConfigure({
+  eventWrapper: cb => {
+    const result = cb();
+    detectChangesForMountedFixtures();
+    return result;
+  },
+});
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -148,13 +154,16 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWaitFor<T>(callback, options: waitForOptions = { container: fixture.nativeElement }): Promise<T> {
+  function componentWaitFor<T>(
+    callback,
+    options: dtlWaitForOptions = { container: fixture.nativeElement },
+  ): Promise<T> {
     return waitForWrapper(detectChanges, callback, options);
   }
 
   function componentWaitForElementToBeRemoved<T>(
     callback: (() => T) | T,
-    options: waitForOptions = { container: fixture.nativeElement },
+    options: dtlWaitForOptions = { container: fixture.nativeElement },
   ): Promise<T> {
     return waitForElementToBeRemovedWrapper(detectChanges, callback, options);
   }
@@ -168,14 +177,17 @@ export async function render<SutType, WrapperType = SutType>(
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement, maxLength, options) =>
       Array.isArray(element)
-        ? element.forEach(e => console.log(prettyDOM(e, maxLength, options)))
-        : console.log(prettyDOM(element, maxLength, options)),
+        ? element.forEach(e => console.log(dtlPrettyDOM(e, maxLength, options)))
+        : console.log(dtlPrettyDOM(element, maxLength, options)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
     tab,
     waitFor: componentWaitFor,
     waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
-    ...replaceFindWithFindAndDetectChanges(fixture.nativeElement, getQueriesForElement(fixture.nativeElement, queries)),
+    ...replaceFindWithFindAndDetectChanges(
+      fixture.nativeElement,
+      dtlGetQueriesForElement(fixture.nativeElement, queries),
+    ),
     ...eventsWithDetectChanges,
   };
 }
@@ -244,7 +256,7 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
 async function waitForWrapper<T>(
   detectChanges: () => void,
   callback: () => T extends Promise<any> ? never : T,
-  options?: waitForOptions,
+  options?: dtlWaitForOptions,
 ): Promise<T> {
   return await dtlWaitFor(() => {
     detectChanges();
@@ -258,7 +270,7 @@ async function waitForWrapper<T>(
 async function waitForElementToBeRemovedWrapper<T>(
   detectChanges: () => void,
   callback: (() => T) | T,
-  options?: waitForOptions,
+  options?: dtlWaitForOptions,
 ): Promise<T> {
   let cb;
   if (typeof callback !== 'function') {
@@ -298,6 +310,9 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
   });
 }
 
+@Component({ selector: 'wrapper-component', template: '' })
+class WrapperComponent {}
+
 /**
  * Wrap findBy queries to poke the Angular change detection cycle
  */
@@ -329,7 +344,15 @@ function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, original
  * Call detectChanges for all fixtures
  */
 function detectChangesForMountedFixtures() {
-  mountedFixtures.forEach(fixture => fixture.detectChanges());
+  mountedFixtures.forEach(fixture => {
+    try {
+      fixture.detectChanges();
+    } catch (err) {
+      if (!err.message.startsWith('ViewDestroyedError')) {
+        throw err;
+      }
+    }
+  });
 }
 
 /**
@@ -355,14 +378,14 @@ const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
 /**
  * Re-export waitFor with patched waitFor
  */
-async function waitFor<T>(callback: () => T extends Promise<any> ? never : T, options?: waitForOptions): Promise<T> {
+async function waitFor<T>(callback: () => T extends Promise<any> ? never : T, options?: dtlWaitForOptions): Promise<T> {
   return waitForWrapper(detectChangesForMountedFixtures, callback, options);
 }
 
 /**
  * Re-export waitForElementToBeRemoved with patched waitForElementToBeRemoved
  */
-async function waitForElementToBeRemoved<T>(callback: (() => T) | T, options?: waitForOptions): Promise<T> {
+async function waitForElementToBeRemoved<T>(callback: (() => T) | T, options?: dtlWaitForOptions): Promise<T> {
   return waitForElementToBeRemovedWrapper(detectChangesForMountedFixtures, callback, options);
 }
 

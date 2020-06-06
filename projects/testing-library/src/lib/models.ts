@@ -63,6 +63,9 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    */
   rerender: (componentProperties: Partial<ComponentType>) => void;
   /**
+   * @deprecated
+   * Usage of `waitForElementToBeRemoved` from render is deprecated, use this method directly from `@testing-library/angular`
+   *
    * @description
    * Wait for the removal of element(s) from the DOM.
    *
@@ -70,6 +73,9 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    */
   waitForElementToBeRemoved: typeof waitForElementToBeRemoved;
   /**
+   * @deprecated
+   * Usage of `waitFor` from render is deprecated, use this method directly from `@testing-library/angular`
+   *
    * @description
    * When in need to wait for any period of time you can use waitFor, to wait for your expectations to pass.
    *

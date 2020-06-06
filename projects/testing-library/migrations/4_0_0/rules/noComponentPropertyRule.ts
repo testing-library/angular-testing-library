@@ -10,9 +10,9 @@ const FAILURE_MESSAGE = 'Found component propety syntax, signature looks differe
 
 export class Rule extends Rules.AbstractRule {
   public apply(ast: ts.SourceFile): Array<RuleFailure> {
-    return tsquery(ast, IS_COMPONENT_PROPERTY_QUERY).map(result => {
+    return tsquery(ast, IS_COMPONENT_PROPERTY_QUERY).map((result) => {
       const [valueNode] = tsquery(result, COMPONENT_PROPERTY_VALUE_QUERY);
-      const replacement = new Replacement(result.getStart(), result.getWidth(), (valueNode || result).text);
+      const replacement = new Replacement(result.getStart(), result.getWidth(), (valueNode || result).getText());
       const start = result.getStart();
       const end = result.getEnd();
 

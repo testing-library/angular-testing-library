@@ -4,6 +4,9 @@ import { tab } from './tab';
 
 export interface UserEvents {
   /**
+   * @deprecated
+   * Use `userEvents.type` from @testing-library/user-event
+   *
    * @description
    * Types a value in an input field with the same interactions as the user would do.
    *
@@ -19,6 +22,9 @@ export interface UserEvents {
   type: ReturnType<typeof createType>;
 
   /**
+   * @deprecated
+   * Use `userEvents.selectOptions` from @testing-library/user-event
+   *
    * @description
    * Select an option(s) from a select field with the same interactions as the user would do.
    *
@@ -33,6 +39,9 @@ export interface UserEvents {
   selectOptions: ReturnType<typeof createSelectOptions>;
 
   /**
+   * @deprecated
+   * Use `userEvents.tab` from @testing-library/user-event
+   *
    * @description
    * Fires a tab event changing the document.activeElement in the same way the browser does.
    *

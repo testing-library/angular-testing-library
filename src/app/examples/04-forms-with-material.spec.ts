@@ -1,5 +1,6 @@
 import { ReactiveFormsModule } from '@angular/forms';
-import { render, screen, userEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { MaterialModule } from '../material.module';
 import { MaterialFormsComponent } from './04-forms-with-material';
@@ -19,15 +20,18 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(errors).toContainElement(screen.queryByText('color is required'));
 
   userEvent.type(nameControl, 'Tim');
-  userEvent.type(scoreControl, 12);
-  userEvent.selectOptions(colorControl, 'Green');
+  userEvent.clear(scoreControl);
+  userEvent.type(scoreControl, '12');
+  userEvent.click(colorControl);
+  userEvent.click(screen.getByText(/green/i));
 
   expect(screen.queryByText('name is required')).not.toBeInTheDocument();
   expect(screen.queryByText('score must be lesser than 10')).toBeInTheDocument();
   expect(screen.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
-  userEvent.type(scoreControl, 7);
+  userEvent.clear(scoreControl);
+  userEvent.type(scoreControl, '7');
   expect(scoreControl).toBeValid();
 
   expect(errors).not.toBeInTheDocument();
