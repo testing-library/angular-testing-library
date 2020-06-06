@@ -5,9 +5,7 @@ import { mapTo, timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'fixture',
-  template: `
-    <div>{{ result | async }}</div>
-  `,
+  template: ` <div>{{ result | async }}</div> `,
 })
 class FixtureComponent {
   result = timer(30).pipe(mapTo('I am visible'));

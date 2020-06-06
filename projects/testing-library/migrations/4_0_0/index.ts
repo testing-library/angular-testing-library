@@ -17,7 +17,7 @@ function createRule(ruleName: string): TslintFixTask {
   );
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return (_, context) => {
     const noCreateComponentRule = createRule('no-create-component');
     const noComponentParametersRule = createRule('no-component-parameters');

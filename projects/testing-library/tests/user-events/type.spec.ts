@@ -225,7 +225,7 @@ describe('does not type when ', () => {
     const inputControl = component.getByTestId('input') as HTMLInputElement;
     component.type(inputControl, 'Hello');
 
-    Object.values(componentEvents).forEach(evt => expect(evt).not.toHaveBeenCalled());
+    Object.values(componentEvents).forEach((evt) => expect(evt).not.toHaveBeenCalled());
     expect(inputControl.value).toBe('');
   });
 
@@ -260,7 +260,7 @@ describe('does not type when ', () => {
   test('event.preventDefault() is called', async () => {
     const componentProperties = {
       onChange: jest.fn(),
-      onKeyDown: jest.fn().mockImplementation(event => event.preventDefault()),
+      onKeyDown: jest.fn().mockImplementation((event) => event.preventDefault()),
     };
 
     const component = await render(FixtureComponent, { componentProperties });
@@ -281,9 +281,7 @@ describe('does not type when ', () => {
 test('can clear an input field', async () => {
   @Component({
     selector: 'fixture',
-    template: `
-      <input type="text" data-testid="input" [value]="initialValue" />
-    `,
+    template: ` <input type="text" data-testid="input" [value]="initialValue" /> `,
   })
   class FixtureComponent {
     @Input() initialValue = '';

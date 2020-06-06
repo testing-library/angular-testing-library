@@ -179,7 +179,7 @@ describe('selectOption: multiple', () => {
       value = [];
 
       onChange(event: KeyboardEvent) {
-        this.value = Array.from((<HTMLSelectElement>event.target).selectedOptions).map(o => o.value);
+        this.value = Array.from((<HTMLSelectElement>event.target).selectedOptions).map((o) => o.value);
       }
     }
 

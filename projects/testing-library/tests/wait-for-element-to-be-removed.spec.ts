@@ -4,9 +4,7 @@ import { timer } from 'rxjs';
 
 @Component({
   selector: 'fixture',
-  template: `
-    <div *ngIf="visible" data-testid="im-here">👋</div>
-  `,
+  template: ` <div *ngIf="visible" data-testid="im-here">👋</div> `,
 })
 class FixtureComponent implements OnInit {
   visible = true;

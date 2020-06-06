@@ -23,7 +23,7 @@ import { createSelectOptions, createType, tab } from './user-events';
 const mountedFixtures = new Set<ComponentFixture<any>>();
 
 dtlConfigure({
-  eventWrapper: cb => {
+  eventWrapper: (cb) => {
     const result = cb();
     detectChangesForMountedFixtures();
     return result;
@@ -69,7 +69,7 @@ export async function render<SutType, WrapperType = SutType>(
   if (componentProviders) {
     componentProviders
       .reduce((acc, provider) => acc.concat(provider), [])
-      .forEach(p => {
+      .forEach((p) => {
         const { provide, ...provider } = p;
         TestBed.overrideProvider(provide, provider);
       });
@@ -103,17 +103,14 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   }
 
-  const eventsWithDetectChanges = Object.keys(dtlFireEvent).reduce(
-    (events, key) => {
-      events[key] = (element: HTMLElement, options?: {}) => {
-        const result = dtlFireEvent[key](element, options);
-        detectChanges();
-        return result;
-      };
-      return events;
-    },
-    {} as FireFunction & FireObject,
-  );
+  const eventsWithDetectChanges = Object.keys(dtlFireEvent).reduce((events, key) => {
+    events[key] = (element: HTMLElement, options?: {}) => {
+      const result = dtlFireEvent[key](element, options);
+      detectChanges();
+      return result;
+    };
+    return events;
+  }, {} as FireFunction & FireObject);
 
   const rerender = (rerenderedProperties: Partial<SutType>) => {
     setComponentProperties(fixture, { componentProperties: rerenderedProperties });
@@ -177,7 +174,7 @@ export async function render<SutType, WrapperType = SutType>(
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement, maxLength, options) =>
       Array.isArray(element)
-        ? element.forEach(e => console.log(dtlPrettyDOM(e, maxLength, options)))
+        ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
         : console.log(dtlPrettyDOM(element, maxLength, options)),
     type: createType(eventsWithDetectChanges),
     selectOptions: createSelectOptions(eventsWithDetectChanges),
@@ -275,14 +272,14 @@ async function waitForElementToBeRemovedWrapper<T>(
   let cb;
   if (typeof callback !== 'function') {
     const elements = (Array.isArray(callback) ? callback : [callback]) as HTMLElement[];
-    const getRemainingElements = elements.map(element => {
+    const getRemainingElements = elements.map((element) => {
       let parent = element.parentElement;
       while (parent.parentElement) {
         parent = parent.parentElement;
       }
       return () => (parent.contains(element) ? element : null);
     });
-    cb = () => getRemainingElements.map(c => c()).filter(Boolean);
+    cb = () => getRemainingElements.map((c) => c()).filter(Boolean);
   } else {
     cb = callback;
   }
@@ -317,34 +314,31 @@ class WrapperComponent {}
  * Wrap findBy queries to poke the Angular change detection cycle
  */
 function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
-  return Object.keys(originalQueriesForContainer).reduce(
-    (newQueries, key) => {
-      if (key.startsWith('find')) {
-        const getByQuery = dtlQueries[key.replace('find', 'get')];
-        newQueries[key] = async (text, options, waitOptions) => {
-          // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
-          const result = await waitForWrapper(
-            detectChangesForMountedFixtures,
-            () => getByQuery(container, text, options),
-            waitOptions,
-          );
-          return result;
-        };
-      } else {
-        newQueries[key] = originalQueriesForContainer[key];
-      }
+  return Object.keys(originalQueriesForContainer).reduce((newQueries, key) => {
+    if (key.startsWith('find')) {
+      const getByQuery = dtlQueries[key.replace('find', 'get')];
+      newQueries[key] = async (text, options, waitOptions) => {
+        // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
+        const result = await waitForWrapper(
+          detectChangesForMountedFixtures,
+          () => getByQuery(container, text, options),
+          waitOptions,
+        );
+        return result;
+      };
+    } else {
+      newQueries[key] = originalQueriesForContainer[key];
+    }
 
-      return newQueries;
-    },
-    {} as T,
-  );
+    return newQueries;
+  }, {} as T);
 }
 
 /**
  * Call detectChanges for all fixtures
  */
 function detectChangesForMountedFixtures() {
-  mountedFixtures.forEach(fixture => {
+  mountedFixtures.forEach((fixture) => {
     try {
       fixture.detectChanges();
     } catch (err) {
@@ -358,17 +352,14 @@ function detectChangesForMountedFixtures() {
 /**
  * Wrap dom-fireEvent to poke the Angular change detection cycle after an event is fired
  */
-const fireEvent = Object.keys(dtlFireEvent).reduce(
-  (events, key) => {
-    events[key] = (element: HTMLElement, options?: {}) => {
-      const result = dtlFireEvent[key](element, options);
-      detectChangesForMountedFixtures();
-      return result;
-    };
-    return events;
-  },
-  {} as typeof dtlFireEvent,
-);
+const fireEvent = Object.keys(dtlFireEvent).reduce((events, key) => {
+  events[key] = (element: HTMLElement, options?: {}) => {
+    const result = dtlFireEvent[key](element, options);
+    detectChangesForMountedFixtures();
+    return result;
+  };
+  return events;
+}, {} as typeof dtlFireEvent);
 
 /**
  * Re-export screen with patched queries

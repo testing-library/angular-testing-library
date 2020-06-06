@@ -3,7 +3,7 @@ import { createSelector, Store, select } from '@ngrx/store';
 
 export const selectItems = createSelector(
   (state: any) => state.items,
-  items => items,
+  (items) => items,
 );
 
 @Component({

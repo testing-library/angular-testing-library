@@ -3,7 +3,11 @@ import { createSelector, Store, createAction, createReducer, on, select } from '
 
 const increment = createAction('increment');
 const decrement = createAction('decrement');
-const counterReducer = createReducer(0, on(increment, state => state + 1), on(decrement, state => state - 1));
+const counterReducer = createReducer(
+  0,
+  on(increment, (state) => state + 1),
+  on(decrement, (state) => state - 1),
+);
 
 export function reducer(state, action) {
   return counterReducer(state, action);
@@ -11,7 +15,7 @@ export function reducer(state, action) {
 
 const selectValue = createSelector(
   (state: any) => state.value,
-  value => value * 10,
+  (value) => value * 10,
 );
 
 @Component({

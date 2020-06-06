@@ -14,7 +14,7 @@ export class Rule extends Rules.AbstractRule {
   }
 
   private getImports(ast: ts.SourceFile): Array<RuleFailure> {
-    return tsquery(ast, IMPORT_QUERY).map(result => {
+    return tsquery(ast, IMPORT_QUERY).map((result) => {
       // replace text between (single) quotes
       const replacement = new Replacement(result.getStart() + 1, result.getWidth() - 2, '@testing-library/angular');
       const start = result.getStart();

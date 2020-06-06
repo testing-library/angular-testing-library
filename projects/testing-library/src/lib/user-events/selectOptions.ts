@@ -35,12 +35,12 @@ export function createSelectOptions(fireEvent: FireFunction & FireObject) {
 
   return async function selectOptions(
     element: HTMLElement,
-    options: Matcher | ByRoleOptions | ((Matcher | ByRoleOptions)[]),
+    options: Matcher | ByRoleOptions | (Matcher | ByRoleOptions)[],
   ) {
     const selectElement = element as HTMLSelectElement;
 
     if (selectElement.selectedOptions) {
-      Array.from(selectElement.selectedOptions).forEach(option => (option.selected = false));
+      Array.from(selectElement.selectedOptions).forEach((option) => (option.selected = false));
     }
 
     const focusedElement = document.activeElement;

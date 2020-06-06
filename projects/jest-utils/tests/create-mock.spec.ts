@@ -14,9 +14,7 @@ class FixtureService {
 
 @Component({
   selector: 'fixture',
-  template: `
-    <button (click)="print()">Print</button>
-  `,
+  template: ` <button (click)="print()">Print</button> `,
 })
 export class FixtureComponent {
   constructor(private service: FixtureService) {}
@@ -41,7 +39,7 @@ it('provides a mock service', async () => {
   expect(service.print).toHaveBeenCalledTimes(1);
 });
 
-it('is possible to write a mock implementation', async done => {
+it('is possible to write a mock implementation', async (done) => {
   const { click, getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });

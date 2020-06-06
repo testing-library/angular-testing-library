@@ -3,9 +3,7 @@ import { render } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
-  template: `
-    {{ name }}
-  `,
+  template: ` {{ name }} `,
 })
 class FixtureComponent {
   @Input() name = 'Sarah';

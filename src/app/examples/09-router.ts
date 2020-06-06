@@ -27,16 +27,14 @@ export class MasterComponent {}
   `,
 })
 export class DetailComponent {
-  id = this.route.paramMap.pipe(map(params => params.get('id')));
-  text = this.route.queryParams.pipe(map(params => params['text']));
-  subtext = this.route.queryParams.pipe(map(params => params['subtext']));
+  id = this.route.paramMap.pipe(map((params) => params.get('id')));
+  text = this.route.queryParams.pipe(map((params) => params['text']));
+  subtext = this.route.queryParams.pipe(map((params) => params['subtext']));
   constructor(private route: ActivatedRoute) {}
 }
 
 @Component({
   selector: 'app-detail-hidden',
-  template: `
-    You found the treasure!
-  `,
+  template: ` You found the treasure! `,
 })
 export class HiddenDetailComponent {}

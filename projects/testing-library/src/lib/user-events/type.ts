@@ -1,7 +1,7 @@
 import { FireFunction, FireObject } from '@testing-library/dom';
 
 function wait(time) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     setTimeout(() => resolve(), time);
   });
 }

@@ -2,9 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-button',
-  template: `
-    <button (click)="raise.emit()">{{ name }}</button>
-  `,
+  template: ` <button (click)="raise.emit()">{{ name }}</button> `,
 })
 export class NestedButtonComponent {
   @Input() name: string;
@@ -13,9 +11,7 @@ export class NestedButtonComponent {
 
 @Component({
   selector: 'app-value',
-  template: `
-    <span data-testid="value">{{ value }}</span>
-  `,
+  template: ` <span data-testid="value">{{ value }}</span> `,
 })
 export class NestedValueComponent {
   @Input() value: number;

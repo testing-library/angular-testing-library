@@ -52,7 +52,11 @@ import { FormBuilder, Validators, ReactiveFormsModule, ValidationErrors } from '
   ],
 })
 export class MaterialFormsComponent {
-  colors = [{ id: 'R', value: 'Red' }, { id: 'B', value: 'Blue' }, { id: 'G', value: 'Green' }];
+  colors = [
+    { id: 'R', value: 'Red' },
+    { id: 'B', value: 'Blue' },
+    { id: 'G', value: 'Green' },
+  ];
   form = this.formBuilder.group({
     name: ['', Validators.required],
     score: [0, [Validators.min(1), Validators.max(10)]],
@@ -63,10 +67,10 @@ export class MaterialFormsComponent {
 
   get formErrors() {
     return Object.keys(this.form.controls)
-      .map(formKey => {
+      .map((formKey) => {
         const controlErrors: ValidationErrors = this.form.get(formKey).errors;
         if (controlErrors != null) {
-          return Object.keys(controlErrors).map(keyError => {
+          return Object.keys(controlErrors).map((keyError) => {
             const error = controlErrors[keyError];
             switch (keyError) {
               case 'required':

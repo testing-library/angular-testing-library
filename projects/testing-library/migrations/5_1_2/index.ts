@@ -44,7 +44,7 @@ function updatePackageJson(host: Tree) {
   return host;
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return (host, context) => {
     context.addTask(createRule('no-angular-extensions-import'));
 

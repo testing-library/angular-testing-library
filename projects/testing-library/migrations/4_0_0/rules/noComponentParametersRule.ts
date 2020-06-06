@@ -12,7 +12,7 @@ const FAILURE_MESSAGE = 'Found `parameters` parameter, use `componentProperties`
 export class Rule extends Rules.AbstractRule {
   public apply(ast: ts.SourceFile): Array<RuleFailure> {
     return tsquery(ast, IS_COMPONENT_PROPERTY_QUERY)
-      .map(result => {
+      .map((result) => {
         const [parameterNode] = tsquery(result, COMPONENT_PARAMETERS_PROPERTY_VALUE_QUERY);
         if (!parameterNode) {
           return [];

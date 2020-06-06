@@ -27,10 +27,7 @@ describe('Migration to version 5.1.2', () => {
     await schematicRunner.runSchematicAsync('migration-5.1.2', {}, tree).toPromise();
     await schematicRunner.engine.executePostTasks().toPromise();
 
-    const actual = await host
-      .read(specPath)
-      .toPromise()
-      .then(virtualFs.fileBufferToString);
+    const actual = await host.read(specPath).toPromise().then(virtualFs.fileBufferToString);
 
     expect(actual).toBe(stripIndents`
         import { render } from '@testing-library/angular';

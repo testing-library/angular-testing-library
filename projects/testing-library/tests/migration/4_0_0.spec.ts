@@ -110,10 +110,7 @@ describe('Migration to version 4.0.0', () => {
       schematicRunner.runSchematic('migration-4.0.0', {}, tree);
       await schematicRunner.engine.executePostTasks().toPromise();
 
-      const actual = await host
-        .read(specPath)
-        .toPromise()
-        .then(virtualFs.fileBufferToString);
+      const actual = await host.read(specPath).toPromise().then(virtualFs.fileBufferToString);
 
       expect(actual).toBe(expected);
     });

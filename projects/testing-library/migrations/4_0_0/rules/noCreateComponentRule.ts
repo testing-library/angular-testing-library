@@ -19,7 +19,7 @@ export class Rule extends Rules.AbstractRule {
   }
 
   private getImports(ast: ts.SourceFile): Array<RuleFailure> {
-    return tsquery(ast, CREATE_COMPONENT_IMPORT_QUERY).map(result => {
+    return tsquery(ast, CREATE_COMPONENT_IMPORT_QUERY).map((result) => {
       const replacement = new Replacement(result.getStart(), result.getWidth(), RENDER);
       const start = result.getStart();
       const end = result.getEnd();
@@ -29,7 +29,7 @@ export class Rule extends Rules.AbstractRule {
   }
 
   private getUsages(ast: ts.SourceFile): Array<RuleFailure> {
-    return tsquery(ast, CREATE_COMPONENT_CALL_EXPRESSION_QUERY).map(result => {
+    return tsquery(ast, CREATE_COMPONENT_CALL_EXPRESSION_QUERY).map((result) => {
       const replacement = new Replacement(result.getStart(), result.getWidth(), RENDER);
       const start = result.getStart();
       const end = result.getEnd();
