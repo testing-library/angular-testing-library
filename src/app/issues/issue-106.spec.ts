@@ -16,7 +16,7 @@ export class TestSelectComponent {
   }
 }
 
-it('should show hidden text', async () => {
+it('https://github.com/testing-library/angular-testing-library/issues/106', async () => {
   await render(TestSelectComponent);
   const toggle = screen.getByTestId('toggle');
   const hiddenText = screen.queryByTestId('getme');
@@ -28,5 +28,8 @@ it('should show hidden text', async () => {
   // await waitFor(() => expect(hiddenText).not.toBeNull());
 
   // succeeds
-  await waitFor(() => expect(screen.queryByTestId('getme')).not.toBeNull());
+  // await waitFor(() => expect(screen.queryByTestId('getme')).not.toBeNull());
+
+  // better
+  screen.getByTestId('getme');
 });
