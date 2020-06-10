@@ -131,7 +131,7 @@ describe('Counter', () => {
     await render(CounterComponent, { componentProperties: { counter: 5 } });
 
     const incrementButton = screen.getByRole('button', { name: /increment/i });
-    fireEvent.click(incrementControl);
+    fireEvent.click(incrementButton);
 
     expect(screen.getByText('Current Count: 6'));
   });
