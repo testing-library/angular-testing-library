@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render } from '../src/public_api';
@@ -69,5 +69,49 @@ describe('animationModule', () => {
     expect(browserAnimationsModule).toBeDefined();
 
     expect(() => TestBed.inject(NoopAnimationsModule)).toThrow();
+  });
+});
+
+@Component({
+  selector: 'fixture',
+  template: ` {{ name }} `,
+})
+class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {
+  @Input() name = 'Sarah';
+  @Input() nameInitialized?: (name: string) => void;
+  @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
+
+  ngOnInit() {
+    if (this.nameInitialized) {
+      this.nameInitialized(this.name);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.name && this.nameChanged) {
+      this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
+    }
+  }
+}
+describe('Angular component life-cycle hooks', () => {
+  test('will call ngOnInit on initial render', async () => {
+    const nameInitialized = jest.fn();
+    const componentProperties = { nameInitialized };
+    const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
+
+    component.getByText('Sarah');
+    expect(nameInitialized).toBeCalledWith('Sarah');
+  });
+
+  test('will call ngOnChanges on initial render before ngOnInit', async () => {
+    const nameInitialized = jest.fn();
+    const nameChanged = jest.fn();
+    const componentProperties = { nameInitialized, nameChanged };
+    const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
+
+    component.getByText('Sarah');
+    expect(nameChanged).toBeCalledWith('Sarah', true);
+    // expect `nameChanged` to be called before `nameInitialized`
+    expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
   });
 });
