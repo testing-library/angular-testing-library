@@ -1,4 +1,4 @@
-import { Component, Type, NgZone } from '@angular/core';
+import { Component, Type, NgZone, SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -99,6 +99,12 @@ export async function render<SutType, WrapperType = SutType>(
     }
   }
 
+  // Call ngOnChanges on initial render
+  if (hasOnChangesHook(fixture.componentInstance)) {
+    const changes = getChangesObj(null, fixture.componentInstance);
+    fixture.componentInstance.ngOnChanges(changes)
+  }
+
   if (detectChangesOnRender) {
     detectChanges();
   }
@@ -113,7 +119,14 @@ export async function render<SutType, WrapperType = SutType>(
   }, {} as FireFunction & FireObject);
 
   const rerender = (rerenderedProperties: Partial<SutType>) => {
+    const changes = getChangesObj(fixture.componentInstance, rerenderedProperties);
+
     setComponentProperties(fixture, { componentProperties: rerenderedProperties });
+
+    if (hasOnChangesHook(fixture.componentInstance)) {
+      fixture.componentInstance.ngOnChanges(changes);
+    }
+
     detectChanges();
   };
 
@@ -209,6 +222,22 @@ function setComponentProperties<SutType>(
   }
   return fixture;
 }
+
+function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
+  return 'ngOnChanges' in componentInstance
+    && typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function';
+};
+
+function getChangesObj<SutType>(
+  oldProps: Partial<SutType> | null,
+  newProps: Partial<SutType>
+) {
+  const isFirstChange = oldProps === null;
+  return Object.keys(newProps).reduce<SimpleChanges>((changes, key) => ({
+    ...changes,
+    [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange)
+  }), {});
+};
 
 function addAutoDeclarations<SutType>(
   component: Type<SutType>,

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { render } from '../src/public_api';
 
 @Component({
@@ -20,3 +20,33 @@ test('will rerender the component with updated props', async () => {
 
   component.getByText(name);
 });
+
+@Component({
+  selector: 'fixture-onchanges',
+  template: ` {{ name }} `,
+})
+class FixtureWithNgOnChangesComponent implements OnChanges {
+  @Input() name = 'Sarah';
+  @Input() nameChanged: (name: string, isFirstChange: boolean) => void;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.name && this.nameChanged) {
+      this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
+    }
+  }
+}
+
+test('will call ngOnChanges on rerender', async () => {
+  const nameChanged = jest.fn();
+  const componentProperties = { nameChanged };
+  const component = await render(FixtureWithNgOnChangesComponent, {componentProperties});
+  component.getByText('Sarah');
+
+  const name = 'Mark';
+  component.rerender({
+    name,
+  });
+
+  component.getByText(name);
+  expect(nameChanged).toBeCalledWith(name, false);
+})
