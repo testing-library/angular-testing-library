@@ -74,6 +74,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "miluoshi",
+      "name": "Miluoshi",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1130547?v=4",
+      "profile": "https://github.com/miluoshi",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
