@@ -31,7 +31,7 @@ practices.</p>
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs] [![Code of Conduct][coc-badge]][coc]
-[![Join the community on Spectrum][spectrum-badge]][spectrum]
+[![Discord][discord-badge]][discord]
 
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
@@ -199,6 +199,7 @@ Thanks goes to these people ([emoji key][emojis]):
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
@@ -232,7 +233,7 @@ a 👍. This helps maintainers prioritize what to work on.
 For questions related to using the library, please visit a support community
 instead of filing an issue on GitHub.
 
-- [Spectrum][spectrum]
+- [Discord][discord]
 - [Stack Overflow][stackoverflow]
 
 ## LICENSE
@@ -255,8 +256,8 @@ Links:
 [package]: https://www.npmjs.com/package/@testing-library/angular
 [downloads-badge]: https://img.shields.io/npm/dm/@testing-library/angular.svg?style=flat-square
 [npmtrends]: http://www.npmtrends.com/@testing-library/angular
-[spectrum-badge]: https://withspectrum.github.io/badge/badge.svg
-[spectrum]: https://spectrum.chat/testing-library
+[discord-badge]: https://img.shields.io/discord/723559267868737556.svg?color=7389D8&labelColor=6A7EC2&logo=discord&logoColor=ffffff&style=flat-square
+[discord]: https://discord.gg/c6JN9fM
 [license-badge]: https://img.shields.io/npm/l/@testing-library/angular.svg?style=flat-square
 [license]: https://github.com/testing-library/angular-testing-library/blob/master/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
