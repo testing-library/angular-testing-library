@@ -194,12 +194,12 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/miluoshi"><img src="https://avatars1.githubusercontent.com/u/1130547?v=4" width="100px;" alt=""/><br /><sub><b>Miluoshi</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=miluoshi" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=miluoshi" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://nickmccurdy.com/"><img src="https://avatars0.githubusercontent.com/u/927220?v=4" width="100px;" alt=""/><br /><sub><b>Nick McCurdy</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=nickmccurdy" title="Documentation">📖</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
