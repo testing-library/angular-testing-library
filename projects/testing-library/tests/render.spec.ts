@@ -1,7 +1,8 @@
 import { Component, NgModule, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render } from '../src/public_api';
+import { render, configure } from '../src/public_api';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'fixture',
@@ -40,20 +41,20 @@ describe('removeAngularAttributes', () => {
   });
 });
 
-@NgModule({
-  declarations: [FixtureComponent],
-})
-export class FixtureModule {}
-describe('excludeComponentDeclaration', () => {
-  test('will throw if component is declared in an import', async () => {
-    await render(FixtureComponent, {
-      imports: [FixtureModule],
-      excludeComponentDeclaration: true,
+describe('animationModule', () => {
+  @NgModule({
+    declarations: [FixtureComponent],
+  })
+  class FixtureModule {}
+  describe('excludeComponentDeclaration', () => {
+    test('will throw if component is declared in an import', async () => {
+      await render(FixtureComponent, {
+        imports: [FixtureModule],
+        excludeComponentDeclaration: true,
+      });
     });
   });
-});
 
-describe('animationModule', () => {
   test('adds NoopAnimationsModule by default', async () => {
     await render(FixtureComponent);
     const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
@@ -72,28 +73,29 @@ describe('animationModule', () => {
   });
 });
 
-@Component({
-  selector: 'fixture',
-  template: ` {{ name }} `,
-})
-class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {
-  @Input() name = 'Sarah';
-  @Input() nameInitialized?: (name: string) => void;
-  @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
-
-  ngOnInit() {
-    if (this.nameInitialized) {
-      this.nameInitialized(this.name);
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.name && this.nameChanged) {
-      this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
-    }
-  }
-}
 describe('Angular component life-cycle hooks', () => {
+  @Component({
+    selector: 'fixture',
+    template: ` {{ name }} `,
+  })
+  class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {
+    @Input() name = 'Sarah';
+    @Input() nameInitialized?: (name: string) => void;
+    @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
+
+    ngOnInit() {
+      if (this.nameInitialized) {
+        this.nameInitialized(this.name);
+      }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+      if (changes.name && this.nameChanged) {
+        this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
+      }
+    }
+  }
+
   test('will call ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };
@@ -113,5 +115,39 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameChanged).toBeCalledWith('Sarah', true);
     // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
+  });
+});
+
+describe('configure: default imports', () => {
+  @Component({
+    selector: 'app-fixture',
+    template: `
+      <form [formGroup]="form" name="form">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" formControlName="name" />
+        </div>
+      </form>
+    `,
+  })
+  class FormsComponent {
+    form = this.formBuilder.group({
+      name: [''],
+    });
+
+    constructor(private formBuilder: FormBuilder) {}
+  }
+
+  beforeEach(() => {
+    configure({
+      defaultImports: [ReactiveFormsModule],
+    });
+  });
+
+  test('adds default imports to the testbed', async () => {
+    await render(FormsComponent);
+
+    const reactive = TestBed.inject(ReactiveFormsModule);
+    expect(reactive).not.toBeNull();
   });
 });
