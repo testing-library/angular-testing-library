@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { render, screen, fireEvent, waitFor } from '@testing-library/angular';
 
 @Component({
@@ -28,8 +27,16 @@ it('https://github.com/testing-library/angular-testing-library/issues/106', asyn
   // await waitFor(() => expect(hiddenText).not.toBeNull());
 
   // succeeds
-  // await waitFor(() => expect(screen.queryByTestId('getme')).not.toBeNull());
+  await waitFor(() => expect(screen.queryByTestId('getme')).not.toBeNull());
+});
 
-  // better
+it('better https://github.com/testing-library/angular-testing-library/issues/106', async () => {
+  await render(TestSelectComponent);
+  const toggle = screen.getByTestId('toggle');
+  const hiddenText = screen.queryByTestId('getme');
+
+  expect(hiddenText).toBeNull();
+  fireEvent.click(toggle);
+
   screen.getByTestId('getme');
 });
