@@ -313,4 +313,4 @@ export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Qu
   componentProperties?: Partial<any>;
 }
 
-export type Config = dtlConfig & { defaultImports: any[] };
+export type Config = { defaultImports: any[]; dom: Partial<dtlConfig> };

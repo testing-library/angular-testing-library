@@ -16,21 +16,12 @@ import {
   queries as dtlQueries,
   waitForOptions as dtlWaitForOptions,
   configure as dtlConfigure,
-  getConfig as dtlGetConfig,
-  Config as dtlConfig,
 } from '@testing-library/dom';
-import { RenderComponentOptions, RenderDirectiveOptions, RenderResult, Config } from './models';
+import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
+import { getConfig } from './config';
 import { createSelectOptions, createType, tab } from './user-events';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-
-dtlConfigure({
-  eventWrapper: (cb) => {
-    const result = cb();
-    detectChangesForMountedFixtures();
-    return result;
-  },
-});
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -61,11 +52,20 @@ export async function render<SutType, WrapperType = SutType>(
     removeAngularAttributes = false,
   } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
-  const config = dtlGetConfig();
+  const config = getConfig();
+
+  dtlConfigure({
+    eventWrapper: (cb) => {
+      const result = cb();
+      detectChangesForMountedFixtures();
+      return result;
+    },
+    ...config.dom,
+  });
 
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, { declarations, excludeComponentDeclaration, template, wrapper }),
-    imports: addAutoImports({ imports: imports.concat((config as Config).defaultImports || []), routes }),
+    imports: addAutoImports({ imports: imports.concat(config.defaultImports), routes }),
     providers: [...providers],
     schemas: [...schemas],
   });
@@ -423,12 +423,6 @@ const userEvent = {
   tab: tab,
 };
 
-function configure(config: Partial<Config>) {
-  dtlConfigure({
-    defaultImports: config.defaultImports,
-  } as Partial<dtlConfig>);
-}
-
 /**
  * Manually export otherwise we get the following error while running Jest tests
  * TypeError: Cannot set property fireEvent of [object Object] which has only a getter
@@ -501,4 +495,4 @@ export {
   within,
 } from '@testing-library/dom';
 
-export { configure, fireEvent, screen, userEvent, waitFor, waitForElementToBeRemoved };
+export { fireEvent, screen, userEvent, waitFor, waitForElementToBeRemoved };

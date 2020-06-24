@@ -4,4 +4,5 @@
 
 export * from './lib/models';
 export * from './lib/user-events';
+export * from './lib/config';
 export * from './lib/testing-library';

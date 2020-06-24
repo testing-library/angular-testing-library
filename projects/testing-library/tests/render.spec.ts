@@ -1,8 +1,7 @@
 import { Component, NgModule, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, configure } from '../src/public_api';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { render } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
@@ -115,39 +114,5 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameChanged).toBeCalledWith('Sarah', true);
     // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
-  });
-});
-
-describe('configure: default imports', () => {
-  @Component({
-    selector: 'app-fixture',
-    template: `
-      <form [formGroup]="form" name="form">
-        <div>
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" formControlName="name" />
-        </div>
-      </form>
-    `,
-  })
-  class FormsComponent {
-    form = this.formBuilder.group({
-      name: [''],
-    });
-
-    constructor(private formBuilder: FormBuilder) {}
-  }
-
-  beforeEach(() => {
-    configure({
-      defaultImports: [ReactiveFormsModule],
-    });
-  });
-
-  test('adds default imports to the testbed', async () => {
-    await render(FormsComponent);
-
-    const reactive = TestBed.inject(ReactiveFormsModule);
-    expect(reactive).not.toBeNull();
   });
 });
