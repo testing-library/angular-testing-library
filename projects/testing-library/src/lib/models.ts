@@ -1,7 +1,15 @@
 import { Type, DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import { BoundFunction, FireObject, Queries, queries, waitFor, waitForElementToBeRemoved } from '@testing-library/dom';
+import {
+  BoundFunction,
+  FireObject,
+  Queries,
+  queries,
+  waitFor,
+  waitForElementToBeRemoved,
+  Config as dtlConfig,
+} from '@testing-library/dom';
 import { UserEvents } from './user-events';
 import { OptionsReceived } from 'pretty-format';
 
@@ -303,4 +311,9 @@ export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Qu
    */
   wrapper?: Type<WrapperType>;
   componentProperties?: Partial<any>;
+}
+
+export interface Config {
+  defaultImports: any[];
+  dom: Partial<dtlConfig>;
 }

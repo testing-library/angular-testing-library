@@ -1,4 +1,3 @@
-import { ReactiveFormsModule } from '@angular/forms';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -7,7 +6,7 @@ import { MaterialFormsComponent } from './04-forms-with-material';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   const { fixture } = await render(MaterialFormsComponent, {
-    imports: [ReactiveFormsModule, MaterialModule],
+    imports: [MaterialModule],
   });
 
   const nameControl = screen.getByLabelText(/name/i);

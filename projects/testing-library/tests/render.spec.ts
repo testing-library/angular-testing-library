@@ -40,20 +40,20 @@ describe('removeAngularAttributes', () => {
   });
 });
 
-@NgModule({
-  declarations: [FixtureComponent],
-})
-export class FixtureModule {}
-describe('excludeComponentDeclaration', () => {
-  test('will throw if component is declared in an import', async () => {
-    await render(FixtureComponent, {
-      imports: [FixtureModule],
-      excludeComponentDeclaration: true,
+describe('animationModule', () => {
+  @NgModule({
+    declarations: [FixtureComponent],
+  })
+  class FixtureModule {}
+  describe('excludeComponentDeclaration', () => {
+    test('will throw if component is declared in an import', async () => {
+      await render(FixtureComponent, {
+        imports: [FixtureModule],
+        excludeComponentDeclaration: true,
+      });
     });
   });
-});
 
-describe('animationModule', () => {
   test('adds NoopAnimationsModule by default', async () => {
     await render(FixtureComponent);
     const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
@@ -72,28 +72,29 @@ describe('animationModule', () => {
   });
 });
 
-@Component({
-  selector: 'fixture',
-  template: ` {{ name }} `,
-})
-class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {
-  @Input() name = 'Sarah';
-  @Input() nameInitialized?: (name: string) => void;
-  @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
-
-  ngOnInit() {
-    if (this.nameInitialized) {
-      this.nameInitialized(this.name);
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.name && this.nameChanged) {
-      this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
-    }
-  }
-}
 describe('Angular component life-cycle hooks', () => {
+  @Component({
+    selector: 'fixture',
+    template: ` {{ name }} `,
+  })
+  class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {
+    @Input() name = 'Sarah';
+    @Input() nameInitialized?: (name: string) => void;
+    @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
+
+    ngOnInit() {
+      if (this.nameInitialized) {
+        this.nameInitialized(this.name);
+      }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+      if (changes.name && this.nameChanged) {
+        this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
+      }
+    }
+  }
+
   test('will call ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };

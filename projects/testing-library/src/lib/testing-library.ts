@@ -18,17 +18,10 @@ import {
   configure as dtlConfigure,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
+import { getConfig } from './config';
 import { createSelectOptions, createType, tab } from './user-events';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-
-dtlConfigure({
-  eventWrapper: (cb) => {
-    const result = cb();
-    detectChangesForMountedFixtures();
-    return result;
-  },
-});
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -59,9 +52,20 @@ export async function render<SutType, WrapperType = SutType>(
     removeAngularAttributes = false,
   } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
 
+  const config = getConfig();
+
+  dtlConfigure({
+    eventWrapper: (cb) => {
+      const result = cb();
+      detectChangesForMountedFixtures();
+      return result;
+    },
+    ...config.dom,
+  });
+
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, { declarations, excludeComponentDeclaration, template, wrapper }),
-    imports: addAutoImports({ imports, routes }),
+    imports: addAutoImports({ imports: imports.concat(config.defaultImports), routes }),
     providers: [...providers],
     schemas: [...schemas],
   });
@@ -102,7 +106,7 @@ export async function render<SutType, WrapperType = SutType>(
   // Call ngOnChanges on initial render
   if (hasOnChangesHook(fixture.componentInstance)) {
     const changes = getChangesObj(null, fixture.componentInstance);
-    fixture.componentInstance.ngOnChanges(changes)
+    fixture.componentInstance.ngOnChanges(changes);
   }
 
   if (detectChangesOnRender) {
@@ -224,20 +228,21 @@ function setComponentProperties<SutType>(
 }
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
-  return 'ngOnChanges' in componentInstance
-    && typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function';
-};
+  return (
+    'ngOnChanges' in componentInstance && typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function'
+  );
+}
 
-function getChangesObj<SutType>(
-  oldProps: Partial<SutType> | null,
-  newProps: Partial<SutType>
-) {
+function getChangesObj<SutType>(oldProps: Partial<SutType> | null, newProps: Partial<SutType>) {
   const isFirstChange = oldProps === null;
-  return Object.keys(newProps).reduce<SimpleChanges>((changes, key) => ({
-    ...changes,
-    [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange)
-  }), {});
-};
+  return Object.keys(newProps).reduce<SimpleChanges>(
+    (changes, key) => ({
+      ...changes,
+      [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange),
+    }),
+    {},
+  );
+}
 
 function addAutoDeclarations<SutType>(
   component: Type<SutType>,
@@ -425,7 +430,6 @@ const userEvent = {
  */
 export {
   buildQueries,
-  configure,
   getByLabelText,
   getAllByLabelText,
   queryByLabelText,

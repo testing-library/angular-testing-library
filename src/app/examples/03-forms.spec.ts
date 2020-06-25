@@ -1,13 +1,10 @@
-import { ReactiveFormsModule } from '@angular/forms';
 import { render, screen, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { FormsComponent } from './03-forms';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
-  await render(FormsComponent, {
-    imports: [ReactiveFormsModule],
-  });
+  await render(FormsComponent);
 
   const nameControl = screen.getByRole('textbox', { name: /name/i });
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });

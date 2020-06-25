@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { FormBuilder, Validators, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture',
