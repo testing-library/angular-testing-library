@@ -1,0 +1,30 @@
+{
+  "npmScope": "testing-library",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "strictlyOrderedTargets": ["build-release"],
+        "cacheableOperations": ["build", "build-release", "test", "lint"]
+      }
+    }
+  },
+  "projects": {
+    "example-app": {
+      "tags": []
+    },
+    "testing-library": {
+      "tags": []
+    },
+    "jest-utils": {
+      "tags": []
+    }
+  }
+}

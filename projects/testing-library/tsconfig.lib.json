@@ -15,6 +15,7 @@
     "lib": ["dom", "es2015", "es2018.promise"]
   },
   "angularCompilerOptions": {
+    "enableIvy": false,
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true,

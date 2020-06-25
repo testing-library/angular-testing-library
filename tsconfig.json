@@ -14,8 +14,8 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "paths": {
-      "@testing-library/angular": ["dist/@testing-library/angular"],
-      "@testing-library/angular/*": ["dist/@testing-library/angular/*"]
+      "@testing-library/angular": ["projects/testing-library"],
+      "@testing-library/angular/jest-utils": ["projects/jest-utils"]
     }
   }
 }
