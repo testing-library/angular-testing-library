@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { delay } from 'rxjs/operators';
-import { render } from '../src/public_api';
+import { render, fireEvent } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
@@ -22,18 +22,26 @@ class FixtureComponent implements OnInit {
 
 describe('detectChanges', () => {
   test('does not recognize change if execution is delayed', async () => {
-    const { getByTestId, type } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+    const { getByTestId } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
-    type(getByTestId('input'), 'What a great day!');
+    fireEvent.input(getByTestId('input'), {
+      target: {
+        value: 'What a great day!',
+      },
+    });
     expect(getByTestId('button').innerHTML).toBe('Button');
   });
 
   test('exposes detectChanges triggering a change detection cycle', fakeAsync(async () => {
-    const { getByTestId, type, detectChanges } = await render(FixtureComponent, {
+    const { getByTestId, detectChanges } = await render(FixtureComponent, {
       imports: [ReactiveFormsModule],
     });
 
-    type(getByTestId('input'), 'What a great day!');
+    fireEvent.input(getByTestId('input'), {
+      target: {
+        value: 'What a great day!',
+      },
+    });
 
     tick(500);
     detectChanges();
@@ -42,11 +50,15 @@ describe('detectChanges', () => {
   }));
 
   test('does not throw on a destroyed fixture', async () => {
-    const { getByTestId, type, fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+    const { getByTestId, fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
     fixture.destroy();
 
-    type(getByTestId('input'), 'What a great day!');
+    fireEvent.input(getByTestId('input'), {
+      target: {
+        value: 'What a great day!',
+      },
+    });
     expect(getByTestId('button').innerHTML).toBe('Button');
   });
 });

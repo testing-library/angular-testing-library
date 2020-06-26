@@ -5,13 +5,10 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  FireFunction,
-  FireObject,
   getQueriesForElement as dtlGetQueriesForElement,
   prettyDOM as dtlPrettyDOM,
   waitFor as dtlWaitFor,
   waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
-  fireEvent as dtlFireEvent,
   screen as dtlScreen,
   queries as dtlQueries,
   waitForOptions as dtlWaitForOptions,
@@ -19,7 +16,6 @@ import {
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './models';
 import { getConfig } from './config';
-import { createSelectOptions, createType, tab } from './user-events';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
 
@@ -113,15 +109,6 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   }
 
-  const eventsWithDetectChanges = Object.keys(dtlFireEvent).reduce((events, key) => {
-    events[key] = (element: HTMLElement, options?: {}) => {
-      const result = dtlFireEvent[key](element, options);
-      detectChanges();
-      return result;
-    };
-    return events;
-  }, {} as FireFunction & FireObject);
-
   const rerender = (rerenderedProperties: Partial<SutType>) => {
     const changes = getChangesObj(fixture.componentInstance, rerenderedProperties);
 
@@ -168,20 +155,6 @@ export async function render<SutType, WrapperType = SutType>(
     return result;
   };
 
-  function componentWaitFor<T>(
-    callback,
-    options: dtlWaitForOptions = { container: fixture.nativeElement },
-  ): Promise<T> {
-    return waitForWrapper(detectChanges, callback, options);
-  }
-
-  function componentWaitForElementToBeRemoved<T>(
-    callback: (() => T) | T,
-    options: dtlWaitForOptions = { container: fixture.nativeElement },
-  ): Promise<T> {
-    return waitForElementToBeRemovedWrapper(detectChanges, callback, options);
-  }
-
   return {
     fixture,
     detectChanges,
@@ -193,16 +166,10 @@ export async function render<SutType, WrapperType = SutType>(
       Array.isArray(element)
         ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
         : console.log(dtlPrettyDOM(element, maxLength, options)),
-    type: createType(eventsWithDetectChanges),
-    selectOptions: createSelectOptions(eventsWithDetectChanges),
-    tab,
-    waitFor: componentWaitFor,
-    waitForElementToBeRemoved: componentWaitForElementToBeRemoved,
     ...replaceFindWithFindAndDetectChanges(
       fixture.nativeElement,
       dtlGetQueriesForElement(fixture.nativeElement, queries),
     ),
-    ...eventsWithDetectChanges,
   };
 }
 
@@ -302,7 +269,7 @@ async function waitForElementToBeRemovedWrapper<T>(
   detectChanges: () => void,
   callback: (() => T) | T,
   options?: dtlWaitForOptions,
-): Promise<T> {
+): Promise<void> {
   let cb;
   if (typeof callback !== 'function') {
     const elements = (Array.isArray(callback) ? callback : [callback]) as HTMLElement[];
@@ -384,18 +351,6 @@ function detectChangesForMountedFixtures() {
 }
 
 /**
- * Wrap dom-fireEvent to poke the Angular change detection cycle after an event is fired
- */
-const fireEvent = Object.keys(dtlFireEvent).reduce((events, key) => {
-  events[key] = (element: HTMLElement, options?: {}) => {
-    const result = dtlFireEvent[key](element, options);
-    detectChangesForMountedFixtures();
-    return result;
-  };
-  return events;
-}, {} as typeof dtlFireEvent);
-
-/**
  * Re-export screen with patched queries
  */
 const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
@@ -410,18 +365,9 @@ async function waitFor<T>(callback: () => T extends Promise<any> ? never : T, op
 /**
  * Re-export waitForElementToBeRemoved with patched waitForElementToBeRemoved
  */
-async function waitForElementToBeRemoved<T>(callback: (() => T) | T, options?: dtlWaitForOptions): Promise<T> {
+async function waitForElementToBeRemoved<T>(callback: (() => T) | T, options?: dtlWaitForOptions): Promise<void> {
   return waitForElementToBeRemovedWrapper(detectChangesForMountedFixtures, callback, options);
 }
-
-/**
- * Re-export userEvent with the patched fireEvent
- */
-const userEvent = {
-  type: createType(fireEvent),
-  selectOptions: createSelectOptions(fireEvent),
-  tab: tab,
-};
 
 /**
  * Manually export otherwise we get the following error while running Jest tests
@@ -429,6 +375,7 @@ const userEvent = {
  * exports.fireEvent = fireEvent
  */
 export {
+  fireEvent,
   buildQueries,
   getByLabelText,
   getAllByLabelText,
@@ -495,4 +442,5 @@ export {
   within,
 } from '@testing-library/dom';
 
-export { fireEvent, screen, userEvent, waitFor, waitForElementToBeRemoved };
+// export patched dtl
+export { screen, waitFor, waitForElementToBeRemoved };

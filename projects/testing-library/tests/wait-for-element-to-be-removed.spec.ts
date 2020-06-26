@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { render, screen, waitForElementToBeRemoved as waitForElementToBeRemovedATL } from '../src/public_api';
+import { render, screen, waitForElementToBeRemoved } from '../src/public_api';
 import { timer } from 'rxjs';
 
 @Component({
@@ -13,54 +13,26 @@ class FixtureComponent implements OnInit {
   }
 }
 
-describe('from import', () => {
-  test('waits for element to be removed (callback)', async () => {
-    await render(FixtureComponent);
+test('waits for element to be removed (callback)', async () => {
+  await render(FixtureComponent);
 
-    await waitForElementToBeRemovedATL(() => screen.getByTestId('im-here'));
+  await waitForElementToBeRemoved(() => screen.getByTestId('im-here'));
 
-    expect(screen.queryByTestId('im-here')).toBeNull();
-  });
-
-  test('waits for element to be removed (element)', async () => {
-    await render(FixtureComponent);
-
-    await waitForElementToBeRemovedATL(screen.getByTestId('im-here'));
-
-    expect(screen.queryByTestId('im-here')).toBeNull();
-  });
-
-  test('allows to override options', async () => {
-    await render(FixtureComponent);
-
-    await expect(waitForElementToBeRemovedATL(() => screen.getByTestId('im-here'), { timeout: 200 })).rejects.toThrow(
-      /Timed out in waitForElementToBeRemoved/i,
-    );
-  });
+  expect(screen.queryByTestId('im-here')).toBeNull();
 });
-describe('from render', () => {
-  test('waits for element to be removed (callback)', async () => {
-    const { queryByTestId, getByTestId, waitForElementToBeRemoved } = await render(FixtureComponent);
 
-    await waitForElementToBeRemoved(() => getByTestId('im-here'));
+test('waits for element to be removed (element)', async () => {
+  await render(FixtureComponent);
 
-    expect(queryByTestId('im-here')).toBeNull();
-  });
+  await waitForElementToBeRemoved(screen.getByTestId('im-here'));
 
-  test('waits for element to be removed (element)', async () => {
-    const { queryByTestId, getByTestId, waitForElementToBeRemoved } = await render(FixtureComponent);
+  expect(screen.queryByTestId('im-here')).toBeNull();
+});
 
-    const node = getByTestId('im-here');
-    await waitForElementToBeRemoved(node);
+test('allows to override options', async () => {
+  await render(FixtureComponent);
 
-    expect(queryByTestId('im-here')).toBeNull();
-  });
-
-  test('allows to override options', async () => {
-    const { getByTestId, waitForElementToBeRemoved } = await render(FixtureComponent);
-
-    await expect(waitForElementToBeRemoved(() => getByTestId('im-here'), { timeout: 200 })).rejects.toThrow(
-      /Timed out in waitForElementToBeRemoved/i,
-    );
-  });
+  await expect(waitForElementToBeRemoved(() => screen.getByTestId('im-here'), { timeout: 200 })).rejects.toThrow(
+    /Timed out in waitForElementToBeRemoved/i,
+  );
 });
