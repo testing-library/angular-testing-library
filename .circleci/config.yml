@@ -40,7 +40,7 @@ jobs:
       - restore_cache:
           key: *cache_key
       - run:
-          name: test
+          name: build
           command: yarn build
       - save_cache:
           key: *dist_key
