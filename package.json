@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "nx run-many --target=build-release --all",
+    "build": "nx run-many --target=build --all",
     "test": "yarn affected:test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",

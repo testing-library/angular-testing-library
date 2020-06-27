@@ -5,7 +5,7 @@
   "projects": {
     "example-app": {
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "apps/example-app",
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
@@ -52,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "testing-library-app:build"
+            "browserTarget": "example-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "testing-library-app:build:production"
+              "browserTarget": "example-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "testing-library-app:build"
+            "browserTarget": "example-app:build"
           }
         },
         "lint": {
@@ -89,7 +89,7 @@
       "projectType": "library",
       "prefix": "lib",
       "architect": {
-        "build": {
+        "build-package": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/testing-library/tsconfig.lib.json",
@@ -109,13 +109,13 @@
             "exclude": ["**/node_modules/**"]
           }
         },
-        "build-release": {
+        "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "parallel": false,
             "commands": [
               {
-                "command": "ng build testing-library"
+                "command": "ng run testing-library:build-package"
               },
               {
                 "command": "tsc -p ./projects/testing-library/migrations/tsconfig.migrations.json"
@@ -145,7 +145,7 @@
       "projectType": "library",
       "prefix": "lib",
       "architect": {
-        "build": {
+        "build-package": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/jest-utils/tsconfig.lib.json",
@@ -165,13 +165,13 @@
             "exclude": ["**/node_modules/**"]
           }
         },
-        "build-release": {
+        "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "parallel": false,
             "commands": [
               {
-                "command": "ng build jest-utils"
+                "command": "ng run jest-utils:build-package"
               }
             ]
           }
@@ -187,7 +187,7 @@
       }
     }
   },
-  "defaultProject": "testing-library-app",
+  "defaultProject": "example-app",
   "cli": {
     "analytics": false
   }
