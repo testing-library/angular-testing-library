@@ -17,7 +17,7 @@ jobs:
           key: *cache_key
       - run:
           name: install-dependencies
-          command: yarn --frozen-lockfile
+          command: yarn --frozen-lockfile --non-interactive
       - save_cache:
           key: *cache_key
           paths:
@@ -31,43 +31,33 @@ jobs:
           key: *cache_key
       - run:
           name: lint
-          command: yarn lint
+          command: yarn affected:lint
 
-  test-lib:
+  build:
     <<: *job_defaults
     steps:
       - checkout
       - restore_cache:
           key: *cache_key
       - run:
-          name: test
-          command: yarn test --maxWorkers=1 --ci
-
-  build-lib:
-    <<: *job_defaults
-    steps:
-      - checkout
-      - restore_cache:
-          key: *cache_key
-      - run:
-          name: test
+          name: build
           command: yarn build
       - save_cache:
           key: *dist_key
           paths:
             - dist
+      - store_artifacts:
+          path: dist
 
-  test-app:
+  test:
     <<: *job_defaults
     steps:
       - checkout
       - restore_cache:
           key: *cache_key
-      - restore_cache:
-          key: *dist_key
       - run:
           name: test
-          command: yarn test:app --maxWorkers=1 --ci
+          command: yarn affected:test --ci --code-coverage
 
   release:
     <<: *job_defaults
@@ -101,26 +91,22 @@ workflows:
       - lint:
           requires:
             - install
-      - test-lib:
-          requires:
-            - install
-      - build-lib:
+      - build:
           requires:
             - lint
-            - test-lib
-      - test-app:
+      - test:
           requires:
-            - build-lib
+            - build
       - release:
           requires:
-            - test-app
+            - test
           filters:
             branches:
               only:
                 - master
       - release-beta:
           requires:
-            - test-app
+            - test
           filters:
             branches:
               only:

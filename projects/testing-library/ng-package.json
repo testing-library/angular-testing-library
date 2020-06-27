@@ -3,7 +3,7 @@
   "dest": "../../dist/@testing-library/angular",
   "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "index.ts"
   },
   "whitelistedNonPeerDependencies": [
     "@testing-library/dom",
