@@ -1,23 +1,11 @@
 import { Type, DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import {
-  BoundFunction,
-  FireObject,
-  Queries,
-  queries,
-  waitFor,
-  waitForElementToBeRemoved,
-  Config as dtlConfig,
-} from '@testing-library/dom';
-import { UserEvents } from './user-events';
+import { BoundFunction, Queries, queries, Config as dtlConfig } from '@testing-library/dom';
 import { OptionsReceived } from 'pretty-format';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
-export interface RenderResult<ComponentType, WrapperType = ComponentType>
-  extends RenderResultQueries,
-    FireObject,
-    UserEvents {
+export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
   /**
    * @description
    * The containing DOM node of your rendered Angular Component.
@@ -70,26 +58,6 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType>
    * Re-render the same component with different props.
    */
   rerender: (componentProperties: Partial<ComponentType>) => void;
-  /**
-   * @deprecated
-   * Usage of `waitForElementToBeRemoved` from render is deprecated, use this method directly from `@testing-library/angular`
-   *
-   * @description
-   * Wait for the removal of element(s) from the DOM.
-   *
-   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitforelementtoberemoved
-   */
-  waitForElementToBeRemoved: typeof waitForElementToBeRemoved;
-  /**
-   * @deprecated
-   * Usage of `waitFor` from render is deprecated, use this method directly from `@testing-library/angular`
-   *
-   * @description
-   * When in need to wait for any period of time you can use waitFor, to wait for your expectations to pass.
-   *
-   * For more info see https://testing-library.com/docs/dom-testing-library/api-async#waitFor
-   */
-  waitFor: typeof waitFor;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {

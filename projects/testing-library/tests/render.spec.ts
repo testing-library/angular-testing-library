@@ -1,7 +1,7 @@
 import { Component, NgModule, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render } from '../src/public_api';
+import { render, fireEvent } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
@@ -15,9 +15,9 @@ class FixtureComponent {}
 test('creates queries and events', async () => {
   const component = await render(FixtureComponent);
 
-  component.input(component.getByTestId('input'), { target: { value: 'a super awesome input' } });
+  fireEvent.input(component.getByTestId('input'), { target: { value: 'a super awesome input' } });
   component.getByDisplayValue('a super awesome input');
-  component.click(component.getByText('button'));
+  fireEvent.click(component.getByText('button'));
 });
 
 describe('removeAngularAttributes', () => {

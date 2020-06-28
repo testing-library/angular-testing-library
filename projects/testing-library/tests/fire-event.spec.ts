@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { render } from '../src/public_api';
+import { render, fireEvent } from '../src/public_api';
 
 @Component({
   selector: 'fixture',
@@ -13,6 +13,5 @@ test('does not call detect changes when fixture is destroyed', async () => {
   component.fixture.destroy();
 
   // should otherwise throw
-  component.input(component.getByTestId('input'), { target: { value: 'Bonjour' } });
-  component.type(component.getByTestId('input'), 'Alles klar');
+  fireEvent.input(component.getByTestId('input'), { target: { value: 'Bonjour' } });
 });

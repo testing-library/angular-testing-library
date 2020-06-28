@@ -1,6 +1,6 @@
 import { Directive, HostListener, ElementRef, Input, Output, EventEmitter, Component } from '@angular/core';
 
-import { render } from '../src/public_api';
+import { render, fireEvent } from '../src/public_api';
 
 @Directive({
   selector: '[onOff]',
@@ -32,9 +32,9 @@ test('uses the default props', async () => {
     template: '<div onOff></div>',
   });
 
-  component.click(component.getByText('init'));
-  component.click(component.getByText('on'));
-  component.click(component.getByText('off'));
+  fireEvent.click(component.getByText('init'));
+  fireEvent.click(component.getByText('on'));
+  fireEvent.click(component.getByText('off'));
 });
 
 test('overrides input properties', async () => {
@@ -42,9 +42,9 @@ test('overrides input properties', async () => {
     template: '<div onOff on="hello"></div>',
   });
 
-  component.click(component.getByText('init'));
-  component.click(component.getByText('hello'));
-  component.click(component.getByText('off'));
+  fireEvent.click(component.getByText('init'));
+  fireEvent.click(component.getByText('hello'));
+  fireEvent.click(component.getByText('off'));
 });
 
 test('overrides input properties via a wrapper', async () => {
@@ -56,9 +56,9 @@ test('overrides input properties via a wrapper', async () => {
     },
   });
 
-  component.click(component.getByText('init'));
-  component.click(component.getByText('hello'));
-  component.click(component.getByText('off'));
+  fireEvent.click(component.getByText('init'));
+  fireEvent.click(component.getByText('hello'));
+  fireEvent.click(component.getByText('off'));
 });
 
 test('overrides output properties', async () => {
@@ -71,10 +71,10 @@ test('overrides output properties', async () => {
     },
   });
 
-  component.click(component.getByText('init'));
+  fireEvent.click(component.getByText('init'));
   expect(clicked).toHaveBeenCalledWith('on');
 
-  component.click(component.getByText('on'));
+  fireEvent.click(component.getByText('on'));
   expect(clicked).toHaveBeenCalledWith('off');
 });
 
