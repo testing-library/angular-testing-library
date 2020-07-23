@@ -121,11 +121,12 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   };
 
-  let router = routes ? TestBed.inject(Router) : null;
-  const zone = TestBed.inject(NgZone);
+  const inject = TestBed.inject || TestBed.get
+  let router = routes ? inject(Router) : null;
+  const zone = inject(NgZone);
   const navigate = async (elementOrPath: Element | string, basePath = '') => {
     if (!router) {
-      router = TestBed.inject(Router);
+      router = inject(Router);
     }
 
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
