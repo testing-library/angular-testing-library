@@ -40,7 +40,7 @@ jobs:
           key: *cache_key
       - run:
           name: build
-          command: yarn build
+          command: yarn build --skip-nx-cache
       - store_artifacts:
           path: dist
       - persist_to_workspace:
