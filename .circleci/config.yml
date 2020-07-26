@@ -6,7 +6,6 @@ job_defaults: &job_defaults
   working_directory: ~/project/repo
 
 cache_key: &cache_key angular-testing-library-deps-cache-{{ checksum "yarn.lock" }}
-dist_key: &dist_key angular-testing-library-dist-{{ .Revision }}
 
 jobs:
   install:
@@ -42,12 +41,12 @@ jobs:
       - run:
           name: build
           command: yarn build
-      - save_cache:
-          key: *dist_key
-          paths:
-            - dist
       - store_artifacts:
           path: dist
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - .
 
   test:
     <<: *job_defaults
@@ -65,8 +64,8 @@ jobs:
       - checkout
       - restore_cache:
           key: *cache_key
-      - restore_cache:
-          key: *dist_key
+      - attach_workspace:
+          at: dist
       - run:
           name: release
           command: yarn semantic-release || true
@@ -77,8 +76,8 @@ jobs:
       - checkout
       - restore_cache:
           key: *cache_key
-      - restore_cache:
-          key: *dist_key
+      - attach_workspace:
+          at: dist
       - run:
           name: release
           command: yarn semantic-release || true
