@@ -138,7 +138,7 @@ describe('Counter', () => {
 });
 ```
 
-[See more examples](https://github.com/testing-library/angular-testing-library/tree/master/src/app/examples)
+[See more examples](https://github.com/testing-library/angular-testing-library/tree/master/apps/example-app/app/examples)
 
 ## Installation
 
