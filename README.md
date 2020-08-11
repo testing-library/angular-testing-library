@@ -196,6 +196,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/miluoshi"><img src="https://avatars1.githubusercontent.com/u/1130547?v=4" width="100px;" alt=""/><br /><sub><b>Miluoshi</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=miluoshi" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=miluoshi" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://nickmccurdy.com/"><img src="https://avatars0.githubusercontent.com/u/927220?v=4" width="100px;" alt=""/><br /><sub><b>Nick McCurdy</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=nickmccurdy" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/SrinivasanTarget"><img src="https://avatars2.githubusercontent.com/u/8896549?v=4" width="100px;" alt=""/><br /><sub><b>Srinivasan Sekar</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=SrinivasanTarget" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/serkan-sipahi-59b20081/"><img src="https://avatars2.githubusercontent.com/u/1880749?v=4" width="100px;" alt=""/><br /><sub><b>Bitcollage</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=SerkanSipahi" title="Documentation">📖</a></td>
   </tr>
 </table>
 
