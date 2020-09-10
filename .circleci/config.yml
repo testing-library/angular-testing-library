@@ -5,7 +5,7 @@ job_defaults: &job_defaults
     - image: circleci/node:12.9.1
   working_directory: ~/project/repo
 
-cache_key: &cache_key angular-testing-library-deps-cache-{{ checksum "yarn.lock" }}
+cache_key: &cache_key angular-testing-library-deps-cache
 
 jobs:
   install:
@@ -16,7 +16,7 @@ jobs:
           key: *cache_key
       - run:
           name: install-dependencies
-          command: yarn --frozen-lockfile --non-interactive
+          command: npm install
       - save_cache:
           key: *cache_key
           paths:
@@ -30,7 +30,7 @@ jobs:
           key: *cache_key
       - run:
           name: lint
-          command: yarn affected:lint
+          command: npm run affected:lint
 
   build:
     <<: *job_defaults
@@ -40,7 +40,7 @@ jobs:
           key: *cache_key
       - run:
           name: build
-          command: yarn build --skip-nx-cache
+          command: npm run build --skip-nx-cache
       - store_artifacts:
           path: dist
       - persist_to_workspace:
@@ -56,7 +56,7 @@ jobs:
           key: *cache_key
       - run:
           name: test
-          command: yarn affected:test --ci --code-coverage
+          command: npm run affected:test --ci --code-coverage
 
   release:
     <<: *job_defaults
@@ -68,7 +68,7 @@ jobs:
           at: dist
       - run:
           name: release
-          command: yarn semantic-release || true
+          command: npm run semantic-release || true
 
   release-beta:
     <<: *job_defaults
@@ -80,7 +80,7 @@ jobs:
           at: dist
       - run:
           name: release
-          command: yarn semantic-release || true
+          command: npm run semantic-release || true
 
 workflows:
   version: 2
