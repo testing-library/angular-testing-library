@@ -12,7 +12,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["@types/jest"],
+    "types": ["jest"],
     "lib": ["dom", "es2015"]
   },
   "angularCompilerOptions": {
