@@ -11,7 +11,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
-  const colorControl = screen.getByRole('listbox', { name: /color/i });
+  const colorControl = screen.getByRole('combobox', { name: /color/i });
   const errors = screen.getByRole('alert');
 
   expect(errors).toContainElement(screen.queryByText('name is required'));
