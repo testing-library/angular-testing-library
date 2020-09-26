@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": false,
-    "types": ["@types/jest", "@types/node"],
+    "types": ["node", "jest"],
     "lib": ["dom", "es2015", "es2018.promise"]
   },
   "angularCompilerOptions": {

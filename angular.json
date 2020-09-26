@@ -78,7 +78,7 @@
           "options": {
             "jestConfig": "apps/example-app/jest.config.js",
             "tsConfig": "apps/example-app/tsconfig.spec.json",
-            "setupFile": "apps/example-app/setup-jest.ts"
+            "setupFile": "apps/example-app/test-setup.ts"
           }
         }
       }
@@ -134,7 +134,7 @@
           "options": {
             "jestConfig": "projects/testing-library/jest.config.js",
             "tsConfig": "projects/testing-library/tsconfig.spec.json",
-            "setupFile": "projects/testing-library/setup-jest.ts"
+            "setupFile": "projects/testing-library/test-setup.ts"
           }
         }
       }
@@ -181,7 +181,7 @@
           "options": {
             "jestConfig": "projects/jest-utils/jest.config.js",
             "tsConfig": "projects/jest-utils/tsconfig.spec.json",
-            "setupFile": "projects/jest-utils/setup-jest.ts"
+            "setupFile": "projects/jest-utils/test-setup.ts"
           }
         }
       }

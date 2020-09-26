@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
-    "types": ["jest", "node"]
-  }
+    "types": ["node", "jest"]
+  },
+  "files": ["test-setup.ts"],
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

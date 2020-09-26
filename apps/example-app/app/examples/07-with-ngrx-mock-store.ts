@@ -10,7 +10,7 @@ export const selectItems = createSelector(
   selector: 'app-fixture',
   template: `
     <ul>
-      <li *ngFor="let item of items | async" (click)="send(item)" [attr.aria-label]="item">{{ item }}</li>
+      <li *ngFor="let item of items | async" (click)="send(item)">{{ item }}</li>
     </ul>
   `,
 })

@@ -83,7 +83,7 @@ describe('Migration to version 4.0.0', () => {
         async function setup() {
           await render(
             HomeComponent,
-            
+
             {componentProperties: {
                 value: 'foo',
                 count: 2
@@ -107,12 +107,12 @@ describe('Migration to version 4.0.0', () => {
       process.chdir(getSystemPath(host.root));
       await host.write(specPath, input).toPromise();
 
-      schematicRunner.runSchematic('migration-4.0.0', {}, tree);
+      await schematicRunner.runSchematicAsync('migration-4.0.0', {}, tree).toPromise();
       await schematicRunner.engine.executePostTasks().toPromise();
 
       const actual = await host.read(specPath).toPromise().then(virtualFs.fileBufferToString);
 
-      expect(actual).toBe(expected);
+      expect(actual.replace(/\s/g, '')).toBe(expected.replace(/\s/g, ''));
     });
   });
 });

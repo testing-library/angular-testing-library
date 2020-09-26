@@ -1,10 +1,10 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/angular';
 
-import { CdkVirtualScrollOverviewExample } from './13-scrolling.component';
+import { CdkVirtualScrollOverviewExampleComponent } from './13-scrolling.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 test('should scroll to load more items', async () => {
-  await render(CdkVirtualScrollOverviewExample, {
+  await render(CdkVirtualScrollOverviewExampleComponent, {
     imports: [ScrollingModule],
   });
 
