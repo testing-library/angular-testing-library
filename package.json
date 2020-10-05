@@ -33,7 +33,7 @@
     "@ngrx/store": "^9.2.0",
     "@nrwl/angular": "^10.0.0",
     "@nrwl/nx-cloud": "^10.0.0",
-    "@phenomnomnominal/tsquery": "^4.1.0",
+    "@phenomnomnominal/tsquery": "^4.1.1",
     "@testing-library/dom": "^7.24.1",
     "@testing-library/user-event": "^12.0.11",
     "core-js": "^3.6.5",
