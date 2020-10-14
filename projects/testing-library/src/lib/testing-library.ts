@@ -318,12 +318,12 @@ class WrapperComponent {}
 function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
   return Object.keys(originalQueriesForContainer).reduce((newQueries, key) => {
     if (key.startsWith('find')) {
-      const getByQuery = dtlQueries[key.replace('find', 'get')];
+      const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
       newQueries[key] = async (text, options, waitOptions) => {
         // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
         const result = await waitForWrapper(
           detectChangesForMountedFixtures,
-          () => getByQuery(container, text, options),
+          () => getByQuery(text, options),
           waitOptions,
         );
         return result;
