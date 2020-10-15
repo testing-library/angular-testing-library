@@ -198,6 +198,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/SrinivasanTarget"><img src="https://avatars2.githubusercontent.com/u/8896549?v=4" width="100px;" alt=""/><br /><sub><b>Srinivasan Sekar</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=SrinivasanTarget" title="Documentation">📖</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/serkan-sipahi-59b20081/"><img src="https://avatars2.githubusercontent.com/u/1880749?v=4" width="100px;" alt=""/><br /><sub><b>Bitcollage</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=SerkanSipahi" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/krokofant"><img src="https://avatars0.githubusercontent.com/u/5908498?v=4" width="100px;" alt=""/><br /><sub><b>Emil Sundin</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=krokofant" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Ombrax"><img src="https://avatars0.githubusercontent.com/u/7486723?v=4" width="100px;" alt=""/><br /><sub><b>Ombrax</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=Ombrax" title="Code">💻</a></td>
   </tr>
 </table>
 
