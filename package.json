@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "nx run-many --target=build --all",
+    "build": "nx run-many --target=build --projects=testing-library,jest-utils",
     "test": "nx run-many --target=test --all",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",

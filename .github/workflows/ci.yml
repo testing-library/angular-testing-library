@@ -18,6 +18,6 @@ jobs:
       - name: install
         run: npm install
       - name: build
-        run: npm run build --skip-nx-cache
+        run: npm run build -- --skip-nx-cache
       - name: test
-        run: npm run test --ci --code-coverage
+        run: npm run test -- --ci --code-coverage
