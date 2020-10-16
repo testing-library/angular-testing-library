@@ -121,7 +121,7 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges();
   };
 
-  const inject = TestBed.inject || TestBed.get
+  const inject = TestBed.inject || TestBed.get;
   let router = routes ? inject(Router) : null;
   const zone = inject(NgZone);
   const navigate = async (elementOrPath: Element | string, basePath = '') => {
@@ -167,10 +167,7 @@ export async function render<SutType, WrapperType = SutType>(
       Array.isArray(element)
         ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
         : console.log(dtlPrettyDOM(element, maxLength, options)),
-    ...replaceFindWithFindAndDetectChanges(
-      fixture.nativeElement,
-      dtlGetQueriesForElement(fixture.nativeElement, queries),
-    ),
+    ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
 }
 
@@ -315,10 +312,10 @@ class WrapperComponent {}
 /**
  * Wrap findBy queries to poke the Angular change detection cycle
  */
-function replaceFindWithFindAndDetectChanges<T>(container: HTMLElement, originalQueriesForContainer: T): T {
+function replaceFindWithFindAndDetectChanges<T>(originalQueriesForContainer: T): T {
   return Object.keys(originalQueriesForContainer).reduce((newQueries, key) => {
-    if (key.startsWith('find')) {
-      const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
+    const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
+    if (key.startsWith('find') && getByQuery) {
       newQueries[key] = async (text, options, waitOptions) => {
         // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
         const result = await waitForWrapper(
@@ -354,7 +351,7 @@ function detectChangesForMountedFixtures() {
 /**
  * Re-export screen with patched queries
  */
-const screen = replaceFindWithFindAndDetectChanges(document.body, dtlScreen);
+const screen = replaceFindWithFindAndDetectChanges(dtlScreen);
 
 /**
  * Re-export waitFor with patched waitFor
