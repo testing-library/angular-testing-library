@@ -2,7 +2,7 @@ import { Component, Type, NgZone, SimpleChange, OnChanges, SimpleChanges } from 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   getQueriesForElement as dtlGetQueriesForElement,
@@ -10,7 +10,6 @@ import {
   waitFor as dtlWaitFor,
   waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
   screen as dtlScreen,
-  queries as dtlQueries,
   waitForOptions as dtlWaitForOptions,
   configure as dtlConfigure,
 } from '@testing-library/dom';
@@ -134,15 +133,19 @@ export async function render<SutType, WrapperType = SutType>(
     const queryParams = params
       ? params.split('&').reduce((qp, q) => {
           const [key, value] = q.split('=');
+          // TODO(Breaking): group same keys qp[key] ? [...qp[key], value] : value
           qp[key] = value;
           return qp;
         }, {})
       : undefined;
 
-    const doNavigate = () =>
-      router.navigate([path], {
-        queryParams,
-      });
+    const navigateOptions: NavigationExtras = queryParams
+      ? {
+          queryParams,
+        }
+      : undefined;
+
+    const doNavigate = () => (navigateOptions ? router.navigate([path], navigateOptions) : router.navigate([path]));
 
     let result;
 
