@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { timer } from 'rxjs';
 import { render, screen } from '../src/public_api';
-import { mapTo, timeout } from 'rxjs/operators';
+import { mapTo } from 'rxjs/operators';
 
 @Component({
   selector: 'fixture',
