@@ -1,4 +1,4 @@
-import { Component, Type, NgZone, SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Type, NgZone, SimpleChange, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -94,7 +94,7 @@ export async function render<SutType, WrapperType = SutType>(
 
   function detectChanges() {
     if (isAlive) {
-      fixture.detectChanges();
+      fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
     }
   }
 
