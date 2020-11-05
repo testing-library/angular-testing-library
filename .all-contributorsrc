@@ -129,6 +129,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rafaelss95",
+      "name": "Rafael Santana",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/11965907?v=4",
+      "profile": "https://github.com/rafaelss95",
+      "contributions": [
+        "code",
+        "test",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
