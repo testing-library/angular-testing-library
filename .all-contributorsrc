@@ -140,6 +140,16 @@
         "test",
         "bug"
       ]
+    },
+    {
+      "login": "BBlackwo",
+      "name": "Benjamin Blackwood",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7598058?v=4",
+      "profile": "https://twitter.com/B_Blackwo",
+      "contributions": [
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
