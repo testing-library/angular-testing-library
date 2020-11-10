@@ -60,6 +60,7 @@ practices.</p>
 - [Guiding Principles](#guiding-principles)
 - [Contributors](#contributors)
 - [Docs](#docs)
+- [FAQ](#faq)
 - [Issues](#issues)
   - [🐛 Bugs](#-bugs)
   - [💡 Feature Requests](#-feature-requests)
@@ -217,6 +218,11 @@ Contributions of any kind welcome!
 
 [**Read The Docs**](https://testing-library.com/angular) |
 [Edit the docs](https://github.com/testing-library/testing-library-docs)
+
+## FAQ
+
+##### I am using Reactive Forms and the `jest-dom` matcher `toHaveFormValues` always returns an empty object or there are missing fields. Why?
+Only form elements with a `name` attribute will have their values passed to `toHaveFormsValues`.
 
 ## Issues
 
