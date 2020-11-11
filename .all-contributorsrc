@@ -150,6 +150,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "portothree",
+      "name": "Gustavo Porto",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3718120?v=4",
+      "profile": "http://gustavoporto.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
