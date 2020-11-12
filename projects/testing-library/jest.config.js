@@ -4,5 +4,5 @@ module.exports = {
     name: 'ATL',
     color: 'magenta',
   },
-  preset: '../../jest.config.js',
+  preset: '../../jest.preset.js',
 };

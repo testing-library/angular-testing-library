@@ -40,7 +40,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -90,7 +89,7 @@
       "prefix": "lib",
       "architect": {
         "build-package": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/testing-library/tsconfig.lib.json",
             "project": "projects/testing-library/ng-package.json"
@@ -146,7 +145,7 @@
       "prefix": "lib",
       "architect": {
         "build-package": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/jest-utils/tsconfig.lib.json",
             "project": "projects/jest-utils/ng-package.json"
