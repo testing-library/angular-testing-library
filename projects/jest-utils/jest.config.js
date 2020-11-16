@@ -4,5 +4,5 @@ module.exports = {
     name: 'JEST UTILS',
     color: 'magenta',
   },
-  preset: '../../jest.config.js',
+  preset: '../../jest.preset.js',
 };
