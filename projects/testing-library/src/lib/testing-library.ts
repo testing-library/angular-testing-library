@@ -273,7 +273,7 @@ async function waitForElementToBeRemovedWrapper<T>(
 ): Promise<void> {
   let cb;
   if (typeof callback !== 'function') {
-    const elements = (Array.isArray(callback) ? callback : [callback]) as HTMLElement[];
+    const elements = (Array.isArray(callback) ? callback : [callback]) as Element[];
     const getRemainingElements = elements.map((element) => {
       let parent = element.parentElement;
       while (parent.parentElement) {
