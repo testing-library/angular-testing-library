@@ -13,7 +13,7 @@
     "experimentalDecorators": true,
     "importHelpers": false,
     "types": ["node", "jest"],
-    "lib": ["dom", "es2015", "es2018.promise"]
+    "lib": ["dom", "es2018"]
   },
   "angularCompilerOptions": {
     "enableIvy": false,

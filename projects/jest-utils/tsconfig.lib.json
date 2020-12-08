@@ -14,7 +14,7 @@
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "types": ["jest"],
-    "lib": ["dom", "es2015"]
+    "lib": ["dom", "es2018"]
   },
   "angularCompilerOptions": {
     "enableIvy": false,
