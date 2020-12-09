@@ -205,6 +205,7 @@ Thanks goes to these people ([emoji key][emojis]):
   <tr>
     <td align="center"><a href="https://twitter.com/B_Blackwo"><img src="https://avatars0.githubusercontent.com/u/7598058?v=4" width="100px;" alt=""/><br /><sub><b>Benjamin Blackwood</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=BBlackwo" title="Documentation">📖</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=BBlackwo" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://gustavoporto.dev"><img src="https://avatars2.githubusercontent.com/u/3718120?v=4" width="100px;" alt=""/><br /><sub><b>Gustavo Porto</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=portothree" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://wwww.reibo.be"><img src="https://avatars1.githubusercontent.com/u/1673799?v=4" width="100px;" alt=""/><br /><sub><b>Bo Vandersteene</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=bovandersteene" title="Code">💻</a></td>
   </tr>
 </table>
 
