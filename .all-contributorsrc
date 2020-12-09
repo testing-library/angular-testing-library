@@ -159,6 +159,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "bovandersteene",
+      "name": "Bo Vandersteene",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1673799?v=4",
+      "profile": "http://wwww.reibo.be",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
