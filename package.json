@@ -3,6 +3,7 @@
   "version": "0.0.0-semantically-released",
   "scripts": {
     "ng": "ng",
+    "postinstall": "ngcc",
     "start": "ng serve",
     "build": "nx run-many --target=build --projects=testing-library,jest-utils",
     "test": "nx run-many --target=test --all",

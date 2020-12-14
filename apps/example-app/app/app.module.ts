@@ -21,7 +21,6 @@ import { ComponentWithProviderComponent } from './examples/05-component-provider
 import { WithNgRxStoreComponent, reducer } from './examples/06-with-ngrx-store';
 import { WithNgRxMockStoreComponent } from './examples/07-with-ngrx-mock-store';
 import { MasterComponent, DetailComponent, HiddenDetailComponent } from './examples/09-router';
-import { DialogContentComponentModule } from './examples/15-dialog.component';
 
 function reducerItems() {
   return ['One', 'Two', 'Three'];
@@ -58,7 +57,6 @@ function reducerItems() {
       value: reducer,
       items: reducerItems,
     }),
-    DialogContentComponentModule,
   ],
   bootstrap: [AppComponent],
 })
