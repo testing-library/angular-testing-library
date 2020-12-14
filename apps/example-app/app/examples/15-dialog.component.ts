@@ -9,7 +9,7 @@ export class DialogComponent {
   constructor(public dialog: MatDialog) {}
 
   openDialog(): void {
-    this.dialog.open(DialogContentDialogComponent);
+    this.dialog.open(DialogContentComponent);
   }
 }
 
@@ -24,8 +24,8 @@ export class DialogComponent {
     </div>
   `,
 })
-export class DialogContentDialogComponent {
-  constructor(public dialogRef: MatDialogRef<DialogContentDialogComponent>) {}
+export class DialogContentComponent {
+  constructor(public dialogRef: MatDialogRef<DialogContentComponent>) {}
 
   cancel(): void {
     this.dialogRef.close();
@@ -33,6 +33,6 @@ export class DialogContentDialogComponent {
 }
 
 @NgModule({
-  declarations: [DialogContentDialogComponent],
+  declarations: [DialogContentComponent],
 })
-export class DialogContentDialogModule {}
+export class DialogContentComponentModule {}
