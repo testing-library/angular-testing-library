@@ -23,7 +23,7 @@ test('dialog closes', async () => {
   expect(closeFn).toHaveBeenCalledTimes(1);
 });
 
-test.only('opens and closes the dialog with buttons', async () => {
+test('opens and closes the dialog with buttons', async () => {
   await render(DialogComponent, {
     imports: [MatDialogModule, DialogContentComponentModule],
   });
