@@ -129,7 +129,7 @@ describe('Angular component life-cycle hooks', () => {
 test('Waits for angular app initialization before rendering components', (done) => {
   let resolve;
 
-  let promise = new Promise((res) => {
+  const promise = new Promise((res) => {
     resolve = res;
   });
 
