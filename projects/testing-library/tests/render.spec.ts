@@ -1,4 +1,13 @@
-import { Component, NgModule, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  NgModule,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  APP_INITIALIZER,
+  ApplicationInitStatus,
+} from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render, fireEvent } from '../src/public_api';
@@ -115,4 +124,30 @@ describe('Angular component life-cycle hooks', () => {
     // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
   });
+});
+
+test('Waits for angular app initialization before rendering components', (done) => {
+  let resolve;
+
+  let promise = new Promise((res) => {
+    resolve = res;
+  });
+
+  render(FixtureComponent, {
+    providers: [
+      {
+        provide: APP_INITIALIZER,
+        useFactory: () => () => promise,
+        multi: true,
+      },
+    ],
+  })
+    .then(() => {
+      expect(TestBed.inject(ApplicationInitStatus).done).toEqual(true);
+      done();
+    })
+    .catch(done);
+
+  // Wait a bit so the test will fail if render completes without us resolving the promise
+  setTimeout(resolve, 1000);
 });
