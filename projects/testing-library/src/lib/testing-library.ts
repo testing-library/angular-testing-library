@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, Type, NgZone, SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Type,
+  NgZone,
+  SimpleChange,
+  OnChanges,
+  SimpleChanges,
+  ApplicationInitStatus,
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -74,7 +83,7 @@ export async function render<SutType, WrapperType = SutType>(
       });
   }
 
-  const fixture = createComponentFixture(sut, { template, wrapper });
+  const fixture = await createComponentFixture(sut, { template, wrapper });
   setComponentProperties(fixture, { componentProperties });
 
   if (removeAngularAttributes) {
@@ -174,15 +183,21 @@ export async function render<SutType, WrapperType = SutType>(
   };
 }
 
-function createComponentFixture<SutType>(
+async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
+  /* Make sure angular application is initialized before creating component */
+  await TestBed.inject(ApplicationInitStatus).donePromise;
+  return TestBed.createComponent(component);
+}
+
+async function createComponentFixture<SutType>(
   component: Type<SutType>,
   { template, wrapper }: Pick<RenderDirectiveOptions<SutType, any>, 'template' | 'wrapper'>,
-): ComponentFixture<SutType> {
+): Promise<ComponentFixture<SutType>> {
   if (template) {
     TestBed.overrideTemplate(wrapper, template);
-    return TestBed.createComponent(wrapper);
+    return createComponent(wrapper);
   }
-  return TestBed.createComponent(component);
+  return createComponent(component);
 }
 
 function setComponentProperties<SutType>(
