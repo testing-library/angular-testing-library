@@ -168,6 +168,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jbchr",
+      "name": "Janek",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/23141806?v=4",
+      "profile": "https://github.com/jbchr",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
