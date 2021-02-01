@@ -26,6 +26,7 @@ import { RenderComponentOptions, RenderDirectiveOptions, RenderResult } from './
 import { getConfig } from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
+const inject = TestBed.inject || TestBed.get;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -129,7 +130,6 @@ export async function render<SutType, WrapperType = SutType>(
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
   };
 
-  const inject = TestBed.inject || TestBed.get;
   let router = routes ? inject(Router) : null;
   const zone = inject(NgZone);
   const navigate = async (elementOrPath: Element | string, basePath = '') => {
@@ -185,7 +185,7 @@ export async function render<SutType, WrapperType = SutType>(
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
-  await TestBed.inject(ApplicationInitStatus).donePromise;
+  await inject(ApplicationInitStatus).donePromise;
   return TestBed.createComponent(component);
 }
 
