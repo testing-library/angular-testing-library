@@ -8,6 +8,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node: [12, 14]
+        angular-version: [10.0.x, 11.0.x, 11.1.x, 11.2.x]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
@@ -15,6 +16,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Use Angular version ${{ matrix.angular-version }}
+        uses: ngworker/angular-versions-action@v3
+        with:
+          angular-version: ${{ matrix.angular-version }}
       - name: install
         run: npm install
       - name: build
