@@ -34,12 +34,12 @@ export async function render<ComponentType>(
 ): Promise<RenderResult<ComponentType, ComponentType>>;
 export async function render<DirectiveType, WrapperType = WrapperComponent>(
   component: Type<DirectiveType>,
-  renderOptions?: RenderDirectiveOptions<DirectiveType, WrapperType>,
-): Promise<RenderResult<DirectiveType, WrapperType>>;
+  renderOptions?: RenderDirectiveOptions<WrapperType>,
+): Promise<RenderResult<WrapperType>>;
 
 export async function render<SutType, WrapperType = SutType>(
   sut: Type<SutType>,
-  renderOptions: RenderComponentOptions<SutType> | RenderDirectiveOptions<SutType, WrapperType> = {},
+  renderOptions: RenderComponentOptions<SutType> | RenderDirectiveOptions<WrapperType> = {},
 ): Promise<RenderResult<SutType>> {
   const {
     detectChanges: detectChangesOnRender = true,
@@ -55,7 +55,7 @@ export async function render<SutType, WrapperType = SutType>(
     excludeComponentDeclaration = false,
     routes,
     removeAngularAttributes = false,
-  } = renderOptions as RenderDirectiveOptions<SutType, WrapperType>;
+  } = renderOptions as RenderDirectiveOptions<WrapperType>;
 
   const config = getConfig();
 
@@ -191,7 +191,7 @@ async function createComponent<SutType>(component: Type<SutType>): Promise<Compo
 
 async function createComponentFixture<SutType>(
   component: Type<SutType>,
-  { template, wrapper }: Pick<RenderDirectiveOptions<SutType, any>, 'template' | 'wrapper'>,
+  { template, wrapper }: Pick<RenderDirectiveOptions<any>, 'template' | 'wrapper'>,
 ): Promise<ComponentFixture<SutType>> {
   if (template) {
     TestBed.overrideTemplate(wrapper, template);
@@ -205,7 +205,14 @@ function setComponentProperties<SutType>(
   { componentProperties = {} }: Pick<RenderDirectiveOptions<SutType, any>, 'componentProperties'>,
 ) {
   for (const key of Object.keys(componentProperties)) {
-    fixture.componentInstance[key] = componentProperties[key];
+    let _value =  componentProperties[key];
+    Object.defineProperty(fixture.componentInstance, key, {
+      get: () => _value ,
+      set: (value) => {
+        _value = value;
+        fixture.detectChanges();
+      }
+    });
   }
   return fixture;
 }
@@ -235,7 +242,7 @@ function addAutoDeclarations<SutType>(
     template,
     wrapper,
   }: Pick<
-    RenderDirectiveOptions<SutType, any>,
+    RenderDirectiveOptions<any>,
     'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'
   >,
 ) {

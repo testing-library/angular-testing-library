@@ -250,8 +250,8 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   removeAngularAttributes?: boolean;
 }
 
-export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Queries = typeof queries>
-  extends RenderComponentOptions<DirectiveType, Q> {
+export interface RenderDirectiveOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
+  extends RenderComponentOptions<Properties, Q> {
   /**
    * @description
    * The template to render the directive.
@@ -278,7 +278,7 @@ export interface RenderDirectiveOptions<DirectiveType, WrapperType, Q extends Qu
    * })
    */
   wrapper?: Type<WrapperType>;
-  componentProperties?: Partial<any>;
+  componentProperties?: Partial<WrapperType & Properties>;
 }
 
 export interface Config {

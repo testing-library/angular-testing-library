@@ -19,6 +19,19 @@ export class OnOffDirective {
     this.clicked.emit(this.el.nativeElement.textContent);
   }
 }
+
+@Directive({
+  selector: '[update]',
+})
+export class UpdateInputDirective {
+  @Input()
+  set update(value: any) {
+    this.el.nativeElement.textContent = value;
+  }
+
+  constructor(private el: ElementRef) {}
+}
+
 test('the directive renders', async () => {
   const component = await render(OnOffDirective, {
     template: '<div onOff></div>',
@@ -97,4 +110,18 @@ describe('removeAngularAttributes', () => {
     expect(document.querySelector('[ng-version]')).not.toBeNull();
     expect(document.querySelector('[id]')).not.toBeNull();
   });
+});
+
+
+test('updates properties and invokes change detection', async () => {
+  const component = await render(UpdateInputDirective, {
+    template: '<div [update]="value" ></div>',
+    componentProperties: {
+      value: 'value1'
+    }
+  });
+
+  component.getByText('value1')
+  component.fixture.componentInstance.value = 'updated value'
+  component.getByText('updated value')
 });
