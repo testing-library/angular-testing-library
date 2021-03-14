@@ -29,7 +29,7 @@
     "@angular/core": ">= 10.0.0 < 12"
   },
   "dependencies": {
-    "@testing-library/dom": "^7.18.1",
+    "@testing-library/dom": "7.29.5",
     "@phenomnomnominal/tsquery": "^4.1.1",
     "tslib": "^2.0.0",
     "tslint": "^5.16.0"
