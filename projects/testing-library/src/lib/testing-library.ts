@@ -110,7 +110,7 @@ export async function render<SutType, WrapperType = SutType>(
 
   // Call ngOnChanges on initial render
   if (hasOnChangesHook(fixture.componentInstance)) {
-    const changes = getChangesObj(null, fixture.componentInstance);
+    const changes = getChangesObj(null, componentProperties);
     fixture.componentInstance.ngOnChanges(changes);
   }
 
@@ -205,13 +205,13 @@ function setComponentProperties<SutType>(
   { componentProperties = {} }: Pick<RenderDirectiveOptions<SutType, any>, 'componentProperties'>,
 ) {
   for (const key of Object.keys(componentProperties)) {
-    let _value =  componentProperties[key];
+    let _value = componentProperties[key];
     Object.defineProperty(fixture.componentInstance, key, {
-      get: () => _value ,
+      get: () => _value,
       set: (value) => {
         _value = value;
         fixture.detectChanges();
-      }
+      },
     });
   }
   return fixture;
@@ -241,10 +241,7 @@ function addAutoDeclarations<SutType>(
     excludeComponentDeclaration,
     template,
     wrapper,
-  }: Pick<
-    RenderDirectiveOptions<any>,
-    'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'
-  >,
+  }: Pick<RenderDirectiveOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'>,
 ) {
   const wrappers = () => {
     return template ? [wrapper] : [];

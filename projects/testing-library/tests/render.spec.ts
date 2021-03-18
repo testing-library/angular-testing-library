@@ -87,7 +87,7 @@ describe('Angular component life-cycle hooks', () => {
     template: ` {{ name }} `,
   })
   class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {
-    @Input() name = 'Sarah';
+    @Input() name = 'Initial';
     @Input() nameInitialized?: (name: string) => void;
     @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
 
@@ -109,14 +109,14 @@ describe('Angular component life-cycle hooks', () => {
     const componentProperties = { nameInitialized };
     const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    component.getByText('Sarah');
-    expect(nameInitialized).toBeCalledWith('Sarah');
+    component.getByText('Initial');
+    expect(nameInitialized).toBeCalledWith('Initial');
   });
 
   test('will call ngOnChanges on initial render before ngOnInit', async () => {
     const nameInitialized = jest.fn();
     const nameChanged = jest.fn();
-    const componentProperties = { nameInitialized, nameChanged };
+    const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
     const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
     component.getByText('Sarah');
