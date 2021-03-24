@@ -213,7 +213,7 @@ function setComponentProperties<SutType>(
     const defaultGetter = () => _value;
     const extendedSetter = (value) => {
       _value = value;
-      descriptor?.set.call(fixture.componentInstance, _value);
+      descriptor?.set?.call(fixture.componentInstance, _value);
       fixture.detectChanges();
     };
 
@@ -222,7 +222,7 @@ function setComponentProperties<SutType>(
       set: extendedSetter,
     });
 
-    descriptor?.set.call(fixture.componentInstance, _value);
+    descriptor?.set?.call(fixture.componentInstance, _value);
   }
   return fixture;
 }
