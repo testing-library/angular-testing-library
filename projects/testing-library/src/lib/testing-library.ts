@@ -205,14 +205,24 @@ function setComponentProperties<SutType>(
   { componentProperties = {} }: Pick<RenderDirectiveOptions<SutType, any>, 'componentProperties'>,
 ) {
   for (const key of Object.keys(componentProperties)) {
+    const descriptor: PropertyDescriptor = Object.getOwnPropertyDescriptor(
+      fixture.componentInstance.constructor.prototype,
+      key,
+    );
     let _value = componentProperties[key];
+    const defaultGetter = () => _value;
+    const extendedSetter = (value) => {
+      _value = value;
+      descriptor?.set?.call(fixture.componentInstance, _value);
+      fixture.detectChanges();
+    };
+
     Object.defineProperty(fixture.componentInstance, key, {
-      get: () => _value,
-      set: (value) => {
-        _value = value;
-        fixture.detectChanges();
-      },
+      get: descriptor?.get || defaultGetter,
+      set: extendedSetter,
     });
+
+    descriptor?.set?.call(fixture.componentInstance, _value);
   }
   return fixture;
 }
