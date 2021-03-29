@@ -41,6 +41,7 @@ export async function render<SutType, WrapperType = SutType>(
   sut: Type<SutType>,
   renderOptions: RenderComponentOptions<SutType> | RenderDirectiveOptions<WrapperType> = {},
 ): Promise<RenderResult<SutType>> {
+  const { dom: domConfig, ...globalConfig } = getConfig();
   const {
     detectChanges: detectChangesOnRender = true,
     declarations = [],
@@ -55,9 +56,8 @@ export async function render<SutType, WrapperType = SutType>(
     excludeComponentDeclaration = false,
     routes,
     removeAngularAttributes = false,
-  } = renderOptions as RenderDirectiveOptions<WrapperType>;
-
-  const config = getConfig();
+    defaultImports = [],
+  } = { ...globalConfig, ...renderOptions };
 
   dtlConfigure({
     eventWrapper: (cb) => {
@@ -65,12 +65,15 @@ export async function render<SutType, WrapperType = SutType>(
       detectChangesForMountedFixtures();
       return result;
     },
-    ...config.dom,
+    ...domConfig,
   });
 
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, { declarations, excludeComponentDeclaration, template, wrapper }),
-    imports: addAutoImports({ imports: imports.concat(config.defaultImports), routes }),
+    imports: addAutoImports({
+      imports: imports.concat(defaultImports),
+      routes,
+    }),
     providers: [...providers],
     schemas: [...schemas],
   });

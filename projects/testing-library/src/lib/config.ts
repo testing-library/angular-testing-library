@@ -1,8 +1,8 @@
 import { Config } from './models';
 
 let config: Config = {
-  defaultImports: [],
   dom: {},
+  defaultImports: [],
 };
 
 export function configure(newConfig: Partial<Config> | ((config: Partial<Config>) => Partial<Config>)) {
