@@ -281,7 +281,14 @@ export interface RenderDirectiveOptions<WrapperType, Properties extends object =
   componentProperties?: Partial<WrapperType & Properties>;
 }
 
-export interface Config {
-  defaultImports: any[];
+export interface Config extends Pick<RenderComponentOptions<any>, 'excludeComponentDeclaration'> {
+  /**
+   * DOM Testing Library config
+   * @link https://testing-library.com/docs/dom-testing-library/api-configuration/
+   */
   dom: Partial<dtlConfig>;
+  /**
+   * Imports that are added to the imports
+   */
+  defaultImports: any[];
 }

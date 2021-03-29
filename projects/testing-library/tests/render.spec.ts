@@ -55,7 +55,7 @@ describe('animationModule', () => {
   })
   class FixtureModule {}
   describe('excludeComponentDeclaration', () => {
-    test('will throw if component is declared in an import', async () => {
+    test('does not throw if component is declared in an imported module', async () => {
       await render(FixtureComponent, {
         imports: [FixtureModule],
         excludeComponentDeclaration: true,
