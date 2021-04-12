@@ -5,5 +5,10 @@
     "types": [],
     "allowJs": true
   },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
   "files": ["main.ts", "polyfills.ts"]
 }
