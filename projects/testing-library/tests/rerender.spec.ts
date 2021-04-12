@@ -40,7 +40,7 @@ class FixtureWithNgOnChangesComponent implements OnChanges {
 test('will call ngOnChanges on rerender', async () => {
   const nameChanged = jest.fn();
   const componentProperties = { nameChanged };
-  const component = await render(FixtureWithNgOnChangesComponent, {componentProperties});
+  const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
   component.getByText('Sarah');
 
   const name = 'Mark';
@@ -50,14 +50,12 @@ test('will call ngOnChanges on rerender', async () => {
 
   component.getByText(name);
   expect(nameChanged).toBeCalledWith(name, false);
-})
+});
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'fixture-onpush',
-  template: `
-    <div data-testid="number" [class.active]="activeField === 'number'">Number</div>
-  `,
+  template: ` <div data-testid="number" [class.active]="activeField === 'number'">Number</div> `,
 })
 class FixtureWithOnPushComponent {
   @Input() activeField: string;
@@ -70,4 +68,4 @@ test('update properties on rerender', async () => {
   expect(numberHtmlElementRef).not.toHaveClass('active');
   rerender({ activeField: 'number' });
   expect(numberHtmlElementRef).toHaveClass('active');
-})
+});

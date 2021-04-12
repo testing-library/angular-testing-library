@@ -112,16 +112,15 @@ describe('removeAngularAttributes', () => {
   });
 });
 
-
 test('updates properties and invokes change detection', async () => {
   const component = await render(UpdateInputDirective, {
     template: '<div [update]="value" ></div>',
     componentProperties: {
-      value: 'value1'
-    }
+      value: 'value1',
+    },
   });
 
-  component.getByText('value1')
-  component.fixture.componentInstance.value = 'updated value'
-  component.getByText('updated value')
+  component.getByText('value1');
+  component.fixture.componentInstance.value = 'updated value';
+  component.getByText('updated value');
 });
