@@ -19,8 +19,13 @@
             "main": "apps/example-app/main.ts",
             "polyfills": "apps/example-app/polyfills.ts",
             "tsConfig": "apps/example-app/tsconfig.json",
-            "assets": ["apps/example-app/favicon.ico", "apps/example-app/assets"],
-            "styles": ["apps/example-app/styles.css"],
+            "assets": [
+              "apps/example-app/favicon.ico",
+              "apps/example-app/assets"
+            ],
+            "styles": [
+              "apps/example-app/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -46,7 +51,10 @@
               "vendorChunk": false,
               "buildOptimizer": true
             }
-          }
+          },
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -68,17 +76,24 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/example-app/tsconfig.json", "apps/example-app/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "apps/example-app/tsconfig.json",
+              "apps/example-app/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/example-app/jest.config.js",
-            "tsConfig": "apps/example-app/tsconfig.spec.json",
             "setupFile": "apps/example-app/test-setup.ts"
-          }
+          },
+          "outputs": [
+            "coverage/"
+          ]
         }
       }
     },
@@ -104,8 +119,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["projects/testing-library/tsconfig.lib.json", "projects/testing-library/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "projects/testing-library/tsconfig.lib.json",
+              "projects/testing-library/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "build": {
@@ -132,9 +152,11 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "projects/testing-library/jest.config.js",
-            "tsConfig": "projects/testing-library/tsconfig.spec.json",
             "setupFile": "projects/testing-library/test-setup.ts"
-          }
+          },
+          "outputs": [
+            "coverage/projects/testing-library"
+          ]
         }
       }
     },
@@ -160,8 +182,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["projects/jest-utils/tsconfig.lib.json", "projects/jest-utils/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "projects/jest-utils/tsconfig.lib.json",
+              "projects/jest-utils/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "build": {
@@ -179,9 +206,11 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "projects/jest-utils/jest.config.js",
-            "tsConfig": "projects/jest-utils/tsconfig.spec.json",
             "setupFile": "projects/jest-utils/test-setup.ts"
-          }
+          },
+          "outputs": [
+            "coverage/projects/jest-utils"
+          ]
         }
       }
     }
