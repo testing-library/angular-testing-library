@@ -1,12 +1,21 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "",
+  "cli": {
+    "analytics": false
+  },
+  "defaultProject": "example-app",
+  "schematics": {
+    "@nrwl/angular": {
+      "convert-tslint-to-eslint": {
+        "removeTSLintIfNoMoreTSLintTargets": true
+      }
+    }
+  },
   "projects": {
     "example-app": {
-      "root": "",
-      "sourceRoot": "apps/example-app",
       "projectType": "application",
+      "root": "apps/example-app",
+      "sourceRoot": "apps/example-app/src",
       "prefix": "app",
       "schematics": {},
       "architect": {
@@ -15,16 +24,16 @@
           "options": {
             "aot": true,
             "outputPath": "dist/apps/example-app",
-            "index": "apps/example-app/index.html",
-            "main": "apps/example-app/main.ts",
-            "polyfills": "apps/example-app/polyfills.ts",
-            "tsConfig": "apps/example-app/tsconfig.json",
+            "index": "apps/example-app/src/index.html",
+            "main": "apps/example-app/src/main.ts",
+            "polyfills": "apps/example-app/src/polyfills.ts",
+            "tsConfig": "apps/example-app/tsconfig.app.json",
             "assets": [
-              "apps/example-app/favicon.ico",
-              "apps/example-app/assets"
+              "apps/example-app/src/favicon.ico",
+              "apps/example-app/src/assets"
             ],
             "styles": [
-              "apps/example-app/styles.css"
+              "apps/example-app/src/styles.css"
             ],
             "scripts": []
           },
@@ -38,8 +47,8 @@
               ],
               "fileReplacements": [
                 {
-                  "replace": "apps/example-app/environments/environment.ts",
-                  "with": "apps/example-app/environments/environment.prod.ts"
+                  "replace": "apps/example-app/src/environments/environment.ts",
+                  "with": "apps/example-app/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -89,7 +98,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/example-app/jest.config.js",
-            "setupFile": "apps/example-app/test-setup.ts"
+            "setupFile": "apps/example-app/src/test-setup.ts"
           },
           "outputs": [
             "coverage/"
@@ -117,14 +126,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": [
-              "projects/testing-library/tsconfig.lib.json",
-              "projects/testing-library/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/testing-library/src/**/*.ts",
+              "projects/testing-library/src/**/*.html",
+              "projects/testing-library/src/**/*.html"
             ]
           }
         },
@@ -180,14 +187,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": [
-              "projects/jest-utils/tsconfig.lib.json",
-              "projects/jest-utils/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/jest-utils/src/**/*.ts",
+              "projects/jest-utils/src/**/*.html",
+              "projects/jest-utils/src/**/*.html"
             ]
           }
         },
@@ -214,9 +219,5 @@
         }
       }
     }
-  },
-  "defaultProject": "example-app",
-  "cli": {
-    "analytics": false
   }
 }

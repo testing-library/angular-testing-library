@@ -1,3 +1,3 @@
 module.exports = {
-  projects: ['<rootDir>/', '<rootDir>/projects/testing-library', '<rootDir>/projects/jest-utils'],
+  projects: ['<rootDir>/apps/example-app', '<rootDir>/projects/testing-library', '<rootDir>/projects/jest-utils'],
 };
