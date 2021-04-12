@@ -8,10 +8,6 @@
       "parserOptions": {
         "project": ["/tsconfig.*?.json"]
       },
-      "rules": {}
-    },
-    {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",

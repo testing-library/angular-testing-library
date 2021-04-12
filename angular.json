@@ -1,17 +1,9 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
     "analytics": false
   },
   "defaultProject": "example-app",
-  "schematics": {
-    "@nrwl/angular": {
-      "convert-tslint-to-eslint": {
-        "removeTSLintIfNoMoreTSLintTargets": true
-      }
-    }
-  },
   "projects": {
     "example-app": {
       "projectType": "application",
@@ -77,10 +69,9 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": ["apps/example-app/tsconfig.json", "apps/example-app/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": ["apps/example-app/src/**/*.ts", "apps/example-app/src/**/*.html"]
           }
         },
         "test": {
