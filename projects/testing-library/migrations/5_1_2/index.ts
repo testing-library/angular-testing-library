@@ -30,7 +30,7 @@ function displayInformation(tree, context: SchematicContext) {
 
 function updatePackageJson(host: Tree) {
   if (host.exists('package.json')) {
-    // tslint:disable-next-line: no-non-null-assertion
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const sourceText = host.read('package.json')!.toString('utf-8');
     const json = JSON.parse(sourceText);
 

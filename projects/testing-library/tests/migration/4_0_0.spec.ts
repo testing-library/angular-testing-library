@@ -4,7 +4,7 @@ import { HostTree } from '@angular-devkit/schematics';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 
 describe('Migration to version 4.0.0', () => {
-  /* tslint:disable */
+  /* eslint-disable */
   const fixtures = [
     {
       description: 'template syntax',
@@ -94,7 +94,7 @@ describe('Migration to version 4.0.0', () => {
         }`,
     },
   ];
-  /* tslint:enable */
+  /* eslint-enable */
 
   const schematicRunner = new SchematicTestRunner('migrations', require.resolve('../../migrations/migration.json'));
   const specPath = normalize('tests/home.spec.ts');
