@@ -4,7 +4,7 @@ import { SpoilerDirective } from './08-directive';
 
 test('it is possible to test directives', async () => {
   await render(SpoilerDirective, {
-    template: `<div appSpoiler data-testid="dir"></div>`,
+    template: '<div appSpoiler data-testid="dir"></div>',
   });
 
   const directive = screen.getByTestId('dir');
@@ -26,7 +26,7 @@ test('it is possible to test directives with props', async () => {
   const visible = 'There is nothing to see here ...';
 
   await render(SpoilerDirective, {
-    template: `<div appSpoiler [hidden]="hidden" [visible]="visible"></div>`,
+    template: '<div appSpoiler [hidden]="hidden" [visible]="visible"></div>',
     componentProperties: {
       hidden,
       visible,

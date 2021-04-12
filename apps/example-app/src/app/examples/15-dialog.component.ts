@@ -2,8 +2,8 @@ import { Component, NgModule } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'dialog-overview-example',
-  template: `<button (click)="openDialog()">Open dialog</button>`,
+  selector: 'app-dialog-overview-example',
+  template: '<button (click)="openDialog()">Open dialog</button>',
 })
 export class DialogComponent {
   constructor(public dialog: MatDialog) {}
@@ -14,7 +14,7 @@ export class DialogComponent {
 }
 
 @Component({
-  selector: 'dialog-overview-example-dialog',
+  selector: 'app-dialog-overview-example-dialog',
   template: `
     <h1 mat-dialog-title>Dialog Title</h1>
     <div mat-dialog-content>Dialog content</div>

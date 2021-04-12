@@ -50,6 +50,7 @@
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/quotes": ["error", "single"],
         "@typescript-eslint/type-annotation-spacing": "error",
+        "@typescript-eslint/no-explicit-any": "off",
         "arrow-body-style": "error",
         "brace-style": ["error", "1tbs"],
         "constructor-super": "error",

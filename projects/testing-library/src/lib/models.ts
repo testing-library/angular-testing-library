@@ -250,6 +250,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   removeAngularAttributes?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export interface RenderDirectiveOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
   extends RenderComponentOptions<Properties, Q> {
   /**
