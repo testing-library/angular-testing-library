@@ -3,6 +3,7 @@
   "version": "0.0.0-semantically-released",
   "scripts": {
     "ng": "ng",
+    "nx": "nx",
     "postinstall": "ngcc",
     "start": "ng serve",
     "build": "nx run-many --target=build --projects=testing-library,jest-utils",
@@ -17,6 +18,9 @@
     "affected:lint": "nx affected:lint",
     "affected:dep-graph": "nx affected:dep-graph",
     "affected": "nx affected",
+    "format": "nx format:write",
+    "format:write": "nx format:write",
+    "format:check": "nx format:check",
     "precommit": "lint-staged",
     "semantic-release": "semantic-release"
   },
