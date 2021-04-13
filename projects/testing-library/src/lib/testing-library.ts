@@ -256,9 +256,9 @@ function addAutoDeclarations<SutType>(
     wrapper,
   }: Pick<RenderDirectiveOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'>,
 ) {
-  const wrappers = () => template ? [wrapper] : [];
+  const wrappers = () => (template ? [wrapper] : []);
 
-  const components = () => excludeComponentDeclaration ? [] : [component];
+  const components = () => (excludeComponentDeclaration ? [] : [component]);
 
   return [...declarations, ...wrappers(), ...components()];
 }
@@ -270,7 +270,7 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
     return animationIsDefined ? [] : [NoopAnimationsModule];
   };
 
-  const routing = () => routes ? [RouterTestingModule.withRoutes(routes)] : [];
+  const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
 
   return [...imports, ...animations(), ...routing()];
 }
