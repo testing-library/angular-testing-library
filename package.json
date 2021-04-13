@@ -72,7 +72,7 @@
     "eslint-plugin-import": "latest",
     "husky": "^4.2.5",
     "jest": "^26.1.0",
-    "jest-preset-angular": "8.3.2",
+    "jest-preset-angular": "8.4.0",
     "lint-staged": "^10.2.11",
     "ng-packagr": "11.2.4",
     "prettier": "2.2.1",
