@@ -53,7 +53,6 @@
         "@typescript-eslint/no-explicit-any": "off",
         "arrow-body-style": "error",
         "brace-style": ["error", "1tbs"],
-        "constructor-super": "error",
         "curly": "error",
         "eol-last": "error",
         "eqeqeq": ["error", "smart"],
@@ -89,14 +88,12 @@
             ]
           }
         ],
-        "no-debugger": "error",
         "no-empty": "off",
         "no-eval": "error",
         "no-new-wrappers": "error",
         "no-throw-literal": "error",
         "no-undef-init": "error",
         "no-underscore-dangle": "off",
-        "no-unused-labels": "error",
         "radix": "error",
         "spaced-comment": [
           "error",
