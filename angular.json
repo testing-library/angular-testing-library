@@ -122,12 +122,6 @@
                 "command": "ng run testing-library:build-package"
               },
               {
-                "command": "tsc -p ./projects/testing-library/migrations/tsconfig.migrations.json"
-              },
-              {
-                "command": "cpy ./projects/testing-library/migrations/migration.json ./dist/@testing-library/angular/migrations"
-              },
-              {
                 "command": "cpy ./README.md ./dist/@testing-library/angular"
               }
             ]

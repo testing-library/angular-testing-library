@@ -9,6 +9,6 @@
     "@testing-library/dom",
     "@testing-library/user-event",
     "@phenomnomnominal/tsquery",
-    "tslint"
+    "eslint"
   ]
 }
