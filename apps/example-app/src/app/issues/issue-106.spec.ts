@@ -38,5 +38,5 @@ it('better https://github.com/testing-library/angular-testing-library/issues/106
   expect(hiddenText).not.toBeInTheDocument();
   fireEvent.click(toggle);
 
-  screen.getByTestId('getme');
+  expect(screen.getByTestId('getme')).toBeInTheDocument();
 });
