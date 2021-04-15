@@ -5,10 +5,10 @@
   "lib": {
     "entryFile": "index.ts"
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@testing-library/dom",
     "@testing-library/user-event",
     "@phenomnomnominal/tsquery",
-    "tslint"
+    "eslint"
   ]
 }

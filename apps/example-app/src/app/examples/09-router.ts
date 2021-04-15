@@ -1,4 +1,4 @@
-import { OnInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 
@@ -35,6 +35,6 @@ export class DetailComponent {
 
 @Component({
   selector: 'app-detail-hidden',
-  template: ` You found the treasure! `,
+  template: ' You found the treasure! ',
 })
 export class HiddenDetailComponent {}

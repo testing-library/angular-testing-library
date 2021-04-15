@@ -256,13 +256,9 @@ function addAutoDeclarations<SutType>(
     wrapper,
   }: Pick<RenderDirectiveOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'>,
 ) {
-  const wrappers = () => {
-    return template ? [wrapper] : [];
-  };
+  const wrappers = () => (template ? [wrapper] : []);
 
-  const components = () => {
-    return excludeComponentDeclaration ? [] : [component];
-  };
+  const components = () => (excludeComponentDeclaration ? [] : [component]);
 
   return [...declarations, ...wrappers(), ...components()];
 }
@@ -274,9 +270,7 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
     return animationIsDefined ? [] : [NoopAnimationsModule];
   };
 
-  const routing = () => {
-    return routes ? [RouterTestingModule.withRoutes(routes)] : [];
-  };
+  const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
 
   return [...imports, ...animations(), ...routing()];
 }
@@ -341,6 +335,7 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
   });
 }
 
+// eslint-disable-next-line @angular-eslint/component-selector
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
 

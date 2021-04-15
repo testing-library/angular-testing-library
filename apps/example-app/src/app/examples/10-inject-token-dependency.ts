@@ -4,7 +4,7 @@ export const DATA = new InjectionToken<{ text: string }>('Components Data');
 
 @Component({
   selector: 'app-fixture',
-  template: ` {{ data.text }} `,
+  template: ' {{ data.text }} ',
 })
 export class DataInjectedComponent {
   constructor(@Inject(DATA) public data: { text: string }) {}

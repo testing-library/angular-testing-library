@@ -1,4 +1,4 @@
-import { ApplicationInitStatus, Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { delay, filter, mapTo } from 'rxjs/operators';
 

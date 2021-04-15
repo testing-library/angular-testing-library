@@ -29,10 +29,7 @@ export function createMock<T>(type: Type<T>): Mock<T> {
   return mock;
 }
 
-export function createMockWithValues<T, K extends keyof T>(
-  type: Type<T>,
-  values: Partial<Record<K, T[K]>>,
-): Mock<T> {
+export function createMockWithValues<T, K extends keyof T>(type: Type<T>, values: Partial<Record<K, T[K]>>): Mock<T> {
   const mock = createMock(type);
 
   Object.entries(values).forEach(([field, value]) => {
