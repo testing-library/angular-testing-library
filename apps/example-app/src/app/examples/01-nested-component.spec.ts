@@ -11,12 +11,12 @@ test('renders the current value and can increment and decrement', async () => {
   const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
-  expect(valueControl.textContent).toBe('0');
+  expect(valueControl).toHaveTextContent('0');
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
-  expect(valueControl.textContent).toBe('2');
+  expect(valueControl).toHaveTextContent('2');
 
   fireEvent.click(decrementControl);
-  expect(valueControl.textContent).toBe('1');
+  expect(valueControl).toHaveTextContent('1');
 });

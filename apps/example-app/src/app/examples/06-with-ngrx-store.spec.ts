@@ -21,12 +21,12 @@ test('works with ngrx store', async () => {
   const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
-  expect(valueControl.textContent).toBe('0');
+  expect(valueControl).toHaveTextContent('0');
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
-  expect(valueControl.textContent).toBe('20');
+  expect(valueControl).toHaveTextContent('20');
 
   fireEvent.click(decrementControl);
-  expect(valueControl.textContent).toBe('10');
+  expect(valueControl).toHaveTextContent('10');
 });

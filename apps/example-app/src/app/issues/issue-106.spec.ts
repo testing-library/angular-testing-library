@@ -20,14 +20,14 @@ it('https://github.com/testing-library/angular-testing-library/issues/106', asyn
   const toggle = screen.getByTestId('toggle');
   const hiddenText = screen.queryByTestId('getme');
 
-  expect(hiddenText).toBeNull();
+  expect(hiddenText).not.toBeInTheDocument();
   fireEvent.click(toggle);
 
   // fails
   // await waitFor(() => expect(hiddenText).not.toBeNull());
 
   // succeeds
-  await waitFor(() => expect(screen.queryByTestId('getme')).not.toBeNull());
+  await waitFor(() => expect(screen.queryByTestId('getme')).toBeInTheDocument());
 });
 
 it('better https://github.com/testing-library/angular-testing-library/issues/106', async () => {
@@ -35,7 +35,7 @@ it('better https://github.com/testing-library/angular-testing-library/issues/106
   const toggle = screen.getByTestId('toggle');
   const hiddenText = screen.queryByTestId('getme');
 
-  expect(hiddenText).toBeNull();
+  expect(hiddenText).not.toBeInTheDocument();
   fireEvent.click(toggle);
 
   screen.getByTestId('getme');

@@ -18,12 +18,12 @@ test('is possible to set input and listen for output', async () => {
   const sendControl = screen.getByRole('button', { name: /send/i });
   const valueControl = screen.getByTestId('value');
 
-  expect(valueControl.textContent).toBe('47');
+  expect(valueControl).toHaveTextContent('47');
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
-  expect(valueControl.textContent).toBe('50');
+  expect(valueControl).toHaveTextContent('50');
 
   fireEvent.click(sendControl);
   expect(sendValue).toHaveBeenCalledTimes(1);
@@ -44,12 +44,12 @@ test('is possible to set input and listen for output with the template syntax', 
   const sendControl = screen.getByRole('button', { name: /send/i });
   const valueControl = screen.getByTestId('value');
 
-  expect(valueControl.textContent).toBe('47');
+  expect(valueControl).toHaveTextContent('47');
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
-  expect(valueControl.textContent).toBe('50');
+  expect(valueControl).toHaveTextContent('50');
 
   fireEvent.click(sendControl);
   expect(sendSpy).toHaveBeenCalledTimes(1);
