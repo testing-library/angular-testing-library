@@ -54,6 +54,7 @@ test('closes the dialog via the backdrop', async () => {
   await screen.findByRole('dialog');
   await screen.findByRole('heading', { name: /dialog title/i });
 
+  // eslint-disable-next-line testing-library/no-node-access
   fireEvent.click(document.querySelector('.cdk-overlay-backdrop'));
 
   await waitForElementToBeRemoved(() => screen.getByRole('dialog'));
