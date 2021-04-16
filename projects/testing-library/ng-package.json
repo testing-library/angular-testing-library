@@ -5,10 +5,5 @@
   "lib": {
     "entryFile": "index.ts"
   },
-  "allowedNonPeerDependencies": [
-    "@testing-library/dom",
-    "@testing-library/user-event",
-    "@phenomnomnominal/tsquery",
-    "eslint"
-  ]
+  "allowedNonPeerDependencies": ["@testing-library/dom"]
 }
