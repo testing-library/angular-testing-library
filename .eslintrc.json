@@ -36,6 +36,7 @@
     },
     {
       "files": ["*.ts"],
+      "plugins": ["eslint-plugin-import", "@angular-eslint/eslint-plugin", "@typescript-eslint"],
       "rules": {
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/dot-notation": "off",
@@ -102,8 +103,14 @@
             "markers": ["/"]
           }
         ]
-      },
-      "plugins": ["eslint-plugin-import", "@angular-eslint/eslint-plugin", "@typescript-eslint"]
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "extends": ["plugin:testing-library/angular", "plugin:jest-dom/recommended"],
+      "rules": {
+        "testing-library/prefer-explicit-assert": "error"
+      }
     },
     {
       "files": ["*.html"],

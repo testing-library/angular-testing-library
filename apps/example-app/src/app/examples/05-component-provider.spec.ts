@@ -18,14 +18,14 @@ test('renders the current value and can increment and decrement', async () => {
   const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
-  expect(valueControl.textContent).toBe('0');
+  expect(valueControl).toHaveTextContent('0');
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
-  expect(valueControl.textContent).toBe('2');
+  expect(valueControl).toHaveTextContent('2');
 
   fireEvent.click(decrementControl);
-  expect(valueControl.textContent).toBe('1');
+  expect(valueControl).toHaveTextContent('1');
 });
 
 test('renders the current value and can increment and decrement with a mocked jest-utils service', async () => {
@@ -48,14 +48,14 @@ test('renders the current value and can increment and decrement with a mocked je
   const decrementControl = screen.getByRole('button', { name: /decrement/i });
   const valueControl = screen.getByTestId('value');
 
-  expect(valueControl.textContent).toBe('50');
+  expect(valueControl).toHaveTextContent('50');
 
   fireEvent.click(incrementControl);
   fireEvent.click(incrementControl);
-  expect(valueControl.textContent).toBe('70');
+  expect(valueControl).toHaveTextContent('70');
 
   fireEvent.click(decrementControl);
-  expect(valueControl.textContent).toBe('60');
+  expect(valueControl).toHaveTextContent('60');
 });
 
 test('renders the current value and can increment and decrement with provideMocked from jest-utils', async () => {
