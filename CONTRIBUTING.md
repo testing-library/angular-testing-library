@@ -10,8 +10,7 @@ Hi there, thanks for being willing to contribute!
 
 ## Testing
 
-- Run `npm run test:lib` to test the library
-- Run `npm run test:app` to test the application
+- Run `npm run test` to test the library and the example application
 - Run `npm run build` to build the library
 
 ## Push changes
