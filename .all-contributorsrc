@@ -197,6 +197,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lacolaco",
+      "name": "Suguru Inatomi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1529180?v=4",
+      "profile": "https://lacolaco.net",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
