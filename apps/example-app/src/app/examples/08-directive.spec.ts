@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/angular';
 import { SpoilerDirective } from './08-directive';
 
 test('it is possible to test directives', async () => {
-  await render(SpoilerDirective, {
-    template: '<div appSpoiler data-testid="dir"></div>',
+  await render('<div appSpoiler data-testid="dir"></div>', {
+    declarations: [SpoilerDirective],
   });
 
   const directive = screen.getByTestId('dir');
@@ -25,8 +25,8 @@ test('it is possible to test directives with props', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  await render(SpoilerDirective, {
-    template: '<div appSpoiler [hidden]="hidden" [visible]="visible"></div>',
+  await render('<div appSpoiler [hidden]="hidden" [visible]="visible"></div>', {
+    declarations: [SpoilerDirective],
     componentProperties: {
       hidden,
       visible,
@@ -49,8 +49,8 @@ test('it is possible to test directives with props in template', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  await render(SpoilerDirective, {
-    template: `<div appSpoiler hidden="${hidden}" visible="${visible}"></div>`,
+  await render(`<div appSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
+    declarations: [SpoilerDirective],
   });
 
   expect(screen.queryByText(visible)).not.toBeInTheDocument();

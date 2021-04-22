@@ -250,6 +250,9 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   removeAngularAttributes?: boolean;
 }
 
+/**
+ * @deprecated Use `render(template, { declarations: [SomeDirective] })` instead.
+ */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export interface RenderDirectiveOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
   extends RenderComponentOptions<Properties, Q> {
@@ -262,8 +265,31 @@ export interface RenderDirectiveOptions<WrapperType, Properties extends object =
    * const component = await render(SpoilerDirective, {
    *  template: `<div spoiler message='SPOILER'></div>`
    * })
+   *
+   * @deprecated Use `render(template, { declarations: [SomeDirective] })` instead.
    */
   template: string;
+  /**
+   * @description
+   * An Angular component to wrap the component in.
+   * The template will be overridden with the `template` option.
+   *
+   * @default
+   * `WrapperComponent`, an empty component that strips the `ng-version` attribute
+   *
+   * @example
+   * const component = await render(SpoilerDirective, {
+   *  template: `<div spoiler message='SPOILER'></div>`
+   *  wrapper: CustomWrapperComponent
+   * })
+   */
+  wrapper?: Type<WrapperType>;
+  componentProperties?: Partial<WrapperType & Properties>;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export interface RenderTemplateOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
+  extends RenderComponentOptions<Properties, Q> {
   /**
    * @description
    * An Angular component to wrap the component in.
