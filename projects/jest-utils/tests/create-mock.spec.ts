@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { fireEvent, render } from '@testing-library/angular';
 
 import { createMock, provideMock, Mock } from '../src/public_api';
-import { render, fireEvent } from '../../testing-library/src/public_api';
 
 class FixtureService {
   constructor(private foo: string, public bar: string) {}
@@ -13,7 +13,7 @@ class FixtureService {
 }
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ` <button (click)="print()">Print</button> `,
 })
 export class FixtureComponent {

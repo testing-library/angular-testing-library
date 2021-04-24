@@ -4,7 +4,7 @@ import { render, screen } from '../src/public_api';
 import { mapTo } from 'rxjs/operators';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ` <div>{{ result | async }}</div> `,
 })
 class FixtureComponent {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { render, fireEvent } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ` <input type="text" data-testid="input" /> `,
 })
 class FixtureComponent {}

@@ -29,6 +29,10 @@
       "plugins": ["@angular-eslint/eslint-plugin", "@typescript-eslint"]
     },
     {
+      "files": ["*.spec.ts"],
+      "extends": ["plugin:testing-library/angular", "plugin:jest-dom/recommended"]
+    },
+    {
       "files": ["*.html"],
       "extends": ["plugin:@nrwl/nx/angular-template"],
       "rules": {}

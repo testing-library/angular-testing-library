@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { render } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: `
     <p>rawr</p>
     <button data-testid="btn">I'm a button</button>
@@ -11,7 +11,7 @@ import { render } from '../src/public_api';
 class FixtureComponent {}
 
 test('debug', async () => {
-  jest.spyOn(console, 'log').mockImplementation(() => {});
+  jest.spyOn(console, 'log').mockImplementation();
   const { debug } = await render(FixtureComponent);
 
   debug();
@@ -21,7 +21,7 @@ test('debug', async () => {
 });
 
 test('debug allows to be called with an element', async () => {
-  jest.spyOn(console, 'log').mockImplementation(() => {});
+  jest.spyOn(console, 'log').mockImplementation();
   const { debug, getByTestId } = await render(FixtureComponent);
   const btn = getByTestId('btn');
 

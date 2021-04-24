@@ -3,7 +3,7 @@ import { timer } from 'rxjs';
 import { render, screen, fireEvent, waitFor as waitForATL } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: `
     <button data-testid="button" (click)="load()">Load</button>
     <div>{{ result }}</div>

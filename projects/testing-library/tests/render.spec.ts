@@ -13,7 +13,7 @@ import { TestBed } from '@angular/core/testing';
 import { render, fireEvent } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: `
     <input type="text" data-testid="input" />
     <button>button</button>
@@ -83,7 +83,7 @@ describe('animationModule', () => {
 
 describe('Angular component life-cycle hooks', () => {
   @Component({
-    selector: 'fixture',
+    selector: 'atl-fixture',
     template: ` {{ name }} `,
   })
   class FixtureWithNgOnChangesComponent implements OnInit, OnChanges {

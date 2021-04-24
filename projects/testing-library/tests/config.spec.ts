@@ -4,7 +4,7 @@ import { render, configure } from '../src/public_api';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <form [formGroup]="form" name="form">
       <div>

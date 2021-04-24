@@ -358,6 +358,7 @@ if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
   });
 }
 
+// TODO: rename to `atl-wrapper-component`
 // eslint-disable-next-line @angular-eslint/component-selector
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}

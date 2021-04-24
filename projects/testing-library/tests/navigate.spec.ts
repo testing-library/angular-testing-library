@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { render } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ``,
 })
 class FixtureComponent {}

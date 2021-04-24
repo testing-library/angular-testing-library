@@ -60,7 +60,7 @@ export class Service {
 }
 
 @Component({
-  selector: 'fixture-component',
+  selector: 'atl-fixture',
   template: '{{service.foo()}}',
 })
 export class FixtureComponent {

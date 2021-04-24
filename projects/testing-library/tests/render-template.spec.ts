@@ -1,5 +1,3 @@
-/* eslint-disable testing-library/no-container */
-/* eslint-disable testing-library/render-result-naming-convention */
 import { Directive, HostListener, ElementRef, Input, Output, EventEmitter, Component } from '@angular/core';
 
 import { render, fireEvent } from '../src/public_api';
@@ -70,7 +68,7 @@ test('the directive renders (compatibility with the deprecated signature)', asyn
   expect(component.container.querySelector('[onoff]')).toBeInTheDocument();
 });
 
-test.only('uses the default props', async () => {
+test('uses the default props', async () => {
   const component = await render('<div onOff></div>', {
     declarations: [OnOffDirective],
   });
