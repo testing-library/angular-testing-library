@@ -16,7 +16,7 @@ class FixtureService {
   selector: 'atl-fixture',
   template: ` <button (click)="print()">Print</button> `,
 })
-export class FixtureComponent {
+class FixtureComponent {
   constructor(private service: FixtureService) {}
 
   print() {
@@ -39,6 +39,7 @@ it('provides a mock service', async () => {
   expect(service.print).toHaveBeenCalledTimes(1);
 });
 
+// eslint-disable-next-line jest/expect-expect
 it('is possible to write a mock implementation', async (done) => {
   const { getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],

@@ -53,7 +53,7 @@ test('shows the provided service value with template syntax', async () => {
 });
 
 @Injectable()
-export class Service {
+class Service {
   foo() {
     return 'foo';
   }
@@ -63,6 +63,6 @@ export class Service {
   selector: 'atl-fixture',
   template: '{{service.foo()}}',
 })
-export class FixtureComponent {
+class FixtureComponent {
   constructor(public service: Service) {}
 }

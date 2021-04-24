@@ -13,7 +13,7 @@ import { render } from '../../src/public_api';
     </div>
   `,
 })
-export class BugGetByLabelTextComponent {}
+class BugGetByLabelTextComponent {}
 
 it('first step to reproduce the bug: skip this test to avoid the error or remove the for attribute of label', async () => {
   expect(await render(BugGetByLabelTextComponent)).toBeDefined();

@@ -5,7 +5,7 @@ import { render } from '../../src/public_api';
 @Component({
   template: `<h1>Hello {{ formattedName }}</h1>`,
 })
-export class BugOnChangeComponent implements OnChanges {
+class BugOnChangeComponent implements OnChanges {
   @Input() name: string;
 
   formattedName: string;

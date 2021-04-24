@@ -106,6 +106,14 @@
       }
     },
     {
+      "files": ["*.spec.ts"],
+      "extends": ["plugin:jest/recommended"],
+      "rules": {
+        "jest/no-done-callback": "off",
+        "jest/expect-expect": "off"
+      }
+    },
+    {
       "files": ["*.html"],
       "rules": {}
     }
