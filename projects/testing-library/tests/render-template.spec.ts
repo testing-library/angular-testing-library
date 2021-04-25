@@ -1,5 +1,3 @@
-/* eslint-disable testing-library/no-container */
-/* eslint-disable testing-library/render-result-naming-convention */
 import { Directive, HostListener, ElementRef, Input, Output, EventEmitter, Component } from '@angular/core';
 
 import { render, fireEvent } from '../src/public_api';
@@ -8,7 +6,7 @@ import { render, fireEvent } from '../src/public_api';
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[onOff]',
 })
-export class OnOffDirective {
+class OnOffDirective {
   @Input() on = 'on';
   @Input() off = 'off';
   @Output() clicked = new EventEmitter<string>();
@@ -27,7 +25,7 @@ export class OnOffDirective {
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[update]',
 })
-export class UpdateInputDirective {
+class UpdateInputDirective {
   @Input()
   set update(value: any) {
     this.el.nativeElement.textContent = value;
@@ -41,7 +39,7 @@ export class UpdateInputDirective {
   selector: 'greeting',
   template: 'Hello {{ name }}!',
 })
-export class GreetingComponent {
+class GreetingComponent {
   @Input() name = 'World';
 }
 
@@ -59,7 +57,7 @@ test('the component renders', async () => {
   });
 
   expect(component.container.querySelector('greeting')).toBeInTheDocument();
-  expect(component.getByText('Hello Angular!'));
+  expect(component.getByText('Hello Angular!')).toBeInTheDocument();
 });
 
 test('the directive renders (compatibility with the deprecated signature)', async () => {
@@ -70,7 +68,7 @@ test('the directive renders (compatibility with the deprecated signature)', asyn
   expect(component.container.querySelector('[onoff]')).toBeInTheDocument();
 });
 
-test.only('uses the default props', async () => {
+test('uses the default props', async () => {
   const component = await render('<div onOff></div>', {
     declarations: [OnOffDirective],
   });

@@ -3,7 +3,7 @@ import { screen } from '@testing-library/dom';
 import { render } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ` {{ name }} `,
 })
 class FixtureComponent {
@@ -23,7 +23,7 @@ test('will rerender the component with updated props', async () => {
 });
 
 @Component({
-  selector: 'fixture-onchanges',
+  selector: 'atl-fixture',
   template: ` {{ name }} `,
 })
 class FixtureWithNgOnChangesComponent implements OnChanges {
@@ -54,7 +54,7 @@ test('will call ngOnChanges on rerender', async () => {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'fixture-onpush',
+  selector: 'atl-fixture',
   template: ` <div data-testid="number" [class.active]="activeField === 'number'">Number</div> `,
 })
 class FixtureWithOnPushComponent {

@@ -3,7 +3,7 @@ import { render, screen, waitForElementToBeRemoved } from '../src/public_api';
 import { timer } from 'rxjs';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ` <div *ngIf="visible" data-testid="im-here">👋</div> `,
 })
 class FixtureComponent implements OnInit {

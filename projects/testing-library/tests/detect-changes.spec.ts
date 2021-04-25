@@ -5,7 +5,7 @@ import { delay } from 'rxjs/operators';
 import { render, fireEvent } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: `
     <input type="text" data-testid="input" [formControl]="inputControl" />
     <button data-testid="button">{{ caption }}</button>

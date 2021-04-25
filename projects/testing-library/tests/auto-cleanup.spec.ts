@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { render } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
-  template: ` Hello {{ name }}! `,
+  selector: 'atl-fixture',
+  template: `Hello {{ name }}!`,
 })
 class FixtureComponent {
   @Input() name: string;

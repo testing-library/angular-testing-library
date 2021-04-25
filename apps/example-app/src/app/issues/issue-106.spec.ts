@@ -6,7 +6,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/angular';
   template: `<button (click)="toggleShow()" data-testid="toggle">toggle</button>
     <div *ngIf="show$ | async" data-testid="getme">Here I am</div>`,
 })
-export class TestSelectComponent {
+class TestSelectComponent {
   showSubj = new BehaviorSubject(false);
   show$ = this.showSubj.asObservable();
 

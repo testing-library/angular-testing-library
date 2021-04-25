@@ -71,7 +71,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/example-app/src/**/*.ts", "apps/example-app/src/**/*.html"]
+            "lintFilePatterns": ["apps/example-app/**/*.ts", "apps/example-app/**/*.html"]
           }
         },
         "test": {
@@ -106,11 +106,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/testing-library/src/**/*.ts",
-              "projects/testing-library/src/**/*.html",
-              "projects/testing-library/src/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/testing-library/**/*.ts", "projects/testing-library/**/*.html"]
           }
         },
         "build": {
@@ -159,11 +155,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/jest-utils/src/**/*.ts",
-              "projects/jest-utils/src/**/*.html",
-              "projects/jest-utils/src/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/jest-utils/**/*.ts", "projects/jest-utils/**/*.html"]
           }
         },
         "build": {

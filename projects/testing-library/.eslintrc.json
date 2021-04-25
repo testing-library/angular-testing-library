@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "lib",
+            "prefix": ["atl"],
             "style": "camelCase"
           }
         ],
@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "lib",
+            "prefix": ["atl"],
             "style": "kebab-case"
           }
         ]
