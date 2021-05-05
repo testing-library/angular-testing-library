@@ -371,7 +371,7 @@ function replaceFindWithFindAndDetectChanges<T>(originalQueriesForContainer: T):
     const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
     if (key.startsWith('find') && getByQuery) {
       newQueries[key] = async (text, options, waitOptions) => {
-        // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
+        // original implementation at https://github.com/testing-library/dom-testing-library/blob/main/src/query-helpers.js
         const result = await waitForWrapper(
           detectChangesForMountedFixtures,
           () => getByQuery(text, options),
