@@ -1,4 +1,4 @@
 module.exports = {
   pkgRoot: 'dist/@testing-library/angular',
-  branches: ['master', { name: 'beta', prerelease: true }],
+  branches: ['main', { name: 'beta', prerelease: true }],
 };

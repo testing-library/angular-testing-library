@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-master',
+  selector: 'app-main',
   template: `
     <a [routerLink]="'./detail/one'">Load one</a> | <a [routerLink]="'./detail/two'">Load two</a> |
     <a [routerLink]="'./detail/three'">Load three</a> |

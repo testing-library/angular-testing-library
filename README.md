@@ -6,7 +6,7 @@
     height="80"
     width="80"
     alt="hedgehog"
-    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/master/other/hedgehog.png"
+    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/hedgehog.png"
   />
 </a>
 
@@ -43,7 +43,7 @@ practices.</p>
     <img
       width="500"
       alt="TestingJavaScript.com Learn the smart, efficient way to test any JavaScript application."
-      src="https://raw.githubusercontent.com/testing-library/react-testing-library/master/other/testingjavascript.jpg"
+      src="https://raw.githubusercontent.com/testing-library/react-testing-library/main/other/testingjavascript.jpg"
     />
   </a>
 </div>
@@ -139,7 +139,7 @@ describe('Counter', () => {
 });
 ```
 
-[See more examples](https://github.com/testing-library/angular-testing-library/tree/master/apps/example-app/src/app/examples)
+[See more examples](https://github.com/testing-library/angular-testing-library/tree/main/apps/example-app/src/app/examples)
 
 ## Installation
 
@@ -270,8 +270,8 @@ Links:
 
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master.svg?style=shield
-[build]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master
+[build-badge]: https://circleci.com/gh/testing-library/angular-testing-library/tree/main.svg?style=shield
+[build]: https://circleci.com/gh/testing-library/angular-testing-library/tree/main
 [coverage]: https://codecov.io/github/testing-library/angular-testing-library
 [coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/angular-testing-library.svg?style=flat-square
 [version-badge]: https://img.shields.io/npm/v/@testing-library/angular.svg?style=flat-square
@@ -281,12 +281,12 @@ Links:
 [discord-badge]: https://img.shields.io/discord/723559267868737556.svg?color=7389D8&labelColor=6A7EC2&logo=discord&logoColor=ffffff&style=flat-square
 [discord]: https://discord.gg/testing-library
 [license-badge]: https://img.shields.io/npm/l/@testing-library/angular.svg?style=flat-square
-[license]: https://github.com/testing-library/angular-testing-library/blob/master/LICENSE
+[license]: https://github.com/testing-library/angular-testing-library/blob/main/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
 [donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/testing-library/angular-testing-library/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/testing-library/angular-testing-library/blob/main/CODE_OF_CONDUCT.md
 [github-watch-badge]: https://img.shields.io/github/watchers/testing-library/angular-testing-library.svg?style=social
 [github-watch]: https://github.com/testing-library/angular-testing-library/watchers
 [github-star-badge]: https://img.shields.io/github/stars/testing-library/angular-testing-library.svg?style=social

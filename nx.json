@@ -10,7 +10,7 @@
     "nx.json": "*"
   },
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "npmScope": "testing-library",
   "tasksRunnerOptions": {
