@@ -211,6 +211,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/the-ult"><img src="https://avatars.githubusercontent.com/u/4863062?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Arjen</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=the-ult" title="Code">💻</a></td>
     <td align="center"><a href="https://lacolaco.net"><img src="https://avatars.githubusercontent.com/u/1529180?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Suguru Inatomi</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=lacolaco" title="Code">💻</a> <a href="#ideas-lacolaco" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/amitmiran137"><img src="https://avatars.githubusercontent.com/u/47772523?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Miran</b></sub></a><br /><a href="#infra-amitmiran137" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
