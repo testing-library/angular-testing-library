@@ -15,15 +15,25 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/apps/example-app",
             "index": "apps/example-app/src/index.html",
             "main": "apps/example-app/src/main.ts",
             "polyfills": "apps/example-app/src/polyfills.ts",
             "tsConfig": "apps/example-app/tsconfig.app.json",
-            "assets": ["apps/example-app/src/favicon.ico", "apps/example-app/src/assets"],
-            "styles": ["apps/example-app/src/styles.css"],
-            "scripts": []
+            "assets": [
+              "apps/example-app/src/favicon.ico",
+              "apps/example-app/src/assets"
+            ],
+            "styles": [
+              "apps/example-app/src/styles.css"
+            ],
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -43,13 +53,14 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
             }
           },
-          "outputs": ["{options.outputPath}"]
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -71,7 +82,13 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/example-app/**/*.ts", "apps/example-app/**/*.html"]
+            "lintFilePatterns": [
+              "apps/example-app/**/*.ts",
+              "apps/example-app/**/*.html",
+              "apps/example-app/src/**/*.html",
+              "apps/example-app/src/**/*.html",
+              "apps/example-app/src/**/*.html"
+            ]
           }
         },
         "test": {
@@ -80,7 +97,9 @@
             "jestConfig": "apps/example-app/jest.config.js",
             "setupFile": "apps/example-app/src/test-setup.ts"
           },
-          "outputs": ["coverage/"]
+          "outputs": [
+            "coverage/"
+          ]
         }
       }
     },
@@ -106,7 +125,13 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["projects/testing-library/**/*.ts", "projects/testing-library/**/*.html"]
+            "lintFilePatterns": [
+              "projects/testing-library/**/*.ts",
+              "projects/testing-library/**/*.html",
+              "projects/testing-library/src/**/*.html",
+              "projects/testing-library/src/**/*.html",
+              "projects/testing-library/src/**/*.html"
+            ]
           }
         },
         "build": {
@@ -129,7 +154,9 @@
             "jestConfig": "projects/testing-library/jest.config.js",
             "setupFile": "projects/testing-library/test-setup.ts"
           },
-          "outputs": ["coverage/projects/testing-library"]
+          "outputs": [
+            "coverage/projects/testing-library"
+          ]
         }
       }
     },
@@ -155,7 +182,13 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["projects/jest-utils/**/*.ts", "projects/jest-utils/**/*.html"]
+            "lintFilePatterns": [
+              "projects/jest-utils/**/*.ts",
+              "projects/jest-utils/**/*.html",
+              "projects/jest-utils/src/**/*.html",
+              "projects/jest-utils/src/**/*.html",
+              "projects/jest-utils/src/**/*.html"
+            ]
           }
         },
         "build": {
@@ -175,7 +208,9 @@
             "jestConfig": "projects/jest-utils/jest.config.js",
             "setupFile": "projects/jest-utils/test-setup.ts"
           },
-          "outputs": ["coverage/projects/jest-utils"]
+          "outputs": [
+            "coverage/projects/jest-utils"
+          ]
         }
       }
     }
