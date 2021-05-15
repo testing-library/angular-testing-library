@@ -27,7 +27,7 @@ jobs:
       - name: test
         run: npm run test -- --ci --code-coverage
       - name: Release
-        if: github.repository == 'testing-library/angular-testing-library' && github.ref == 'refs/heads/main' && matrix.node-version == 16 && matrix.os == 'ubuntu-latest'
+        if: github.repository == 'testing-library/angular-testing-library' && github.ref == 'refs/heads/main' && matrix.node-version == 14 && matrix.os == 'ubuntu-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
