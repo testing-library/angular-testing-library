@@ -352,10 +352,16 @@ function cleanupAtFixture(fixture) {
   mountedFixtures.delete(fixture);
 }
 
-if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
-  afterEach(async () => {
-    cleanup();
-  });
+// if we're running in a test runner that supports afterEach
+// then we'll automatically run cleanup afterEach test
+// this ensures that tests run in isolation from each other
+// if you don't like this, set the ATL_SKIP_AUTO_CLEANUP env variable to 'true'
+if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
+  if (typeof afterEach === 'function') {
+    afterEach(() => {
+      cleanup();
+    });
+  }
 }
 
 // TODO: rename to `atl-wrapper-component`
