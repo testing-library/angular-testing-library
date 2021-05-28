@@ -20,13 +20,8 @@
             "main": "apps/example-app/src/main.ts",
             "polyfills": "apps/example-app/src/polyfills.ts",
             "tsConfig": "apps/example-app/tsconfig.app.json",
-            "assets": [
-              "apps/example-app/src/favicon.ico",
-              "apps/example-app/src/assets"
-            ],
-            "styles": [
-              "apps/example-app/src/styles.css"
-            ],
+            "assets": ["apps/example-app/src/favicon.ico", "apps/example-app/src/assets"],
+            "styles": ["apps/example-app/src/styles.css"],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -58,9 +53,7 @@
               "buildOptimizer": true
             }
           },
-          "outputs": [
-            "{options.outputPath}"
-          ]
+          "outputs": ["{options.outputPath}"]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -97,9 +90,7 @@
             "jestConfig": "apps/example-app/jest.config.js",
             "setupFile": "apps/example-app/src/test-setup.ts"
           },
-          "outputs": [
-            "coverage/"
-          ]
+          "outputs": ["coverage/"]
         }
       }
     },
@@ -144,6 +135,9 @@
               },
               {
                 "command": "cpy ./README.md ./dist/@testing-library/angular"
+              },
+              {
+                "command": "cpy schematics/**/*.json ../../dist/@testing-library/angular --cwd=./projects/testing-library --parents"
               }
             ]
           }
@@ -154,9 +148,7 @@
             "jestConfig": "projects/testing-library/jest.config.js",
             "setupFile": "projects/testing-library/test-setup.ts"
           },
-          "outputs": [
-            "coverage/projects/testing-library"
-          ]
+          "outputs": ["coverage/projects/testing-library"]
         }
       }
     },
@@ -208,9 +200,7 @@
             "jestConfig": "projects/jest-utils/jest.config.js",
             "setupFile": "projects/jest-utils/test-setup.ts"
           },
-          "outputs": [
-            "coverage/projects/jest-utils"
-          ]
+          "outputs": ["coverage/projects/jest-utils"]
         }
       }
     }
