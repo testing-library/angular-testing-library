@@ -134,10 +134,10 @@
                 "command": "ng run testing-library:build-package"
               },
               {
-                "command": "cpy ./README.md ./dist/@testing-library/angular"
+                "command": "npm run build:schematics"
               },
               {
-                "command": "cpy schematics/**/*.json ../../dist/@testing-library/angular --cwd=./projects/testing-library --parents"
+                "command": "cpy ./README.md ./dist/@testing-library/angular"
               }
             ]
           }
