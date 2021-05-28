@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "$id": "SchematicsTestingLibraryAngular",
-  "title": "testing-library-anguular",
+  "title": "testing-library-angular",
   "type": "object",
   "properties": {},
   "required": []
