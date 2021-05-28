@@ -21,6 +21,10 @@
     "url": "https://github.com/testing-library/angular-testing-library/issues"
   },
   "homepage": "https://github.com/testing-library/angular-testing-library#readme",
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
   "ng-update": {
     "migrations": "./schematics/migrations/migration.json"
   },
