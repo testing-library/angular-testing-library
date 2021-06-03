@@ -113,6 +113,10 @@
     {
       "files": ["*.html"],
       "rules": {}
+    },
+    {
+      "files": ["*.ts", "*.js", "*.json", "*.md"],
+      "extends": ["prettier"]
     }
   ]
 }
