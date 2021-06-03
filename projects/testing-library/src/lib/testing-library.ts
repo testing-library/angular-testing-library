@@ -244,6 +244,7 @@ function setComponentProperties<SutType>(
       set: extendedSetter,
       // Allow the property to be defined again later.
       // This happens when the component properties are updated after initial render.
+      // For Jest this is `true` by default, for Karma and a real browser the default is `false`
       configurable: true,
     });
 
