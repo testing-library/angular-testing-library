@@ -242,6 +242,10 @@ function setComponentProperties<SutType>(
     Object.defineProperty(fixture.componentInstance, key, {
       get: descriptor?.get || defaultGetter,
       set: extendedSetter,
+      // Allow the property to be defined again later.
+      // This happens when the component properties are updated after initial render.
+      // For Jest this is `true` by default, for Karma and a real browser the default is `false`
+      configurable: true,
     });
 
     descriptor?.set?.call(fixture.componentInstance, _value);
