@@ -115,7 +115,7 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.js", "*.json", "*.md"],
+      "files": ["*.ts", "*.js"],
       "extends": ["prettier"]
     }
   ]
