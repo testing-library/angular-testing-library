@@ -49,7 +49,7 @@
         "@typescript-eslint/quotes": "off",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/no-explicit-any": "off",
-        "arrow-body-style": "error",
+        "arrow-body-style": "off",
         "brace-style": ["error", "1tbs"],
         "curly": "error",
         "eol-last": "error",
