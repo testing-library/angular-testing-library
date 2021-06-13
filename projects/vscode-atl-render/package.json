@@ -2,7 +2,7 @@
   "name": "vscode-atl-render",
   "displayName": "vscode-atl-render",
   "description": "HTML highlighting in ATL the render method",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "timdeschryver",
   "license": "MIT",
   "repository": {

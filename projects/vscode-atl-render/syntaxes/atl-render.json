@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "scopeName": "atl.render",
-  "injectionSelector": "L:source.ts -comment -(string -text.html)",
+  "injectionSelector": "L:source.ts -comment",
   "name": "atl.render",
   "patterns": [
     {
@@ -29,18 +29,21 @@
       "patterns": [
         {
           "include": "#renderTemplate"
+        },
+        {
+          "include": "source.ts"
         }
       ]
     },
     "renderTemplate": {
       "contentName": "text.html",
-      "begin": "\\G\\s*([`|'|\"])",
+      "begin": "[`|'|\"]",
       "beginCaptures": {
-        "1": {
+        "0": {
           "name": "string"
         }
       },
-      "end": "\\1",
+      "end": "\\0",
       "endCaptures": {
         "0": {
           "name": "string"
