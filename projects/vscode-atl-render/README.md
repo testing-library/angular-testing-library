@@ -1,3 +1,3 @@
 # vscode-atl-render
 
-[Download link](https://marketplace.visualstudio.com/manage/publishers/timdeschryver/extensions/vscode-atl-render/hub?_a=acquisition)
+This extension adds HTML highlighting to the render method of the Angular Testing Library.
