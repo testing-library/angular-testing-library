@@ -59,7 +59,7 @@ export async function render<SutType, WrapperType = SutType>(
     providers = [],
     schemas = [],
     queries,
-    template,
+    template = undefined,
     wrapper = WrapperComponent,
     componentProperties = {},
     componentProviders = [],

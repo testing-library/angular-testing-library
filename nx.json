@@ -28,6 +28,9 @@
     "example-app": {
       "tags": []
     },
+    "example-app-karma": {
+      "tags": []
+    },
     "testing-library": {
       "tags": []
     },
