@@ -94,6 +94,93 @@
         }
       }
     },
+    "example-app-karma": {
+      "projectType": "application",
+      "root": "apps/example-app-karma",
+      "sourceRoot": "apps/example-app-karma/src",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/example-app-karma",
+            "index": "apps/example-app-karma/src/index.html",
+            "main": "apps/example-app-karma/src/main.ts",
+            "polyfills": "apps/example-app-karma/src/polyfills.ts",
+            "tsConfig": "apps/example-app-karma/tsconfig.app.json",
+            "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
+            "styles": ["apps/example-app-karma/src/styles.css"],
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/example-app-karma/src/environments/environment.ts",
+                  "with": "apps/example-app-karma/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "example-app-karma:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "example-app-karma:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/example-app-karma/**/*.ts",
+              "apps/example-app-karma/**/*.html",
+              "apps/example-app-karma/src/**/*.html",
+              "apps/example-app-karma/src/**/*.html",
+              "apps/example-app-karma/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "apps/example-app-karma/src/test.ts",
+            "tsConfig": "apps/example-app-karma/tsconfig.spec.json",
+            "polyfills": "apps/example-app-karma/src/polyfills.ts",
+            "karmaConfig": "apps/example-app-karma/karma.conf.js",
+            "styles": [],
+            "scripts": [],
+            "assets": []
+          }
+        }
+      }
+    },
     "testing-library": {
       "root": "projects/testing-library",
       "sourceRoot": "projects/testing-library/src",
