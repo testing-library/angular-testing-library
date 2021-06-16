@@ -110,7 +110,7 @@
             "polyfills": "apps/example-app-karma/src/polyfills.ts",
             "tsConfig": "apps/example-app-karma/tsconfig.app.json",
             "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
-            "styles": ["apps/example-app-karma/src/styles.css"],
+            "styles": [],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
