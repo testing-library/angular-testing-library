@@ -1,7 +1,7 @@
 import { Type, DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyFormatOptions } from '@testing-library/dom';
+import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
 export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
@@ -22,7 +22,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   debug: (
     element?: Element | HTMLDocument | (Element | HTMLDocument)[],
     maxLength?: number,
-    options?: PrettyFormatOptions,
+    options?: PrettyDOMOptions,
   ) => void;
   /**
    * @description
