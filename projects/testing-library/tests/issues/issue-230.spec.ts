@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { render, waitFor } from '@testing-library/angular';
+import { render, waitFor, screen } from '@testing-library/angular';
 
 @Component({
   template: ` <button [ngClass]="classes">Load</button> `,
@@ -12,7 +12,7 @@ class LoopComponent {
   }
 }
 
-test('does not end up in a loop', async () => {
+test('wait does not end up in a loop', async () => {
   await render(LoopComponent);
 
   await expect(
@@ -20,4 +20,10 @@ test('does not end up in a loop', async () => {
       expect(true).toEqual(false);
     }),
   ).rejects.toThrow();
+});
+
+test('find does not end up in a loop', async () => {
+  await render(LoopComponent);
+
+  await expect(screen.findByText('foo')).rejects.toThrow();
 });

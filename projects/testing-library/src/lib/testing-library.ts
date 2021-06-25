@@ -315,9 +315,7 @@ async function waitForWrapper<T>(
     try {
       return callback();
     } catch (error) {
-      if (error.name === 'TestingLibraryElementError') {
-        detectChanges();
-      }
+      setImmediate(() => detectChanges());
       throw error;
     }
   }, options);
@@ -347,8 +345,10 @@ async function waitForElementToBeRemovedWrapper<T>(
   }
 
   return await dtlWaitForElementToBeRemoved(() => {
+    const result = cb();
     detectChanges();
-    return cb();
+    setImmediate(() => detectChanges());
+    return result;
   }, options);
 }
 
