@@ -12,7 +12,7 @@ test('should scroll to load more items', async () => {
   expect(item0).toBeVisible();
 
   screen.getByTestId('scroll-viewport').scrollTop = 500;
-  await waitForElementToBeRemoved(() => screen.getByText(/Item #0/i));
+  await waitForElementToBeRemoved(() => screen.queryByText(/Item #0/i));
 
   const item12 = await screen.findByText(/Item #12/i);
   expect(item12).toBeVisible();

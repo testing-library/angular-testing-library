@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { timer } from 'rxjs';
-import { render, screen, fireEvent, waitFor as waitForATL } from '../src/public_api';
+import { render, screen, fireEvent, waitFor } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -24,7 +24,7 @@ test('waits for assertion to become true', async () => {
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await waitForATL(() => screen.getByText('Success'));
+  await waitFor(() => screen.getByText('Success'));
   screen.getByText('Success');
 });
 
@@ -33,7 +33,7 @@ test('allows to override options', async () => {
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await expect(waitForATL(() => screen.getByText('Success'), { timeout: 200 })).rejects.toThrow(
+  await expect(waitFor(() => screen.getByText('Success'), { timeout: 200 })).rejects.toThrow(
     /Unable to find an element with the text: Success/i,
   );
 });
