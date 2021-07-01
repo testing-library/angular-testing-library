@@ -303,16 +303,21 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
 }
 
 /**
- * Wrap waitFor to poke the Angular change detection cycle before invoking the callback
+ * Wrap waitFor to invoke the Angular change detection cycle before invoking the callback
  */
 async function waitForWrapper<T>(
   detectChanges: () => void,
   callback: () => T extends Promise<any> ? never : T,
   options?: dtlWaitForOptions,
 ): Promise<T> {
+  detectChanges();
   return await dtlWaitFor(() => {
-    detectChanges();
-    return callback();
+    try {
+      return callback();
+    } catch (error) {
+      setImmediate(() => detectChanges());
+      throw error;
+    }
   }, options);
 }
 
@@ -340,8 +345,10 @@ async function waitForElementToBeRemovedWrapper<T>(
   }
 
   return await dtlWaitForElementToBeRemoved(() => {
+    const result = cb();
     detectChanges();
-    return cb();
+    setImmediate(() => detectChanges());
+    return result;
   }, options);
 }
 
