@@ -40,13 +40,14 @@ it('provides a mock service', async () => {
 });
 
 // eslint-disable-next-line jest/expect-expect
-it('is possible to write a mock implementation', async (done) => {
+it('is possible to write a mock implementation', async () => {
   const { getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
 
   const service = TestBed.inject(FixtureService) as Mock<FixtureService>;
-  service.print.mockImplementation(() => done());
+  service.print = jest.fn();
 
   fireEvent.click(getByText('Print'));
+  expect(service.print).toHaveBeenCalled();
 });

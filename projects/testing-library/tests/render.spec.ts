@@ -126,28 +126,19 @@ describe('Angular component life-cycle hooks', () => {
   });
 });
 
-test('Waits for angular app initialization before rendering components', (done) => {
-  let resolve;
+test('Waits for angular app initialization before rendering components', async () => {
+  const mock = jest.fn();
 
-  const promise = new Promise((res) => {
-    resolve = res;
-  });
-
-  render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [
       {
         provide: APP_INITIALIZER,
-        useFactory: () => () => promise,
+        useFactory: () => mock,
         multi: true,
       },
     ],
-  })
-    .then(() => {
-      expect(TestBed.inject(ApplicationInitStatus).done).toEqual(true);
-      done();
-    })
-    .catch(done);
+  });
 
-  // Wait a bit so the test will fail if render completes without us resolving the promise
-  setTimeout(resolve, 1000);
+  expect(TestBed.inject(ApplicationInitStatus).done).toEqual(true);
+  expect(mock).toHaveBeenCalled();
 });
