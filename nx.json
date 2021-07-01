@@ -31,11 +31,19 @@
     "example-app-karma": {
       "tags": []
     },
-    "testing-library": {
-      "tags": []
-    },
     "jest-utils": {
       "tags": []
+    },
+    "testing-library": {
+      "tags": []
     }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }
