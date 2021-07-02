@@ -24,12 +24,12 @@ class FixtureComponent {
   }
 }
 
-it('mocks all functions', () => {
+test('mocks all functions', () => {
   const mock = createMock(FixtureService);
   expect(mock.print.mock).toBeDefined();
 });
 
-it('provides a mock service', async () => {
+test('provides a mock service', async () => {
   const { getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
@@ -39,7 +39,7 @@ it('provides a mock service', async () => {
   expect(service.print).toHaveBeenCalledTimes(1);
 });
 
-it('is possible to write a mock implementation', async () => {
+test('is possible to write a mock implementation', async () => {
   const { getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });

@@ -17,7 +17,7 @@ class BugOnChangeComponent implements OnChanges {
   }
 }
 
-it('should output formatted name after rendering', async () => {
+test('should output formatted name after rendering', async () => {
   const { getByText } = await render(BugOnChangeComponent, { componentProperties: { name: 'name' } });
 
   getByText('Hello NAME');

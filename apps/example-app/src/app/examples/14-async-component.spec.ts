@@ -1,4 +1,4 @@
-import { fakeAsync, flush, tick } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { render, screen, fireEvent } from '@testing-library/angular';
 
 import { AsyncComponent } from './14-async-component';
