@@ -25,7 +25,6 @@ practices.</p>
 
 <!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
-[![Code Coverage][coverage-badge]][coverage]
 [![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
@@ -275,10 +274,8 @@ Links:
 
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]: https://circleci.com/gh/testing-library/angular-testing-library/tree/main.svg?style=shield
-[build]: https://circleci.com/gh/testing-library/angular-testing-library/tree/main
-[coverage]: https://codecov.io/github/testing-library/angular-testing-library
-[coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/angular-testing-library.svg?style=flat-square
+[build-badge]: https://github.com/testing-library/angular-testing-library/actions/workflows/ci.yml/badge.svg
+[build]: https://github.com/testing-library/angular-testing-library/actions/workflows/ci.yml
 [version-badge]: https://img.shields.io/npm/v/@testing-library/angular.svg?style=flat-square
 [package]: https://www.npmjs.com/package/@testing-library/angular
 [downloads-badge]: https://img.shields.io/npm/dm/@testing-library/angular.svg?style=flat-square
