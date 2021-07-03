@@ -87,8 +87,7 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/example-app/jest.config.js",
-            "setupFile": "apps/example-app/src/test-setup.ts"
+            "jestConfig": "apps/example-app/jest.config.js"
           },
           "outputs": ["coverage/"]
         }
@@ -232,8 +231,7 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "projects/testing-library/jest.config.js",
-            "setupFile": "projects/testing-library/test-setup.ts"
+            "jestConfig": "projects/testing-library/jest.config.js"
           },
           "outputs": ["coverage/projects/testing-library"]
         }
@@ -284,8 +282,7 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "projects/jest-utils/jest.config.js",
-            "setupFile": "projects/jest-utils/test-setup.ts"
+            "jestConfig": "projects/jest-utils/jest.config.js"
           },
           "outputs": ["coverage/projects/jest-utils"]
         }
