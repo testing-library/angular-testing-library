@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ApplicationInitStatus,
 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationExtras, Router } from '@angular/router';
@@ -310,14 +310,21 @@ async function waitForWrapper<T>(
   callback: () => T extends Promise<any> ? never : T,
   options?: dtlWaitForOptions,
 ): Promise<T> {
+  let inFakeAsync = true;
+  try {
+    tick(0);
+  } catch (err) {
+    inFakeAsync = false;
+  }
+
   detectChanges();
+
   return await dtlWaitFor(() => {
-    try {
-      return callback();
-    } catch (error) {
-      setImmediate(() => detectChanges());
-      throw error;
+    setTimeout(() => detectChanges(), 0);
+    if (inFakeAsync) {
+      tick(0);
     }
+    return callback();
   }, options);
 }
 
@@ -345,10 +352,8 @@ async function waitForElementToBeRemovedWrapper<T>(
   }
 
   return await dtlWaitForElementToBeRemoved(() => {
-    const result = cb();
     detectChanges();
-    setImmediate(() => detectChanges());
-    return result;
+    return cb();
   }, options);
 }
 

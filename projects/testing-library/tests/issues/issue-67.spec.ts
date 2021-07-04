@@ -15,11 +15,11 @@ import { render } from '../../src/public_api';
 })
 class BugGetByLabelTextComponent {}
 
-it('first step to reproduce the bug: skip this test to avoid the error or remove the for attribute of label', async () => {
+test('first step to reproduce the bug: skip this test to avoid the error or remove the for attribute of label', async () => {
   expect(await render(BugGetByLabelTextComponent)).toBeDefined();
 });
 
-it('second step: bug happens :`(', async () => {
+test('second step: bug happens :`(', async () => {
   const { getByLabelText, getByTestId } = await render(BugGetByLabelTextComponent);
 
   const checkboxByTestId = getByTestId('checkbox');

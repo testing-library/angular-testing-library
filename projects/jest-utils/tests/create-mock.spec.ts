@@ -24,12 +24,12 @@ class FixtureComponent {
   }
 }
 
-it('mocks all functions', () => {
+test('mocks all functions', () => {
   const mock = createMock(FixtureService);
   expect(mock.print.mock).toBeDefined();
 });
 
-it('provides a mock service', async () => {
+test('provides a mock service', async () => {
   const { getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
@@ -39,14 +39,13 @@ it('provides a mock service', async () => {
   expect(service.print).toHaveBeenCalledTimes(1);
 });
 
-// eslint-disable-next-line jest/expect-expect
-it('is possible to write a mock implementation', async (done) => {
+test('is possible to write a mock implementation', async () => {
   const { getByText } = await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
 
   const service = TestBed.inject(FixtureService) as Mock<FixtureService>;
-  service.print.mockImplementation(() => done());
 
   fireEvent.click(getByText('Print'));
+  expect(service.print).toHaveBeenCalled();
 });

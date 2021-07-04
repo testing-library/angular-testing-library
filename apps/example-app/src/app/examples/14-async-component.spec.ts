@@ -14,3 +14,16 @@ test('can use fakeAsync utilities', fakeAsync(async () => {
   const hello = await screen.findByText('Hello world');
   expect(hello).toBeInTheDocument();
 }));
+
+test('can use fakeTimer utilities', async () => {
+  jest.useFakeTimers();
+  await render(AsyncComponent);
+
+  const load = await screen.findByRole('button', { name: /load/i });
+  fireEvent.click(load);
+
+  jest.advanceTimersByTime(10_000);
+
+  const hello = await screen.findByText('Hello world');
+  expect(hello).toBeInTheDocument();
+});

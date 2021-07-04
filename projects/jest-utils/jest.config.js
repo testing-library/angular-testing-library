@@ -5,4 +5,5 @@ module.exports = {
     color: 'magenta',
   },
   preset: '../../jest.preset.js',
+  setupFilesAfterEnv: ['<rootDir>/test-setup.ts'],
 };
