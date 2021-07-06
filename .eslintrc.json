@@ -103,13 +103,6 @@
       }
     },
     {
-      "files": ["*.spec.ts"],
-      "extends": ["plugin:jest/recommended"],
-      "rules": {
-        "jest/expect-expect": "off"
-      }
-    },
-    {
       "files": ["*.html"],
       "rules": {}
     },

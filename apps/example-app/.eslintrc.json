@@ -28,6 +28,23 @@
       }
     },
     {
+      "files": ["*.spec.ts"],
+      "env": {
+        "jest": true
+      },
+      "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "plugin:testing-library/angular",
+        "plugin:jest-dom/recommended"
+      ],
+      "rules": {
+        "testing-library/prefer-explicit-assert": "error",
+        "jest/consistent-test-it": ["error"],
+        "jest/expect-expect": "off"
+      }
+    },
+    {
       "files": ["*.html"],
       "extends": ["plugin:@nrwl/nx/angular-template"],
       "rules": {}
