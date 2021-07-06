@@ -352,8 +352,9 @@ async function waitForElementToBeRemovedWrapper<T>(
   }
 
   return await dtlWaitForElementToBeRemoved(() => {
+    const result = cb();
     detectChanges();
-    return cb();
+    return result;
   }, options);
 }
 
