@@ -7,7 +7,7 @@ it('https://github.com/testing-library/angular-testing-library/issues/222', asyn
     },
   });
 
-  screen.getByText('Hello Sarah');
+  expect(screen.getByText('Hello Sarah')).toBeTruthy();
   rerender({ name: 'Mark' });
-  screen.getByText('Hello Mark');
+  expect(screen.getByText('Hello Mark')).toBeTruthy();
 });
