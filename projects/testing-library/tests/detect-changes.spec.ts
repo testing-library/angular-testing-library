@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { delay } from 'rxjs/operators';
-import { render, fireEvent } from '../src/public_api';
+import { render, fireEvent, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -22,22 +22,22 @@ class FixtureComponent implements OnInit {
 
 describe('detectChanges', () => {
   it('does not recognize change if execution is delayed', async () => {
-    const { getByTestId } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+    await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
-    fireEvent.input(getByTestId('input'), {
+    fireEvent.input(screen.getByTestId('input'), {
       target: {
         value: 'What a great day!',
       },
     });
-    expect(getByTestId('button').innerHTML).toBe('Button');
+    expect(screen.getByTestId('button').innerHTML).toBe('Button');
   });
 
   it('exposes detectChanges triggering a change detection cycle', fakeAsync(async () => {
-    const { getByTestId, detectChanges } = await render(FixtureComponent, {
+    const { detectChanges } = await render(FixtureComponent, {
       imports: [ReactiveFormsModule],
     });
 
-    fireEvent.input(getByTestId('input'), {
+    fireEvent.input(screen.getByTestId('input'), {
       target: {
         value: 'What a great day!',
       },
@@ -46,19 +46,19 @@ describe('detectChanges', () => {
     tick(500);
     detectChanges();
 
-    expect(getByTestId('button').innerHTML).toBe('Button updated after 400ms');
+    expect(screen.getByTestId('button').innerHTML).toBe('Button updated after 400ms');
   }));
 
   it('does not throw on a destroyed fixture', async () => {
-    const { getByTestId, fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+    const { fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
     fixture.destroy();
 
-    fireEvent.input(getByTestId('input'), {
+    fireEvent.input(screen.getByTestId('input'), {
       target: {
         value: 'What a great day!',
       },
     });
-    expect(getByTestId('button').innerHTML).toBe('Button');
+    expect(screen.getByTestId('button').innerHTML).toBe('Button');
   });
 });

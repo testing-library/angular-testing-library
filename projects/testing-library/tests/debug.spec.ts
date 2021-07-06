@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { render } from '../src/public_api';
+import { render, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -14,6 +14,7 @@ test('debug', async () => {
   jest.spyOn(console, 'log').mockImplementation();
   const { debug } = await render(FixtureComponent);
 
+  // eslint-disable-next-line testing-library/no-debug
   debug();
 
   expect(console.log).toHaveBeenCalledWith(expect.stringContaining('rawr'));
@@ -22,9 +23,10 @@ test('debug', async () => {
 
 test('debug allows to be called with an element', async () => {
   jest.spyOn(console, 'log').mockImplementation();
-  const { debug, getByTestId } = await render(FixtureComponent);
-  const btn = getByTestId('btn');
+  const { debug } = await render(FixtureComponent);
+  const btn = screen.getByTestId('btn');
 
+  // eslint-disable-next-line testing-library/no-debug
   debug(btn);
 
   expect(console.log).not.toHaveBeenCalledWith(expect.stringContaining('rawr'));

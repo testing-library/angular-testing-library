@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent } from '../src/public_api';
+import { render, fireEvent, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -22,11 +22,11 @@ import { render, fireEvent } from '../src/public_api';
 class FixtureComponent {}
 
 test('creates queries and events', async () => {
-  const component = await render(FixtureComponent);
+  await render(FixtureComponent);
 
-  fireEvent.input(component.getByTestId('input'), { target: { value: 'a super awesome input' } });
-  component.getByDisplayValue('a super awesome input');
-  fireEvent.click(component.getByText('button'));
+  fireEvent.input(screen.getByTestId('input'), { target: { value: 'a super awesome input' } });
+  expect(screen.getByDisplayValue('a super awesome input')).toBeInTheDocument();
+  fireEvent.click(screen.getByText('button'));
 });
 
 describe('removeAngularAttributes', () => {
@@ -107,9 +107,9 @@ describe('Angular component life-cycle hooks', () => {
   it('will call ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };
-    const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
+    await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    component.getByText('Initial');
+    expect(screen.getByText('Initial')).toBeInTheDocument();
     expect(nameInitialized).toHaveBeenCalledWith('Initial');
   });
 
@@ -117,9 +117,10 @@ describe('Angular component life-cycle hooks', () => {
     const nameInitialized = jest.fn();
     const nameChanged = jest.fn();
     const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
-    const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    component.getByText('Sarah');
+    await render(FixtureWithNgOnChangesComponent, { componentProperties });
+
+    expect(screen.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
     // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);

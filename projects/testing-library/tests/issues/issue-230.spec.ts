@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { render, waitFor, screen } from '@testing-library/angular';
+import { render, waitFor, screen } from '../../src/public_api';
 
 @Component({
   template: ` <button [ngClass]="classes">Load</button> `,

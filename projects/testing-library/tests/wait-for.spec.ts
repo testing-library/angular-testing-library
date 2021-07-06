@@ -25,7 +25,7 @@ test('waits for assertion to become true', async () => {
   fireEvent.click(screen.getByTestId('button'));
 
   await screen.findByText('Success');
-  screen.getByText('Success');
+  expect(screen.getByText('Success')).toBeInTheDocument();
 });
 
 test('allows to override options', async () => {
