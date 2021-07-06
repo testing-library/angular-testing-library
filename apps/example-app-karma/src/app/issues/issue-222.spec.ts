@@ -9,5 +9,6 @@ it('https://github.com/testing-library/angular-testing-library/issues/222', asyn
 
   expect(screen.getByText('Hello Sarah')).toBeTruthy();
   rerender({ name: 'Mark' });
+
   expect(screen.getByText('Hello Mark')).toBeTruthy();
 });

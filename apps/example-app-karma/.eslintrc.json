@@ -28,6 +28,14 @@
       }
     },
     {
+      "files": ["*.spec.ts"],
+      "env": {
+        "jasmine": true
+      },
+      "plugins": ["jasmine"],
+      "extends": ["plugin:jasmine/recommended"]
+    },
+    {
       "files": ["*.html"],
       "extends": ["plugin:@nrwl/nx/angular-template"],
       "rules": {}
