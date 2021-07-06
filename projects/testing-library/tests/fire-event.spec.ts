@@ -8,9 +8,9 @@ import { render, fireEvent, screen } from '../src/public_api';
 class FixtureComponent {}
 
 test('does not call detect changes when fixture is destroyed', async () => {
-  const view = await render(FixtureComponent);
+  const { fixture } = await render(FixtureComponent);
 
-  view.fixture.destroy();
+  fixture.destroy();
 
   // should otherwise throw
   fireEvent.input(screen.getByTestId('input'), { target: { value: 'Bonjour' } });
