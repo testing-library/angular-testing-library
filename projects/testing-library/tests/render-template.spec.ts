@@ -120,7 +120,7 @@ test('overrides output properties', async () => {
 });
 
 describe('removeAngularAttributes', () => {
-  test('should remove angular attributes', async () => {
+  it('should remove angular attributes', async () => {
     await render('<div onOff (clicked)="clicked($event)"></div>', {
       declarations: [OnOffDirective],
       removeAngularAttributes: true,
@@ -130,7 +130,7 @@ describe('removeAngularAttributes', () => {
     expect(document.querySelector('[id]')).toBeNull();
   });
 
-  test('is disabled by default', async () => {
+  it('is disabled by default', async () => {
     await render('<div onOff (clicked)="clicked($event)"></div>', {
       declarations: [OnOffDirective],
     });

@@ -21,7 +21,7 @@ class FixtureComponent implements OnInit {
 }
 
 describe('detectChanges', () => {
-  test('does not recognize change if execution is delayed', async () => {
+  it('does not recognize change if execution is delayed', async () => {
     const { getByTestId } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
     fireEvent.input(getByTestId('input'), {
@@ -32,7 +32,7 @@ describe('detectChanges', () => {
     expect(getByTestId('button').innerHTML).toBe('Button');
   });
 
-  test('exposes detectChanges triggering a change detection cycle', fakeAsync(async () => {
+  it('exposes detectChanges triggering a change detection cycle', fakeAsync(async () => {
     const { getByTestId, detectChanges } = await render(FixtureComponent, {
       imports: [ReactiveFormsModule],
     });
@@ -49,7 +49,7 @@ describe('detectChanges', () => {
     expect(getByTestId('button').innerHTML).toBe('Button updated after 400ms');
   }));
 
-  test('does not throw on a destroyed fixture', async () => {
+  it('does not throw on a destroyed fixture', async () => {
     const { getByTestId, fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
 
     fixture.destroy();

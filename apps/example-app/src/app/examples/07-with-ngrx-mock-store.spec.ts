@@ -23,5 +23,5 @@ test('works with provideMockStore', async () => {
 
   fireEvent.click(screen.getByText(/seven/i));
 
-  expect(store.dispatch).toBeCalledWith({ type: '[Item List] send', item: 'Seven' });
+  expect(store.dispatch).toHaveBeenCalledWith({ type: '[Item List] send', item: 'Seven' });
 });

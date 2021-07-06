@@ -12,24 +12,24 @@ class FixtureComponent {
 }
 
 describe('screen', () => {
-  test('waits for element to be added to the DOM', async () => {
+  it('waits for element to be added to the DOM', async () => {
     await render(FixtureComponent);
     await expect(screen.findByText('I am visible')).resolves.toBeTruthy();
   });
 
-  test('rejects when something cannot be found', async () => {
+  it('rejects when something cannot be found', async () => {
     await render(FixtureComponent);
     await expect(screen.findByText('I am invisible', {}, { timeout: 40 })).rejects.toThrow('x');
   });
 });
 
 describe('rendered component', () => {
-  test('waits for element to be added to the DOM', async () => {
+  it('waits for element to be added to the DOM', async () => {
     const { findByText } = await render(FixtureComponent);
     await expect(findByText('I am visible')).resolves.toBeTruthy();
   });
 
-  test('rejects when something cannot be found', async () => {
+  it('rejects when something cannot be found', async () => {
     const { findByText } = await render(FixtureComponent);
     await expect(findByText('I am invisible', {}, { timeout: 40 })).rejects.toThrow('x');
   });

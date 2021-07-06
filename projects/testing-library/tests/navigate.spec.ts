@@ -19,7 +19,7 @@ test('should navigate correctly', async () => {
 
   navigate('details');
 
-  expect(navSpy).toBeCalledWith(['details']);
+  expect(navSpy).toHaveBeenCalledWith(['details']);
 });
 
 test('should pass queryParams if provided', async () => {
@@ -32,7 +32,7 @@ test('should pass queryParams if provided', async () => {
 
   navigate('details?sortBy=name&sortOrder=asc');
 
-  expect(navSpy).toBeCalledWith(['details'], {
+  expect(navSpy).toHaveBeenCalledWith(['details'], {
     queryParams: {
       sortBy: 'name',
       sortOrder: 'asc',

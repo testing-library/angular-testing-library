@@ -20,11 +20,11 @@ class FixtureComponent {
 test('waits for assertion to become true', async () => {
   await render(FixtureComponent);
 
-  expect(screen.queryByText('Success')).toBeNull();
+  expect(screen.queryByText('Success')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await waitFor(() => screen.getByText('Success'));
+  await screen.findByText('Success');
   screen.getByText('Success');
 });
 

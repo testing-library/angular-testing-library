@@ -29,7 +29,7 @@ test('renders the provided customers with manual mock', async () => {
   });
 
   const listItems = screen.getAllByRole('listitem');
-  expect(listItems.length).toBe(customers.length);
+  expect(listItems).toHaveLength(customers.length);
 
   customers.forEach((customer) => screen.getByText(new RegExp(customer.name, 'i')));
 });
@@ -59,7 +59,7 @@ test('renders the provided customers with createMock', async () => {
   });
 
   const listItems = screen.getAllByRole('listitem');
-  expect(listItems.length).toBe(customers.length);
+  expect(listItems).toHaveLength(customers.length);
 
   customers.forEach((customer) => screen.getByText(new RegExp(customer.name, 'i')));
 });

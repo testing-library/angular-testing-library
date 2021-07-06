@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { screen } from '@testing-library/dom';
+import { screen } from '@testing-library/angular';
 import { render } from '../src/public_api';
 
 @Component({
@@ -49,7 +49,7 @@ test('will call ngOnChanges on rerender', async () => {
   });
 
   component.getByText(name);
-  expect(nameChanged).toBeCalledWith(name, false);
+  expect(nameChanged).toHaveBeenCalledWith(name, false);
 });
 
 @Component({

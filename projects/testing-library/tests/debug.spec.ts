@@ -16,7 +16,7 @@ test('debug', async () => {
 
   debug();
 
-  expect(console.log).toBeCalledWith(expect.stringContaining('rawr'));
+  expect(console.log).toHaveBeenCalledWith(expect.stringContaining('rawr'));
   (<any>console.log).mockRestore();
 });
 
@@ -27,7 +27,7 @@ test('debug allows to be called with an element', async () => {
 
   debug(btn);
 
-  expect(console.log).not.toBeCalledWith(expect.stringContaining('rawr'));
-  expect(console.log).toBeCalledWith(expect.stringContaining(`I'm a button`));
+  expect(console.log).not.toHaveBeenCalledWith(expect.stringContaining('rawr'));
+  expect(console.log).toHaveBeenCalledWith(expect.stringContaining(`I'm a button`));
   (<any>console.log).mockRestore();
 });
