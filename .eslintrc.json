@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "testing-library"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -103,19 +103,19 @@
       }
     },
     {
-      "files": ["*.spec.ts"],
-      "extends": ["plugin:jest/recommended"],
-      "rules": {
-        "jest/expect-expect": "off"
-      }
-    },
-    {
       "files": ["*.html"],
       "rules": {}
     },
     {
       "files": ["*.ts", "*.js"],
       "extends": ["prettier"]
+    },
+    {
+      "files": ["*.spec.ts"],
+      "extends": ["plugin:testing-library/angular"],
+      "rules": {
+        "testing-library/prefer-explicit-assert": "error"
+      }
     }
   ]
 }

@@ -1,6 +1,6 @@
 // https://github.com/testing-library/angular-testing-library/issues/188
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { render } from '../../src/public_api';
+import { render, screen } from '../../src/public_api';
 
 @Component({
   template: `<h1>Hello {{ formattedName }}</h1>`,
@@ -18,7 +18,7 @@ class BugOnChangeComponent implements OnChanges {
 }
 
 test('should output formatted name after rendering', async () => {
-  const { getByText } = await render(BugOnChangeComponent, { componentProperties: { name: 'name' } });
+  await render(BugOnChangeComponent, { componentProperties: { name: 'name' } });
 
-  getByText('Hello NAME');
+  expect(screen.getByText('Hello NAME')).toBeInTheDocument();
 });

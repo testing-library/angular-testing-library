@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent } from '../src/public_api';
+import { render, fireEvent, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -22,15 +22,19 @@ import { render, fireEvent } from '../src/public_api';
 class FixtureComponent {}
 
 test('creates queries and events', async () => {
-  const component = await render(FixtureComponent);
+  const view = await render(FixtureComponent);
 
-  fireEvent.input(component.getByTestId('input'), { target: { value: 'a super awesome input' } });
-  component.getByDisplayValue('a super awesome input');
-  fireEvent.click(component.getByText('button'));
+  /// We wish to test the utility function from `render` here.
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  fireEvent.click(view.getByText('button'));
 });
 
 describe('removeAngularAttributes', () => {
-  test('should remove angular attribute', async () => {
+  it('should remove angular attribute', async () => {
     await render(FixtureComponent, {
       removeAngularAttributes: true,
     });
@@ -39,7 +43,7 @@ describe('removeAngularAttributes', () => {
     expect(document.querySelector('[id]')).toBeNull();
   });
 
-  test('is disabled by default', async () => {
+  it('is disabled by default', async () => {
     await render(FixtureComponent, {
       removeAngularAttributes: false,
     });
@@ -55,7 +59,7 @@ describe('animationModule', () => {
   })
   class FixtureModule {}
   describe('excludeComponentDeclaration', () => {
-    test('does not throw if component is declared in an imported module', async () => {
+    it('does not throw if component is declared in an imported module', async () => {
       await render(FixtureComponent, {
         imports: [FixtureModule],
         excludeComponentDeclaration: true,
@@ -63,13 +67,13 @@ describe('animationModule', () => {
     });
   });
 
-  test('adds NoopAnimationsModule by default', async () => {
+  it('adds NoopAnimationsModule by default', async () => {
     await render(FixtureComponent);
     const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
     expect(noopAnimationsModule).toBeDefined();
   });
 
-  test('does not add NoopAnimationsModule if BrowserAnimationsModule is an import', async () => {
+  it('does not add NoopAnimationsModule if BrowserAnimationsModule is an import', async () => {
     await render(FixtureComponent, {
       imports: [BrowserAnimationsModule],
     });
@@ -104,24 +108,29 @@ describe('Angular component life-cycle hooks', () => {
     }
   }
 
-  test('will call ngOnInit on initial render', async () => {
+  it('will call ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };
-    const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
+    const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    component.getByText('Initial');
-    expect(nameInitialized).toBeCalledWith('Initial');
+    /// We wish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByText('Initial')).toBeInTheDocument();
+    expect(nameInitialized).toHaveBeenCalledWith('Initial');
   });
 
-  test('will call ngOnChanges on initial render before ngOnInit', async () => {
+  it('will call ngOnChanges on initial render before ngOnInit', async () => {
     const nameInitialized = jest.fn();
     const nameChanged = jest.fn();
     const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
-    const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    component.getByText('Sarah');
-    expect(nameChanged).toBeCalledWith('Sarah', true);
-    // expect `nameChanged` to be called before `nameInitialized`
+    const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
+
+    /// We wish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByText('Sarah')).toBeInTheDocument();
+    expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
+    /// expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
   });
 });

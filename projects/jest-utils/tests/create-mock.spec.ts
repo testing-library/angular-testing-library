@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { fireEvent, render } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 
 import { createMock, provideMock, Mock } from '../src/public_api';
 
@@ -30,22 +30,22 @@ test('mocks all functions', () => {
 });
 
 test('provides a mock service', async () => {
-  const { getByText } = await render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
   const service = TestBed.inject(FixtureService);
 
-  fireEvent.click(getByText('Print'));
+  fireEvent.click(screen.getByText('Print'));
   expect(service.print).toHaveBeenCalledTimes(1);
 });
 
 test('is possible to write a mock implementation', async () => {
-  const { getByText } = await render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [provideMock(FixtureService)],
   });
 
   const service = TestBed.inject(FixtureService) as Mock<FixtureService>;
 
-  fireEvent.click(getByText('Print'));
+  fireEvent.click(screen.getByText('Print'));
   expect(service.print).toHaveBeenCalled();
 });

@@ -21,6 +21,7 @@ import { ComponentWithProviderComponent } from './examples/05-component-provider
 import { WithNgRxStoreComponent, reducer } from './examples/06-with-ngrx-store';
 import { WithNgRxMockStoreComponent } from './examples/07-with-ngrx-mock-store';
 import { MasterComponent, DetailComponent, HiddenDetailComponent } from './examples/09-router';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 function reducerItems() {
   return ['One', 'Two', 'Three'];
@@ -53,6 +54,7 @@ function reducerItems() {
     MatSidenavModule,
     MatToolbarModule,
     AppRoutingModule,
+    ScrollingModule,
     StoreModule.forRoot({
       value: reducer,
       items: reducerItems,

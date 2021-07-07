@@ -37,6 +37,7 @@ test('closes the dialog via the backdrop', async () => {
 
   // using fireEvent because of:
   // unable to click element as it has or inherits pointer-events set to "none"
+  // eslint-disable-next-line testing-library/no-node-access
   fireEvent.click(document.querySelector('.cdk-overlay-backdrop'));
 
   await waitForElementToBeRemoved(() => screen.getByRole('dialog'));

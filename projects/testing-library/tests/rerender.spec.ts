@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { screen } from '@testing-library/dom';
-import { render } from '../src/public_api';
+import { render, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -11,15 +10,13 @@ class FixtureComponent {
 }
 
 test('will rerender the component with updated props', async () => {
-  const component = await render(FixtureComponent);
-  component.getByText('Sarah');
+  const { rerender } = await render(FixtureComponent);
+  expect(screen.getByText('Sarah')).toBeInTheDocument();
 
   const name = 'Mark';
-  component.rerender({
-    name,
-  });
+  rerender({ name });
 
-  component.getByText(name);
+  expect(screen.getByText(name)).toBeInTheDocument();
 });
 
 @Component({
@@ -40,16 +37,14 @@ class FixtureWithNgOnChangesComponent implements OnChanges {
 test('will call ngOnChanges on rerender', async () => {
   const nameChanged = jest.fn();
   const componentProperties = { nameChanged };
-  const component = await render(FixtureWithNgOnChangesComponent, { componentProperties });
-  component.getByText('Sarah');
+  const { rerender } = await render(FixtureWithNgOnChangesComponent, { componentProperties });
+  expect(screen.getByText('Sarah')).toBeInTheDocument();
 
   const name = 'Mark';
-  component.rerender({
-    name,
-  });
+  rerender({ name });
 
-  component.getByText(name);
-  expect(nameChanged).toBeCalledWith(name, false);
+  expect(screen.getByText(name)).toBeInTheDocument();
+  expect(nameChanged).toHaveBeenCalledWith(name, false);
 });
 
 @Component({

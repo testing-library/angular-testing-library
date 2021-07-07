@@ -20,12 +20,12 @@ class FixtureComponent {
 test('waits for assertion to become true', async () => {
   await render(FixtureComponent);
 
-  expect(screen.queryByText('Success')).toBeNull();
+  expect(screen.queryByText('Success')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await waitFor(() => screen.getByText('Success'));
-  screen.getByText('Success');
+  await screen.findByText('Success');
+  expect(screen.getByText('Success')).toBeInTheDocument();
 });
 
 test('allows to override options', async () => {
