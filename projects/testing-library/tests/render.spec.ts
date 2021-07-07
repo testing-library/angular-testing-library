@@ -22,11 +22,15 @@ import { render, fireEvent, screen } from '../src/public_api';
 class FixtureComponent {}
 
 test('creates queries and events', async () => {
-  await render(FixtureComponent);
+  const view = await render(FixtureComponent);
 
-  fireEvent.input(screen.getByTestId('input'), { target: { value: 'a super awesome input' } });
-  expect(screen.getByDisplayValue('a super awesome input')).toBeInTheDocument();
-  fireEvent.click(screen.getByText('button'));
+  /// We whish to test the utility function from `render` here.
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  fireEvent.click(view.getByText('button'));
 });
 
 describe('removeAngularAttributes', () => {
@@ -107,9 +111,11 @@ describe('Angular component life-cycle hooks', () => {
   it('will call ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };
-    await render(FixtureWithNgOnChangesComponent, { componentProperties });
+    const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    expect(screen.getByText('Initial')).toBeInTheDocument();
+    /// We whish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByText('Initial')).toBeInTheDocument();
     expect(nameInitialized).toHaveBeenCalledWith('Initial');
   });
 
@@ -118,11 +124,13 @@ describe('Angular component life-cycle hooks', () => {
     const nameChanged = jest.fn();
     const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
 
-    await render(FixtureWithNgOnChangesComponent, { componentProperties });
+    const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    expect(screen.getByText('Sarah')).toBeInTheDocument();
+    /// We whish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
-    // expect `nameChanged` to be called before `nameInitialized`
+    /// expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
   });
 });
