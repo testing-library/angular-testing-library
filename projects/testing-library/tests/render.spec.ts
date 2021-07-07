@@ -24,7 +24,7 @@ class FixtureComponent {}
 test('creates queries and events', async () => {
   const view = await render(FixtureComponent);
 
-  /// We whish to test the utility function from `render` here.
+  /// We wish to test the utility function from `render` here.
   // eslint-disable-next-line testing-library/prefer-screen-queries
   fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
   // eslint-disable-next-line testing-library/prefer-screen-queries
@@ -113,7 +113,7 @@ describe('Angular component life-cycle hooks', () => {
     const componentProperties = { nameInitialized };
     const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    /// We whish to test the utility function from `render` here.
+    /// We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     expect(view.getByText('Initial')).toBeInTheDocument();
     expect(nameInitialized).toHaveBeenCalledWith('Initial');
@@ -126,7 +126,7 @@ describe('Angular component life-cycle hooks', () => {
 
     const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    /// We whish to test the utility function from `render` here.
+    /// We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     expect(view.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
