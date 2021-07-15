@@ -1,5 +1,5 @@
 {
-  "extends": ["../../.eslintrc.json"],
+  "extends": "../../.eslintrc.json",
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
@@ -25,8 +25,18 @@
             "style": "kebab-case"
           }
         ]
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "env": {
+        "jest": true
       },
-      "plugins": ["@angular-eslint/eslint-plugin", "@typescript-eslint"]
+      "extends": ["plugin:jest/recommended", "plugin:jest/style", "plugin:jest-dom/recommended"],
+      "rules": {
+        "jest/consistent-test-it": ["error"],
+        "jest/expect-expect": "off"
+      }
     },
     {
       "files": ["*.html"],

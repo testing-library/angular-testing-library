@@ -6,7 +6,7 @@
     height="80"
     width="80"
     alt="hedgehog"
-    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/master/other/hedgehog.png"
+    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/hedgehog.png"
   />
 </a>
 
@@ -25,7 +25,6 @@ practices.</p>
 
 <!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
-[![Code Coverage][coverage-badge]][coverage]
 [![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
@@ -43,7 +42,7 @@ practices.</p>
     <img
       width="500"
       alt="TestingJavaScript.com Learn the smart, efficient way to test any JavaScript application."
-      src="https://raw.githubusercontent.com/testing-library/react-testing-library/master/other/testingjavascript.jpg"
+      src="https://raw.githubusercontent.com/testing-library/react-testing-library/main/other/testingjavascript.jpg"
     />
   </a>
 </div>
@@ -139,7 +138,7 @@ describe('Counter', () => {
 });
 ```
 
-[See more examples](https://github.com/testing-library/angular-testing-library/tree/master/apps/example-app/src/app/examples)
+[See more examples](https://github.com/testing-library/angular-testing-library/tree/main/apps/example-app/src/app/examples)
 
 ## Installation
 
@@ -211,6 +210,11 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/the-ult"><img src="https://avatars.githubusercontent.com/u/4863062?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Arjen</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=the-ult" title="Code">💻</a></td>
     <td align="center"><a href="https://lacolaco.net"><img src="https://avatars.githubusercontent.com/u/1529180?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Suguru Inatomi</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=lacolaco" title="Code">💻</a> <a href="#ideas-lacolaco" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/amitmiran137"><img src="https://avatars.githubusercontent.com/u/47772523?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Miran</b></sub></a><br /><a href="#infra-amitmiran137" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://github.com/jwillebrands"><img src="https://avatars.githubusercontent.com/u/8925?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jan-Willem Willebrands</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=jwillebrands" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.sandroroth.com"><img src="https://avatars.githubusercontent.com/u/16229645?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sandro</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=rothsandro" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/issues?q=author%3Arothsandro" title="Bug reports">🐛</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
@@ -270,10 +274,8 @@ Links:
 
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master.svg?style=shield
-[build]: https://circleci.com/gh/testing-library/angular-testing-library/tree/master
-[coverage]: https://codecov.io/github/testing-library/angular-testing-library
-[coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/angular-testing-library.svg?style=flat-square
+[build-badge]: https://github.com/testing-library/angular-testing-library/actions/workflows/ci.yml/badge.svg
+[build]: https://github.com/testing-library/angular-testing-library/actions/workflows/ci.yml
 [version-badge]: https://img.shields.io/npm/v/@testing-library/angular.svg?style=flat-square
 [package]: https://www.npmjs.com/package/@testing-library/angular
 [downloads-badge]: https://img.shields.io/npm/dm/@testing-library/angular.svg?style=flat-square
@@ -281,12 +283,12 @@ Links:
 [discord-badge]: https://img.shields.io/discord/723559267868737556.svg?color=7389D8&labelColor=6A7EC2&logo=discord&logoColor=ffffff&style=flat-square
 [discord]: https://discord.gg/testing-library
 [license-badge]: https://img.shields.io/npm/l/@testing-library/angular.svg?style=flat-square
-[license]: https://github.com/testing-library/angular-testing-library/blob/master/LICENSE
+[license]: https://github.com/testing-library/angular-testing-library/blob/main/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
 [donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/testing-library/angular-testing-library/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/testing-library/angular-testing-library/blob/main/CODE_OF_CONDUCT.md
 [github-watch-badge]: https://img.shields.io/github/watchers/testing-library/angular-testing-library.svg?style=social
 [github-watch]: https://github.com/testing-library/angular-testing-library/watchers
 [github-star-badge]: https://img.shields.io/github/stars/testing-library/angular-testing-library.svg?style=social

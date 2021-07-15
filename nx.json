@@ -10,7 +10,7 @@
     "nx.json": "*"
   },
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "npmScope": "testing-library",
   "tasksRunnerOptions": {
@@ -26,6 +26,9 @@
   },
   "projects": {
     "example-app": {
+      "tags": []
+    },
+    "example-app-karma": {
       "tags": []
     },
     "testing-library": {

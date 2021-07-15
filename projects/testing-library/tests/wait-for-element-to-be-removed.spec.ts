@@ -3,7 +3,7 @@ import { render, screen, waitForElementToBeRemoved } from '../src/public_api';
 import { timer } from 'rxjs';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: ` <div *ngIf="visible" data-testid="im-here">👋</div> `,
 })
 class FixtureComponent implements OnInit {
@@ -18,7 +18,7 @@ test('waits for element to be removed (callback)', async () => {
 
   await waitForElementToBeRemoved(() => screen.getByTestId('im-here'));
 
-  expect(screen.queryByTestId('im-here')).toBeNull();
+  expect(screen.queryByTestId('im-here')).not.toBeInTheDocument();
 });
 
 test('waits for element to be removed (element)', async () => {
@@ -26,7 +26,7 @@ test('waits for element to be removed (element)', async () => {
 
   await waitForElementToBeRemoved(screen.getByTestId('im-here'));
 
-  expect(screen.queryByTestId('im-here')).toBeNull();
+  expect(screen.queryByTestId('im-here')).not.toBeInTheDocument();
 });
 
 test('allows to override options', async () => {

@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Component } from '@angular/core';
-import { render } from '../../src/public_api';
+import { render, screen } from '../../src/public_api';
 
 test('shows the service value', async () => {
-  const { getByText } = await render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [Service],
   });
 
-  getByText('foo');
+  expect(screen.getByText('foo')).toBeInTheDocument();
 });
 
 test('shows the service value with template syntax', async () => {
-  const { getByText } = await render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [Service],
   });
 
-  getByText('foo');
+  expect(screen.getByText('foo')).toBeInTheDocument();
 });
 
 test('shows the provided service value', async () => {
-  const { getByText } = await render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [
       {
         provide: Service,
@@ -32,11 +32,11 @@ test('shows the provided service value', async () => {
     ],
   });
 
-  getByText('bar');
+  expect(screen.getByText('bar')).toBeInTheDocument();
 });
 
 test('shows the provided service value with template syntax', async () => {
-  const { getByText } = await render(FixtureComponent, {
+  await render(FixtureComponent, {
     providers: [
       {
         provide: Service,
@@ -49,20 +49,20 @@ test('shows the provided service value with template syntax', async () => {
     ],
   });
 
-  getByText('bar');
+  expect(screen.getByText('bar')).toBeInTheDocument();
 });
 
 @Injectable()
-export class Service {
+class Service {
   foo() {
     return 'foo';
   }
 }
 
 @Component({
-  selector: 'fixture-component',
+  selector: 'atl-fixture',
   template: '{{service.foo()}}',
 })
-export class FixtureComponent {
+class FixtureComponent {
   constructor(public service: Service) {}
 }

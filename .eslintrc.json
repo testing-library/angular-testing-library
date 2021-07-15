@@ -1,13 +1,10 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "testing-library"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "parserOptions": {
-        "project": ["/tsconfig.*?.json"]
-      },
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -49,10 +46,10 @@
         ],
         "@typescript-eslint/no-unused-expressions": "error",
         "@typescript-eslint/prefer-function-type": "error",
-        "@typescript-eslint/quotes": ["error", "single"],
+        "@typescript-eslint/quotes": "off",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/no-explicit-any": "off",
-        "arrow-body-style": "error",
+        "arrow-body-style": "off",
         "brace-style": ["error", "1tbs"],
         "curly": "error",
         "eol-last": "error",
@@ -106,15 +103,19 @@
       }
     },
     {
+      "files": ["*.html"],
+      "rules": {}
+    },
+    {
+      "files": ["*.ts", "*.js"],
+      "extends": ["prettier"]
+    },
+    {
       "files": ["*.spec.ts"],
-      "extends": ["plugin:testing-library/angular", "plugin:jest-dom/recommended"],
+      "extends": ["plugin:testing-library/angular"],
       "rules": {
         "testing-library/prefer-explicit-assert": "error"
       }
-    },
-    {
-      "files": ["*.html"],
-      "rules": {}
     }
   ]
 }

@@ -207,6 +207,34 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "amitmiran137",
+      "name": "Amit Miran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47772523?v=4",
+      "profile": "https://github.com/amitmiran137",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "jwillebrands",
+      "name": "Jan-Willem Willebrands",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8925?v=4",
+      "profile": "https://github.com/jwillebrands",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rothsandro",
+      "name": "Sandro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16229645?v=4",
+      "profile": "https://www.sandroroth.com",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

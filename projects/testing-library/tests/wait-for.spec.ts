@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { timer } from 'rxjs';
-import { render, screen, fireEvent, waitFor as waitForATL } from '../src/public_api';
+import { render, screen, fireEvent, waitFor } from '../src/public_api';
 
 @Component({
-  selector: 'fixture',
+  selector: 'atl-fixture',
   template: `
     <button data-testid="button" (click)="load()">Load</button>
     <div>{{ result }}</div>
@@ -20,12 +20,12 @@ class FixtureComponent {
 test('waits for assertion to become true', async () => {
   await render(FixtureComponent);
 
-  expect(screen.queryByText('Success')).toBeNull();
+  expect(screen.queryByText('Success')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await waitForATL(() => screen.getByText('Success'));
-  screen.getByText('Success');
+  await screen.findByText('Success');
+  expect(screen.getByText('Success')).toBeInTheDocument();
 });
 
 test('allows to override options', async () => {
@@ -33,7 +33,7 @@ test('allows to override options', async () => {
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await expect(waitForATL(() => screen.getByText('Success'), { timeout: 200 })).rejects.toThrow(
+  await expect(waitFor(() => screen.getByText('Success'), { timeout: 200 })).rejects.toThrow(
     /Unable to find an element with the text: Success/i,
   );
 });

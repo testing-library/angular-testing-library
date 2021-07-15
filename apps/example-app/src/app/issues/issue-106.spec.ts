@@ -6,7 +6,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/angular';
   template: `<button (click)="toggleShow()" data-testid="toggle">toggle</button>
     <div *ngIf="show$ | async" data-testid="getme">Here I am</div>`,
 })
-export class TestSelectComponent {
+class TestSelectComponent {
   showSubj = new BehaviorSubject(false);
   show$ = this.showSubj.asObservable();
 
@@ -15,7 +15,7 @@ export class TestSelectComponent {
   }
 }
 
-it('https://github.com/testing-library/angular-testing-library/issues/106', async () => {
+test('https://github.com/testing-library/angular-testing-library/issues/106', async () => {
   await render(TestSelectComponent);
   const toggle = screen.getByTestId('toggle');
   const hiddenText = screen.queryByTestId('getme');
@@ -30,7 +30,7 @@ it('https://github.com/testing-library/angular-testing-library/issues/106', asyn
   await waitFor(() => expect(screen.queryByTestId('getme')).toBeInTheDocument());
 });
 
-it('better https://github.com/testing-library/angular-testing-library/issues/106', async () => {
+test('better https://github.com/testing-library/angular-testing-library/issues/106', async () => {
   await render(TestSelectComponent);
   const toggle = screen.getByTestId('toggle');
   const hiddenText = screen.queryByTestId('getme');

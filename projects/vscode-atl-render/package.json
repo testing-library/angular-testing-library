@@ -1,0 +1,47 @@
+{
+  "name": "vscode-atl-render",
+  "displayName": "Angular Testing Library Render Highlighting",
+  "description": "HTML highlighting in ATL the render method",
+  "version": "0.0.3",
+  "icon": "other/hedgehog.png",
+  "publisher": "timdeschryver",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/testing-library/angular-testing-library.git"
+  },
+  "homepage": "https://github.com/testing-library/angular-testing-library/blob/main/README.md",
+  "engines": {
+    "vscode": "^1.57.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "configuration": [
+      {
+        "id": "atl-render",
+        "title": "Angular Testing Library Render",
+        "properties": {
+          "atl-render.format.enabled": {
+            "type": "boolean",
+            "description": "Enable/disable formatting of render template strings.",
+            "default": true
+          }
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "atl.render",
+        "path": "./syntaxes/atl-render.json",
+        "injectTo": [
+          "source.ts"
+        ],
+        "embeddedLanguages": {
+          "text.html": "html"
+        }
+      }
+    ]
+  }
+}

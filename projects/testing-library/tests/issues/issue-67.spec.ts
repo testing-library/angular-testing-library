@@ -1,6 +1,6 @@
 // https://github.com/testing-library/angular-testing-library/issues/67
 import { Component } from '@angular/core';
-import { render } from '../../src/public_api';
+import { render, screen } from '../../src/public_api';
 
 @Component({
   template: `
@@ -13,17 +13,17 @@ import { render } from '../../src/public_api';
     </div>
   `,
 })
-export class BugGetByLabelTextComponent {}
+class BugGetByLabelTextComponent {}
 
-it('first step to reproduce the bug: skip this test to avoid the error or remove the for attribute of label', async () => {
+test('first step to reproduce the bug: skip this test to avoid the error or remove the for attribute of label', async () => {
   expect(await render(BugGetByLabelTextComponent)).toBeDefined();
 });
 
-it('second step: bug happens :`(', async () => {
-  const { getByLabelText, getByTestId } = await render(BugGetByLabelTextComponent);
+test('second step: bug happens :`(', async () => {
+  await render(BugGetByLabelTextComponent);
 
-  const checkboxByTestId = getByTestId('checkbox');
-  const checkboxByLabelTest = getByLabelText('TEST');
+  const checkboxByTestId = screen.getByTestId('checkbox');
+  const checkboxByLabelTest = screen.getByLabelText('TEST');
 
   expect(checkboxByTestId).toBe(checkboxByLabelTest);
 });

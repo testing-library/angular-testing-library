@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "../../dist/@testing-library/angular/schematics/ng-add",
+    "removeComments": true,
+    "skipLibCheck": true,
+    "sourceMap": false
+  },
+  "include": ["schematics/**/*.ts"]
+}

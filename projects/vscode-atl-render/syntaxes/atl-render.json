@@ -1,0 +1,62 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "atl.render",
+  "injectionSelector": "L:source.ts -comment",
+  "name": "atl.render",
+  "patterns": [
+    {
+      "include": "#renderMethod"
+    }
+  ],
+  "repository": {
+    "renderMethod": {
+      "name": "renderMethod",
+      "begin": "(?x)(\\b(?:\\w+\\.)*(?:render)\\s*)(\\()",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.ts"
+        },
+        "2": {
+          "name": "meta.brace.round.ts"
+        }
+      },
+      "end": "(\\))",
+      "endCaptures": {
+        "0": {
+          "name": "meta.brace.round.ts"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#renderTemplate"
+        },
+        {
+          "include": "source.ts"
+        }
+      ]
+    },
+    "renderTemplate": {
+      "contentName": "text.html",
+      "begin": "[`|'|\"]",
+      "beginCaptures": {
+        "0": {
+          "name": "string"
+        }
+      },
+      "end": "\\0",
+      "endCaptures": {
+        "0": {
+          "name": "string"
+        }
+      },
+      "patterns": [
+        {
+          "include": "text.html.derivative"
+        },
+        {
+          "include": "template.ng"
+        }
+      ]
+    }
+  }
+}

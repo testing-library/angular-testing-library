@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ApplicationInitStatus,
 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationExtras, Router } from '@angular/router';
@@ -59,7 +59,7 @@ export async function render<SutType, WrapperType = SutType>(
     providers = [],
     schemas = [],
     queries,
-    template,
+    template = undefined,
     wrapper = WrapperComponent,
     componentProperties = {},
     componentProviders = [],
@@ -242,6 +242,10 @@ function setComponentProperties<SutType>(
     Object.defineProperty(fixture.componentInstance, key, {
       get: descriptor?.get || defaultGetter,
       set: extendedSetter,
+      // Allow the property to be defined again later.
+      // This happens when the component properties are updated after initial render.
+      // For Jest this is `true` by default, for Karma and a real browser the default is `false`
+      configurable: true,
     });
 
     descriptor?.set?.call(fixture.componentInstance, _value);
@@ -299,15 +303,27 @@ function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, '
 }
 
 /**
- * Wrap waitFor to poke the Angular change detection cycle before invoking the callback
+ * Wrap waitFor to invoke the Angular change detection cycle before invoking the callback
  */
 async function waitForWrapper<T>(
   detectChanges: () => void,
   callback: () => T extends Promise<any> ? never : T,
   options?: dtlWaitForOptions,
 ): Promise<T> {
+  let inFakeAsync = true;
+  try {
+    tick(0);
+  } catch (err) {
+    inFakeAsync = false;
+  }
+
+  detectChanges();
+
   return await dtlWaitFor(() => {
-    detectChanges();
+    setTimeout(() => detectChanges(), 0);
+    if (inFakeAsync) {
+      tick(0);
+    }
     return callback();
   }, options);
 }
@@ -336,8 +352,9 @@ async function waitForElementToBeRemovedWrapper<T>(
   }
 
   return await dtlWaitForElementToBeRemoved(() => {
+    const result = cb();
     detectChanges();
-    return cb();
+    return result;
   }, options);
 }
 
@@ -352,12 +369,19 @@ function cleanupAtFixture(fixture) {
   mountedFixtures.delete(fixture);
 }
 
-if (typeof afterEach === 'function' && !process.env.ATL_SKIP_AUTO_CLEANUP) {
-  afterEach(async () => {
-    cleanup();
-  });
+// if we're running in a test runner that supports afterEach
+// then we'll automatically run cleanup afterEach test
+// this ensures that tests run in isolation from each other
+// if you don't like this, set the ATL_SKIP_AUTO_CLEANUP env variable to 'true'
+if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
+  if (typeof afterEach === 'function') {
+    afterEach(() => {
+      cleanup();
+    });
+  }
 }
 
+// TODO: rename to `atl-wrapper-component`
 // eslint-disable-next-line @angular-eslint/component-selector
 @Component({ selector: 'wrapper-component', template: '' })
 class WrapperComponent {}
@@ -370,7 +394,7 @@ function replaceFindWithFindAndDetectChanges<T>(originalQueriesForContainer: T):
     const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
     if (key.startsWith('find') && getByQuery) {
       newQueries[key] = async (text, options, waitOptions) => {
-        // original implementation at https://github.com/testing-library/dom-testing-library/blob/master/src/query-helpers.js
+        // original implementation at https://github.com/testing-library/dom-testing-library/blob/main/src/query-helpers.js
         const result = await waitForWrapper(
           detectChangesForMountedFixtures,
           () => getByQuery(text, options),
