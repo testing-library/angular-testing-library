@@ -45,3 +45,10 @@ export function provideMock<T>(type: Type<T>): Provider {
     useValue: createMock(type),
   };
 }
+
+export function provideMockWithValues<T, K extends keyof T>(type: Type<T>, values: Partial<Record<K, T[K]>>): Provider {
+  return {
+    provide: type,
+    useValue: createMockWithValues(type, values),
+  };
+}
