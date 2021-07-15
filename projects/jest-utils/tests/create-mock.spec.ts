@@ -2,13 +2,17 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { fireEvent, render, screen } from '@testing-library/angular';
 
-import { createMock, provideMock, Mock } from '../src/public_api';
+import { createMock, provideMock, provideMockWithValues, Mock } from '../src/public_api';
 
 class FixtureService {
   constructor(private foo: string, public bar: string) {}
 
   print() {
     console.log(this.foo, this.bar);
+  }
+
+  concat() {
+    return this.foo + this.bar;
   }
 }
 
@@ -37,6 +41,23 @@ test('provides a mock service', async () => {
 
   fireEvent.click(screen.getByText('Print'));
   expect(service.print).toHaveBeenCalledTimes(1);
+});
+
+test('provides a mock service with values', async () => {
+  await render(FixtureComponent, {
+    providers: [provideMockWithValues(FixtureService, {
+      bar: 'value',
+      concat: jest.fn(() => 'a concatenated value')
+    })],
+  });
+
+  const service = TestBed.inject(FixtureService);
+
+  fireEvent.click(screen.getByText('Print'));
+
+  expect(service.bar).toEqual('value');
+  expect(service.concat()).toEqual('a concatenated value');
+  expect(service.print).toHaveBeenCalled();
 });
 
 test('is possible to write a mock implementation', async () => {
