@@ -363,6 +363,8 @@ function cleanup() {
 }
 
 function cleanupAtFixture(fixture) {
+  fixture.destroy();
+
   if (!fixture.nativeElement.getAttribute('ng-version') && fixture.nativeElement.parentNode === document.body) {
     document.body.removeChild(fixture.nativeElement);
   }
