@@ -2,6 +2,11 @@
 import 'zone.js/dist/zone-testing';
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import JasmineDOM from '@testing-library/jasmine-dom/dist';
+
+beforeAll(() => {
+  jasmine.getEnv().addMatchers(JasmineDOM);
+});
 
 declare const require: any;
 
