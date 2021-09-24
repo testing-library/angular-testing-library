@@ -5,7 +5,7 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import JasmineDOM from '@testing-library/jasmine-dom/dist';
 
 beforeAll(() => {
-  (jasmine.getEnv() as jasmine.Env).addMatchers(JasmineDOM);
+  (jasmine.getEnv() as any).addMatchers(JasmineDOM);
 });
 
 declare const require: any;
