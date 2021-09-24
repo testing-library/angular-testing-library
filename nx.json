@@ -31,10 +31,10 @@
     "example-app-karma": {
       "tags": []
     },
-    "testing-library": {
+    "jest-utils": {
       "tags": []
     },
-    "jest-utils": {
+    "testing-library": {
       "tags": []
     }
   }
