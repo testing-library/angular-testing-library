@@ -93,53 +93,30 @@ export async function render<SutType, WrapperType = SutType>(
     schemas: [...schemas],
   });
 
-  if (componentProviders) {
-    componentProviders
-      .reduce((acc, provider) => acc.concat(provider), [])
-      .forEach((p) => {
-        const { provide, ...provider } = p;
-        TestBed.overrideProvider(provide, provider);
-      });
-  }
-
-  const fixture = await createComponentFixture(sut, { template, wrapper });
-  setComponentProperties(fixture, { componentProperties });
-
-  if (removeAngularAttributes) {
-    fixture.nativeElement.removeAttribute('ng-version');
-    const idAttribute = fixture.nativeElement.getAttribute('id');
-    if (idAttribute && idAttribute.startsWith('root')) {
-      fixture.nativeElement.removeAttribute('id');
-    }
-  }
-
-  mountedFixtures.add(fixture);
-
   await TestBed.compileComponents();
 
-  let isAlive = true;
-  fixture.componentRef.onDestroy(() => (isAlive = false));
+  componentProviders
+    .reduce((acc, provider) => acc.concat(provider), [])
+    .forEach((p) => {
+      const { provide, ...provider } = p;
+      TestBed.overrideProvider(provide, provider);
+    });
 
-  function detectChanges() {
-    if (isAlive) {
-      fixture.detectChanges();
-    }
-  }
+  const componentContainer = createComponentFixture(sut, { template, wrapper });
 
-  // Call ngOnChanges on initial render
-  if (hasOnChangesHook(fixture.componentInstance)) {
-    const changes = getChangesObj(null, componentProperties);
-    fixture.componentInstance.ngOnChanges(changes);
-  }
+  let fixture: ComponentFixture<SutType>;
+  let detectChanges: () => void;
 
-  if (detectChangesOnRender) {
-    detectChanges();
-  }
+  await renderFixture(componentProperties);
 
-  const rerender = (rerenderedProperties: Partial<SutType>) => {
-    const changes = getChangesObj(fixture.componentInstance, rerenderedProperties);
+  const rerender = async (rerenderedProperties: Partial<SutType>) => {
+    await renderFixture(rerenderedProperties);
+  };
 
-    setComponentProperties(fixture, { componentProperties: rerenderedProperties });
+  const change = (changedProperties: Partial<SutType>) => {
+    const changes = getChangesObj(fixture.componentInstance, changedProperties);
+
+    setComponentProperties(fixture, { componentProperties: changedProperties });
 
     if (hasOnChangesHook(fixture.componentInstance)) {
       fixture.componentInstance.ngOnChanges(changes);
@@ -188,9 +165,10 @@ export async function render<SutType, WrapperType = SutType>(
 
   return {
     fixture,
-    detectChanges,
+    detectChanges: () => detectChanges(),
     navigate,
     rerender,
+    change,
     debugElement: typeof sut === 'string' ? fixture.debugElement : fixture.debugElement.query(By.directive(sut)),
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement, maxLength, options) =>
@@ -199,6 +177,42 @@ export async function render<SutType, WrapperType = SutType>(
         : console.log(dtlPrettyDOM(element, maxLength, options)),
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
+
+  async function renderFixture(properties: Partial<SutType>) {
+    if (fixture) {
+      cleanupAtFixture(fixture);
+    }
+
+    fixture = await createComponent(componentContainer);
+    setComponentProperties(fixture, { componentProperties: properties });
+
+    if (removeAngularAttributes) {
+      fixture.nativeElement.removeAttribute('ng-version');
+      const idAttribute = fixture.nativeElement.getAttribute('id');
+      if (idAttribute && idAttribute.startsWith('root')) {
+        fixture.nativeElement.removeAttribute('id');
+      }
+    }
+    mountedFixtures.add(fixture);
+
+    let isAlive = true;
+    fixture.componentRef.onDestroy(() => (isAlive = false));
+
+    if (hasOnChangesHook(fixture.componentInstance)) {
+      const changes = getChangesObj(null, componentProperties);
+      fixture.componentInstance.ngOnChanges(changes);
+    }
+
+    detectChanges = () => {
+      if (isAlive) {
+        fixture.detectChanges();
+      }
+    };
+
+    if (detectChangesOnRender) {
+      detectChanges();
+    }
+  }
 }
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
@@ -207,19 +221,19 @@ async function createComponent<SutType>(component: Type<SutType>): Promise<Compo
   return TestBed.createComponent(component);
 }
 
-async function createComponentFixture<SutType>(
+function createComponentFixture<SutType>(
   sut: Type<SutType> | string,
   { template, wrapper }: Pick<RenderDirectiveOptions<any>, 'template' | 'wrapper'>,
-): Promise<ComponentFixture<SutType>> {
+): Type<any> {
   if (typeof sut === 'string') {
     TestBed.overrideTemplate(wrapper, sut);
-    return createComponent(wrapper);
+    return wrapper;
   }
   if (template) {
     TestBed.overrideTemplate(wrapper, template);
-    return createComponent(wrapper);
+    return wrapper;
   }
-  return createComponent(sut);
+  return sut;
 }
 
 function setComponentProperties<SutType>(

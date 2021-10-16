@@ -56,7 +56,13 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
    * @description
    * Re-render the same component with different props.
    */
-  rerender: (componentProperties: Partial<ComponentType>) => void;
+  rerender: (rerenderedProperties: Partial<ComponentType>) => void;
+
+  /**
+   * @description
+   * Re-render the component while invoking ngOnChanges.
+   */
+  change: (changedProperties: Partial<ComponentType>) => void;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
