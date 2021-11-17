@@ -19,8 +19,12 @@ import {
   waitFor as dtlWaitFor,
   waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
   screen as dtlScreen,
+  within as dtlWithin,
   waitForOptions as dtlWaitForOptions,
   configure as dtlConfigure,
+  Queries,
+  getQueriesForElement,
+  queries as dtlQueries,
 } from '@testing-library/dom';
 import { RenderComponentOptions, RenderDirectiveOptions, RenderTemplateOptions, RenderResult } from './models';
 import { getConfig } from './config';
@@ -433,6 +437,18 @@ function detectChangesForMountedFixtures() {
 const screen = replaceFindWithFindAndDetectChanges(dtlScreen);
 
 /**
+ * Re-export within with patched queries
+ */
+
+const within: typeof getQueriesForElement = <T extends Queries = typeof dtlQueries>(
+  element: HTMLElement,
+  queriesToBind?: T,
+) => {
+  const container = dtlWithin(element, queriesToBind);
+  return replaceFindWithFindAndDetectChanges(container);
+};
+
+/**
  * Re-export waitFor with patched waitFor
  */
 async function waitFor<T>(callback: () => T extends Promise<any> ? never : T, options?: dtlWaitForOptions): Promise<T> {
@@ -516,8 +532,7 @@ export {
   queryAllByAttribute,
   queryByAttribute,
   queryHelpers,
-  within,
 } from '@testing-library/dom';
 
 // export patched dtl
-export { screen, waitFor, waitForElementToBeRemoved };
+export { screen, waitFor, waitForElementToBeRemoved, within };

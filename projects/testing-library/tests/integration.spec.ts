@@ -84,7 +84,7 @@ const entities = [
   },
 ];
 
-it('renders the table', async () => {
+test('renders the table', async () => {
   jest.useFakeTimers();
 
   await render(EntitiesComponent, {
@@ -125,10 +125,11 @@ it('renders the table', async () => {
   const row = await screen.findByRole('row', {
     name: /Entity 2/i,
   });
+
   userEvent.click(
     await within(row).findByRole('button', {
       name: /edit/i,
     }),
   );
-  waitFor(() => expect(modalMock.open).toHaveBeenCalledWith('edit entity', 'Entity 2'));
+  await waitFor(() => expect(modalMock.open).toHaveBeenCalledWith('edit entity', 'Entity 2'));
 });
