@@ -7,6 +7,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/example-app-karma",
         "index": "apps/example-app-karma/src/index.html",
@@ -15,13 +16,7 @@
         "tsConfig": "apps/example-app-karma/tsconfig.app.json",
         "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
         "styles": [],
-        "scripts": [],
-        "vendorChunk": true,
-        "extractLicenses": false,
-        "buildOptimizer": false,
-        "sourceMap": true,
-        "optimization": false,
-        "namedChunks": true
+        "scripts": []
       },
       "configurations": {
         "production": {
@@ -37,27 +32,30 @@
               "with": "apps/example-app-karma/src/environments/environment.prod.ts"
             }
           ],
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false,
-          "buildOptimizer": true
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
         }
       },
-      "outputs": ["{options.outputPath}"]
+      "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
-      "options": {
-        "browserTarget": "example-app-karma:build"
-      },
       "configurations": {
         "production": {
           "browserTarget": "example-app-karma:build:production"
+        },
+        "development": {
+          "browserTarget": "example-app-karma:build:development"
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
@@ -65,8 +63,6 @@
         "lintFilePatterns": [
           "apps/example-app-karma/**/*.ts",
           "apps/example-app-karma/**/*.html",
-          "apps/example-app-karma/src/**/*.html",
-          "apps/example-app-karma/src/**/*.html",
           "apps/example-app-karma/src/**/*.html"
         ]
       },
@@ -78,10 +74,7 @@
         "main": "apps/example-app-karma/src/test.ts",
         "tsConfig": "apps/example-app-karma/tsconfig.spec.json",
         "polyfills": "apps/example-app-karma/src/polyfills.ts",
-        "karmaConfig": "apps/example-app-karma/karma.conf.js",
-        "styles": [],
-        "scripts": [],
-        "assets": []
+        "karmaConfig": "apps/example-app-karma/karma.conf.js"
       }
     }
   },

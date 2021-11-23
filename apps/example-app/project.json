@@ -7,6 +7,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/example-app",
         "index": "apps/example-app/src/index.html",
@@ -15,13 +16,7 @@
         "tsConfig": "apps/example-app/tsconfig.app.json",
         "assets": ["apps/example-app/src/favicon.ico", "apps/example-app/src/assets"],
         "styles": ["apps/example-app/src/styles.css"],
-        "scripts": [],
-        "vendorChunk": true,
-        "extractLicenses": false,
-        "buildOptimizer": false,
-        "sourceMap": true,
-        "optimization": false,
-        "namedChunks": true
+        "scripts": []
       },
       "configurations": {
         "production": {
@@ -37,27 +32,30 @@
               "with": "apps/example-app/src/environments/environment.prod.ts"
             }
           ],
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false,
-          "buildOptimizer": true
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
         }
       },
-      "outputs": ["{options.outputPath}"]
+      "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
-      "options": {
-        "browserTarget": "example-app:build"
-      },
       "configurations": {
         "production": {
           "browserTarget": "example-app:build:production"
+        },
+        "development": {
+          "browserTarget": "example-app:build:development"
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
