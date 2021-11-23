@@ -79,9 +79,12 @@ export class MaterialFormsComponent {
                 return `${formKey} must be greater than ${error.min}`;
               case 'max':
                 return `${formKey} must be lesser than ${error.max}`;
+              default:
+                return `${formKey} is invalid`;
             }
           });
         }
+        return [];
       })
       .reduce((errors, value) => errors.concat(value), [])
       .filter(Boolean);

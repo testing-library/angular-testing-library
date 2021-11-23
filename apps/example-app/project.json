@@ -1,0 +1,82 @@
+{
+  "projectType": "application",
+  "root": "apps/example-app",
+  "sourceRoot": "apps/example-app/src",
+  "prefix": "app",
+  "generators": {},
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/example-app",
+        "index": "apps/example-app/src/index.html",
+        "main": "apps/example-app/src/main.ts",
+        "polyfills": "apps/example-app/src/polyfills.ts",
+        "tsConfig": "apps/example-app/tsconfig.app.json",
+        "assets": ["apps/example-app/src/favicon.ico", "apps/example-app/src/assets"],
+        "styles": ["apps/example-app/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "6kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/example-app/src/environments/environment.ts",
+              "with": "apps/example-app/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "example-app:build:production"
+        },
+        "development": {
+          "browserTarget": "example-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "example-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/example-app/**/*.ts", "apps/example-app/**/*.html", "apps/example-app/src/**/*.html"]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/example-app/jest.config.js"
+      },
+      "outputs": ["coverage/"]
+    }
+  },
+  "tags": []
+}

@@ -35,6 +35,8 @@ CHANGELOG.md
 !.vscode/extensions.json
 
 # misc
+.cache
+.angular
 /.sass-cache
 /connect.lock
 /coverage

@@ -1,0 +1,60 @@
+{
+  "projectType": "library",
+  "root": "projects/testing-library",
+  "sourceRoot": "projects/testing-library/src",
+  "prefix": "lib",
+  "targets": {
+    "build-package": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/@testing-library/angular"],
+      "options": {
+        "project": "projects/testing-library/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/testing-library/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "projects/testing-library/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "projects/testing-library/**/*.ts",
+          "projects/testing-library/**/*.html",
+          "projects/testing-library/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx run testing-library:build-package"
+          },
+          {
+            "command": "npm run build:schematics"
+          },
+          {
+            "command": "cpy ./README.md ./dist/@testing-library/angular"
+          }
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "projects/testing-library/jest.config.js"
+      },
+      "outputs": ["coverage/projects/testing-library"]
+    }
+  },
+  "tags": []
+}
