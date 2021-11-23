@@ -20,22 +20,13 @@
         "accessToken": "M2Q4YjlkNjMtMzY1NC00ZjkwLTk1ZjgtZjg5Y2VkMzFjM2FifHJlYWQtd3JpdGU=",
         "cacheableOperations": ["build", "test", "lint", "e2e"],
         "canTrackAnalytics": false,
-        "showUsageWarnings": true
+        "showUsageWarnings": true,
+        "parallel": 1
       }
     }
   },
-  "projects": {
-    "example-app": {
-      "tags": []
-    },
-    "example-app-karma": {
-      "tags": []
-    },
-    "jest-utils": {
-      "tags": []
-    },
-    "testing-library": {
-      "tags": []
-    }
-  }
+  "cli": {
+    "analytics": false
+  },
+  "defaultProject": "example-app"
 }

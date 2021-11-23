@@ -1,9 +1,5 @@
 {
   "version": 1,
-  "cli": {
-    "analytics": false
-  },
-  "defaultProject": "example-app",
   "projects": {
     "example-app": {
       "projectType": "application",
@@ -92,7 +88,8 @@
           },
           "outputs": ["coverage/"]
         }
-      }
+      },
+      "tags": []
     },
     "example-app-karma": {
       "projectType": "application",
@@ -180,7 +177,8 @@
             "assets": []
           }
         }
-      }
+      },
+      "tags": []
     },
     "jest-utils": {
       "root": "projects/jest-utils",
@@ -232,7 +230,8 @@
           },
           "outputs": ["coverage/projects/jest-utils"]
         }
-      }
+      },
+      "tags": []
     },
     "testing-library": {
       "root": "projects/testing-library",
@@ -290,7 +289,8 @@
           },
           "outputs": ["coverage/projects/testing-library"]
         }
-      }
+      },
+      "tags": []
     }
   }
 }

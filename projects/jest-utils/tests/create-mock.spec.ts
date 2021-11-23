@@ -45,10 +45,12 @@ test('provides a mock service', async () => {
 
 test('provides a mock service with values', async () => {
   await render(FixtureComponent, {
-    providers: [provideMockWithValues(FixtureService, {
-      bar: 'value',
-      concat: jest.fn(() => 'a concatenated value')
-    })],
+    providers: [
+      provideMockWithValues(FixtureService, {
+        bar: 'value',
+        concat: jest.fn(() => 'a concatenated value'),
+      }),
+    ],
   });
 
   const service = TestBed.inject(FixtureService);
