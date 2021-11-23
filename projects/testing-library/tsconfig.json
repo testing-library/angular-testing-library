@@ -13,9 +13,7 @@
       "path": "./tsconfig.spec.json"
     }
   ],
-  "compilerOptions": {
-    "strict": false
-  },
+  "compilerOptions": {},
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

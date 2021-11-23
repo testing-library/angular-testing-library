@@ -1,21 +1,24 @@
 {
+  "projectType": "library",
   "root": "projects/jest-utils",
   "sourceRoot": "projects/jest-utils/src",
-  "projectType": "library",
   "prefix": "lib",
   "targets": {
     "build-package": {
-      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/@testing-library/angular/jest-utils"],
       "options": {
-        "tsConfig": "projects/jest-utils/tsconfig.lib.json",
         "project": "projects/jest-utils/ng-package.json"
       },
       "configurations": {
         "production": {
-          "project": "projects/jest-utils/ng-package.json",
+          "tsConfig": "projects/jest-utils/tsconfig.lib.prod.json"
+        },
+        "development": {
           "tsConfig": "projects/jest-utils/tsconfig.lib.json"
         }
-      }
+      },
+      "defaultConfiguration": "production"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",

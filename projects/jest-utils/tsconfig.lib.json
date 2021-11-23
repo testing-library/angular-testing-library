@@ -3,13 +3,9 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
     "declaration": true,
-    "declarationMap": false,
+    "declarationMap": true,
     "inlineSources": true,
     "types": ["jest"]
-  },
-  "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": true
   },
   "exclude": ["src/test.ts", "**/*.spec.ts", "**/*.test.ts"]
 }
