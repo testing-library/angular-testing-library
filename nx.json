@@ -1,21 +1,26 @@
 {
   "npmScope": "testing-library",
+  "affected": {
+    "defaultBase": "main"
+  },
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "projects"
   },
+  "cli": {
+    "analytics": false,
+    "cache": {
+      "enabled": true,
+      "path": "./.cache/angular",
+      "environment": "all"
+    }
+  },
   "implicitDependencies": {
-    "angular.json": "*",
     "package.json": {
       "dependencies": "*",
       "devDependencies": "*"
     },
-    "tsconfig.base.json": "*",
-    ".eslintrc.json": "*",
-    "nx.json": "*"
-  },
-  "affected": {
-    "defaultBase": "main"
+    ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
@@ -25,17 +30,17 @@
         "cacheableOperations": ["build", "test", "lint", "e2e"],
         "canTrackAnalytics": false,
         "showUsageWarnings": true,
-        "parallel": 1
+        "parallel": 3
       }
     }
   },
-  "cli": {
-    "analytics": false,
-    "cache": {
-      "enabled": true,
-      "path": "./.cache/angular",
-      "environment": "all"
-    }
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   },
   "generators": {
     "@nrlw/workspace:library": {
