@@ -23,8 +23,6 @@
         "lintFilePatterns": [
           "projects/testing-library/**/*.ts",
           "projects/testing-library/**/*.html",
-          "projects/testing-library/src/**/*.html",
-          "projects/testing-library/src/**/*.html",
           "projects/testing-library/src/**/*.html"
         ]
       },
