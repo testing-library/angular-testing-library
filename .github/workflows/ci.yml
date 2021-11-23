@@ -4,14 +4,15 @@ on:
   push:
     branches:
       - 'main'
+      - 'beta'
   pull_request: {}
 
 jobs:
   build_test_release:
     strategy:
       matrix:
-        node-version: ${{ fromJSON(github.ref == 'refs/heads/main' && '[16]' || '[12,14,16]') }}
-        os: ${{ fromJSON(github.ref == 'refs/heads/main' && '["ubuntu-latest"]' || '["ubuntu-latest", "windows-latest"]') }}
+        node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[16]' || '[12,14,16]') }}
+        os: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '["ubuntu-latest"]' || '["ubuntu-latest", "windows-latest"]') }}
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -27,7 +28,7 @@ jobs:
       - name: test
         run: npm run test
       - name: Release
-        if: github.repository == 'testing-library/angular-testing-library' && github.ref == 'refs/heads/main'
+        if: github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta')
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
