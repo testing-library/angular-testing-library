@@ -68,13 +68,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/example-app/**/*.ts",
-          "apps/example-app/**/*.html",
-          "apps/example-app/src/**/*.html",
-          "apps/example-app/src/**/*.html",
-          "apps/example-app/src/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/example-app/**/*.ts", "apps/example-app/**/*.html", "apps/example-app/src/**/*.html"]
       },
       "outputs": ["{options.outputFile}"]
     },
