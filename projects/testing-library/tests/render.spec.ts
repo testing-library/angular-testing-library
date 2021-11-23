@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen } from '../src/public_api';
+import { render, fireEvent } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',

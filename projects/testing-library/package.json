@@ -29,11 +29,11 @@
     "migrations": "./schematics/migrations/migration.json"
   },
   "peerDependencies": {
-    "@angular/common": ">= 10.0.0",
-    "@angular/platform-browser": ">= 10.0.0",
-    "@angular/animations": ">= 10.0.0",
-    "@angular/router": ">= 10.0.0",
-    "@angular/core": ">= 10.0.0"
+    "@angular/common": ">= 13.0.0",
+    "@angular/platform-browser": ">= 13.0.0",
+    "@angular/animations": ">= 13.0.0",
+    "@angular/router": ">= 13.0.0",
+    "@angular/core": ">= 13.0.0"
   },
   "dependencies": {
     "@testing-library/dom": "^8.0.0",

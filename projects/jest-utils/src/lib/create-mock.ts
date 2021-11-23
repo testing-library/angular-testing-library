@@ -16,7 +16,7 @@ export function createMock<T>(type: Type<T>): Mock<T> {
       }
 
       const descriptor = Object.getOwnPropertyDescriptor(proto, prop);
-      if (typeof descriptor.value === 'function') {
+      if (typeof descriptor?.value === 'function') {
         mock[prop] = jest.fn();
       }
     }
