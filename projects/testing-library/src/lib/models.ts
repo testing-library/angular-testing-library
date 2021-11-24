@@ -54,13 +54,14 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   navigate: (elementOrPath: Element | string, basePath?: string) => Promise<boolean>;
   /**
    * @description
-   * Re-render the same component with different props.
+   * Re-render the same component with different properties.
+   * This creates a new instance of the component.
    */
   rerender: (rerenderedProperties: Partial<ComponentType>) => void;
 
   /**
    * @description
-   * Re-render the component while invoking ngOnChanges.
+   * Keeps the current fixture intact and invokes ngOnChanges with the updated properties.
    */
   change: (changedProperties: Partial<ComponentType>) => void;
 }
