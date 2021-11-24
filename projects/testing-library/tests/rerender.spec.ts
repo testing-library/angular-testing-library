@@ -1,66 +1,40 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { render, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
-  template: ` {{ name }} `,
+  template: ` {{ firstName }} {{ lastName }} `,
 })
 class FixtureComponent {
-  @Input() name = 'Sarah';
+  @Input() firstName = 'Sarah';
+  @Input() lastName;
 }
 
-test('will rerender the component with updated props', async () => {
+test('rerenders the component with updated props', async () => {
   const { rerender } = await render(FixtureComponent);
   expect(screen.getByText('Sarah')).toBeInTheDocument();
 
-  const name = 'Mark';
-  rerender({ name });
+  const firstName = 'Mark';
+  await rerender({ firstName });
 
-  expect(screen.getByText(name)).toBeInTheDocument();
+  expect(screen.getByText(firstName)).toBeInTheDocument();
 });
 
-@Component({
-  selector: 'atl-fixture',
-  template: ` {{ name }} `,
-})
-class FixtureWithNgOnChangesComponent implements OnChanges {
-  @Input() name = 'Sarah';
-  @Input() nameChanged: (name: string, isFirstChange: boolean) => void;
+test('rerenders the component with updated props and resets other props', async () => {
+  const firstName = 'Mark';
+  const lastName = 'Peeters';
+  const { rerender } = await render(FixtureComponent, {
+    componentProperties: {
+      firstName,
+      lastName,
+    },
+  });
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.name && this.nameChanged) {
-      this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
-    }
-  }
-}
+  expect(screen.getByText(`${firstName} ${lastName}`)).toBeInTheDocument();
 
-test('will call ngOnChanges on rerender', async () => {
-  const nameChanged = jest.fn();
-  const componentProperties = { nameChanged };
-  const { rerender } = await render(FixtureWithNgOnChangesComponent, { componentProperties });
-  expect(screen.getByText('Sarah')).toBeInTheDocument();
+  const firstName2 = 'Chris';
+  rerender({ firstName: firstName2 });
 
-  const name = 'Mark';
-  rerender({ name });
-
-  expect(screen.getByText(name)).toBeInTheDocument();
-  expect(nameChanged).toHaveBeenCalledWith(name, false);
-});
-
-@Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'atl-fixture',
-  template: ` <div data-testid="number" [class.active]="activeField === 'number'">Number</div> `,
-})
-class FixtureWithOnPushComponent {
-  @Input() activeField: string;
-}
-
-test('update properties on rerender', async () => {
-  const { rerender } = await render(FixtureWithOnPushComponent);
-  const numberHtmlElementRef = screen.queryByTestId('number');
-
-  expect(numberHtmlElementRef).not.toHaveClass('active');
-  rerender({ activeField: 'number' });
-  expect(numberHtmlElementRef).toHaveClass('active');
+  expect(screen.queryByText(`${firstName2} ${lastName}`)).not.toBeInTheDocument();
+  expect(screen.queryByText(firstName2)).not.toBeInTheDocument();
 });
