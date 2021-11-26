@@ -217,6 +217,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/michaelwestphal"><img src="https://avatars.githubusercontent.com/u/1829174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Michael Westphal</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=michaelwestphal" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=michaelwestphal" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/Lukas-Kullmann"><img src="https://avatars.githubusercontent.com/u/387547?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lukas</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=Lukas-Kullmann" title="Code">💻</a></td>
     <td align="center"><a href="https://matan.io"><img src="https://avatars.githubusercontent.com/u/12711091?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matan Borenkraout</b></sub></a><br /><a href="#maintenance-MatanBobi" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/mleimer"><img src="https://avatars.githubusercontent.com/u/14271564?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mleimer</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=mleimer" title="Documentation">📖</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=mleimer" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
