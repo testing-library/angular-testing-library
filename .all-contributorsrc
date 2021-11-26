@@ -264,6 +264,16 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "mleimer",
+      "name": "mleimer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14271564?v=4",
+      "profile": "https://github.com/mleimer",
+      "contributions": [
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
