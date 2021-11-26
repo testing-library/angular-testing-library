@@ -7,8 +7,8 @@ test('it is possible to test ng-content without selector', async () => {
   const projection = 'it should be showed into a p element!';
 
   TestBed.overrideComponent(CellComponent, { set: { selector: 'cell' } });
-  await render(CellComponent, {
-    template: `<cell data-testid="one-cell-with-ng-content">${projection}</cell>`,
+  await render(`<cell data-testid="one-cell-with-ng-content">${projection}</cell>`, {
+    declarations: [CellComponent],
   });
 
   expect(screen.getByText(projection)).toBeInTheDocument();

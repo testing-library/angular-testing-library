@@ -26,7 +26,7 @@ import {
   getQueriesForElement,
   queries as dtlQueries,
 } from '@testing-library/dom';
-import { RenderComponentOptions, RenderDirectiveOptions, RenderTemplateOptions, RenderResult } from './models';
+import { RenderComponentOptions, RenderTemplateOptions, RenderResult } from './models';
 import { getConfig } from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
@@ -36,13 +36,6 @@ export async function render<ComponentType>(
   component: Type<ComponentType>,
   renderOptions?: RenderComponentOptions<ComponentType>,
 ): Promise<RenderResult<ComponentType, ComponentType>>;
-/**
- * @deprecated Use `render(template, { declarations: [DirectiveType] })` instead.
- */
-export async function render<DirectiveType, WrapperType = WrapperComponent>(
-  component: Type<DirectiveType>,
-  renderOptions?: RenderDirectiveOptions<WrapperType>,
-): Promise<RenderResult<WrapperType>>;
 export async function render<WrapperType = WrapperComponent>(
   template: string,
   renderOptions?: RenderTemplateOptions<WrapperType>,
@@ -50,10 +43,7 @@ export async function render<WrapperType = WrapperComponent>(
 
 export async function render<SutType, WrapperType = SutType>(
   sut: Type<SutType> | string,
-  renderOptions:
-    | RenderComponentOptions<SutType>
-    | RenderDirectiveOptions<WrapperType>
-    | RenderTemplateOptions<WrapperType> = {},
+  renderOptions: RenderComponentOptions<SutType> | RenderTemplateOptions<WrapperType> = {},
 ): Promise<RenderResult<SutType>> {
   const { dom: domConfig, ...globalConfig } = getConfig();
   const {
@@ -86,7 +76,6 @@ export async function render<SutType, WrapperType = SutType>(
     declarations: addAutoDeclarations(sut, {
       declarations,
       excludeComponentDeclaration,
-      template,
       wrapper,
     }),
     imports: addAutoImports({
@@ -106,7 +95,7 @@ export async function render<SutType, WrapperType = SutType>(
       TestBed.overrideProvider(provide, provider);
     });
 
-  const componentContainer = createComponentFixture(sut, { template, wrapper });
+  const componentContainer = createComponentFixture(sut, { wrapper });
 
   let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
@@ -227,14 +216,10 @@ async function createComponent<SutType>(component: Type<SutType>): Promise<Compo
 
 function createComponentFixture<SutType>(
   sut: Type<SutType> | string,
-  { template, wrapper }: Pick<RenderDirectiveOptions<any>, 'template' | 'wrapper'>,
+  { wrapper }: Pick<RenderTemplateOptions<SutType>, 'wrapper'>,
 ): Type<any> {
   if (typeof sut === 'string') {
     TestBed.overrideTemplate(wrapper, sut);
-    return wrapper;
-  }
-  if (template) {
-    TestBed.overrideTemplate(wrapper, template);
     return wrapper;
   }
   return sut;
@@ -242,7 +227,7 @@ function createComponentFixture<SutType>(
 
 function setComponentProperties<SutType>(
   fixture: ComponentFixture<SutType>,
-  { componentProperties = {} }: Pick<RenderDirectiveOptions<SutType, any>, 'componentProperties'>,
+  { componentProperties = {} }: Pick<RenderTemplateOptions<SutType, any>, 'componentProperties'>,
 ) {
   for (const key of Object.keys(componentProperties)) {
     const descriptor: PropertyDescriptor = Object.getOwnPropertyDescriptor(
@@ -293,19 +278,15 @@ function addAutoDeclarations<SutType>(
   {
     declarations,
     excludeComponentDeclaration,
-    template,
     wrapper,
-  }: Pick<RenderDirectiveOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'template' | 'wrapper'>,
+  }: Pick<RenderTemplateOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'wrapper'>,
 ) {
   if (typeof sut === 'string') {
     return [...declarations, wrapper];
   }
 
-  const wrappers = () => (template ? [wrapper] : []);
-
   const components = () => (excludeComponentDeclaration ? [] : [sut]);
-
-  return [...declarations, ...wrappers(), ...components()];
+  return [...declarations, ...components()];
 }
 
 function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>) {

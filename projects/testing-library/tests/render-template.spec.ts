@@ -62,15 +62,6 @@ test('the component renders', async () => {
   expect(screen.getByText('Hello Angular!')).toBeInTheDocument();
 });
 
-test('the directive renders (compatibility with the deprecated signature)', async () => {
-  const view = await render(OnOffDirective, {
-    template: '<div onOff></div>',
-  });
-
-  // eslint-disable-next-line testing-library/no-container
-  expect(view.container.querySelector('[onoff]')).toBeInTheDocument();
-});
-
 test('uses the default props', async () => {
   await render('<div onOff></div>', {
     declarations: [OnOffDirective],
