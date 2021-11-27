@@ -388,9 +388,7 @@ if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
   }
 }
 
-// TODO: rename to `atl-wrapper-component`
-// eslint-disable-next-line @angular-eslint/component-selector
-@Component({ selector: 'wrapper-component', template: '' })
+@Component({ selector: 'atl-wrapper-component', template: '' })
 class WrapperComponent {}
 
 /**
