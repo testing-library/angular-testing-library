@@ -130,8 +130,14 @@ export async function render<SutType, WrapperType = SutType>(
     const queryParams = params
       ? params.split('&').reduce((qp, q) => {
           const [key, value] = q.split('=');
-          // TODO(Breaking): group same keys qp[key] ? [...qp[key], value] : value
-          qp[key] = value;
+          const currentValue = qp[key];
+          if (typeof currentValue === 'undefined') {
+            qp[key] = value;
+          } else if (Array.isArray(currentValue)) {
+            qp[key] = [...currentValue, value];
+          } else {
+            qp[key] = [currentValue, value];
+          }
           return qp;
         }, {})
       : undefined;
