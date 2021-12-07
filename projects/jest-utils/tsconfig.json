@@ -7,14 +7,12 @@
       "path": "./tsconfig.lib.json"
     },
     {
-      "path": "./tsconfig.lib.prod.json"
-    },
-    {
       "path": "./tsconfig.spec.json"
     }
   ],
   "compilerOptions": {},
   "angularCompilerOptions": {
+    "compilationMode": "partial",
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
