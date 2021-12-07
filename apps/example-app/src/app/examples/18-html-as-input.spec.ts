@@ -13,7 +13,20 @@ class StripHTMLPipe implements PipeTransform {
 const STRING_WITH_HTML =
   'Some <em>database</em> <b>field</b> <div><span>with <strong>stripped</strong> HTML</span></div>';
 
-test('should strip the HTML from a string', async () => {
+// https://github.com/testing-library/angular-testing-library/pull/271
+test('passes HTML as component properties', async () => {
+  await render(`<p>{{ stringWithHtml | stripHTML }}</p>`, {
+    componentProperties: {
+      stringWithHtml: STRING_WITH_HTML,
+    },
+    declarations: [StripHTMLPipe],
+  });
+
+  expect(screen.getByText('Some database field with stripped HTML')).toBeInTheDocument();
+});
+
+
+test('throws when passed HTML is passed in directly', async () => {
   await expect(() =>
     render(`<p data-testid="test"> {{ '${STRING_WITH_HTML}' | stripHTML }} </p>`, {
       declarations: [StripHTMLPipe],
@@ -21,14 +34,3 @@ test('should strip the HTML from a string', async () => {
   ).rejects.toThrow();
 });
 
-test('workaround should strip the HTML from a string', async () => {
-  await render(`<p data-testid="test">{{ stringWithHtml | stripHTML }}</p>`, {
-    componentProperties: {
-      stringWithHtml: STRING_WITH_HTML,
-    },
-    declarations: [StripHTMLPipe],
-  });
-
-  const testControl = screen.getByTestId('test');
-  expect(testControl).toHaveTextContent('Some database field with stripped HTML');
-});
