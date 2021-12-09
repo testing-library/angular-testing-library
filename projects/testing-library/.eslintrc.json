@@ -4,11 +4,18 @@
   "overrides": [
     {
       "files": ["*.ts"],
+      "rules": {
+        "@typescript-eslint/ban-ts-comment": "off"
+      }
+    },
+    {
+      "files": ["*.ts"],
       "extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
       "parserOptions": {
         "project": ["projects/testing-library/tsconfig.*?.json"]
       },
       "rules": {
+        "@typescript-eslint/ban-ts-comment": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
