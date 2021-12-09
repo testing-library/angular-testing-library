@@ -6,9 +6,9 @@ import { render, screen } from '../../src/public_api';
   template: `<h1>Hello {{ formattedName }}</h1>`,
 })
 class BugOnChangeComponent implements OnChanges {
-  @Input() name: string;
+  @Input() name?: string;
 
-  formattedName: string;
+  formattedName?: string;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.name) {

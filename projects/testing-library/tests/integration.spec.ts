@@ -36,7 +36,9 @@ class EntitiesComponent {
   query = new BehaviorSubject<string>('');
   readonly entities = this.query.pipe(
     debounceTime(DEBOUNCE_TIME),
-    switchMap((q) => this.entitiesService.fetchAll().pipe(map((ent) => ent.filter((e) => e.name.includes(q))))),
+    switchMap((q) =>
+      this.entitiesService.fetchAll().pipe(map((ent: any) => ent.filter((e: any) => e.name.includes(q)))),
+    ),
     startWith(entities),
   );
 
@@ -65,7 +67,7 @@ class EntitiesComponent {
   `,
 })
 class TableComponent {
-  @Input() entities: any[];
+  @Input() entities: any[] = [];
   @Output() edit = new EventEmitter<string>();
 }
 

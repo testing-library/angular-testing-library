@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, ValidationErrors } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture',
@@ -68,8 +68,8 @@ export class MaterialFormsComponent {
   get formErrors() {
     return Object.keys(this.form.controls)
       .map((formKey) => {
-        const controlErrors: ValidationErrors = this.form.get(formKey).errors;
-        if (controlErrors != null) {
+        const controlErrors = this.form.get(formKey)?.errors;
+        if (controlErrors) {
           return Object.keys(controlErrors).map((keyError) => {
             const error = controlErrors[keyError];
             switch (keyError) {

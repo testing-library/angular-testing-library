@@ -36,11 +36,11 @@ test('it is possible to test directives with props', async () => {
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
   expect(screen.queryByText(hidden)).toBeInTheDocument();
 
-  fireEvent.mouseOver(screen.queryByText(hidden));
+  fireEvent.mouseOver(screen.getByText(hidden));
   expect(screen.queryByText(hidden)).not.toBeInTheDocument();
   expect(screen.queryByText(visible)).toBeInTheDocument();
 
-  fireEvent.mouseLeave(screen.queryByText(visible));
+  fireEvent.mouseLeave(screen.getByText(visible));
   expect(screen.queryByText(hidden)).toBeInTheDocument();
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
 });
@@ -56,11 +56,11 @@ test('it is possible to test directives with props in template', async () => {
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
   expect(screen.queryByText(hidden)).toBeInTheDocument();
 
-  fireEvent.mouseOver(screen.queryByText(hidden));
+  fireEvent.mouseOver(screen.getByText(hidden));
   expect(screen.queryByText(hidden)).not.toBeInTheDocument();
   expect(screen.queryByText(visible)).toBeInTheDocument();
 
-  fireEvent.mouseLeave(screen.queryByText(visible));
+  fireEvent.mouseLeave(screen.getByText(visible));
   expect(screen.queryByText(hidden)).toBeInTheDocument();
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
 });

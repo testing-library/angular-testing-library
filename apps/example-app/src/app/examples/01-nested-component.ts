@@ -5,7 +5,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   template: ' <button (click)="raise.emit()">{{ name }}</button> ',
 })
 export class NestedButtonComponent {
-  @Input() name: string;
+  @Input() name = '';
   @Output() raise = new EventEmitter<void>();
 }
 
@@ -14,7 +14,7 @@ export class NestedButtonComponent {
   template: ' <span data-testid="value">{{ value }}</span> ',
 })
 export class NestedValueComponent {
-  @Input() value: number;
+  @Input() value?: number;
 }
 
 @Component({
