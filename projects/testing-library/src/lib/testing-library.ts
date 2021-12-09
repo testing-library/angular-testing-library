@@ -53,8 +53,7 @@ export async function render<SutType, WrapperType = SutType>(
     providers = [],
     schemas = [],
     queries,
-    template = undefined,
-    wrapper = WrapperComponent,
+    wrapper = WrapperComponent as Type<WrapperType>,
     componentProperties = {},
     componentProviders = [],
     excludeComponentDeclaration = false,
@@ -89,13 +88,13 @@ export async function render<SutType, WrapperType = SutType>(
   await TestBed.compileComponents();
 
   componentProviders
-    .reduce((acc, provider) => acc.concat(provider), [])
-    .forEach((p) => {
+    .reduce((acc, provider) => acc.concat(provider), [] as any[])
+    .forEach((p: any) => {
       const { provide, ...provider } = p;
       TestBed.overrideProvider(provide, provider);
     });
 
-  const componentContainer = createComponentFixture(sut, { wrapper });
+  const componentContainer = createComponentFixture(sut, wrapper);
 
   let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
@@ -120,7 +119,7 @@ export async function render<SutType, WrapperType = SutType>(
 
   let router = routes ? inject(Router) : null;
   const zone = inject(NgZone);
-  const navigate = async (elementOrPath: Element | string, basePath = '') => {
+  const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     if (!router) {
       router = inject(Router);
     }
@@ -139,16 +138,18 @@ export async function render<SutType, WrapperType = SutType>(
             qp[key] = [currentValue, value];
           }
           return qp;
-        }, {})
+        }, {} as Record<string, string | string[]>)
       : undefined;
 
-    const navigateOptions: NavigationExtras = queryParams
+    const navigateOptions: NavigationExtras | undefined = queryParams
       ? {
           queryParams,
         }
       : undefined;
 
-    const doNavigate = () => (navigateOptions ? router.navigate([path], navigateOptions) : router.navigate([path]));
+    const doNavigate = () => {
+      return navigateOptions ? router?.navigate([path], navigateOptions) : router?.navigate([path]);
+    };
 
     let result;
 
@@ -159,21 +160,25 @@ export async function render<SutType, WrapperType = SutType>(
     }
 
     detectChanges();
-    return result;
+    return result ?? false;
   };
 
   return {
+    // @ts-ignore: fixture assigned
     fixture,
     detectChanges: () => detectChanges(),
     navigate,
     rerender,
     change,
+    // @ts-ignore: fixture assigned
     debugElement: typeof sut === 'string' ? fixture.debugElement : fixture.debugElement.query(By.directive(sut)),
+    // @ts-ignore: fixture assigned
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement, maxLength, options) =>
       Array.isArray(element)
         ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
         : console.log(dtlPrettyDOM(element, maxLength, options)),
+    // @ts-ignore: fixture assigned
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
 
@@ -220,9 +225,9 @@ async function createComponent<SutType>(component: Type<SutType>): Promise<Compo
   return TestBed.createComponent(component);
 }
 
-function createComponentFixture<SutType>(
+function createComponentFixture<SutType, WrapperType>(
   sut: Type<SutType> | string,
-  { wrapper }: Pick<RenderTemplateOptions<SutType>, 'wrapper'>,
+  wrapper: Type<WrapperType>,
 ): Type<any> {
   if (typeof sut === 'string') {
     TestBed.overrideTemplate(wrapper, sut);
@@ -236,13 +241,10 @@ function setComponentProperties<SutType>(
   { componentProperties = {} }: Pick<RenderTemplateOptions<SutType, any>, 'componentProperties'>,
 ) {
   for (const key of Object.keys(componentProperties)) {
-    const descriptor: PropertyDescriptor = Object.getOwnPropertyDescriptor(
-      fixture.componentInstance.constructor.prototype,
-      key,
-    );
+    const descriptor = Object.getOwnPropertyDescriptor((fixture.componentInstance as any).constructor.prototype, key);
     let _value = componentProperties[key];
     const defaultGetter = () => _value;
-    const extendedSetter = (value) => {
+    const extendedSetter = (value: any) => {
       _value = value;
       descriptor?.set?.call(fixture.componentInstance, _value);
       fixture.detectChanges();
@@ -268,21 +270,24 @@ function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstanc
   );
 }
 
-function getChangesObj<SutType>(oldProps: Partial<SutType> | null, newProps: Partial<SutType>) {
+function getChangesObj<SutType extends Record<string, any>>(
+  oldProps: Partial<SutType> | null,
+  newProps: Partial<SutType>,
+) {
   const isFirstChange = oldProps === null;
   return Object.keys(newProps).reduce<SimpleChanges>(
     (changes, key) => ({
       ...changes,
       [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange),
     }),
-    {},
+    {} as SutType,
   );
 }
 
 function addAutoDeclarations<SutType>(
   sut: Type<SutType> | string,
   {
-    declarations,
+    declarations = [],
     excludeComponentDeclaration,
     wrapper,
   }: Pick<RenderTemplateOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'wrapper'>,
@@ -295,7 +300,7 @@ function addAutoDeclarations<SutType>(
   return [...declarations, ...components()];
 }
 
-function addAutoImports({ imports, routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>) {
+function addAutoImports({ imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>) {
   const animations = () => {
     const animationIsDefined =
       imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
@@ -341,19 +346,19 @@ async function waitForElementToBeRemovedWrapper<T>(
   callback: (() => T) | T,
   options?: dtlWaitForOptions,
 ): Promise<void> {
-  let cb;
+  let cb: () => T;
   if (typeof callback !== 'function') {
     const elements = (Array.isArray(callback) ? callback : [callback]) as Element[];
     const getRemainingElements = elements.map((element) => {
-      let parent = element.parentElement;
+      let parent = element.parentElement as Element;
       while (parent.parentElement) {
         parent = parent.parentElement;
       }
       return () => (parent.contains(element) ? element : null);
     });
-    cb = () => getRemainingElements.map((c) => c()).filter(Boolean);
+    cb = () => getRemainingElements.map((c) => c()).find(Boolean) as unknown as T;
   } else {
-    cb = callback;
+    cb = callback as () => T;
   }
 
   return await dtlWaitForElementToBeRemoved(() => {
@@ -367,7 +372,7 @@ function cleanup() {
   mountedFixtures.forEach(cleanupAtFixture);
 }
 
-function cleanupAtFixture(fixture) {
+function cleanupAtFixture(fixture: ComponentFixture<any>) {
   fixture.destroy();
 
   if (!fixture.nativeElement.getAttribute('ng-version') && fixture.nativeElement.parentNode === document.body) {
@@ -394,25 +399,21 @@ class WrapperComponent {}
 /**
  * Wrap findBy queries to poke the Angular change detection cycle
  */
-function replaceFindWithFindAndDetectChanges<T>(originalQueriesForContainer: T): T {
+function replaceFindWithFindAndDetectChanges<T extends Record<string, any>>(originalQueriesForContainer: T): T {
   return Object.keys(originalQueriesForContainer).reduce((newQueries, key) => {
     const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
     if (key.startsWith('find') && getByQuery) {
-      newQueries[key] = async (text, options, waitOptions) => {
+      newQueries[key] = async (...queryOptions: any[]) => {
+        const waitOptions = queryOptions.length === 3 ? queryOptions.pop() : undefined;
         // original implementation at https://github.com/testing-library/dom-testing-library/blob/main/src/query-helpers.js
-        const result = await waitForWrapper(
-          detectChangesForMountedFixtures,
-          () => getByQuery(text, options),
-          waitOptions,
-        );
-        return result;
+        return await waitForWrapper(detectChangesForMountedFixtures, () => getByQuery(...queryOptions), waitOptions);
       };
     } else {
       newQueries[key] = originalQueriesForContainer[key];
     }
 
     return newQueries;
-  }, {} as T);
+  }, {} as Record<string, any>) as T;
 }
 
 /**
@@ -422,7 +423,7 @@ function detectChangesForMountedFixtures() {
   mountedFixtures.forEach((fixture) => {
     try {
       fixture.detectChanges();
-    } catch (err) {
+    } catch (err: any) {
       if (!err.message.startsWith('ViewDestroyedError')) {
         throw err;
       }

@@ -7,7 +7,7 @@ import { render, screen } from '../src/public_api';
 })
 class FixtureComponent {
   @Input() firstName = 'Sarah';
-  @Input() lastName;
+  @Input() lastName?: string;
 }
 
 test('changes the component with updated props', async () => {
@@ -44,7 +44,7 @@ test('changes the component with updated props while keeping other props untouch
 })
 class FixtureWithNgOnChangesComponent implements OnChanges {
   @Input() name = 'Sarah';
-  @Input() nameChanged: (name: string, isFirstChange: boolean) => void;
+  @Input() nameChanged?: (name: string, isFirstChange: boolean) => void;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.name && this.nameChanged) {
@@ -72,7 +72,7 @@ test('will call ngOnChanges on change', async () => {
   template: ` <div data-testid="number" [class.active]="activeField === 'number'">Number</div> `,
 })
 class FixtureWithOnPushComponent {
-  @Input() activeField: string;
+  @Input() activeField = '';
 }
 
 test('update properties on change', async () => {

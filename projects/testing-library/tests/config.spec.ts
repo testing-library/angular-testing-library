@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { render, configure } from '../src/public_api';
+import { render, configure, Config } from '../src/public_api';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -22,12 +22,12 @@ class FormsComponent {
   constructor(private formBuilder: FormBuilder) {}
 }
 
-let originalConfig;
+let originalConfig: Config;
 beforeEach(() => {
   // Grab the existing configuration so we can restore
   // it at the end of the test
   configure((existingConfig) => {
-    originalConfig = existingConfig;
+    originalConfig = existingConfig as Config;
     // Don't change the existing config
     return {};
   });

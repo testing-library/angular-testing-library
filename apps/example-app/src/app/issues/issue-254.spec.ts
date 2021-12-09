@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Inject, OnInit } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { createMock } from '@testing-library/angular/jest-utils';
 
 interface Division {
-  JobType: string;
-  JobBullets: string[];
-  Description: string;
+  jobType?: string;
+  jobBullets?: string[];
+  description?: string;
 }
 
 @Inject({
@@ -21,25 +20,25 @@ class JobsService {
 @Component({
   selector: 'app-home-career-oportunities',
   template: ` <ul class="popu-category-bullets">
-    <li class="text-dark" *ngFor="let bullet of dedicated.JobBullets">
+    <li class="text-dark" *ngFor="let bullet of dedicated?.jobBullets">
       {{ bullet }}
     </li>
   </ul>`,
 })
 class CareerOportunitiesComponent implements OnInit {
-  dedicated = {} as Division;
-  intermodal = {} as Division;
-  noCdl = {} as Division;
-  otr = {} as Division;
+  dedicated?: Division;
+  intermodal?: Division;
+  noCdl?: Division;
+  otr?: Division;
 
   constructor(private jobsService: JobsService) {}
 
   ngOnInit(): void {
     this.jobsService.divisions().then((apiDivisions) => {
-      this.dedicated = apiDivisions.find((c) => c.JobType === 'DEDICATED');
-      this.intermodal = apiDivisions.find((c) => c.JobType === 'INTERMODAL');
-      this.noCdl = apiDivisions.find((c) => c.JobType === 'NO_CDL');
-      this.otr = apiDivisions.find((c) => c.JobType === 'OVER_THE_ROAD');
+      this.dedicated = apiDivisions.find((c) => c.jobType === 'DEDICATED');
+      this.intermodal = apiDivisions.find((c) => c.jobType === 'INTERMODAL');
+      this.noCdl = apiDivisions.find((c) => c.jobType === 'NO_CDL');
+      this.otr = apiDivisions.find((c) => c.jobType === 'OVER_THE_ROAD');
     });
   }
 }
@@ -47,20 +46,20 @@ class CareerOportunitiesComponent implements OnInit {
 test('Render Component', async () => {
   const divisions2: Division[] = [
     {
-      JobType: 'INTERMODAL',
-      JobBullets: ['Local Routes', 'Flexible Schedules', 'Competitive Pay'],
-      Description: '',
+      jobType: 'INTERMODAL',
+      jobBullets: ['Local Routes', 'Flexible Schedules', 'Competitive Pay'],
+      description: '',
     },
-    { JobType: 'NO_CDL', JobBullets: ['We Train', 'We Hire', 'We Pay'], Description: '' },
+    { jobType: 'NO_CDL', jobBullets: ['We Train', 'We Hire', 'We Pay'], description: '' },
     {
-      JobType: 'OVER_THE_ROAD',
-      JobBullets: ['Great Miles', 'Competitive Pay', 'Explore the Country'],
-      Description: '',
+      jobType: 'OVER_THE_ROAD',
+      jobBullets: ['Great Miles', 'Competitive Pay', 'Explore the Country'],
+      description: '',
     },
     {
-      JobType: 'DEDICATED',
-      JobBullets: ['Regular Routes', 'Consistent Miles', 'Great Pay'],
-      Description: '',
+      jobType: 'DEDICATED',
+      jobBullets: ['Regular Routes', 'Consistent Miles', 'Great Pay'],
+      description: '',
     },
   ];
   const jobService = createMock(JobsService);

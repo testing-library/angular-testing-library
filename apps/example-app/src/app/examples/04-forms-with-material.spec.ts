@@ -44,6 +44,5 @@ test('is possible to fill in a form and verify error messages (with the help of 
     score: 7,
   });
 
-  // not added to the form?
-  expect((fixture.componentInstance as MaterialFormsComponent).form.get('color').value).toBe('G');
+  expect((fixture.componentInstance as MaterialFormsComponent).form?.get('color')?.value).toBe('G');
 });

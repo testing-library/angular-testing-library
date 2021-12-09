@@ -7,7 +7,7 @@ import { render, screen } from '../src/public_api';
 })
 class FixtureComponent {
   @Input() firstName = 'Sarah';
-  @Input() lastName;
+  @Input() lastName?: string;
 }
 
 test('rerenders the component with updated props', async () => {

@@ -18,6 +18,6 @@ export class InputGetterSetter {
     return 'I am value from getter ' + this.originalValue;
   }
 
-  private originalValue: string;
-  derivedValue: string;
+  private originalValue?: string;
+  derivedValue?: string;
 }

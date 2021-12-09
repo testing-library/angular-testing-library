@@ -268,8 +268,8 @@ export interface RenderTemplateOptions<WrapperType, Properties extends object = 
    * `WrapperComponent`, an empty component that strips the `ng-version` attribute
    *
    * @example
-   * const component = await render(SpoilerDirective, {
-   *  template: `<div spoiler message='SPOILER'></div>`
+   * const component = await render(`<div spoiler message='SPOILER'></div>`, {
+   *  declarations: [SpoilerDirective]
    *  wrapper: CustomWrapperComponent
    * })
    */

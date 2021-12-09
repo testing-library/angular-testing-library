@@ -6,7 +6,7 @@ import { render } from '../src/public_api';
   template: `Hello {{ name }}!`,
 })
 class FixtureComponent {
-  @Input() name: string;
+  @Input() name = '';
 }
 
 describe('Angular auto clean up - previous components only get cleanup up on init (based on root-id)', () => {
