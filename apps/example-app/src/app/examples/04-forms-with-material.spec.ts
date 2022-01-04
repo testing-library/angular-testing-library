@@ -3,8 +3,6 @@ import userEvent from '@testing-library/user-event';
 
 import { MaterialModule } from '../material.module';
 import { MaterialFormsComponent } from './04-forms-with-material';
-import { FormBuilder, Validators } from "@angular/forms";
-import { By } from "@angular/platform-browser";
 
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
@@ -51,18 +49,16 @@ test('is possible to fill in a form and verify error messages (with the help of 
 });
 
 test('is should show pre-set form values', async () => {
-  const formBuilder = new FormBuilder();
-
   const { fixture, detectChanges } = await render(MaterialFormsComponent, {
     imports: [MaterialModule],
-    componentProperties: {
-      form: formBuilder.group({
-        name: ['Max', Validators.required],
-        score: [4, [Validators.min(1), Validators.max(10)]],
-        color: ['B', Validators.required],
-      }),
-    },
   });
+
+  fixture.componentInstance.form.setValue({
+    name: 'Max',
+    score: 4,
+    color: 'B'
+  })
+  detectChanges();
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
@@ -70,9 +66,6 @@ test('is should show pre-set form values', async () => {
 
   expect(nameControl).toHaveValue('Max');
   expect(scoreControl).toHaveValue(4);
-
-  fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement.click();
-  detectChanges();
   expect(colorControl).toHaveTextContent('Blue');
 
   const form = screen.getByRole('form');
@@ -80,6 +73,5 @@ test('is should show pre-set form values', async () => {
     name: 'Max',
     score: 4,
   });
-
   expect((fixture.componentInstance as MaterialFormsComponent).form?.get('color')?.value).toBe('B');
 });
