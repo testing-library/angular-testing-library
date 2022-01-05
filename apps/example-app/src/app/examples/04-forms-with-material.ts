@@ -24,6 +24,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 
       <mat-form-field>
         <mat-select placeholder="Color" name="color" formControlName="color">
+          <mat-select-trigger>
+            {{ colorControlDisplayValue }}
+          </mat-select-trigger>
           <mat-option value="">---</mat-option>
           <mat-option *ngFor="let color of colors" [value]="color.id">{{ color.value }}</mat-option>
         </mat-select>
@@ -60,10 +63,15 @@ export class MaterialFormsComponent {
   form = this.formBuilder.group({
     name: ['', Validators.required],
     score: [0, [Validators.min(1), Validators.max(10)]],
-    color: ['', Validators.required],
+    color: [null, Validators.required],
   });
 
   constructor(private formBuilder: FormBuilder) {}
+
+  get colorControlDisplayValue(): string | undefined {
+    const selectedId = this.form.get('color')?.value;
+    return this.colors.filter(color => color.id === selectedId)[0]?.value;
+  }
 
   get formErrors() {
     return Object.keys(this.form.controls)
