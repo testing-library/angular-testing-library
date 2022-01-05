@@ -48,7 +48,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect((fixture.componentInstance as MaterialFormsComponent).form?.get('color')?.value).toBe('G');
 });
 
-test('is should show pre-set form values', async () => {
+test('set and show pre-set form values', async () => {
   const { fixture, detectChanges } = await render(MaterialFormsComponent, {
     imports: [MaterialModule],
   });
