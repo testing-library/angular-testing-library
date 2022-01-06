@@ -23,11 +23,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "projects/testing-library/**/*.ts",
-          "projects/testing-library/**/*.html",
-          "projects/testing-library/src/**/*.html"
-        ]
+        "lintFilePatterns": ["projects/testing-library/**/*.ts", "projects/testing-library/**/*.html"]
       },
       "outputs": ["{options.outputFile}"]
     },

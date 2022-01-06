@@ -57,7 +57,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentProviders = [],
     excludeComponentDeclaration = false,
-    routes,
+    routes = [],
     removeAngularAttributes = false,
     defaultImports = [],
   } = { ...globalConfig, ...renderOptions };
@@ -386,7 +386,9 @@ function cleanupAtFixture(fixture: ComponentFixture<any>) {
 // this ensures that tests run in isolation from each other
 // if you don't like this, set the ATL_SKIP_AUTO_CLEANUP env variable to 'true'
 if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
+  // @ts-ignore - cannot find name 'afterEach'
   if (typeof afterEach === 'function') {
+    // @ts-ignore - cannot find name 'afterEach'
     afterEach(() => {
       cleanup();
     });
