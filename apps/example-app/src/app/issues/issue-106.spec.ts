@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { render, screen, fireEvent, waitFor } from '@testing-library/angular';
+import { render, screen, fireEvent } from '@testing-library/angular';
 
 @Component({
   template: `<button (click)="toggleShow()" data-testid="toggle">toggle</button>
@@ -27,7 +27,8 @@ test('https://github.com/testing-library/angular-testing-library/issues/106', as
   // await waitFor(() => expect(hiddenText).not.toBeNull());
 
   // succeeds
-  await waitFor(() => expect(screen.queryByTestId('getme')).toBeInTheDocument());
+  const getme = await screen.findByTestId('getme');
+  expect(getme).toBeInTheDocument();
 });
 
 test('better https://github.com/testing-library/angular-testing-library/issues/106', async () => {
