@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { MaterialModule } from '../material.module';
 import { MaterialFormsComponent } from './04-forms-with-material';
 
-
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   const { fixture } = await render(MaterialFormsComponent, {
     imports: [MaterialModule],
@@ -26,7 +25,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   userEvent.click(screen.getByText(/green/i));
 
   expect(screen.queryByText('name is required')).not.toBeInTheDocument();
-  expect(screen.queryByText('score must be lesser than 10')).toBeInTheDocument();
+  expect(screen.getByText('score must be lesser than 10')).toBeInTheDocument();
   expect(screen.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
@@ -56,8 +55,8 @@ test('set and show pre-set form values', async () => {
   fixture.componentInstance.form.setValue({
     name: 'Max',
     score: 4,
-    color: 'B'
-  })
+    color: 'B',
+  });
   detectChanges();
 
   const nameControl = screen.getByLabelText(/name/i);

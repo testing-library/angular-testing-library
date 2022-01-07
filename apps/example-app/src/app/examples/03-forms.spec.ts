@@ -23,7 +23,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   userEvent.selectOptions(colorControl, 'G');
 
   expect(screen.queryByText('name is required')).not.toBeInTheDocument();
-  expect(screen.queryByText('score must be lesser than 10')).toBeInTheDocument();
+  expect(screen.getByText('score must be lesser than 10')).toBeInTheDocument();
   expect(screen.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();

@@ -26,10 +26,10 @@ class JobsService {
   </ul>`,
 })
 class CareerOportunitiesComponent implements OnInit {
-  dedicated?: Division;
-  intermodal?: Division;
-  noCdl?: Division;
-  otr?: Division;
+  dedicated: Division | undefined;
+  intermodal: Division | undefined;
+  noCdl: Division | undefined;
+  otr: Division | undefined;
 
   constructor(private jobsService: JobsService) {}
 
@@ -73,5 +73,6 @@ test('Render Component', async () => {
       },
     ],
   });
-  await screen.findAllByRole('listitem');
+  const listItemControl = await screen.findAllByRole('listitem');
+  expect(listItemControl).toHaveLength(3);
 });

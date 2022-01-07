@@ -57,7 +57,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentProviders = [],
     excludeComponentDeclaration = false,
-    routes,
+    routes = [],
     removeAngularAttributes = false,
     defaultImports = [],
   } = { ...globalConfig, ...renderOptions };

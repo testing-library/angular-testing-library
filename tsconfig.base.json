@@ -14,11 +14,13 @@
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
     "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@testing-library/angular": ["projects/testing-library"],
       "@testing-library/angular/jest-utils": ["projects/jest-utils"]

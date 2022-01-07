@@ -1,9 +1,0 @@
-{
-  "version": 2,
-  "projects": {
-    "example-app": "apps/example-app",
-    "example-app-karma": "apps/example-app-karma",
-    "jest-utils": "projects/jest-utils",
-    "testing-library": "projects/testing-library"
-  }
-}
