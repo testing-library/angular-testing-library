@@ -26,10 +26,10 @@ class JobsService {
   </ul>`,
 })
 class CareerOportunitiesComponent implements OnInit {
-  dedicated?: Division | undefined;
-  intermodal?: Division | undefined;
-  noCdl?: Division | undefined;
-  otr?: Division | undefined;
+  dedicated: Division | undefined;
+  intermodal: Division | undefined;
+  noCdl: Division | undefined;
+  otr: Division | undefined;
 
   constructor(private jobsService: JobsService) {}
 
