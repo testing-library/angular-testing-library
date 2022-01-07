@@ -386,9 +386,7 @@ function cleanupAtFixture(fixture: ComponentFixture<any>) {
 // this ensures that tests run in isolation from each other
 // if you don't like this, set the ATL_SKIP_AUTO_CLEANUP env variable to 'true'
 if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
-  // @ts-ignore - cannot find name 'afterEach'
   if (typeof afterEach === 'function') {
-    // @ts-ignore - cannot find name 'afterEach'
     afterEach(() => {
       cleanup();
     });
