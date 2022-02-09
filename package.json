@@ -25,7 +25,7 @@
     "format:check": "nx format:check",
     "pre-commit": "lint-staged",
     "semantic-release": "semantic-release",
-    "prepare": "husky install"
+    "prepare": "git config core.hookspath .githooks"
   },
   "dependencies": {
     "@angular/animations": "13.1.1",
@@ -77,7 +77,6 @@
     "eslint-plugin-jest": "~25.3.4",
     "eslint-plugin-jest-dom": "~4.0.1",
     "eslint-plugin-testing-library": "~5.0.1",
-    "husky": "^7.0.0",
     "jasmine-core": "^3.10.1",
     "jasmine-spec-reporter": "^7.0.0",
     "jest": "27.4.7",
