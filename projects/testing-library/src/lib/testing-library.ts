@@ -22,10 +22,9 @@ import {
   within as dtlWithin,
   waitForOptions as dtlWaitForOptions,
   configure as dtlConfigure,
-  Queries,
-  getQueriesForElement,
   queries as dtlQueries,
 } from '@testing-library/dom';
+import type { Queries, BoundFunctions } from '@testing-library/dom';
 import { RenderComponentOptions, RenderTemplateOptions, RenderResult } from './models';
 import { getConfig } from './config';
 
@@ -439,12 +438,11 @@ const screen = replaceFindWithFindAndDetectChanges(dtlScreen);
 /**
  * Re-export within with patched queries
  */
-
-const within: typeof getQueriesForElement = <T extends Queries = typeof dtlQueries>(
+const within = <QueriesToBind extends Queries = typeof dtlQueries, T extends QueriesToBind = QueriesToBind>(
   element: HTMLElement,
   queriesToBind?: T,
-) => {
-  const container = dtlWithin(element, queriesToBind);
+): BoundFunctions<T> => {
+  const container = dtlWithin<T>(element, queriesToBind);
   return replaceFindWithFindAndDetectChanges(container);
 };
 

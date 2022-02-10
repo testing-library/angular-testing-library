@@ -20,7 +20,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
    * element: The to be printed HTML element, if not provided it will log the whole component's DOM
    */
   debug: (
-    element?: Element | HTMLDocument | (Element | HTMLDocument)[],
+    element?: Element | Document | (Element | Document)[],
     maxLength?: number,
     options?: PrettyDOMOptions,
   ) => void;
