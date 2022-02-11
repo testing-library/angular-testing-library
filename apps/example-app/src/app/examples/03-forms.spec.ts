@@ -5,6 +5,7 @@ import { FormsComponent } from './03-forms';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   await render(FormsComponent);
+  const user = userEvent.setup({ delay: null });
 
   const nameControl = screen.getByRole('textbox', { name: /name/i });
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
@@ -16,19 +17,21 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(errors).toContainElement(screen.queryByText('color is required'));
 
   expect(nameControl).toBeInvalid();
-  userEvent.type(nameControl, 'Tim');
-  userEvent.clear(scoreControl);
-  userEvent.type(scoreControl, '12');
+  await user.type(nameControl, 'Tim');
+  await user.clear(scoreControl);
+  await user.type(scoreControl, '12');
   fireEvent.blur(scoreControl);
-  userEvent.selectOptions(colorControl, 'G');
+
+  // TODO: why does this throw during cleanup
+  await user.selectOptions(colorControl, 'G');
 
   expect(screen.queryByText('name is required')).not.toBeInTheDocument();
   expect(screen.getByText('score must be lesser than 10')).toBeInTheDocument();
   expect(screen.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
-  userEvent.clear(scoreControl);
-  userEvent.type(scoreControl, '7');
+  await user.clear(scoreControl);
+  await user.type(scoreControl, '7');
   fireEvent.blur(scoreControl);
   expect(scoreControl).toBeValid();
 

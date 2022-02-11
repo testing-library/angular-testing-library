@@ -8,6 +8,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
   const { fixture } = await render(MaterialFormsComponent, {
     imports: [MaterialModule],
   });
+  const user = userEvent.setup({ delay: null });
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
@@ -18,19 +19,19 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(errors).toContainElement(screen.queryByText('score must be greater than 1'));
   expect(errors).toContainElement(screen.queryByText('color is required'));
 
-  userEvent.type(nameControl, 'Tim');
-  userEvent.clear(scoreControl);
-  userEvent.type(scoreControl, '12');
-  userEvent.click(colorControl);
-  userEvent.click(screen.getByText(/green/i));
+  await user.type(nameControl, 'Tim');
+  await user.clear(scoreControl);
+  await user.type(scoreControl, '12');
+  await user.click(colorControl);
+  await user.click(screen.getByText(/green/i));
 
   expect(screen.queryByText('name is required')).not.toBeInTheDocument();
   expect(screen.getByText('score must be lesser than 10')).toBeInTheDocument();
   expect(screen.queryByText('color is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
-  userEvent.clear(scoreControl);
-  userEvent.type(scoreControl, '7');
+  await user.clear(scoreControl);
+  await user.type(scoreControl, '7');
   expect(scoreControl).toBeValid();
 
   expect(errors).not.toBeInTheDocument();

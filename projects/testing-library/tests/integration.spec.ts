@@ -5,8 +5,6 @@ import { of, BehaviorSubject } from 'rxjs';
 import { debounceTime, switchMap, map, startWith } from 'rxjs/operators';
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from '../src/lib/testing-library';
 
-const DEBOUNCE_TIME = 1_000;
-
 @Injectable()
 class EntitiesService {
   fetchAll() {
@@ -35,7 +33,7 @@ class ModalService {
 class EntitiesComponent {
   query = new BehaviorSubject<string>('');
   readonly entities = this.query.pipe(
-    debounceTime(DEBOUNCE_TIME),
+    debounceTime(60_000),
     switchMap((q) =>
       this.entitiesService.fetchAll().pipe(map((ent: any) => ent.filter((e: any) => e.name.includes(q)))),
     ),
@@ -86,9 +84,14 @@ const entities = [
   },
 ];
 
+afterEach(() => {
+  jest.useRealTimers();
+})
+
 test('renders the table', async () => {
   jest.useFakeTimers();
 
+  const user = userEvent.setup({ delay: null });
   await render(EntitiesComponent, {
     declarations: [TableComponent],
     providers: [
@@ -106,6 +109,7 @@ test('renders the table', async () => {
       },
     ],
   });
+
   const modalMock = TestBed.inject(ModalService);
 
   expect(await screen.findByRole('heading', { name: /Entities Title/i })).toBeInTheDocument();
@@ -114,21 +118,21 @@ test('renders the table', async () => {
   expect(await screen.findByRole('cell', { name: /Entity 2/i })).toBeInTheDocument();
   expect(await screen.findByRole('cell', { name: /Entity 3/i })).toBeInTheDocument();
 
-  userEvent.type(await screen.findByRole('textbox', { name: /Search entities/i }), 'Entity 2', {});
-
-  jest.advanceTimersByTime(DEBOUNCE_TIME);
+  await user.type(await screen.findByRole('textbox', { name: /Search entities/i }), 'Entity 2');
+  
+  jest.runOnlyPendingTimers();
 
   await waitForElementToBeRemoved(() => screen.queryByRole('cell', { name: /Entity 1/i }));
   expect(await screen.findByRole('cell', { name: /Entity 2/i })).toBeInTheDocument();
 
-  userEvent.click(await screen.findByRole('button', { name: /New Entity/i }));
+  await user.click(await screen.findByRole('button', { name: /New Entity/i }));
   expect(modalMock.open).toHaveBeenCalledWith('new entity');
 
   const row = await screen.findByRole('row', {
     name: /Entity 2/i,
   });
 
-  userEvent.click(
+  await user.click(
     await within(row).findByRole('button', {
       name: /edit/i,
     }),

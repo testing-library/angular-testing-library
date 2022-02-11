@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -46,6 +46,7 @@ function reducerItems() {
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialModule,

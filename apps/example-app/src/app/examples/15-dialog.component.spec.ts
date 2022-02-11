@@ -19,7 +19,7 @@ test('dialog closes', async () => {
   });
 
   const cancelButton = await screen.findByRole('button', { name: /cancel/i });
-  userEvent.click(cancelButton);
+  await userEvent.click(cancelButton);
 
   expect(closeFn).toHaveBeenCalledTimes(1);
 });
@@ -30,7 +30,7 @@ test('closes the dialog via the backdrop', async () => {
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
-  userEvent.click(openDialogButton);
+  await userEvent.click(openDialogButton);
 
   const dialogControl = await screen.findByRole('dialog');
   expect(dialogControl).toBeInTheDocument();
@@ -54,7 +54,7 @@ test('opens and closes the dialog with buttons', async () => {
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
-  userEvent.click(openDialogButton);
+  await userEvent.click(openDialogButton);
 
   const dialogControl = await screen.findByRole('dialog');
   expect(dialogControl).toBeInTheDocument();
@@ -62,10 +62,7 @@ test('opens and closes the dialog with buttons', async () => {
   expect(dialogTitleControl).toBeInTheDocument();
 
   const cancelButton = await screen.findByRole('button', { name: /cancel/i });
-  userEvent.click(cancelButton);
+  await userEvent.click(cancelButton);
 
-  await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
-
-  const dialogTitle = screen.queryByRole('heading', { name: /dialog title/i });
-  expect(dialogTitle).not.toBeInTheDocument();
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 });
