@@ -1,10 +1,9 @@
 import {Component, NgModule} from '@angular/core';
-import { render, screen } from '../../src/public_api';
-import {Router, RouterModule, Routes} from "@angular/router";
+import {render, screen} from '../../src/public_api';
+import {RouterModule, Routes} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
 import {click} from "@testing-library/user-event/dist/click";
 import {Location} from "@angular/common";
-import {TestBed} from "@angular/core/testing";
 
 @Component({
   template: `<div>Navigate</div> <router-outlet></router-outlet>`,
@@ -31,30 +30,26 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [FirstComponent, SecondComponent],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 class AppRoutingModule {}
 
 
-test('navigate', async () => {
-  // await render(MainComponent, {imports: [AppRoutingModule, RouterTestingModule]});
+test('navigate to second page and back', async () => {
   const subject = await render(MainComponent, {imports: [AppRoutingModule, RouterTestingModule]});
   await subject.navigate('/');
 
-  const router = TestBed.inject(Router);
-  router.initialNavigation();
-
-  await expect(screen.findByText('Navigate')).toBeTruthy();
-  await expect(screen.findByText('first page')).toBeTruthy();
+  expect(await screen.findByText('Navigate')).toBeTruthy();
+  expect(await screen.findByText('first page')).toBeTruthy();
 
   click(await screen.findByText('go to second'));
 
-  await expect(screen.findByText('second page')).toBeTruthy();
-  await expect(screen.findByText('navigate back')).toBeTruthy();
+  expect(await screen.findByText('second page')).toBeTruthy();
+  expect(await screen.findByText('navigate back')).toBeTruthy();
 
-  click(await screen.findByText('navigate back', {selector: 'button'}));
+  click(await screen.findByText('navigate back'));
 
-  // await expect(screen.findByText('first page')).toBeTruthy();
+  expect(await screen.findByText('first page')).toBeTruthy();
 });
