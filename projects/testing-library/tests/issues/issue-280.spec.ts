@@ -1,9 +1,10 @@
 import {Component, NgModule} from '@angular/core';
 import {render, screen} from '@testing-library/angular';
-import {RouterModule, Routes} from "@angular/router";
+import {Router, RouterModule, Routes} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
 import userEvent from "@testing-library/user-event";
 import {Location} from "@angular/common";
+import {TestBed} from "@angular/core/testing";
 
 @Component({
   template: `<div>Navigate</div> <router-outlet></router-outlet>`,
@@ -37,8 +38,28 @@ const routes: Routes = [
 class AppRoutingModule {}
 
 
+// test('navigate to second page and back', async () => {
+//   const subject = await render(MainComponent, {imports: [AppRoutingModule, RouterTestingModule]});
+//   await subject.navigate('/');
+//
+//   expect(await screen.findByText('Navigate')).toBeTruthy();
+//   expect(await screen.findByText('first page')).toBeTruthy();
+//
+//   userEvent.click(await screen.findByText('go to second'));
+//
+//   expect(await screen.findByText('second page')).toBeTruthy();
+//   expect(await screen.findByText('navigate back')).toBeTruthy();
+//
+//   userEvent.click(await screen.findByText('navigate back'));
+//
+//   expect(await screen.findByText('first page')).toBeTruthy();
+// });
+
 test('navigate to second page and back', async () => {
   const subject = await render(MainComponent, {imports: [AppRoutingModule, RouterTestingModule]});
+
+  TestBed.inject(Router).initialNavigation();
+
   await subject.navigate('/');
 
   expect(await screen.findByText('Navigate')).toBeTruthy();
