@@ -274,6 +274,16 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "meirka",
+      "name": "MeIr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/750901?v=4",
+      "profile": "https://github.com/meirka",
+      "contributions": [
+        "bug",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
