@@ -42,17 +42,17 @@ class AppRoutingModule {}
 //   const subject = await render(MainComponent, {imports: [AppRoutingModule, RouterTestingModule]});
 //   await subject.navigate('/');
 //
-//   expect(await screen.findByText('Navigate')).toBeTruthy();
-//   expect(await screen.findByText('first page')).toBeTruthy();
+//   expect(await screen.findByText('Navigate')).toBeInTheDocument();
+//   expect(await screen.findByText('first page')).toBeInTheDocument();
 //
 //   userEvent.click(await screen.findByText('go to second'));
 //
-//   expect(await screen.findByText('second page')).toBeTruthy();
-//   expect(await screen.findByText('navigate back')).toBeTruthy();
+//   expect(await screen.findByText('second page')).toBeInTheDocument();
+//   expect(await screen.findByText('navigate back')).toBeInTheDocument();
 //
 //   userEvent.click(await screen.findByText('navigate back'));
 //
-//   expect(await screen.findByText('first page')).toBeTruthy();
+//   expect(await screen.findByText('first page')).toBeInTheDocument();
 // });
 
 test('navigate to second page and back', async () => {
@@ -62,15 +62,15 @@ test('navigate to second page and back', async () => {
 
   await subject.navigate('/');
 
-  expect(await screen.findByText('Navigate')).toBeTruthy();
-  expect(await screen.findByText('first page')).toBeTruthy();
+  expect(await screen.findByText('Navigate')).toBeInTheDocument();
+  expect(await screen.findByText('first page')).toBeInTheDocument();
 
   userEvent.click(await screen.findByText('go to second'));
 
-  expect(await screen.findByText('second page')).toBeTruthy();
-  expect(await screen.findByText('navigate back')).toBeTruthy();
+  expect(await screen.findByText('second page')).toBeInTheDocument();
+  expect(await screen.findByText('navigate back')).toBeInTheDocument();
 
   userEvent.click(await screen.findByText('navigate back'));
 
-  expect(await screen.findByText('first page')).toBeTruthy();
+  expect(await screen.findByText('first page')).toBeInTheDocument();
 });
