@@ -1,8 +1,8 @@
 import {Component, NgModule} from '@angular/core';
-import {render, screen} from '../../src/public_api';
+import {render, screen} from '@testing-library/angular';
 import {RouterModule, Routes} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
-import {click} from "@testing-library/user-event/dist/click";
+import userEvent from "@testing-library/user-event";
 import {Location} from "@angular/common";
 
 @Component({
@@ -44,12 +44,12 @@ test('navigate to second page and back', async () => {
   expect(await screen.findByText('Navigate')).toBeTruthy();
   expect(await screen.findByText('first page')).toBeTruthy();
 
-  click(await screen.findByText('go to second'));
+  userEvent.click(await screen.findByText('go to second'));
 
   expect(await screen.findByText('second page')).toBeTruthy();
   expect(await screen.findByText('navigate back')).toBeTruthy();
 
-  click(await screen.findByText('navigate back'));
+  userEvent.click(await screen.findByText('navigate back'));
 
   expect(await screen.findByText('first page')).toBeTruthy();
 });
