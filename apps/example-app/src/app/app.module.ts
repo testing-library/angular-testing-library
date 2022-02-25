@@ -20,7 +20,7 @@ import { MaterialFormsComponent } from './examples/04-forms-with-material';
 import { ComponentWithProviderComponent } from './examples/05-component-provider';
 import { WithNgRxStoreComponent, reducer } from './examples/06-with-ngrx-store';
 import { WithNgRxMockStoreComponent } from './examples/07-with-ngrx-mock-store';
-import { MasterComponent, DetailComponent, HiddenDetailComponent } from './examples/09-router';
+import { RootComponent, DetailComponent, HiddenDetailComponent } from './examples/09-router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 function reducerItems() {
@@ -40,7 +40,7 @@ function reducerItems() {
     ComponentWithProviderComponent,
     WithNgRxStoreComponent,
     WithNgRxMockStoreComponent,
-    MasterComponent,
+    RootComponent,
     DetailComponent,
     HiddenDetailComponent,
   ],

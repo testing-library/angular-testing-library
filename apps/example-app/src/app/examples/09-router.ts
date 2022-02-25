@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
     <router-outlet></router-outlet>
   `,
 })
-export class MasterComponent {}
+export class RootComponent {}
 
 @Component({
   selector: 'app-detail',

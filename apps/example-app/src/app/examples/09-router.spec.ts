@@ -1,9 +1,49 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
-import { DetailComponent, MasterComponent, HiddenDetailComponent } from './09-router';
+import { DetailComponent, RootComponent, HiddenDetailComponent } from './09-router';
 
 test('it can navigate to routes', async () => {
-  const { navigate } = await render(MasterComponent, {
+  await render(RootComponent, {
+    declarations: [DetailComponent, HiddenDetailComponent],
+    routes: [
+      {
+        path: '',
+        children: [
+          {
+            path: 'detail/:id',
+            component: DetailComponent,
+          },
+          {
+            path: 'hidden-detail',
+            component: HiddenDetailComponent,
+          },
+        ],
+      },
+    ],
+  });
+
+  expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
+
+  userEvent.click(screen.getByRole('link', { name: /load one/i }));
+  expect(await screen.findByRole('heading', { name: /Detail one/i })).toBeInTheDocument();
+
+  userEvent.click(screen.getByRole('link', { name: /load three/i }));
+  await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: /Detail one/i }));
+  expect(await screen.findByRole('heading', { name: /Detail three/i })).toBeInTheDocument();
+
+  userEvent.click(screen.getByRole('link', { name: /back to parent/i }));
+  await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: /Detail three/i }));
+
+  userEvent.click(screen.getByRole('link', { name: /load two/i }));
+  expect(await screen.findByRole('heading', { name: /Detail two/i })).toBeInTheDocument();
+
+  userEvent.click(screen.getByRole('link', { name: /hidden x/i }));
+  expect(await screen.findByText(/You found the treasure!/i)).toBeInTheDocument();
+});
+
+test('it can navigate to routes - workaround', async () => {
+  const { navigate } = await render(RootComponent, {
     declarations: [DetailComponent, HiddenDetailComponent],
     routes: [
       {
@@ -42,7 +82,7 @@ test('it can navigate to routes', async () => {
 
 test('it can navigate to routes with a base path', async () => {
   const basePath = 'base';
-  const { navigate } = await render(MasterComponent, {
+  const { navigate } = await render(RootComponent, {
     declarations: [DetailComponent, HiddenDetailComponent],
     routes: [
       {
