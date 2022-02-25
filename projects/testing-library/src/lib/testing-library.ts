@@ -116,13 +116,12 @@ export async function render<SutType, WrapperType = SutType>(
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
   };
 
-  let router = routes ? inject(Router) : null;
   const zone = inject(NgZone);
-  const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
-    if (!router) {
-      router = inject(Router);
-    }
 
+  const router = inject(Router);
+  router?.initialNavigation();
+
+  const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
     const [path, params] = (basePath + href).split('?');
     const queryParams = params
