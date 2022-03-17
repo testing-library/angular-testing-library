@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { FormsComponent } from './03-forms';
 
-test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
+test.skip('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   await render(FormsComponent);
   const user = userEvent.setup({ delay: null });
 
