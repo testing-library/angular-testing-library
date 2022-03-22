@@ -119,7 +119,9 @@ export async function render<SutType, WrapperType = SutType>(
   const zone = inject(NgZone);
 
   const router = inject(Router);
-  router?.initialNavigation();
+  if (typeof router?.initialNavigation === 'function') {
+    router?.initialNavigation();
+  }
 
   const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
