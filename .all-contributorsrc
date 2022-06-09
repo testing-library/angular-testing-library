@@ -284,6 +284,16 @@
         "bug",
         "test"
       ]
+    },
+    {
+      "login": "jadengis",
+      "name": "John Dengis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13421336?v=4",
+      "profile": "https://github.com/jadengis",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
