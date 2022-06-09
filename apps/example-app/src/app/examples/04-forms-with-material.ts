@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture',
@@ -66,7 +66,7 @@ export class MaterialFormsComponent {
     color: [null, Validators.required],
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
   get colorControlDisplayValue(): string | undefined {
     const selectedId = this.form.get('color')?.value;

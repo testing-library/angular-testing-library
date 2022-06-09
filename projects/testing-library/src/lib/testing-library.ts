@@ -7,6 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
   ApplicationInitStatus,
+  ɵisStandalone,
 } from '@angular/core';
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -76,7 +77,7 @@ export async function render<SutType, WrapperType = SutType>(
       excludeComponentDeclaration,
       wrapper,
     }),
-    imports: addAutoImports({
+    imports: addAutoImports(sut,{
       imports: imports.concat(defaultImports),
       routes,
     }),
@@ -128,23 +129,23 @@ export async function render<SutType, WrapperType = SutType>(
     const [path, params] = (basePath + href).split('?');
     const queryParams = params
       ? params.split('&').reduce((qp, q) => {
-          const [key, value] = q.split('=');
-          const currentValue = qp[key];
-          if (typeof currentValue === 'undefined') {
-            qp[key] = value;
-          } else if (Array.isArray(currentValue)) {
-            qp[key] = [...currentValue, value];
-          } else {
-            qp[key] = [currentValue, value];
-          }
-          return qp;
-        }, {} as Record<string, string | string[]>)
+        const [key, value] = q.split('=');
+        const currentValue = qp[key];
+        if (typeof currentValue === 'undefined') {
+          qp[key] = value;
+        } else if (Array.isArray(currentValue)) {
+          qp[key] = [...currentValue, value];
+        } else {
+          qp[key] = [currentValue, value];
+        }
+        return qp;
+      }, {} as Record<string, string | string[]>)
       : undefined;
 
     const navigateOptions: NavigationExtras | undefined = queryParams
       ? {
-          queryParams,
-        }
+        queryParams,
+      }
       : undefined;
 
     const doNavigate = () => {
@@ -296,11 +297,14 @@ function addAutoDeclarations<SutType>(
     return [...declarations, wrapper];
   }
 
-  const components = () => (excludeComponentDeclaration ? [] : [sut]);
+  const components = () => (excludeComponentDeclaration || ɵisStandalone(sut) ? [] : [sut]);
   return [...declarations, ...components()];
 }
 
-function addAutoImports({ imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>) {
+function addAutoImports<SutType>(
+  sut: Type<SutType> | string,
+  { imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>,
+) {
   const animations = () => {
     const animationIsDefined =
       imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
@@ -308,8 +312,8 @@ function addAutoImports({ imports = [], routes }: Pick<RenderComponentOptions<an
   };
 
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
-
-  return [...imports, ...animations(), ...routing()];
+  const components = () => (typeof sut !== 'string' && ɵisStandalone(sut) ? [sut] : []);
+  return [...imports, ...components(), ...animations(), ...routing()];
 }
 
 /**
@@ -394,7 +398,7 @@ if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
 }
 
 @Component({ selector: 'atl-wrapper-component', template: '' })
-class WrapperComponent {}
+class WrapperComponent { }
 
 /**
  * Wrap findBy queries to poke the Angular change detection cycle
