@@ -23,7 +23,7 @@
     "noUnusedParameters": true,
     "paths": {
       "@testing-library/angular": ["projects/testing-library"],
-      "@testing-library/angular/jest-utils": ["projects/jest-utils"]
+      "@testing-library/angular/jest-utils": ["projects/testing-library/jest-utils"]
     }
   },
   "exclude": ["node_modules", "tmp"]
