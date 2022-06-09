@@ -221,6 +221,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/meirka"><img src="https://avatars.githubusercontent.com/u/750901?v=4?s=100" width="100px;" alt=""/><br /><sub><b>MeIr</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/issues?q=author%3Ameirka" title="Bug reports">🐛</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=meirka" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/jadengis"><img src="https://avatars.githubusercontent.com/u/13421336?v=4?s=100" width="100px;" alt=""/><br /><sub><b>John Dengis</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=jadengis" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=jadengis" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
