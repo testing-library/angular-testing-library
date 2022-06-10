@@ -7,7 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",
     "prebuild": "rimraf dist",
-    "build": "nx run-many --target=build --projects=testing-library,jest-utils",
+    "build": "nx run-many --target=build --projects=testing-library",
     "build:schematics": "tsc -p ./projects/testing-library/tsconfig.schematics.json",
     "test": "nx run-many --target=test --all",
     "lint": "nx workspace-lint && nx lint",
