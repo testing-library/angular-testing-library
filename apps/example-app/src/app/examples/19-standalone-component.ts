@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
   template: `<div data-testid="standalone">Standalone Component</div>`,
   standalone: true,
 })
-export class StandaloneComponent { }
+export class StandaloneComponent {}
 
 @Component({
   selector: 'app-standalone-with-child',

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent } from '../src/public_api';
+import { render, fireEvent, screen } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -31,6 +31,21 @@ test('creates queries and events', async () => {
   expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
   // eslint-disable-next-line testing-library/prefer-screen-queries
   fireEvent.click(view.getByText('button'));
+});
+
+describe('standalone', () => {
+  @Component({
+    selector: 'atl-fixture',
+    template: ` {{ name }} `,
+  })
+  class StandaloneFixtureComponent {
+    @Input() name = '';
+  }
+
+  it('renders standalone component', async () => {
+    await render(StandaloneFixtureComponent, { componentProperties: { name: 'Bob' } });
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
 });
 
 describe('removeAngularAttributes', () => {
@@ -148,6 +163,13 @@ test('waits for angular app initialization before rendering components', async (
     ],
   });
 
-  expect(TestBed.inject(ApplicationInitStatus).done).toEqual(true);
+  expect(TestBed.inject(ApplicationInitStatus).done).toBe(true);
   expect(mock).toHaveBeenCalled();
+});
+
+test('gets the DebugElement', async () => {
+  const view = await render(FixtureComponent);
+
+  expect(view.debugElement).not.toBeNull();
+  expect(view.debugElement.componentInstance).toBeInstanceOf(FixtureComponent);
 });
