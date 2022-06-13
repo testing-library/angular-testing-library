@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { StandaloneComponent, StandaloneWithChildComponent } from './19-standalone-component';
 
-test('is possible to render a standalone component', async () => {
+test('can render a standalone component', async () => {
   await render(StandaloneComponent);
 
   const content = screen.getByTestId('standalone');
@@ -9,7 +9,7 @@ test('is possible to render a standalone component', async () => {
   expect(content).toHaveTextContent('Standalone Component');
 });
 
-test('is possibl to render a standalone component with a child', async () => {
+test('can render a standalone component with a child', async () => {
   await render(StandaloneWithChildComponent, {
     componentProperties: { name: 'Bob' },
   });

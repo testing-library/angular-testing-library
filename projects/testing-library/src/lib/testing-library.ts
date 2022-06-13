@@ -10,7 +10,6 @@ import {
   ɵisStandalone,
 } from '@angular/core';
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationExtras, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -77,7 +76,7 @@ export async function render<SutType, WrapperType = SutType>(
       excludeComponentDeclaration,
       wrapper,
     }),
-    imports: addAutoImports(sut,{
+    imports: addAutoImports(sut, {
       imports: imports.concat(defaultImports),
       routes,
     }),
@@ -129,23 +128,23 @@ export async function render<SutType, WrapperType = SutType>(
     const [path, params] = (basePath + href).split('?');
     const queryParams = params
       ? params.split('&').reduce((qp, q) => {
-        const [key, value] = q.split('=');
-        const currentValue = qp[key];
-        if (typeof currentValue === 'undefined') {
-          qp[key] = value;
-        } else if (Array.isArray(currentValue)) {
-          qp[key] = [...currentValue, value];
-        } else {
-          qp[key] = [currentValue, value];
-        }
-        return qp;
-      }, {} as Record<string, string | string[]>)
+          const [key, value] = q.split('=');
+          const currentValue = qp[key];
+          if (typeof currentValue === 'undefined') {
+            qp[key] = value;
+          } else if (Array.isArray(currentValue)) {
+            qp[key] = [...currentValue, value];
+          } else {
+            qp[key] = [currentValue, value];
+          }
+          return qp;
+        }, {} as Record<string, string | string[]>)
       : undefined;
 
     const navigateOptions: NavigationExtras | undefined = queryParams
       ? {
-        queryParams,
-      }
+          queryParams,
+        }
       : undefined;
 
     const doNavigate = () => {
@@ -172,7 +171,7 @@ export async function render<SutType, WrapperType = SutType>(
     rerender,
     change,
     // @ts-ignore: fixture assigned
-    debugElement: typeof sut === 'string' ? fixture.debugElement : fixture.debugElement.query(By.directive(sut)),
+    debugElement: fixture.debugElement,
     // @ts-ignore: fixture assigned
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement, maxLength, options) =>
@@ -398,7 +397,7 @@ if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
 }
 
 @Component({ selector: 'atl-wrapper-component', template: '' })
-class WrapperComponent { }
+class WrapperComponent {}
 
 /**
  * Wrap findBy queries to poke the Angular change detection cycle
