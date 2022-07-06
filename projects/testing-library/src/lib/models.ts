@@ -188,6 +188,23 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   componentProviders?: any[];
   /**
    * @description
+   * A collection of imports to override a standalone component's imports with.
+   *
+   * @default
+   * undefined
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *   ɵcomponentImports: [
+   *     MockChildComponent
+   *   ]
+   * })
+   *
+   * @experimental
+   */
+  ɵcomponentImports?: (Type<any> | any[])[];
+  /**
+   * @description
    * Queries to bind. Overrides the default set from DOM Testing Library unless merged.
    *
    * @default
