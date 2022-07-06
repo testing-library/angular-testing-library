@@ -55,6 +55,7 @@ export async function render<SutType, WrapperType = SutType>(
     wrapper = WrapperComponent as Type<WrapperType>,
     componentProperties = {},
     componentProviders = [],
+    ɵcomponentImports: componentImports,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,
@@ -83,6 +84,7 @@ export async function render<SutType, WrapperType = SutType>(
     providers: [...providers],
     schemas: [...schemas],
   });
+  overrideComponentImports(sut, componentImports);
 
   await TestBed.compileComponents();
 
@@ -128,23 +130,23 @@ export async function render<SutType, WrapperType = SutType>(
     const [path, params] = (basePath + href).split('?');
     const queryParams = params
       ? params.split('&').reduce((qp, q) => {
-          const [key, value] = q.split('=');
-          const currentValue = qp[key];
-          if (typeof currentValue === 'undefined') {
-            qp[key] = value;
-          } else if (Array.isArray(currentValue)) {
-            qp[key] = [...currentValue, value];
-          } else {
-            qp[key] = [currentValue, value];
-          }
-          return qp;
-        }, {} as Record<string, string | string[]>)
+        const [key, value] = q.split('=');
+        const currentValue = qp[key];
+        if (typeof currentValue === 'undefined') {
+          qp[key] = value;
+        } else if (Array.isArray(currentValue)) {
+          qp[key] = [...currentValue, value];
+        } else {
+          qp[key] = [currentValue, value];
+        }
+        return qp;
+      }, {} as Record<string, string | string[]>)
       : undefined;
 
     const navigateOptions: NavigationExtras | undefined = queryParams
       ? {
-          queryParams,
-        }
+        queryParams,
+      }
       : undefined;
 
     const doNavigate = () => {
@@ -262,6 +264,18 @@ function setComponentProperties<SutType>(
     descriptor?.set?.call(fixture.componentInstance, _value);
   }
   return fixture;
+}
+
+function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports: (Type<any> | any[])[] | undefined) {
+  if (imports) {
+    if (typeof sut === 'function' && ɵisStandalone(sut)) {
+      TestBed.overrideComponent(sut, { set: { imports } });
+    } else {
+      throw new Error(
+        `Error while rendering ${sut}: Cannot specify componentImports on a template or non-standalone component.`,
+      );
+    }
+  }
 }
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
@@ -397,7 +411,7 @@ if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
 }
 
 @Component({ selector: 'atl-wrapper-component', template: '' })
-class WrapperComponent {}
+class WrapperComponent { }
 
 /**
  * Wrap findBy queries to poke the Angular change detection cycle
