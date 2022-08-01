@@ -57,7 +57,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
    * Re-render the same component with different properties.
    * This creates a new instance of the component.
    */
-  rerender: (rerenderedProperties: Partial<ComponentType>) => void;
+  rerender: (rerenderedProperties: Partial<ComponentType>) => Promise<void>;
 
   /**
    * @description
