@@ -12,6 +12,8 @@ test('is possible to fill in a form and verify error messages (with the help of 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
   const colorControl = screen.getByRole('combobox', { name: /color/i });
+  const dateControl = screen.getByRole('textbox', { name: /Choose a date/i });
+
   const errors = screen.getByRole('alert');
 
   expect(errors).toContainElement(screen.queryByText('name is required'));
@@ -33,6 +35,8 @@ test('is possible to fill in a form and verify error messages (with the help of 
   userEvent.type(scoreControl, '7');
   expect(scoreControl).toBeValid();
 
+  userEvent.type(dateControl, '08/11/2022');
+
   expect(errors).not.toBeInTheDocument();
 
   expect(nameControl).toHaveValue('Tim');
@@ -44,7 +48,10 @@ test('is possible to fill in a form and verify error messages (with the help of 
     name: 'Tim',
     score: 7,
   });
+
+  // material doesn't add these to the form
   expect((fixture.componentInstance as MaterialFormsComponent).form?.get('color')?.value).toBe('G');
+  expect((fixture.componentInstance as MaterialFormsComponent).form?.get('date')?.value).toEqual(new Date(2022, 7, 11));
 });
 
 test('set and show pre-set form values', async () => {
@@ -56,6 +63,7 @@ test('set and show pre-set form values', async () => {
     name: 'Max',
     score: 4,
     color: 'B',
+    date: new Date(2022, 7, 11),
   });
   detectChanges();
 
@@ -73,4 +81,5 @@ test('set and show pre-set form values', async () => {
     score: 4,
   });
   expect((fixture.componentInstance as MaterialFormsComponent).form?.get('color')?.value).toBe('B');
+  expect((fixture.componentInstance as MaterialFormsComponent).form?.get('date')?.value).toEqual(new Date(2022, 7, 11));
 });

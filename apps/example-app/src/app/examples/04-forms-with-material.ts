@@ -32,6 +32,14 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
       <div role="alert" *ngIf="formErrors.length">
         <p *ngFor="let error of formErrors">{{ error }}</p>
       </div>
@@ -64,13 +72,14 @@ export class MaterialFormsComponent {
     name: ['', Validators.required],
     score: [0, [Validators.min(1), Validators.max(10)]],
     color: [null, Validators.required],
+    date: [null, Validators.required],
   });
 
   constructor(private formBuilder: UntypedFormBuilder) {}
 
   get colorControlDisplayValue(): string | undefined {
     const selectedId = this.form.get('color')?.value;
-    return this.colors.filter(color => color.id === selectedId)[0]?.value;
+    return this.colors.filter((color) => color.id === selectedId)[0]?.value;
   }
 
   get formErrors() {
