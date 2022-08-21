@@ -1,6 +1,6 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "projects/testing-library",
   "sourceRoot": "projects/testing-library/src",
   "prefix": "lib",
   "targets": {
@@ -47,7 +47,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "options": {
-        "jestConfig": "projects/testing-library/jest.config.js"
+        "jestConfig": "projects/testing-library/jest.config.ts"
       },
       "outputs": ["coverage/projects/testing-library"]
     }

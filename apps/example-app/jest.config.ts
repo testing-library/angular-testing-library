@@ -1,7 +1,7 @@
-module.exports = {
-  name: 'Example App',
+/* eslint-disable */
+export default {
   displayName: {
-    name: 'Example',
+    name: 'Example App',
     color: 'blue',
   },
   preset: '../../jest.preset.js',

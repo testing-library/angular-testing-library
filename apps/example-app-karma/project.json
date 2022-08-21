@@ -1,6 +1,6 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": "apps/example-app-karma",
   "sourceRoot": "apps/example-app-karma/src",
   "prefix": "app",
   "generators": {},

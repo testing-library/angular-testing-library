@@ -34,14 +34,6 @@
       }
     }
   },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ]
-  },
   "generators": {
     "@nrlw/workspace:library": {
       "linter": "eslint",
@@ -60,7 +52,6 @@
       "tags": ["type:app"]
     },
     "@nrwl/angular:library": {
-      "style": "scss",
       "linter": "eslint",
       "unitTestRunner": "jest",
       "strict": true,
@@ -80,5 +71,11 @@
       }
     }
   },
-  "defaultProject": "example-app"
+  "defaultProject": "example-app",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    }
+  }
 }
