@@ -1,5 +1,5 @@
-module.exports = {
-  name: 'Angular Testing Library',
+/* eslint-disable */
+export default {
   displayName: {
     name: 'ATL',
     color: 'magenta',
