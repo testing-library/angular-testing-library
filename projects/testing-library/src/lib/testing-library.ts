@@ -56,7 +56,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentProviders = [],
     childComponentOverrides = [],
-    ɵcomponentImports: componentImports,
+    componentImports: componentImports,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,

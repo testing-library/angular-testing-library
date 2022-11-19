@@ -215,14 +215,12 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *
    * @example
    * const component = await render(AppComponent, {
-   *   ɵcomponentImports: [
+   *   componentImports: [
    *     MockChildComponent
    *   ]
    * })
-   *
-   * @experimental
    */
-  ɵcomponentImports?: (Type<any> | any[])[];
+  componentImports?: (Type<any> | any[])[];
   /**
    * @description
    * Queries to bind. Overrides the default set from DOM Testing Library unless merged.

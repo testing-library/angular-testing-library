@@ -79,8 +79,8 @@ describe('standalone with child', () => {
     expect(screen.getByText('A child fixture')).toBeInTheDocument();
   });
 
-  it('renders the standalone component with child given ɵcomponentImports', async () => {
-    await render(ParentFixtureComponent, { ɵcomponentImports: [MockChildFixtureComponent] });
+  it('renders the standalone component with a mocked child', async () => {
+    await render(ParentFixtureComponent, { componentImports: [MockChildFixtureComponent] });
     expect(screen.getByText('Parent fixture')).toBeInTheDocument();
     expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
   });
@@ -88,7 +88,7 @@ describe('standalone with child', () => {
   it('rejects render of template with componentImports set', () => {
     const view = render(`<div><atl-parent-fixture></atl-parent-fixture></div>`, {
       imports: [ParentFixtureComponent],
-      ɵcomponentImports: [MockChildFixtureComponent],
+      componentImports: [MockChildFixtureComponent],
     });
     return expect(view).rejects.toMatchObject({ message: /Error while rendering/ });
   });
