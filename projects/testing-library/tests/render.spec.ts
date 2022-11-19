@@ -19,7 +19,7 @@ import { render, fireEvent, screen } from '../src/public_api';
     <button>button</button>
   `,
 })
-class FixtureComponent { }
+class FixtureComponent {}
 
 test('creates queries and events', async () => {
   const view = await render(FixtureComponent);
@@ -50,46 +50,46 @@ describe('standalone', () => {
 
 describe('standalone with child', () => {
   @Component({
-    selector: 'child-fixture',
+    selector: 'atl-child-fixture',
     template: `<span>A child fixture</span>`,
     standalone: true,
   })
-  class ChildFixture { }
+  class ChildFixtureComponent {}
 
   @Component({
-    selector: 'child-fixture',
+    selector: 'atl-child-fixture',
     template: `<span>A mock child fixture</span>`,
     standalone: true,
   })
-  class MockChildFixture { }
+  class MockChildFixtureComponent {}
 
   @Component({
-    selector: 'parent-fixture',
+    selector: 'atl-parent-fixture',
     template: `<h1>Parent fixture</h1>
-      <div><child-fixture></child-fixture></div> `,
+      <div><atl-child-fixture></atl-child-fixture></div> `,
     standalone: true,
-    imports: [ChildFixture],
+    imports: [ChildFixtureComponent],
   })
-  class ParentFixture { }
+  class ParentFixtureComponent {}
 
   it('renders the standalone component with child', async () => {
-    await render(ParentFixture);
-    expect(screen.getByText('Parent fixture'));
-    expect(screen.getByText('A child fixture'));
+    await render(ParentFixtureComponent);
+    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
+    expect(screen.getByText('A child fixture')).toBeInTheDocument();
   });
 
-  it('renders the standalone component with child', async () => {
-    await render(ParentFixture, { ɵcomponentImports: [MockChildFixture] });
-    expect(screen.getByText('Parent fixture'));
-    expect(screen.getByText('A mock child fixture'));
+  it('renders the standalone component with a mocked child', async () => {
+    await render(ParentFixtureComponent, { componentImports: [MockChildFixtureComponent] });
+    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
+    expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
   });
 
   it('rejects render of template with componentImports set', () => {
-    const result = render(`<div><parent-fixture></parent-fixture></div>`, {
-      imports: [ParentFixture],
-      ɵcomponentImports: [MockChildFixture],
+    const view = render(`<div><atl-parent-fixture></atl-parent-fixture></div>`, {
+      imports: [ParentFixtureComponent],
+      componentImports: [MockChildFixtureComponent],
     });
-    return expect(result).rejects.toMatchObject({ message: /Error while rendering/ });
+    return expect(view).rejects.toMatchObject({ message: /Error while rendering/ });
   });
 });
 
@@ -117,7 +117,7 @@ describe('animationModule', () => {
   @NgModule({
     declarations: [FixtureComponent],
   })
-  class FixtureModule { }
+  class FixtureModule {}
   describe('excludeComponentDeclaration', () => {
     it('does not throw if component is declared in an imported module', async () => {
       await render(FixtureComponent, {
