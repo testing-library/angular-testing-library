@@ -6,10 +6,12 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
   template: `
     <form [formGroup]="form" name="form">
       <mat-form-field>
+        <mat-label>Name</mat-label>
         <input matInput placeholder="Name" name="name" formControlName="name" required />
       </mat-form-field>
 
       <mat-form-field>
+        <mat-label>Score</mat-label>
         <input
           matInput
           type="number"
@@ -23,6 +25,7 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
       </mat-form-field>
 
       <mat-form-field>
+        <mat-label>Color</mat-label>
         <mat-select placeholder="Color" name="color" formControlName="color">
           <mat-select-trigger>
             {{ colorControlDisplayValue }}
