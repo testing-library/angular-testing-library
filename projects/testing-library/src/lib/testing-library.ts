@@ -55,7 +55,7 @@ export async function render<SutType, WrapperType = SutType>(
     wrapper = WrapperComponent as Type<WrapperType>,
     componentProperties = {},
     componentProviders = [],
-    ɵcomponentImports: componentImports,
+    componentImports: componentImports,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,
@@ -107,7 +107,7 @@ export async function render<SutType, WrapperType = SutType>(
   };
 
   const change = (changedProperties: Partial<SutType>) => {
-    const changes = getChangesObj(fixture.componentInstance, changedProperties);
+    const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedProperties);
 
     setComponentProperties(fixture, { componentProperties: changedProperties });
 
@@ -288,17 +288,14 @@ function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstanc
   );
 }
 
-function getChangesObj<SutType extends Record<string, any>>(
-  oldProps: Partial<SutType> | null,
-  newProps: Partial<SutType>,
-) {
+function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<string, any>) {
   const isFirstChange = oldProps === null;
   return Object.keys(newProps).reduce<SimpleChanges>(
     (changes, key) => ({
       ...changes,
       [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange),
     }),
-    {} as SutType,
+    {} as Record<string, any>,
   );
 }
 
