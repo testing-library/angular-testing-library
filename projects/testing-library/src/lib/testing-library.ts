@@ -29,7 +29,7 @@ import { RenderComponentOptions, RenderTemplateOptions, RenderResult, ComponentO
 import { getConfig } from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-const inject = TestBed.inject || TestBed.get;
+const safeInject = TestBed.inject || TestBed.get;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -99,6 +99,17 @@ export async function render<SutType, WrapperType = SutType>(
 
   const componentContainer = createComponentFixture(sut, wrapper);
 
+  const zone = safeInject(NgZone);
+  const router = safeInject(Router);
+
+  if (typeof router?.initialNavigation === 'function') {
+    if (zone) {
+      zone.run(() => router?.initialNavigation());
+    } else {
+      router?.initialNavigation();
+    }
+  }
+
   let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
 
@@ -119,17 +130,6 @@ export async function render<SutType, WrapperType = SutType>(
 
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
   };
-
-  const zone = inject(NgZone);
-
-  const router = inject(Router);
-  if (typeof router?.initialNavigation === 'function') {
-    if (zone) {
-      zone.run(() => router?.initialNavigation());
-    } else {
-      router?.initialNavigation();
-    }
-  }
 
   const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
@@ -229,7 +229,7 @@ export async function render<SutType, WrapperType = SutType>(
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
-  await inject(ApplicationInitStatus).donePromise;
+  await safeInject(ApplicationInitStatus).donePromise;
   return TestBed.createComponent(component);
 }
 
