@@ -21,16 +21,18 @@ import { render, fireEvent, screen } from '../src/public_api';
 })
 class FixtureComponent {}
 
-test('creates queries and events', async () => {
-  const view = await render(FixtureComponent);
+describe('DTL functionality', () => {
+  it('creates queries and events', async () => {
+    const view = await render(FixtureComponent);
 
-  /// We wish to test the utility function from `render` here.
-  // eslint-disable-next-line testing-library/prefer-screen-queries
-  fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
-  // eslint-disable-next-line testing-library/prefer-screen-queries
-  expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
-  // eslint-disable-next-line testing-library/prefer-screen-queries
-  fireEvent.click(view.getByText('button'));
+    /// We wish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    fireEvent.click(view.getByText('button'));
+  });
 });
 
 describe('standalone', () => {
@@ -162,13 +164,13 @@ describe('Angular component life-cycle hooks', () => {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-      if (changes.name && this.nameChanged) {
-        this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
+      if (this.nameChanged) {
+        this.nameChanged(changes.name?.currentValue, changes.name?.isFirstChange());
       }
     }
   }
 
-  it('will call ngOnInit on initial render', async () => {
+  it('invokes ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };
     const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
@@ -179,7 +181,7 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameInitialized).toHaveBeenCalledWith('Initial');
   });
 
-  it('will call ngOnChanges on initial render before ngOnInit', async () => {
+  it('invokes ngOnChanges on initial render before ngOnInit', async () => {
     const nameInitialized = jest.fn();
     const nameChanged = jest.fn();
     const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
@@ -192,6 +194,17 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
     /// expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
+  });
+
+  it('does not invoke ngOnChanges when no properties are provided', async () => {
+    @Component({ template: `` })
+    class TestFixtureComponent implements OnChanges {
+      ngOnChanges() {
+        throw new Error('should not be called');
+      }
+    }
+
+    await render(TestFixtureComponent);
   });
 });
 
