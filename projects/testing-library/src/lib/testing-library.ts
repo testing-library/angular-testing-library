@@ -210,7 +210,7 @@ export async function render<SutType, WrapperType = SutType>(
     let isAlive = true;
     fixture.componentRef.onDestroy(() => (isAlive = false));
 
-    if (hasOnChangesHook(fixture.componentInstance)) {
+    if (hasOnChangesHook(fixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
       fixture.componentInstance.ngOnChanges(changes);
     }
