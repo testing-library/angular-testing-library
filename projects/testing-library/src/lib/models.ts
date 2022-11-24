@@ -57,13 +57,22 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
    * Re-render the same component with different properties.
    * This creates a new instance of the component.
    */
-  rerender: (rerenderedProperties: Partial<ComponentType>) => Promise<void>;
-
+  rerender: (
+    properties?: Pick<
+      RenderTemplateOptions<ComponentType>,
+      'componentProperties' | 'componentInputs' | 'componentOutputs'
+    >,
+  ) => Promise<void>;
   /**
    * @description
    * Keeps the current fixture intact and invokes ngOnChanges with the updated properties.
    */
   change: (changedProperties: Partial<ComponentType>) => void;
+  /**
+   * @description
+   * Keeps the current fixture intact, update the @Input properties and invoke ngOnChanges with the updated properties.
+   */
+  changeInput: (changedInputProperties: Partial<ComponentType>) => void;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
@@ -155,7 +164,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   schemas?: any[];
   /**
    * @description
-   * An object to set `@Input` and `@Output` properties of the component
+   * An object to set properties of the component
    *
    * @default
    * {}
@@ -169,6 +178,36 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   componentProperties?: Partial<ComponentType>;
+  /**
+   * @description
+   * An object to set `@Input` properties of the component
+   *
+   * @default
+   * {}
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *  componentInputs: {
+   *    counterValue: 10
+   *  }
+   * })
+   */
+  componentInputs?: Partial<ComponentType>;
+  /**
+   * @description
+   * An object to set `@Output` properties of the component
+   *
+   * @default
+   * {}
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *  componentOutputs: {
+   *    send: (value) => { ... }
+   *  }
+   * })
+   */
+  componentOutputs?: Partial<ComponentType>;
   /**
    * @description
    * A collection of providers to inject dependencies of the component.

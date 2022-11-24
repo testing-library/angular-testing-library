@@ -54,6 +54,8 @@ export async function render<SutType, WrapperType = SutType>(
     queries,
     wrapper = WrapperComponent as Type<WrapperType>,
     componentProperties = {},
+    componentInputs = {},
+    componentOutputs = {},
     componentProviders = [],
     componentImports: componentImports,
     excludeComponentDeclaration = false,
@@ -102,25 +104,51 @@ export async function render<SutType, WrapperType = SutType>(
 
   if (typeof router?.initialNavigation === 'function') {
     if (zone) {
-      zone.run(() => router?.initialNavigation());
+      zone.run(() => router.initialNavigation());
     } else {
-      router?.initialNavigation();
+      router.initialNavigation();
     }
   }
 
   let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
 
-  await renderFixture(componentProperties);
+  await renderFixture(componentProperties, componentInputs, componentOutputs);
 
-  const rerender = async (rerenderedProperties: Partial<SutType>) => {
-    await renderFixture(rerenderedProperties);
+  const rerender = async (
+    properties?: Pick<RenderTemplateOptions<SutType>, 'componentProperties' | 'componentInputs' | 'componentOutputs'>,
+  ) => {
+    await renderFixture(
+      properties?.componentProperties ?? {},
+      properties?.componentInputs ?? {},
+      properties?.componentOutputs ?? {},
+    );
+  };
+
+  const changeInput = (changedInputProperties: Partial<SutType>) => {
+    if (Object.keys(changedInputProperties).length === 0) {
+      return;
+    }
+
+    const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedInputProperties);
+
+    setComponentInputs(fixture, changedInputProperties);
+
+    if (hasOnChangesHook(fixture.componentInstance)) {
+      fixture.componentInstance.ngOnChanges(changes);
+    }
+
+    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
   };
 
   const change = (changedProperties: Partial<SutType>) => {
+    if (Object.keys(changedProperties).length === 0) {
+      return;
+    }
+
     const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedProperties);
 
-    setComponentProperties(fixture, { componentProperties: changedProperties });
+    setComponentProperties(fixture, changedProperties);
 
     if (hasOnChangesHook(fixture.componentInstance)) {
       fixture.componentInstance.ngOnChanges(changes);
@@ -176,6 +204,7 @@ export async function render<SutType, WrapperType = SutType>(
     navigate,
     rerender,
     change,
+    changeInput,
     // @ts-ignore: fixture assigned
     debugElement: fixture.debugElement,
     // @ts-ignore: fixture assigned
@@ -188,13 +217,16 @@ export async function render<SutType, WrapperType = SutType>(
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
 
-  async function renderFixture(properties: Partial<SutType>) {
+  async function renderFixture(properties: Partial<SutType>, inputs: Partial<SutType>, outputs: Partial<SutType>) {
     if (fixture) {
       cleanupAtFixture(fixture);
     }
 
     fixture = await createComponent(componentContainer);
-    setComponentProperties(fixture, { componentProperties: properties });
+
+    setComponentProperties(fixture, properties);
+    setComponentInputs(fixture, inputs);
+    setComponentOutputs(fixture, outputs);
 
     if (removeAngularAttributes) {
       fixture.nativeElement.removeAttribute('ng-version');
@@ -244,7 +276,7 @@ function createComponentFixture<SutType, WrapperType>(
 
 function setComponentProperties<SutType>(
   fixture: ComponentFixture<SutType>,
-  { componentProperties = {} }: Pick<RenderTemplateOptions<SutType, any>, 'componentProperties'>,
+  componentProperties: RenderTemplateOptions<SutType, any>['componentProperties'] = {},
 ) {
   for (const key of Object.keys(componentProperties)) {
     const descriptor = Object.getOwnPropertyDescriptor((fixture.componentInstance as any).constructor.prototype, key);
@@ -268,6 +300,24 @@ function setComponentProperties<SutType>(
     descriptor?.set?.call(fixture.componentInstance, _value);
   }
   return fixture;
+}
+
+function setComponentOutputs<SutType>(
+  fixture: ComponentFixture<SutType>,
+  componentOutputs: RenderTemplateOptions<SutType, any>['componentOutputs'] = {},
+) {
+  for (const [name, value] of Object.entries(componentOutputs)) {
+    (fixture.componentInstance as any)[name] = value;
+  }
+}
+
+function setComponentInputs<SutType>(
+  fixture: ComponentFixture<SutType>,
+  componentInputs: RenderTemplateOptions<SutType>['componentInputs'] = {},
+) {
+  for (const [name, value] of Object.entries(componentInputs)) {
+    fixture.componentRef.setInput(name, value);
+  }
 }
 
 function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports: (Type<any> | any[])[] | undefined) {

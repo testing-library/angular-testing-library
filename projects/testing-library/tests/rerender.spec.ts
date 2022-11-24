@@ -15,7 +15,26 @@ test('rerenders the component with updated props', async () => {
   expect(screen.getByText('Sarah')).toBeInTheDocument();
 
   const firstName = 'Mark';
-  await rerender({ firstName });
+  await rerender({ componentProperties: { firstName } });
+
+  expect(screen.getByText(firstName)).toBeInTheDocument();
+});
+
+test('rerenders without props', async () => {
+  const { rerender } = await render(FixtureComponent);
+  expect(screen.getByText('Sarah')).toBeInTheDocument();
+
+  await rerender();
+
+  expect(screen.getByText('Sarah')).toBeInTheDocument();
+});
+
+test('rerenders the component with updated inputs', async () => {
+  const { rerender } = await render(FixtureComponent);
+  expect(screen.getByText('Sarah')).toBeInTheDocument();
+
+  const firstName = 'Mark';
+  await rerender({ componentInputs: { firstName } });
 
   expect(screen.getByText(firstName)).toBeInTheDocument();
 });
@@ -33,8 +52,8 @@ test('rerenders the component with updated props and resets other props', async 
   expect(screen.getByText(`${firstName} ${lastName}`)).toBeInTheDocument();
 
   const firstName2 = 'Chris';
-  rerender({ firstName: firstName2 });
+  await rerender({ componentProperties: { firstName: firstName2 } });
 
   expect(screen.queryByText(`${firstName2} ${lastName}`)).not.toBeInTheDocument();
-  expect(screen.queryByText(firstName2)).not.toBeInTheDocument();
+  expect(screen.queryByText(`${firstName} ${lastName}`)).not.toBeInTheDocument();
 });
