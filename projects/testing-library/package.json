@@ -29,10 +29,10 @@
     "migrations": "./schematics/migrations/migration.json"
   },
   "peerDependencies": {
-    "@angular/common": "^14.1.0",
-    "@angular/platform-browser": "^14.1.0",
-    "@angular/router": "^14.1.0",
-    "@angular/core": "^14.1.0",
+    "@angular/common": ">=14.1.0",
+    "@angular/platform-browser": ">=14.1.0",
+    "@angular/router": ">=14.1.0",
+    "@angular/core": ">=14.1.0",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "dependencies": {
