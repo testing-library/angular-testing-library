@@ -30,7 +30,7 @@ test('should run logic in the input setter and getter while re-rendering', async
   expect(screen.getByTestId('value')).toHaveTextContent('I am value from setter Angular');
   expect(screen.getByTestId('value-getter')).toHaveTextContent('I am value from getter Angular');
 
-  await rerender({ value: 'React' });
+  await rerender({ componentProperties: { value: 'React' } });
 
   // note we have to re-query because the elements are not the same anymore
   expect(screen.getByTestId('value')).toHaveTextContent('I am value from setter React');

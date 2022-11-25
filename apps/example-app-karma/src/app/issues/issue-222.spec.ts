@@ -9,7 +9,7 @@ it('https://github.com/testing-library/angular-testing-library/issues/222 with r
 
   expect(screen.getByText('Hello Sarah')).toBeTruthy();
 
-  await rerender({ name: 'Mark' });
+  await rerender({ componentProperties: { name: 'Mark' } });
 
   expect(screen.getByText('Hello Mark')).toBeTruthy();
 });
