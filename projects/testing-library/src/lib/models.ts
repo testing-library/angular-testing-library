@@ -78,6 +78,19 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
   /**
    * @description
+   * Automatically detect changes as a "real" running component would do.
+   *
+   * @default
+   * true
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *  autoDetectChanges: false
+   * })
+   */
+  autoDetectChanges?: boolean;
+  /**
+   * @description
    * Will call detectChanges when the component is compiled
    *
    * @default
