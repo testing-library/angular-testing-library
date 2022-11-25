@@ -47,6 +47,7 @@ export async function render<SutType, WrapperType = SutType>(
   const { dom: domConfig, ...globalConfig } = getConfig();
   const {
     detectChanges: detectChangesOnRender = true,
+    autoDetectChanges = true,
     declarations = [],
     imports = [],
     providers = [],
@@ -64,14 +65,7 @@ export async function render<SutType, WrapperType = SutType>(
     defaultImports = [],
   } = { ...globalConfig, ...renderOptions };
 
-  dtlConfigure({
-    eventWrapper: (cb) => {
-      const result = cb();
-      detectChangesForMountedFixtures();
-      return result;
-    },
-    ...domConfig,
-  });
+  dtlConfigure(domConfig);
 
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, {
@@ -193,7 +187,6 @@ export async function render<SutType, WrapperType = SutType>(
       result = doNavigate();
     }
 
-    detectChanges();
     return result ?? false;
   };
 
@@ -223,7 +216,6 @@ export async function render<SutType, WrapperType = SutType>(
     }
 
     fixture = await createComponent(componentContainer);
-
     setComponentProperties(fixture, properties);
     setComponentInputs(fixture, inputs);
     setComponentOutputs(fixture, outputs);
@@ -243,6 +235,10 @@ export async function render<SutType, WrapperType = SutType>(
     if (hasOnChangesHook(fixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
       fixture.componentInstance.ngOnChanges(changes);
+    }
+
+    if (autoDetectChanges) {
+      fixture.autoDetectChanges(true);
     }
 
     detectChanges = () => {
@@ -394,8 +390,6 @@ async function waitForWrapper<T>(
   } catch (err) {
     inFakeAsync = false;
   }
-
-  detectChanges();
 
   return await dtlWaitFor(() => {
     setTimeout(() => detectChanges(), 0);
