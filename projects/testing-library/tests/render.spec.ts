@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   APP_INITIALIZER,
   ApplicationInitStatus,
+  Injectable,
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
@@ -19,7 +20,7 @@ import { render, fireEvent, screen } from '../src/public_api';
     <button>button</button>
   `,
 })
-class FixtureComponent { }
+class FixtureComponent {}
 
 test('creates queries and events', async () => {
   const view = await render(FixtureComponent);
@@ -50,46 +51,84 @@ describe('standalone', () => {
 
 describe('standalone with child', () => {
   @Component({
-    selector: 'child-fixture',
+    selector: 'atl-child-fixture',
     template: `<span>A child fixture</span>`,
     standalone: true,
   })
-  class ChildFixture { }
+  class ChildFixtureComponent {}
 
   @Component({
-    selector: 'child-fixture',
+    selector: 'atl-child-fixture',
     template: `<span>A mock child fixture</span>`,
     standalone: true,
   })
-  class MockChildFixture { }
+  class MockChildFixtureComponent {}
 
   @Component({
-    selector: 'parent-fixture',
+    selector: 'atl-parent-fixture',
     template: `<h1>Parent fixture</h1>
-      <div><child-fixture></child-fixture></div> `,
+      <div><atl-child-fixture></atl-child-fixture></div> `,
     standalone: true,
-    imports: [ChildFixture],
+    imports: [ChildFixtureComponent],
   })
-  class ParentFixture { }
+  class ParentFixtureComponent {}
 
   it('renders the standalone component with child', async () => {
-    await render(ParentFixture);
-    expect(screen.getByText('Parent fixture'));
-    expect(screen.getByText('A child fixture'));
+    await render(ParentFixtureComponent);
+    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
+    expect(screen.getByText('A child fixture')).toBeInTheDocument();
   });
 
-  it('renders the standalone component with child', async () => {
-    await render(ParentFixture, { ɵcomponentImports: [MockChildFixture] });
-    expect(screen.getByText('Parent fixture'));
-    expect(screen.getByText('A mock child fixture'));
+  it('renders the standalone component with child given ɵcomponentImports', async () => {
+    await render(ParentFixtureComponent, { ɵcomponentImports: [MockChildFixtureComponent] });
+    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
+    expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
   });
 
   it('rejects render of template with componentImports set', () => {
-    const result = render(`<div><parent-fixture></parent-fixture></div>`, {
-      imports: [ParentFixture],
-      ɵcomponentImports: [MockChildFixture],
+    const view = render(`<div><atl-parent-fixture></atl-parent-fixture></div>`, {
+      imports: [ParentFixtureComponent],
+      ɵcomponentImports: [MockChildFixtureComponent],
     });
-    return expect(result).rejects.toMatchObject({ message: /Error while rendering/ });
+    return expect(view).rejects.toMatchObject({ message: /Error while rendering/ });
+  });
+});
+
+describe('childComponentOverrides', () => {
+  @Injectable()
+  class MySimpleService {
+    public value = 'real';
+  }
+
+  @Component({
+    selector: 'atl-child-fixture',
+    template: `<span>{{ simpleService.value }}</span>`,
+    standalone: true,
+    providers: [MySimpleService],
+  })
+  class NestedChildFixtureComponent {
+    public constructor(public simpleService: MySimpleService) {}
+  }
+
+  @Component({
+    selector: 'atl-parent-fixture',
+    template: `<atl-child-fixture></atl-child-fixture>`,
+    standalone: true,
+    imports: [NestedChildFixtureComponent],
+  })
+  class ParentFixtureComponent {}
+
+  it('renders with overridden child service when specified', async () => {
+    await render(ParentFixtureComponent, {
+      childComponentOverrides: [
+        {
+          component: NestedChildFixtureComponent,
+          providers: [{ provide: MySimpleService, useValue: { value: 'fake' } }],
+        },
+      ],
+    });
+
+    expect(screen.getByText('fake')).toBeInTheDocument();
   });
 });
 
@@ -117,7 +156,7 @@ describe('animationModule', () => {
   @NgModule({
     declarations: [FixtureComponent],
   })
-  class FixtureModule { }
+  class FixtureModule {}
   describe('excludeComponentDeclaration', () => {
     it('does not throw if component is declared in an imported module', async () => {
       await render(FixtureComponent, {

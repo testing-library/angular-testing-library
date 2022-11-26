@@ -25,7 +25,7 @@ import {
   queries as dtlQueries,
 } from '@testing-library/dom';
 import type { Queries, BoundFunctions } from '@testing-library/dom';
-import { RenderComponentOptions, RenderTemplateOptions, RenderResult } from './models';
+import { RenderComponentOptions, RenderTemplateOptions, RenderResult, ComponentOverride } from './models';
 import { getConfig } from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
@@ -55,6 +55,7 @@ export async function render<SutType, WrapperType = SutType>(
     wrapper = WrapperComponent as Type<WrapperType>,
     componentProperties = {},
     componentProviders = [],
+    childComponentOverrides = [],
     ɵcomponentImports: componentImports,
     excludeComponentDeclaration = false,
     routes = [],
@@ -85,6 +86,7 @@ export async function render<SutType, WrapperType = SutType>(
     schemas: [...schemas],
   });
   overrideComponentImports(sut, componentImports);
+  overrideChildComponentProviders(childComponentOverrides);
 
   await TestBed.compileComponents();
 
@@ -280,6 +282,12 @@ function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports:
       );
     }
   }
+}
+
+function overrideChildComponentProviders(componentOverrides: ComponentOverride<any>[]) {
+  componentOverrides?.forEach(({ component, providers }) => {
+    TestBed.overrideComponent(component, { set: { providers } });
+  });
 }
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
