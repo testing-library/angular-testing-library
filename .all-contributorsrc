@@ -312,6 +312,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "JJosephttg",
+      "name": "Josh Joseph",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23690250?v=4",
+      "profile": "https://github.com/JJosephttg",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -319,5 +329,6 @@
   "projectOwner": "testing-library",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
