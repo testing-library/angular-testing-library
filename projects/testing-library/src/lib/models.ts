@@ -188,6 +188,26 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   componentProviders?: any[];
   /**
    * @description
+   * Collection of child component specified providers to override with
+   *
+   * @default
+   * []
+   *
+   * @example
+   * await render(AppComponent, {
+   *  childComponentOverrides: [
+   *    {
+   *      component: ChildOfAppComponent,
+   *      providers: [{ provide: MyService, useValue: { hello: 'world' } }]
+   *    }
+   *  ]
+   * })
+   *
+   * @experimental
+   */
+  childComponentOverrides?: ComponentOverride<any>[];
+  /**
+   * @description
    * A collection of imports to override a standalone component's imports with.
    *
    * @default
@@ -271,6 +291,11 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   removeAngularAttributes?: boolean;
+}
+
+export interface ComponentOverride<T> {
+  component: Type<T>;
+  providers: any[];
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
