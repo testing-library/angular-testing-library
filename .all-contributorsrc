@@ -322,6 +322,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "shaman-apprentice",
+      "name": "Torsten Knauf",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3596742?v=4",
+      "profile": "https://github.com/shaman-apprentice",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
