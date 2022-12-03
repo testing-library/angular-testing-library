@@ -5,7 +5,7 @@ Hi there, thanks for being willing to contribute!
 ## Setup
 
 - Fork and clone the repository
-- Install dependencies via via `npm install`
+- Install dependencies via `npm install`
 - Create a new feature branch via `git checkout -b feature-branch-name`
 
 ## Testing
