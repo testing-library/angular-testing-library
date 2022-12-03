@@ -226,6 +226,7 @@ Thanks goes to these people ([emoji key][emojis]):
       <td align="center"><a href="https://github.com/dzonatan"><img src="https://avatars.githubusercontent.com/u/5166666?v=4?s=100" width="100px;" alt="Rokas Brazdžionis"/><br /><sub><b>Rokas Brazdžionis</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=dzonatan" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/mateusduraes"><img src="https://avatars.githubusercontent.com/u/19319404?v=4?s=100" width="100px;" alt="Mateus Duraes"/><br /><sub><b>Mateus Duraes</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=mateusduraes" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/JJosephttg"><img src="https://avatars.githubusercontent.com/u/23690250?v=4?s=100" width="100px;" alt="Josh Joseph"/><br /><sub><b>Josh Joseph</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=JJosephttg" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=JJosephttg" title="Tests">⚠️</a></td>
+      <td align="center"><a href="https://github.com/shaman-apprentice"><img src="https://avatars.githubusercontent.com/u/3596742?v=4?s=100" width="100px;" alt="Torsten Knauf"/><br /><sub><b>Torsten Knauf</b></sub></a><br /><a href="#maintenance-shaman-apprentice" title="Maintenance">🚧</a></td>
     </tr>
   </tbody>
 </table>
