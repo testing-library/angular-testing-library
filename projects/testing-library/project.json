@@ -8,7 +8,8 @@
       "executor": "@nrwl/angular:package",
       "outputs": ["dist/@testing-library/angular"],
       "options": {
-        "project": "projects/testing-library/ng-package.json"
+        "project": "projects/testing-library/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": false
       },
       "configurations": {
         "production": {
