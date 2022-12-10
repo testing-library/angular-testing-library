@@ -78,8 +78,25 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * const component = await render(AppComponent, {
    *  detectChanges: false
    * })
+   *
+   * @deprecated
+   * Use `detectChangesOnRender` instead
    */
   detectChanges?: boolean;
+  /**
+   * @description
+   * Invokes `detectChanges` after the component is rendered
+   *
+   * @default
+   * true
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *  detectChangesOnRender: false
+   * })
+   */
+  detectChangesOnRender?: boolean;
+
   /**
    * @description
    * A collection of components, directives and pipes needed to render the component, for example, nested components of the component.
