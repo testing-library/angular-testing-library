@@ -65,6 +65,19 @@ test('calls ngOnChanges on change', async () => {
   expect(screen.getByText(`${propOne} ${propTwo}`)).toBeInTheDocument();
 });
 
+test('does not invoke ngOnChanges on change without props', async () => {
+  const componentInputs = { propOne: 'One', propTwo: 'Two' };
+  const { changeInput, fixture } = await render(FixtureWithNgOnChangesComponent, { componentInputs });
+  const spy = jest.spyOn(fixture.componentInstance, 'ngOnChanges');
+
+  expect(screen.getByText(`${componentInputs.propOne} ${componentInputs.propTwo}`)).toBeInTheDocument();
+
+  changeInput({});
+  expect(spy).not.toHaveBeenCalled();
+
+  expect(screen.getByText(`${componentInputs.propOne} ${componentInputs.propTwo}`)).toBeInTheDocument();
+});
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'atl-fixture',
