@@ -126,15 +126,9 @@ export async function render<SutType, WrapperType = SutType>(
       return;
     }
 
-    const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedInputProperties);
-
     setComponentInputs(fixture, changedInputProperties);
 
-    if (hasOnChangesHook(fixture.componentInstance)) {
-      fixture.componentInstance.ngOnChanges(changes);
-    }
-
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
+    fixture.detectChanges();
   };
 
   const change = (changedProperties: Partial<SutType>) => {
@@ -229,6 +223,7 @@ export async function render<SutType, WrapperType = SutType>(
         fixture.nativeElement.removeAttribute('id');
       }
     }
+
     mountedFixtures.add(fixture);
 
     let isAlive = true;
@@ -338,7 +333,10 @@ function overrideChildComponentProviders(componentOverrides: ComponentOverride<a
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
   return (
-    'ngOnChanges' in componentInstance && typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function'
+    componentInstance !== null &&
+    typeof componentInstance === 'object' &&
+    'ngOnChanges' in componentInstance &&
+    typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function'
   );
 }
 
