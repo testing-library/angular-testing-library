@@ -220,7 +220,7 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameInitialized).toHaveBeenCalledWith('Initial');
   });
 
-  it('invokes ngOnChanges on initial render before ngOnInit', async () => {
+  it('invokes ngOnChanges with componentProperties on initial render before ngOnInit', async () => {
     const nameInitialized = jest.fn();
     const nameChanged = jest.fn();
     const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
@@ -233,6 +233,23 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
     /// expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
+    expect(nameChanged).toHaveBeenCalledTimes(1);
+  });
+
+  it('invokes ngOnChanges with componentInputs on initial render before ngOnInit', async () => {
+    const nameInitialized = jest.fn();
+    const nameChanged = jest.fn();
+    const componentInput = { nameInitialized, nameChanged, name: 'Sarah' };
+
+    const view = await render(FixtureWithNgOnChangesComponent, { componentInputs: componentInput });
+
+    /// We wish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByText('Sarah')).toBeInTheDocument();
+    expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
+    /// expect `nameChanged` to be called before `nameInitialized`
+    expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
+    expect(nameChanged).toHaveBeenCalledTimes(1);
   });
 
   it('does not invoke ngOnChanges when no properties are provided', async () => {
@@ -243,30 +260,39 @@ describe('Angular component life-cycle hooks', () => {
       }
     }
 
-    await render(TestFixtureComponent);
+    const { fixture, detectChanges } = await render(TestFixtureComponent);
+    const spy = jest.spyOn(fixture.componentInstance, 'ngOnChanges');
+
+    detectChanges();
+
+    expect(spy).not.toHaveBeenCalled();
   });
 });
 
-test('waits for angular app initialization before rendering components', async () => {
-  const mock = jest.fn();
+describe('initializer', () => {
+  it('waits for angular app initialization before rendering components', async () => {
+    const mock = jest.fn();
 
-  await render(FixtureComponent, {
-    providers: [
-      {
-        provide: APP_INITIALIZER,
-        useFactory: () => mock,
-        multi: true,
-      },
-    ],
+    await render(FixtureComponent, {
+      providers: [
+        {
+          provide: APP_INITIALIZER,
+          useFactory: () => mock,
+          multi: true,
+        },
+      ],
+    });
+
+    expect(TestBed.inject(ApplicationInitStatus).done).toBe(true);
+    expect(mock).toHaveBeenCalled();
   });
-
-  expect(TestBed.inject(ApplicationInitStatus).done).toBe(true);
-  expect(mock).toHaveBeenCalled();
 });
 
-test('gets the DebugElement', async () => {
-  const view = await render(FixtureComponent);
+describe('DebugElement', () => {
+  it('gets the DebugElement', async () => {
+    const view = await render(FixtureComponent);
 
-  expect(view.debugElement).not.toBeNull();
-  expect(view.debugElement.componentInstance).toBeInstanceOf(FixtureComponent);
+    expect(view.debugElement).not.toBeNull();
+    expect(view.debugElement.componentInstance).toBeInstanceOf(FixtureComponent);
+  });
 });
