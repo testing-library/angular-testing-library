@@ -91,22 +91,6 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   autoDetectChanges?: boolean;
   /**
    * @description
-   * Will call detectChanges when the component is compiled
-   *
-   * @default
-   * true
-   *
-   * @example
-   * const component = await render(AppComponent, {
-   *  detectChanges: false
-   * })
-   *
-   * @deprecated
-   * Use `detectChangesOnRender` instead
-   */
-  detectChanges?: boolean;
-  /**
-   * @description
    * Invokes `detectChanges` after the component is rendered
    *
    * @default
