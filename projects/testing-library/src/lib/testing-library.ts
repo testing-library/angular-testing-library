@@ -46,7 +46,8 @@ export async function render<SutType, WrapperType = SutType>(
 ): Promise<RenderResult<SutType>> {
   const { dom: domConfig, ...globalConfig } = getConfig();
   const {
-    detectChanges: detectChangesOnRender = true,
+    detectChanges: detectChangesDeprecated = true,
+    detectChangesOnRender: detectChangesOnRenderInput,
     autoDetectChanges = true,
     declarations = [],
     imports = [],
@@ -65,6 +66,9 @@ export async function render<SutType, WrapperType = SutType>(
     removeAngularAttributes = false,
     defaultImports = [],
   } = { ...globalConfig, ...renderOptions };
+
+  const detectChangesOnRender =
+    detectChangesOnRenderInput === undefined ? detectChangesDeprecated : detectChangesOnRenderInput;
 
   dtlConfigure(domConfig);
 
