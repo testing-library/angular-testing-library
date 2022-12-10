@@ -255,7 +255,6 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    *
-   * @experimental
    */
   childComponentOverrides?: ComponentOverride<any>[];
   /**
