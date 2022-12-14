@@ -135,7 +135,7 @@ describe('removeAngularAttributes', () => {
 });
 
 test('updates properties and invokes change detection', async () => {
-  const view = await render('<div [update]="value" ></div>', {
+  const view = await render<{ value: string }>('<div [update]="value" ></div>', {
     declarations: [UpdateInputDirective],
     componentProperties: {
       value: 'value1',

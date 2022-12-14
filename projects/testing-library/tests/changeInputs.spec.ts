@@ -11,11 +11,11 @@ class FixtureComponent {
 }
 
 test('changes the component with updated props', async () => {
-  const { change } = await render(FixtureComponent);
+  const { changeInput } = await render(FixtureComponent);
   expect(screen.getByText('Sarah')).toBeInTheDocument();
 
   const firstName = 'Mark';
-  change({ firstName });
+  changeInput({ firstName });
 
   expect(screen.getByText(firstName)).toBeInTheDocument();
 });
@@ -23,8 +23,8 @@ test('changes the component with updated props', async () => {
 test('changes the component with updated props while keeping other props untouched', async () => {
   const firstName = 'Mark';
   const lastName = 'Peeters';
-  const { change } = await render(FixtureComponent, {
-    componentProperties: {
+  const { changeInput } = await render(FixtureComponent, {
+    componentInputs: {
       firstName,
       lastName,
     },
@@ -33,7 +33,7 @@ test('changes the component with updated props while keeping other props untouch
   expect(screen.getByText(`${firstName} ${lastName}`)).toBeInTheDocument();
 
   const firstName2 = 'Chris';
-  change({ firstName: firstName2 });
+  changeInput({ firstName: firstName2 });
 
   expect(screen.getByText(`${firstName2} ${lastName}`)).toBeInTheDocument();
 });
@@ -52,14 +52,14 @@ class FixtureWithNgOnChangesComponent implements OnChanges {
 
 test('calls ngOnChanges on change', async () => {
   const componentInputs = { propOne: 'One', propTwo: 'Two' };
-  const { change, fixture } = await render(FixtureWithNgOnChangesComponent, { componentInputs });
+  const { changeInput, fixture } = await render(FixtureWithNgOnChangesComponent, { componentInputs });
   const spy = jest.spyOn(fixture.componentInstance, 'ngOnChanges');
 
   expect(screen.getByText(`${componentInputs.propOne} ${componentInputs.propTwo}`)).toBeInTheDocument();
 
   const propOne = 'UpdatedOne';
   const propTwo = 'UpdatedTwo';
-  change({ propOne, propTwo });
+  changeInput({ propOne, propTwo });
 
   expect(spy).toHaveBeenCalledTimes(1);
   expect(screen.getByText(`${propOne} ${propTwo}`)).toBeInTheDocument();
@@ -67,16 +67,17 @@ test('calls ngOnChanges on change', async () => {
 
 test('does not invoke ngOnChanges on change without props', async () => {
   const componentInputs = { propOne: 'One', propTwo: 'Two' };
-  const { change, fixture } = await render(FixtureWithNgOnChangesComponent, { componentInputs });
+  const { changeInput, fixture } = await render(FixtureWithNgOnChangesComponent, { componentInputs });
   const spy = jest.spyOn(fixture.componentInstance, 'ngOnChanges');
 
   expect(screen.getByText(`${componentInputs.propOne} ${componentInputs.propTwo}`)).toBeInTheDocument();
 
-  change({});
+  changeInput({});
   expect(spy).not.toHaveBeenCalled();
 
   expect(screen.getByText(`${componentInputs.propOne} ${componentInputs.propTwo}`)).toBeInTheDocument();
 });
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'atl-fixture',
@@ -87,10 +88,10 @@ class FixtureWithOnPushComponent {
 }
 
 test('update properties on change', async () => {
-  const { change } = await render(FixtureWithOnPushComponent);
+  const { changeInput } = await render(FixtureWithOnPushComponent);
   const numberHtmlElementRef = screen.queryByTestId('number');
 
   expect(numberHtmlElementRef).not.toHaveClass('active');
-  change({ activeField: 'number' });
+  changeInput({ activeField: 'number' });
   expect(numberHtmlElementRef).toHaveClass('active');
 });

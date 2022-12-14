@@ -4,7 +4,8 @@
     "outDir": "../../dist/out-tsc",
     "types": [],
     "allowJs": true,
-    "target": "ES2020"
+    "target": "ES2022",
+    "useDefineForClassFields": false
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.d.ts"],

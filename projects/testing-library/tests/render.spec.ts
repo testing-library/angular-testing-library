@@ -22,16 +22,18 @@ import { render, fireEvent, screen } from '../src/public_api';
 })
 class FixtureComponent {}
 
-test('creates queries and events', async () => {
-  const view = await render(FixtureComponent);
+describe('DTL functionality', () => {
+  it('creates queries and events', async () => {
+    const view = await render(FixtureComponent);
 
-  /// We wish to test the utility function from `render` here.
-  // eslint-disable-next-line testing-library/prefer-screen-queries
-  fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
-  // eslint-disable-next-line testing-library/prefer-screen-queries
-  expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
-  // eslint-disable-next-line testing-library/prefer-screen-queries
-  fireEvent.click(view.getByText('button'));
+    /// We wish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByDisplayValue('a super awesome input')).toBeInTheDocument();
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    fireEvent.click(view.getByText('button'));
+  });
 });
 
 describe('standalone', () => {
@@ -79,8 +81,8 @@ describe('standalone with child', () => {
     expect(screen.getByText('A child fixture')).toBeInTheDocument();
   });
 
-  it('renders the standalone component with child given ɵcomponentImports', async () => {
-    await render(ParentFixtureComponent, { ɵcomponentImports: [MockChildFixtureComponent] });
+  it('renders the standalone component with a mocked child', async () => {
+    await render(ParentFixtureComponent, { componentImports: [MockChildFixtureComponent] });
     expect(screen.getByText('Parent fixture')).toBeInTheDocument();
     expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
   });
@@ -88,7 +90,7 @@ describe('standalone with child', () => {
   it('rejects render of template with componentImports set', () => {
     const view = render(`<div><atl-parent-fixture></atl-parent-fixture></div>`, {
       imports: [ParentFixtureComponent],
-      ɵcomponentImports: [MockChildFixtureComponent],
+      componentImports: [MockChildFixtureComponent],
     });
     return expect(view).rejects.toMatchObject({ message: /Error while rendering/ });
   });
@@ -201,13 +203,13 @@ describe('Angular component life-cycle hooks', () => {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-      if (changes.name && this.nameChanged) {
-        this.nameChanged(changes.name.currentValue, changes.name.isFirstChange());
+      if (this.nameChanged) {
+        this.nameChanged(changes.name?.currentValue, changes.name?.isFirstChange());
       }
     }
   }
 
-  it('will call ngOnInit on initial render', async () => {
+  it('invokes ngOnInit on initial render', async () => {
     const nameInitialized = jest.fn();
     const componentProperties = { nameInitialized };
     const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
@@ -218,7 +220,7 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameInitialized).toHaveBeenCalledWith('Initial');
   });
 
-  it('will call ngOnChanges on initial render before ngOnInit', async () => {
+  it('invokes ngOnChanges with componentProperties on initial render before ngOnInit', async () => {
     const nameInitialized = jest.fn();
     const nameChanged = jest.fn();
     const componentProperties = { nameInitialized, nameChanged, name: 'Sarah' };
@@ -231,29 +233,66 @@ describe('Angular component life-cycle hooks', () => {
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
     /// expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
+    expect(nameChanged).toHaveBeenCalledTimes(1);
+  });
+
+  it('invokes ngOnChanges with componentInputs on initial render before ngOnInit', async () => {
+    const nameInitialized = jest.fn();
+    const nameChanged = jest.fn();
+    const componentInput = { nameInitialized, nameChanged, name: 'Sarah' };
+
+    const view = await render(FixtureWithNgOnChangesComponent, { componentInputs: componentInput });
+
+    /// We wish to test the utility function from `render` here.
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    expect(view.getByText('Sarah')).toBeInTheDocument();
+    expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
+    /// expect `nameChanged` to be called before `nameInitialized`
+    expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
+    expect(nameChanged).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not invoke ngOnChanges when no properties are provided', async () => {
+    @Component({ template: `` })
+    class TestFixtureComponent implements OnChanges {
+      ngOnChanges() {
+        throw new Error('should not be called');
+      }
+    }
+
+    const { fixture, detectChanges } = await render(TestFixtureComponent);
+    const spy = jest.spyOn(fixture.componentInstance, 'ngOnChanges');
+
+    detectChanges();
+
+    expect(spy).not.toHaveBeenCalled();
   });
 });
 
-test('waits for angular app initialization before rendering components', async () => {
-  const mock = jest.fn();
+describe('initializer', () => {
+  it('waits for angular app initialization before rendering components', async () => {
+    const mock = jest.fn();
 
-  await render(FixtureComponent, {
-    providers: [
-      {
-        provide: APP_INITIALIZER,
-        useFactory: () => mock,
-        multi: true,
-      },
-    ],
+    await render(FixtureComponent, {
+      providers: [
+        {
+          provide: APP_INITIALIZER,
+          useFactory: () => mock,
+          multi: true,
+        },
+      ],
+    });
+
+    expect(TestBed.inject(ApplicationInitStatus).done).toBe(true);
+    expect(mock).toHaveBeenCalled();
   });
-
-  expect(TestBed.inject(ApplicationInitStatus).done).toBe(true);
-  expect(mock).toHaveBeenCalled();
 });
 
-test('gets the DebugElement', async () => {
-  const view = await render(FixtureComponent);
+describe('DebugElement', () => {
+  it('gets the DebugElement', async () => {
+    const view = await render(FixtureComponent);
 
-  expect(view.debugElement).not.toBeNull();
-  expect(view.debugElement.componentInstance).toBeInstanceOf(FixtureComponent);
+    expect(view.debugElement).not.toBeNull();
+    expect(view.debugElement.componentInstance).toBeInstanceOf(FixtureComponent);
+  });
 });

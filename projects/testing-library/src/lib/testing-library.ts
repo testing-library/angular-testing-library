@@ -29,7 +29,7 @@ import { RenderComponentOptions, RenderTemplateOptions, RenderResult, ComponentO
 import { getConfig } from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-const inject = TestBed.inject || TestBed.get;
+const safeInject = TestBed.inject || TestBed.get;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -46,8 +46,8 @@ export async function render<SutType, WrapperType = SutType>(
 ): Promise<RenderResult<SutType>> {
   const { dom: domConfig, ...globalConfig } = getConfig();
   const {
-    detectChanges: detectChangesDeprecated = true,
-    detectChangesOnRender: detectChangesOnRenderInput,
+    detectChangesOnRender = true,
+    autoDetectChanges = true,
     declarations = [],
     imports = [],
     providers = [],
@@ -55,25 +55,18 @@ export async function render<SutType, WrapperType = SutType>(
     queries,
     wrapper = WrapperComponent as Type<WrapperType>,
     componentProperties = {},
+    componentInputs = {},
+    componentOutputs = {},
     componentProviders = [],
     childComponentOverrides = [],
-    ɵcomponentImports: componentImports,
+    componentImports: componentImports,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,
     defaultImports = [],
   } = { ...globalConfig, ...renderOptions };
 
-  const detectChangesOnRender =
-    detectChangesOnRenderInput === undefined ? detectChangesDeprecated : detectChangesOnRenderInput;
-  dtlConfigure({
-    eventWrapper: (cb) => {
-      const result = cb();
-      detectChangesForMountedFixtures();
-      return result;
-    },
-    ...domConfig,
-  });
+  dtlConfigure(domConfig);
 
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, {
@@ -102,19 +95,50 @@ export async function render<SutType, WrapperType = SutType>(
 
   const componentContainer = createComponentFixture(sut, wrapper);
 
+  const zone = safeInject(NgZone);
+  const router = safeInject(Router);
+
+  if (typeof router?.initialNavigation === 'function') {
+    if (zone) {
+      zone.run(() => router.initialNavigation());
+    } else {
+      router.initialNavigation();
+    }
+  }
+
   let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
 
-  await renderFixture(componentProperties);
+  await renderFixture(componentProperties, componentInputs, componentOutputs);
 
-  const rerender = async (rerenderedProperties: Partial<SutType>) => {
-    await renderFixture(rerenderedProperties);
+  const rerender = async (
+    properties?: Pick<RenderTemplateOptions<SutType>, 'componentProperties' | 'componentInputs' | 'componentOutputs'>,
+  ) => {
+    await renderFixture(
+      properties?.componentProperties ?? {},
+      properties?.componentInputs ?? {},
+      properties?.componentOutputs ?? {},
+    );
+  };
+
+  const changeInput = (changedInputProperties: Partial<SutType>) => {
+    if (Object.keys(changedInputProperties).length === 0) {
+      return;
+    }
+
+    setComponentInputs(fixture, changedInputProperties);
+
+    fixture.detectChanges();
   };
 
   const change = (changedProperties: Partial<SutType>) => {
-    const changes = getChangesObj(fixture.componentInstance, changedProperties);
+    if (Object.keys(changedProperties).length === 0) {
+      return;
+    }
 
-    setComponentProperties(fixture, { componentProperties: changedProperties });
+    const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedProperties);
+
+    setComponentProperties(fixture, changedProperties);
 
     if (hasOnChangesHook(fixture.componentInstance)) {
       fixture.componentInstance.ngOnChanges(changes);
@@ -122,17 +146,6 @@ export async function render<SutType, WrapperType = SutType>(
 
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
   };
-
-  const zone = inject(NgZone);
-
-  const router = inject(Router);
-  if (typeof router?.initialNavigation === 'function') {
-    if (zone) {
-      zone.run(() => router?.initialNavigation());
-    } else {
-      router?.initialNavigation();
-    }
-  }
 
   const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
@@ -170,7 +183,6 @@ export async function render<SutType, WrapperType = SutType>(
       result = doNavigate();
     }
 
-    detectChanges();
     return result ?? false;
   };
 
@@ -181,6 +193,7 @@ export async function render<SutType, WrapperType = SutType>(
     navigate,
     rerender,
     change,
+    changeInput,
     // @ts-ignore: fixture assigned
     debugElement: fixture.debugElement,
     // @ts-ignore: fixture assigned
@@ -193,13 +206,15 @@ export async function render<SutType, WrapperType = SutType>(
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
 
-  async function renderFixture(properties: Partial<SutType>) {
+  async function renderFixture(properties: Partial<SutType>, inputs: Partial<SutType>, outputs: Partial<SutType>) {
     if (fixture) {
       cleanupAtFixture(fixture);
     }
 
     fixture = await createComponent(componentContainer);
-    setComponentProperties(fixture, { componentProperties: properties });
+    setComponentProperties(fixture, properties);
+    setComponentInputs(fixture, inputs);
+    setComponentOutputs(fixture, outputs);
 
     if (removeAngularAttributes) {
       fixture.nativeElement.removeAttribute('ng-version');
@@ -208,14 +223,19 @@ export async function render<SutType, WrapperType = SutType>(
         fixture.nativeElement.removeAttribute('id');
       }
     }
+
     mountedFixtures.add(fixture);
 
     let isAlive = true;
     fixture.componentRef.onDestroy(() => (isAlive = false));
 
-    if (hasOnChangesHook(fixture.componentInstance)) {
+    if (hasOnChangesHook(fixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
       fixture.componentInstance.ngOnChanges(changes);
+    }
+
+    if (autoDetectChanges) {
+      fixture.autoDetectChanges(true);
     }
 
     detectChanges = () => {
@@ -232,7 +252,7 @@ export async function render<SutType, WrapperType = SutType>(
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
-  await inject(ApplicationInitStatus).donePromise;
+  await safeInject(ApplicationInitStatus).donePromise;
   return TestBed.createComponent(component);
 }
 
@@ -249,7 +269,7 @@ function createComponentFixture<SutType, WrapperType>(
 
 function setComponentProperties<SutType>(
   fixture: ComponentFixture<SutType>,
-  { componentProperties = {} }: Pick<RenderTemplateOptions<SutType, any>, 'componentProperties'>,
+  componentProperties: RenderTemplateOptions<SutType, any>['componentProperties'] = {},
 ) {
   for (const key of Object.keys(componentProperties)) {
     const descriptor = Object.getOwnPropertyDescriptor((fixture.componentInstance as any).constructor.prototype, key);
@@ -275,6 +295,24 @@ function setComponentProperties<SutType>(
   return fixture;
 }
 
+function setComponentOutputs<SutType>(
+  fixture: ComponentFixture<SutType>,
+  componentOutputs: RenderTemplateOptions<SutType, any>['componentOutputs'] = {},
+) {
+  for (const [name, value] of Object.entries(componentOutputs)) {
+    (fixture.componentInstance as any)[name] = value;
+  }
+}
+
+function setComponentInputs<SutType>(
+  fixture: ComponentFixture<SutType>,
+  componentInputs: RenderTemplateOptions<SutType>['componentInputs'] = {},
+) {
+  for (const [name, value] of Object.entries(componentInputs)) {
+    fixture.componentRef.setInput(name, value);
+  }
+}
+
 function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports: (Type<any> | any[])[] | undefined) {
   if (imports) {
     if (typeof sut === 'function' && ɵisStandalone(sut)) {
@@ -295,21 +333,21 @@ function overrideChildComponentProviders(componentOverrides: ComponentOverride<a
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
   return (
-    'ngOnChanges' in componentInstance && typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function'
+    componentInstance !== null &&
+    typeof componentInstance === 'object' &&
+    'ngOnChanges' in componentInstance &&
+    typeof (componentInstance as SutType & OnChanges).ngOnChanges === 'function'
   );
 }
 
-function getChangesObj<SutType extends Record<string, any>>(
-  oldProps: Partial<SutType> | null,
-  newProps: Partial<SutType>,
-) {
+function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<string, any>) {
   const isFirstChange = oldProps === null;
   return Object.keys(newProps).reduce<SimpleChanges>(
     (changes, key) => ({
       ...changes,
       [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange),
     }),
-    {} as SutType,
+    {} as Record<string, any>,
   );
 }
 
@@ -358,8 +396,6 @@ async function waitForWrapper<T>(
   } catch (err) {
     inFakeAsync = false;
   }
-
-  detectChanges();
 
   return await dtlWaitFor(() => {
     setTimeout(() => detectChanges(), 0);

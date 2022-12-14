@@ -1,4 +1,5 @@
 {
+  "name": "testing-library",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "projects/testing-library/src",
@@ -6,7 +7,7 @@
   "targets": {
     "build-package": {
       "executor": "@nrwl/angular:package",
-      "outputs": ["dist/@testing-library/angular"],
+      "outputs": ["{workspaceRoot}/dist/@testing-library/angular"],
       "options": {
         "project": "projects/testing-library/ng-package.json",
         "updateBuildableProjectDepsInPackageJson": false
@@ -29,7 +30,7 @@
       "outputs": ["{options.outputFile}"]
     },
     "build": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "parallel": false,
         "commands": [
@@ -50,7 +51,7 @@
       "options": {
         "jestConfig": "projects/testing-library/jest.config.ts"
       },
-      "outputs": ["coverage/projects/testing-library"]
+      "outputs": ["{workspaceRoot}/coverage/projects/testing-library"]
     }
   },
   "tags": []
