@@ -331,6 +331,16 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "antischematic",
+      "name": "antischematic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12976684?v=4",
+      "profile": "https://github.com/antischematic",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
