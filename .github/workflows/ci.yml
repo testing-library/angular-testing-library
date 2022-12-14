@@ -8,12 +8,18 @@ on:
   pull_request: {}
   workflow_dispatch:
 
+permissions: {}
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build_test_release:
+    permissions:
+      actions: write
+      contents: write
+    
     strategy:
       matrix:
         node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[16]' || '[14,16]') }}
