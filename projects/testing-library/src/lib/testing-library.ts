@@ -66,7 +66,16 @@ export async function render<SutType, WrapperType = SutType>(
     defaultImports = [],
   } = { ...globalConfig, ...renderOptions };
 
-  dtlConfigure(domConfig);
+  dtlConfigure({
+    eventWrapper: (cb) => {
+      const result = cb();
+      if (autoDetectChanges) {
+        detectChangesForMountedFixtures();
+      }
+      return result;
+    },
+    ...domConfig,
+  });
 
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, {
@@ -183,6 +192,7 @@ export async function render<SutType, WrapperType = SutType>(
       result = doNavigate();
     }
 
+    detectChanges();
     return result ?? false;
   };
 
@@ -232,10 +242,6 @@ export async function render<SutType, WrapperType = SutType>(
     if (hasOnChangesHook(fixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
       fixture.componentInstance.ngOnChanges(changes);
-    }
-
-    if (autoDetectChanges) {
-      fixture.autoDetectChanges(true);
     }
 
     detectChanges = () => {
