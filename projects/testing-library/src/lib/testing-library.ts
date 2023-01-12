@@ -7,7 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
   ApplicationInitStatus,
-  ɵisStandalone,
+  isStandalone,
 } from '@angular/core';
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -321,7 +321,7 @@ function setComponentInputs<SutType>(
 
 function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports: (Type<any> | any[])[] | undefined) {
   if (imports) {
-    if (typeof sut === 'function' && ɵisStandalone(sut)) {
+    if (typeof sut === 'function' && isStandalone(sut)) {
       TestBed.overrideComponent(sut, { set: { imports } });
     } else {
       throw new Error(
@@ -369,7 +369,7 @@ function addAutoDeclarations<SutType>(
     return [...declarations, wrapper];
   }
 
-  const components = () => (excludeComponentDeclaration || ɵisStandalone(sut) ? [] : [sut]);
+  const components = () => (excludeComponentDeclaration || isStandalone(sut) ? [] : [sut]);
   return [...declarations, ...components()];
 }
 
@@ -384,7 +384,7 @@ function addAutoImports<SutType>(
   };
 
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
-  const components = () => (typeof sut !== 'string' && ɵisStandalone(sut) ? [sut] : []);
+  const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
   return [...imports, ...components(), ...animations(), ...routing()];
 }
 
