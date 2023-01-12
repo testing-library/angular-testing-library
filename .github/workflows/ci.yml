@@ -19,7 +19,7 @@ jobs:
     permissions:
       actions: write
       contents: write
-    
+
     strategy:
       matrix:
         node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[16]' || '[14,16]') }}
@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: install
-        run: npm install --legacy-peer-deps
+        run: npm install
       - name: build
         run: npm run build -- --skip-nx-cache
       - name: test
