@@ -11,7 +11,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
-  const colorControl = screen.getByRole('combobox', { name: /color/i });
+  const colorControl = screen.getByPlaceholderText(/color/i);
   const dateControl = screen.getByRole('textbox', { name: /Choose a date/i });
 
   const errors = screen.getByRole('alert');
@@ -69,7 +69,7 @@ test('set and show pre-set form values', async () => {
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
-  const colorControl = screen.getByRole('combobox', { name: /color/i });
+  const colorControl = screen.getByPlaceholderText(/color/i);
 
   expect(nameControl).toHaveValue('Max');
   expect(scoreControl).toHaveValue(4);
