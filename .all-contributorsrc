@@ -341,6 +341,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "TrustNoOneElse",
+      "name": "Florian Pabst",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25935352?v=4",
+      "profile": "https://github.com/TrustNoOneElse",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
