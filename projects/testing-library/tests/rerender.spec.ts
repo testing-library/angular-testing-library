@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { render, screen } from '../src/public_api';
 
 @Component({
@@ -56,4 +56,41 @@ test('rerenders the component with updated props and resets other props', async 
 
   expect(screen.queryByText(`${firstName2} ${lastName}`)).not.toBeInTheDocument();
   expect(screen.queryByText(`${firstName} ${lastName}`)).not.toBeInTheDocument();
+});
+
+@Component({
+  selector: 'atl-fixture-2',
+  template: `{{
+    hasImproved
+      ? 'Great, I cannot remember any result as good as yours! Keep throwing!'
+      : 'You can do better than that... Try again!'
+  }}`,
+})
+class MotivatorComponent implements OnChanges {
+  @Input() dice = 1;
+
+  hasImproved = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes.dice);
+    if (!changes.dice.firstChange && changes.dice) {
+      this.hasImproved = changes.dice.currentValue > changes.dice.previousValue;
+    }
+  }
+}
+
+test('"ngOnChanges" gets called with an update', async () => {
+  const { rerender } = await render(MotivatorComponent, {
+    componentProperties: { dice: 1 },
+  });
+
+  expect(screen.getByText('You can do better than that... Try again!')).toBeInTheDocument();
+
+  await rerender({
+    componentProperties: {
+      dice: 2,
+    },
+  });
+
+  expect(screen.getByText('Great, I cannot remember any result as good as yours! Keep throwing!')).toBeInTheDocument();
 });
