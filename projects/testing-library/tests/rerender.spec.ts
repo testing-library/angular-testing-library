@@ -54,7 +54,7 @@ test('rerenders the component with updated props and resets other props', async 
   const firstName2 = 'Chris';
   await rerender({ componentProperties: { firstName: firstName2 } });
 
-  expect(screen.queryByText(`${firstName2} ${lastName}`)).not.toBeInTheDocument();
+  expect(screen.getByText(`${firstName2} ${lastName}`)).toBeInTheDocument();
   expect(screen.queryByText(`${firstName} ${lastName}`)).not.toBeInTheDocument();
 });
 
@@ -81,13 +81,13 @@ class MotivatorComponent implements OnChanges {
 
 test('"ngOnChanges" gets called with an update', async () => {
   const { rerender } = await render(MotivatorComponent, {
-    componentProperties: { dice: 1 },
+    componentInputs: { dice: 1 },
   });
 
   expect(screen.getByText('You can do better than that... Try again!')).toBeInTheDocument();
 
   await rerender({
-    componentProperties: {
+    componentInputs: {
       dice: 2,
     },
   });

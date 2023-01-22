@@ -123,11 +123,29 @@ export async function render<SutType, WrapperType = SutType>(
   const rerender = async (
     properties?: Pick<RenderTemplateOptions<SutType>, 'componentProperties' | 'componentInputs' | 'componentOutputs'>,
   ) => {
-    await renderFixture(
-      properties?.componentProperties ?? {},
-      properties?.componentInputs ?? {},
-      properties?.componentOutputs ?? {},
-    );
+    if (properties?.componentProperties) {
+      setComponentProperties(fixture, properties.componentProperties);
+    }
+    if (properties?.componentOutputs) {
+      setComponentOutputs(fixture, properties.componentOutputs);
+    }
+    if (properties?.componentInputs) {
+      const oldProps = {};
+      for (const [key, value] of Object.entries(properties.componentInputs)) {
+        // @ts-ignore -- todo more clever type inferring
+        oldProps[key] = fixture.componentInstance[key];
+        // @ts-ignore -- todo more clever type inferring
+        fixture.componentInstance[key] = value;
+      }
+      if (hasOnChangesHook(fixture.componentInstance)) {
+        const changes = getChangesObj(oldProps, properties.componentInputs);
+        fixture.componentInstance.ngOnChanges(changes);
+      }
+    }
+
+    if (detectChangesOnRender) {
+      detectChanges();
+    }
   };
 
   const changeInput = (changedInputProperties: Partial<SutType>) => {
