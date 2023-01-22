@@ -72,7 +72,6 @@ class MotivatorComponent implements OnChanges {
   hasImproved = false;
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes.dice);
     if (!changes.dice.firstChange && changes.dice) {
       this.hasImproved = changes.dice.currentValue > changes.dice.previousValue;
     }
