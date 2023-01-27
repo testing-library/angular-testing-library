@@ -10,6 +10,8 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
         <input matInput placeholder="Name" name="name" formControlName="name" required />
       </mat-form-field>
 
+      <mat-checkbox formControlName="agree">I Agree</mat-checkbox>
+
       <mat-form-field>
         <mat-label>Score</mat-label>
         <input
@@ -76,6 +78,7 @@ export class MaterialFormsComponent {
     score: [0, [Validators.min(1), Validators.max(10)]],
     color: [null, Validators.required],
     date: [null, Validators.required],
+    agree: [null, Validators.requiredTrue],
   });
 
   constructor(private formBuilder: UntypedFormBuilder) {}
