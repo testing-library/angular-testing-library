@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture',
@@ -35,13 +35,14 @@ export class FormsComponent {
     { id: 'B', value: 'Blue' },
     { id: 'G', value: 'Green' },
   ];
+
   form = this.formBuilder.group({
-    name: ['', Validators.required],
+    name: ['', [Validators.required]],
     score: [0, { validators: [Validators.min(1), Validators.max(10)], updateOn: 'blur' }],
-    color: ['', Validators.required],
+    color: [null as string | null, Validators.required],
   });
 
-  constructor(private formBuilder: UntypedFormBuilder) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   get formErrors() {
     return Object.keys(this.form.controls)

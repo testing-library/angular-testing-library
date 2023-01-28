@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture',
@@ -74,14 +74,14 @@ export class MaterialFormsComponent {
     { id: 'G', value: 'Green' },
   ];
   form = this.formBuilder.group({
-    name: ['', Validators.required],
+    name: ['', [Validators.required]],
     score: [0, [Validators.min(1), Validators.max(10)]],
-    color: [null, Validators.required],
-    date: [null, Validators.required],
-    agree: [null, Validators.requiredTrue],
+    color: [null as string | null, Validators.required],
+    date: [null as Date | null, Validators.required],
+    agree: [false, Validators.requiredTrue],
   });
 
-  constructor(private formBuilder: UntypedFormBuilder) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   get colorControlDisplayValue(): string | undefined {
     const selectedId = this.form.get('color')?.value;
