@@ -1,14 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { render, screen } from '../src/public_api';
 
+let ngOnChangesSpy: jest.Mock;
 @Component({
   selector: 'atl-fixture',
   template: ` {{ firstName }} {{ lastName }} `,
 })
-class FixtureComponent {
+class FixtureComponent implements OnChanges {
   @Input() firstName = 'Sarah';
   @Input() lastName?: string;
+  ngOnChanges(changes: SimpleChanges): void {
+    ngOnChangesSpy(changes);
+  }
 }
+
+beforeEach(() => {
+  ngOnChangesSpy = jest.fn();
+});
 
 test('rerenders the component with updated props', async () => {
   const { rerender } = await render(FixtureComponent);
@@ -54,6 +62,22 @@ test('rerenders the component with updated props and resets other props', async 
   const firstName2 = 'Chris';
   await rerender({ componentProperties: { firstName: firstName2 } });
 
+  expect(screen.getByText(`${firstName2}`)).toBeInTheDocument();
   expect(screen.queryByText(`${firstName2} ${lastName}`)).not.toBeInTheDocument();
   expect(screen.queryByText(`${firstName} ${lastName}`)).not.toBeInTheDocument();
+
+  expect(ngOnChangesSpy).toHaveBeenCalledTimes(2); // one time initially and one time for rerender
+  const rerenderedChanges = ngOnChangesSpy.mock.calls[1][0] as SimpleChanges;
+  expect(rerenderedChanges).toEqual({
+    lastName: {
+      previousValue: 'Peeters',
+      currentValue: undefined,
+      firstChange: false,
+    },
+    firstName: {
+      previousValue: 'Mark',
+      currentValue: 'Chris',
+      firstChange: false,
+    },
+  });
 });

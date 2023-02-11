@@ -55,7 +55,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   /**
    * @description
    * Re-render the same component with different properties.
-   * This creates a new instance of the component.
+   * Properties not passed in again are removed.
    */
   rerender: (
     properties?: Pick<
