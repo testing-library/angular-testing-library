@@ -12,6 +12,7 @@ import {
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render, fireEvent, screen } from '../src/public_api';
+import { Resolve, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'atl-fixture',
@@ -294,5 +295,51 @@ describe('DebugElement', () => {
 
     expect(view.debugElement).not.toBeNull();
     expect(view.debugElement.componentInstance).toBeInstanceOf(FixtureComponent);
+  });
+});
+
+describe('initialRoute', () => {
+  @Component({
+    standalone: true,
+    selector: 'atl-fixture2',
+    template: `<button>Secondary Component</button>`,
+  })
+  class SecondaryFixtureComponent {}
+
+  @Component({
+    standalone: true,
+    selector: 'atl-router-fixture',
+    template: `<router-outlet></router-outlet>`,
+    imports: [RouterModule],
+  })
+  class RouterFixtureComponent {}
+
+  @Injectable()
+  class FixtureResolver implements Resolve<void> {
+    public isResolved = false;
+
+    public resolve() {
+      this.isResolved = true;
+    }
+  }
+
+  it('allows initially rendering a specific route to avoid triggering a resolver for the default route', async () => {
+    const expectedRoute = 'correct-route';
+    const routes = [
+      { path: expectedRoute, component: FixtureComponent },
+      { path: '**', resolve: { data: FixtureResolver }, component: SecondaryFixtureComponent },
+    ];
+
+    await render(RouterFixtureComponent, {
+      initialRoute: expectedRoute,
+      routes,
+      detectChangesOnRender: false,
+      providers: [FixtureResolver],
+    });
+    const resolver = TestBed.inject(FixtureResolver);
+
+    expect(resolver.isResolved).toBe(false);
+    expect(screen.queryByText('Secondary Component')).not.toBeInTheDocument();
+    expect(await screen.findByText('button')).toBeInTheDocument();
   });
 });

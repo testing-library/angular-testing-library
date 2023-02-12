@@ -64,6 +64,7 @@ export async function render<SutType, WrapperType = SutType>(
     routes = [],
     removeAngularAttributes = false,
     defaultImports = [],
+    initialRoute = '',
   } = { ...globalConfig, ...renderOptions };
 
   dtlConfigure({
@@ -106,6 +107,8 @@ export async function render<SutType, WrapperType = SutType>(
 
   const zone = safeInject(NgZone);
   const router = safeInject(Router);
+
+  if (initialRoute) await router.navigate([initialRoute]);
 
   if (typeof router?.initialNavigation === 'function') {
     if (zone) {
