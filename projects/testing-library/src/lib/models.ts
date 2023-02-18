@@ -330,6 +330,21 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
   /**
    * @description
+   * Specifies which route should be initially navigated to
+   *
+   * @example
+   * const component = await render(AppComponent, {
+   *  initialRoute: 'myroute',
+   *  routes: [
+   *    { path: '', component: HomeComponent },
+   *    { path: 'myroute', component: SecondaryComponent }
+   *  ]
+   * })
+   */
+  initialRoute?: string;
+
+  /**
+   * @description
    * Removes the Angular attributes (ng-version, and root-id) from the fixture.
    *
    * @default
