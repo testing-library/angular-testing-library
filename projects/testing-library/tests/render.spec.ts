@@ -324,22 +324,21 @@ describe('initialRoute', () => {
   }
 
   it('allows initially rendering a specific route to avoid triggering a resolver for the default route', async () => {
-    const expectedRoute = 'correct-route';
+    const initialRoute = 'initial-route';
     const routes = [
-      { path: expectedRoute, component: FixtureComponent },
+      { path: initialRoute, component: FixtureComponent },
       { path: '**', resolve: { data: FixtureResolver }, component: SecondaryFixtureComponent },
     ];
 
     await render(RouterFixtureComponent, {
-      initialRoute: expectedRoute,
+      initialRoute,
       routes,
-      detectChangesOnRender: false,
       providers: [FixtureResolver],
     });
     const resolver = TestBed.inject(FixtureResolver);
 
     expect(resolver.isResolved).toBe(false);
     expect(screen.queryByText('Secondary Component')).not.toBeInTheDocument();
-    expect(await screen.findByText('button')).toBeInTheDocument();
+    expect(screen.getByText('button')).toBeInTheDocument();
   });
 });
