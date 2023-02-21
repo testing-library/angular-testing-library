@@ -62,9 +62,9 @@ test('rerenders the component with updated props and resets other props', async 
   const firstName2 = 'Chris';
   await rerender({ componentProperties: { firstName: firstName2 } });
 
-  expect(screen.getByText(`${firstName2}`)).toBeInTheDocument();
-  expect(screen.queryByText(`${firstName2} ${lastName}`)).not.toBeInTheDocument();
-  expect(screen.queryByText(`${firstName} ${lastName}`)).not.toBeInTheDocument();
+  expect(screen.getByText(firstName2)).toBeInTheDocument();
+  expect(screen.queryByText(firstName)).not.toBeInTheDocument();
+  expect(screen.queryByText(lastName)).not.toBeInTheDocument();
 
   expect(ngOnChangesSpy).toHaveBeenCalledTimes(2); // one time initially and one time for rerender
   const rerenderedChanges = ngOnChangesSpy.mock.calls[1][0] as SimpleChanges;
