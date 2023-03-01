@@ -221,9 +221,12 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * {}
    *
    * @example
+   * const sendValue = (value) => { ... }
    * const component = await render(AppComponent, {
    *  componentOutputs: {
-   *    send: (value) => { ... }
+   *    send: {
+   *      emit: sendValue
+   *    }
    *  }
    * })
    */
