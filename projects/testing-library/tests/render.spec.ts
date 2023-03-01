@@ -8,6 +8,8 @@ import {
   APP_INITIALIZER,
   ApplicationInitStatus,
   Injectable,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
@@ -152,6 +154,28 @@ describe('removeAngularAttributes', () => {
 
     expect(document.querySelector('[ng-version]')).not.toBeNull();
     expect(document.querySelector('[id]')).not.toBeNull();
+  });
+});
+
+describe('componentOutputs', () => {
+  it('should set passed event emitter to the component', async () => {
+    @Component({ template: `` })
+    class TestFixtureComponent {
+      @Output() event = new EventEmitter<void>();
+      emitEvent() {
+        this.event.emit();
+      }
+    }
+
+    const mockEmitter = new EventEmitter<void>();
+    const spy = jest.spyOn(mockEmitter, 'emit');
+    const { fixture } = await render(TestFixtureComponent, {
+      componentOutputs: { event: mockEmitter },
+    });
+
+    fixture.componentInstance.emitEvent();
+
+    expect(spy).toHaveBeenCalled();
   });
 });
 

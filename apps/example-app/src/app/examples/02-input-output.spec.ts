@@ -6,8 +6,10 @@ test('is possible to set input and listen for output', async () => {
   const sendValue = jest.fn();
 
   await render(InputOutputComponent, {
-    componentProperties: {
+    componentInputs: {
       value: 47,
+    },
+    componentOutputs: {
       sendValue: {
         emit: sendValue,
       } as any,
