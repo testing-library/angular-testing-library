@@ -81,3 +81,40 @@ test('rerenders the component with updated props and resets other props', async 
     },
   });
 });
+
+describe('detectChangesOnRender', () => {
+  test('change detection gets not called if disabled within render', async () => {
+    const { rerender, detectChanges } = await render(FixtureComponent, { detectChangesOnRender: false });
+    detectChanges();
+    expect(screen.getByText('Sarah')).toBeInTheDocument();
+
+    const firstName = 'Mark';
+    await rerender({ componentInputs: { firstName } });
+
+    expect(screen.getByText('Sarah')).toBeInTheDocument();
+    expect(screen.queryByText(firstName)).not.toBeInTheDocument();
+  });
+
+  test('change detection gets called if disabled within render but enabled within rerender', async () => {
+    const { rerender, detectChanges } = await render(FixtureComponent, { detectChangesOnRender: false });
+    detectChanges();
+    expect(screen.getByText('Sarah')).toBeInTheDocument();
+
+    const firstName = 'Mark';
+    await rerender({ componentInputs: { firstName }, detectChangesOnRender: true });
+
+    expect(screen.getByText(firstName)).toBeInTheDocument();
+    expect(screen.queryByText('Sarah')).not.toBeInTheDocument();
+  });
+
+  test('change detection gets not called if disabled within rerender', async () => {
+    const { rerender } = await render(FixtureComponent);
+    expect(screen.getByText('Sarah')).toBeInTheDocument();
+
+    const firstName = 'Mark';
+    await rerender({ componentInputs: { firstName }, detectChangesOnRender: false });
+
+    expect(screen.getByText('Sarah')).toBeInTheDocument();
+    expect(screen.queryByText(firstName)).not.toBeInTheDocument();
+  });
+});

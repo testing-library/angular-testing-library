@@ -60,7 +60,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   rerender: (
     properties?: Pick<
       RenderTemplateOptions<ComponentType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs'
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
     >,
   ) => Promise<void>;
   /**

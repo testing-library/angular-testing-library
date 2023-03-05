@@ -127,7 +127,10 @@ export async function render<SutType, WrapperType = SutType>(
   let renderedInputKeys = Object.keys(componentInputs);
   let renderedOutputKeys = Object.keys(componentOutputs);
   const rerender = async (
-    properties?: Pick<RenderTemplateOptions<SutType>, 'componentProperties' | 'componentInputs' | 'componentOutputs'>,
+    properties?: Pick<
+      RenderTemplateOptions<SutType>,
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
+    >,
   ) => {
     const newComponentInputs = properties?.componentInputs ?? {};
     for (const inputKey of renderedInputKeys) {
@@ -154,7 +157,12 @@ export async function render<SutType, WrapperType = SutType>(
     }
     renderedPropKeys = Object.keys(newComponentProps);
 
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
+    if (
+      properties?.detectChangesOnRender === true ||
+      (properties?.detectChangesOnRender === undefined && detectChangesOnRender === true)
+    ) {
+      fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
+    }
   };
 
   const changeInput = (changedInputProperties: Partial<SutType>) => {
