@@ -63,7 +63,7 @@ describe('LoginComponent', () => {
     await userEvent.tab();
     await userEvent.click(screen.getByRole('button', { name: 'submit' }));
 
-    expect(screen.getAllByText(/required/i)).toHaveLength(2);
+    expect(screen.getAllByText(/required/i).length).toBe(2);
     expect(screen.getByRole('button', { name: 'submit' })).toBeDisabled();
   });
 });
