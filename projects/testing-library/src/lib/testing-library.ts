@@ -157,10 +157,7 @@ export async function render<SutType, WrapperType = SutType>(
     }
     renderedPropKeys = Object.keys(newComponentProps);
 
-    if (
-      properties?.detectChangesOnRender === true ||
-      (properties?.detectChangesOnRender === undefined && detectChangesOnRender === true)
-    ) {
+    if (properties?.detectChangesOnRender !== false) {
       fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
     }
   };
