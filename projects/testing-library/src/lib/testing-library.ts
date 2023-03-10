@@ -123,14 +123,43 @@ export async function render<SutType, WrapperType = SutType>(
 
   await renderFixture(componentProperties, componentInputs, componentOutputs);
 
+  let renderedPropKeys = Object.keys(componentProperties);
+  let renderedInputKeys = Object.keys(componentInputs);
+  let renderedOutputKeys = Object.keys(componentOutputs);
   const rerender = async (
-    properties?: Pick<RenderTemplateOptions<SutType>, 'componentProperties' | 'componentInputs' | 'componentOutputs'>,
+    properties?: Pick<
+      RenderTemplateOptions<SutType>,
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
+    >,
   ) => {
-    await renderFixture(
-      properties?.componentProperties ?? {},
-      properties?.componentInputs ?? {},
-      properties?.componentOutputs ?? {},
-    );
+    const newComponentInputs = properties?.componentInputs ?? {};
+    for (const inputKey of renderedInputKeys) {
+      if (!Object.prototype.hasOwnProperty.call(newComponentInputs, inputKey)) {
+        delete (fixture.componentInstance as any)[inputKey];
+      }
+    }
+    setComponentInputs(fixture, newComponentInputs);
+    renderedInputKeys = Object.keys(newComponentInputs);
+
+    const newComponentOutputs = properties?.componentOutputs ?? {};
+    for (const outputKey of renderedOutputKeys) {
+      if (!Object.prototype.hasOwnProperty.call(newComponentOutputs, outputKey)) {
+        delete (fixture.componentInstance as any)[outputKey];
+      }
+    }
+    setComponentOutputs(fixture, newComponentOutputs);
+    renderedOutputKeys = Object.keys(newComponentOutputs);
+
+    const newComponentProps = properties?.componentProperties ?? {};
+    const changes = updateProps(fixture, renderedPropKeys, newComponentProps);
+    if (hasOnChangesHook(fixture.componentInstance)) {
+      fixture.componentInstance.ngOnChanges(changes);
+    }
+    renderedPropKeys = Object.keys(newComponentProps);
+
+    if (properties?.detectChangesOnRender !== false) {
+      fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
+    }
   };
 
   const changeInput = (changedInputProperties: Partial<SutType>) => {
@@ -358,6 +387,31 @@ function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<st
     }),
     {} as Record<string, any>,
   );
+}
+
+function updateProps<SutType>(
+  fixture: ComponentFixture<SutType>,
+  prevRenderedPropsKeys: string[],
+  newProps: Record<string, any>,
+) {
+  const componentInstance = fixture.componentInstance as Record<string, any>;
+  const simpleChanges: SimpleChanges = {};
+
+  for (const key of prevRenderedPropsKeys) {
+    if (!Object.prototype.hasOwnProperty.call(newProps, key)) {
+      simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
+      delete componentInstance[key];
+    }
+  }
+
+  for (const [key, value] of Object.entries(newProps)) {
+    if (value !== componentInstance[key]) {
+      simpleChanges[key] = new SimpleChange(componentInstance[key], value, false);
+    }
+  }
+  setComponentProperties(fixture, newProps);
+
+  return simpleChanges;
 }
 
 function addAutoDeclarations<SutType>(
