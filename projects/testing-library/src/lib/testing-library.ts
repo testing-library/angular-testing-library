@@ -162,32 +162,6 @@ export async function render<SutType, WrapperType = SutType>(
     }
   };
 
-  const changeInput = (changedInputProperties: Partial<SutType>) => {
-    if (Object.keys(changedInputProperties).length === 0) {
-      return;
-    }
-
-    setComponentInputs(fixture, changedInputProperties);
-
-    fixture.detectChanges();
-  };
-
-  const change = (changedProperties: Partial<SutType>) => {
-    if (Object.keys(changedProperties).length === 0) {
-      return;
-    }
-
-    const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedProperties);
-
-    setComponentProperties(fixture, changedProperties);
-
-    if (hasOnChangesHook(fixture.componentInstance)) {
-      fixture.componentInstance.ngOnChanges(changes);
-    }
-
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
-  };
-
   const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
     const [path, params] = (basePath + href).split('?');
@@ -234,8 +208,6 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges: () => detectChanges(),
     navigate,
     rerender,
-    change,
-    changeInput,
     // @ts-ignore: fixture assigned
     debugElement: fixture.debugElement,
     // @ts-ignore: fixture assigned
