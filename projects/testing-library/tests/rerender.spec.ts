@@ -48,7 +48,7 @@ test('rerenders the component with updated inputs', async () => {
   expect(screen.getByText(firstName)).toBeInTheDocument();
 });
 
-test('rerenders the component with updated props and resets other props', async () => {
+test('rerenders the component with updated inputs and resets other props', async () => {
   const firstName = 'Mark';
   const lastName = 'Peeters';
   const { rerender } = await render(FixtureComponent, {
