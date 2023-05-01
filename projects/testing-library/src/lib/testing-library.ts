@@ -133,12 +133,7 @@ export async function render<SutType, WrapperType = SutType>(
     >,
   ) => {
     const newComponentInputs = properties?.componentInputs ?? {};
-    for (const inputKey of renderedInputKeys) {
-      if (!Object.prototype.hasOwnProperty.call(newComponentInputs, inputKey)) {
-        delete (fixture.componentInstance as any)[inputKey];
-      }
-    }
-    setComponentInputs(fixture, newComponentInputs);
+    const changesInComponentInput = update(fixture, renderedInputKeys, newComponentInputs, setComponentInputs);
     renderedInputKeys = Object.keys(newComponentInputs);
 
     const newComponentOutputs = properties?.componentOutputs ?? {};
@@ -151,41 +146,19 @@ export async function render<SutType, WrapperType = SutType>(
     renderedOutputKeys = Object.keys(newComponentOutputs);
 
     const newComponentProps = properties?.componentProperties ?? {};
-    const changes = updateProps(fixture, renderedPropKeys, newComponentProps);
-    if (hasOnChangesHook(fixture.componentInstance)) {
-      fixture.componentInstance.ngOnChanges(changes);
-    }
+    const changesInComponentProps = update(fixture, renderedPropKeys, newComponentProps, setComponentProperties);
     renderedPropKeys = Object.keys(newComponentProps);
+
+    if (hasOnChangesHook(fixture.componentInstance)) {
+      fixture.componentInstance.ngOnChanges({
+        ...changesInComponentInput,
+        ...changesInComponentProps,
+      });
+    }
 
     if (properties?.detectChangesOnRender !== false) {
       fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
     }
-  };
-
-  const changeInput = (changedInputProperties: Partial<SutType>) => {
-    if (Object.keys(changedInputProperties).length === 0) {
-      return;
-    }
-
-    setComponentInputs(fixture, changedInputProperties);
-
-    fixture.detectChanges();
-  };
-
-  const change = (changedProperties: Partial<SutType>) => {
-    if (Object.keys(changedProperties).length === 0) {
-      return;
-    }
-
-    const changes = getChangesObj(fixture.componentInstance as Record<string, any>, changedProperties);
-
-    setComponentProperties(fixture, changedProperties);
-
-    if (hasOnChangesHook(fixture.componentInstance)) {
-      fixture.componentInstance.ngOnChanges(changes);
-    }
-
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges();
   };
 
   const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
@@ -234,8 +207,6 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges: () => detectChanges(),
     navigate,
     rerender,
-    change,
-    changeInput,
     // @ts-ignore: fixture assigned
     debugElement: fixture.debugElement,
     // @ts-ignore: fixture assigned
@@ -389,27 +360,32 @@ function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<st
   );
 }
 
-function updateProps<SutType>(
+function update<SutType>(
   fixture: ComponentFixture<SutType>,
-  prevRenderedPropsKeys: string[],
-  newProps: Record<string, any>,
+  prevRenderedKeys: string[],
+  newValues: Record<string, any>,
+  updateFunction: (
+    fixture: ComponentFixture<SutType>,
+    values: RenderTemplateOptions<SutType>['componentInputs' | 'componentProperties'],
+  ) => void,
 ) {
   const componentInstance = fixture.componentInstance as Record<string, any>;
   const simpleChanges: SimpleChanges = {};
 
-  for (const key of prevRenderedPropsKeys) {
-    if (!Object.prototype.hasOwnProperty.call(newProps, key)) {
+  for (const key of prevRenderedKeys) {
+    if (!Object.prototype.hasOwnProperty.call(newValues, key)) {
       simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
       delete componentInstance[key];
     }
   }
 
-  for (const [key, value] of Object.entries(newProps)) {
+  for (const [key, value] of Object.entries(newValues)) {
     if (value !== componentInstance[key]) {
       simpleChanges[key] = new SimpleChange(componentInstance[key], value, false);
     }
   }
-  setComponentProperties(fixture, newProps);
+
+  updateFunction(fixture, newValues);
 
   return simpleChanges;
 }

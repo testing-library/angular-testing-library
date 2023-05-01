@@ -63,22 +63,6 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
       'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
     >,
   ) => Promise<void>;
-  /**
-   * @deprecated
-   * Use rerender instead. For more info see {@link https://github.com/testing-library/angular-testing-library/issues/365 GitHub Issue}
-   *
-   * @description
-   * Keeps the current fixture intact and invokes ngOnChanges with the updated properties.
-   */
-  change: (changedProperties: Partial<ComponentType>) => void;
-  /**
-   * @deprecated
-   * Use rerender instead. For more info see {@link https://github.com/testing-library/angular-testing-library/issues/365 GitHub Issue}
-   *
-   * @description
-   * Keeps the current fixture intact, update the @Input properties and invoke ngOnChanges with the updated properties.
-   */
-  changeInput: (changedInputProperties: Partial<ComponentType>) => void;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
