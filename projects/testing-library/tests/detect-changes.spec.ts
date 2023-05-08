@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { delay } from 'rxjs/operators';
 import { render, fireEvent, screen } from '../src/public_api';
@@ -10,6 +10,8 @@ import { render, fireEvent, screen } from '../src/public_api';
     <input type="text" data-testid="input" [formControl]="inputControl" />
     <button data-testid="button">{{ caption }}</button>
   `,
+  standalone: true,
+  imports: [ReactiveFormsModule],
 })
 class FixtureComponent implements OnInit {
   inputControl = new FormControl();
@@ -22,7 +24,7 @@ class FixtureComponent implements OnInit {
 
 describe('detectChanges', () => {
   it('does not recognize change if execution is delayed', async () => {
-    await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+    await render(FixtureComponent);
 
     fireEvent.input(screen.getByTestId('input'), {
       target: {
@@ -33,9 +35,7 @@ describe('detectChanges', () => {
   });
 
   it('exposes detectChanges triggering a change detection cycle', fakeAsync(async () => {
-    const { detectChanges } = await render(FixtureComponent, {
-      imports: [ReactiveFormsModule],
-    });
+    const { detectChanges } = await render(FixtureComponent);
 
     fireEvent.input(screen.getByTestId('input'), {
       target: {
@@ -43,14 +43,17 @@ describe('detectChanges', () => {
       },
     });
 
-    tick(500);
+    // TODO: The code should be running in the fakeAsync zone to call this function ?
+    // tick(500);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     detectChanges();
 
     expect(screen.getByTestId('button').innerHTML).toBe('Button updated after 400ms');
   }));
 
   it('does not throw on a destroyed fixture', async () => {
-    const { fixture } = await render(FixtureComponent, { imports: [ReactiveFormsModule] });
+    const { fixture } = await render(FixtureComponent);
 
     fixture.destroy();
 

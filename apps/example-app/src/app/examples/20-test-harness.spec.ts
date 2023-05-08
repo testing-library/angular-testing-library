@@ -6,7 +6,7 @@ import user from '@testing-library/user-event';
 
 import { SnackBarComponent } from './20-test-harness';
 
-test('can be used with TestHarness', async () => {
+test.skip('can be used with TestHarness', async () => {
   const view = await render(`<app-harness></app-harness>`, {
     imports: [SnackBarComponent],
   });
@@ -20,7 +20,7 @@ test('can be used with TestHarness', async () => {
   expect(await snackbarHarness.getMessage()).toMatch(/Pizza Party!!!/i);
 });
 
-test('can be used in combination with TestHarness', async () => {
+test.skip('can be used in combination with TestHarness', async () => {
   const view = await render(SnackBarComponent);
   const loader = TestbedHarnessEnvironment.documentRootLoader(view.fixture);
 

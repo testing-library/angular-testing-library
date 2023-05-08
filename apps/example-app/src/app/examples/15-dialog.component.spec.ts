@@ -1,5 +1,5 @@
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { render, screen, waitForElementToBeRemoved, fireEvent } from '@testing-library/angular';
+import { render, screen, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { DialogComponent, DialogContentComponent, DialogContentComponentModule } from './15-dialog.component';
@@ -42,7 +42,7 @@ test('closes the dialog via the backdrop', async () => {
   // eslint-disable-next-line testing-library/no-node-access, @typescript-eslint/no-non-null-assertion
   fireEvent.click(document.querySelector('.cdk-overlay-backdrop')!);
 
-  await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
   const dialogTitle = screen.queryByRole('heading', { name: /dialog title/i });
   expect(dialogTitle).not.toBeInTheDocument();
@@ -64,7 +64,7 @@ test('opens and closes the dialog with buttons', async () => {
   const cancelButton = await screen.findByRole('button', { name: /cancel/i });
   userEvent.click(cancelButton);
 
-  await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
   const dialogTitle = screen.queryByRole('heading', { name: /dialog title/i });
   expect(dialogTitle).not.toBeInTheDocument();

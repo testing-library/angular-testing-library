@@ -7,15 +7,15 @@ describe('fireEvent', () => {
     selector: 'atl-fixture',
     template: ` <input type="text" data-testid="input" [(ngModel)]="name" name="name" />
       <div>Hello {{ name }}</div>`,
+    standalone: true,
+    imports: [FormsModule],
   })
   class FixtureComponent {
     name = '';
   }
 
   it('automatically detect changes when event is fired', async () => {
-    await render(FixtureComponent, {
-      imports: [FormsModule],
-    });
+    await render(FixtureComponent);
 
     fireEvent.input(screen.getByTestId('input'), { target: { value: 'Tim' } });
 
@@ -24,7 +24,6 @@ describe('fireEvent', () => {
 
   it('can disable automatic detect changes when event is fired', async () => {
     const { detectChanges } = await render(FixtureComponent, {
-      imports: [FormsModule],
       autoDetectChanges: false,
     });
 
