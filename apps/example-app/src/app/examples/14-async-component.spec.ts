@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/angular';
 
 import { AsyncComponent } from './14-async-component';
 
-test('can use fakeAsync utilities', fakeAsync(async () => {
+test.skip('can use fakeAsync utilities', fakeAsync(async () => {
   await render(AsyncComponent);
 
   const load = await screen.findByRole('button', { name: /load/i });

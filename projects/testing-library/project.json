@@ -6,7 +6,7 @@
   "prefix": "lib",
   "targets": {
     "build-package": {
-      "executor": "@nrwl/angular:package",
+      "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/@testing-library/angular"],
       "options": {
         "project": "projects/testing-library/ng-package.json",
@@ -23,7 +23,7 @@
       "defaultConfiguration": "production"
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["projects/testing-library/**/*.ts", "projects/testing-library/**/*.html"]
       },
@@ -47,7 +47,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "options": {
         "jestConfig": "projects/testing-library/jest.config.ts"
       },
