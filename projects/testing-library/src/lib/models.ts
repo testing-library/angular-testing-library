@@ -196,7 +196,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  }
    * })
    */
-  componentInputs?: Partial<ComponentType>;
+  componentInputs?: Partial<ComponentType> | { [alias: string]: unknown };
   /**
    * @description
    * An object to set `@Output` properties of the component

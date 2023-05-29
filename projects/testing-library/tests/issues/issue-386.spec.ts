@@ -1,19 +1,18 @@
-import {Component} from '@angular/core';
-import {throwError} from 'rxjs';
-import {render, screen} from '@testing-library/angular';
+import { Component } from '@angular/core';
+import { throwError } from 'rxjs';
 import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../src/public_api';
 
 @Component({
-  selector: 'app-test',
+  selector: 'atl-fixture',
   template: `<button (click)="onTest()">Test</button>`,
   styles: [],
 })
-export class TestComponent {
+class TestComponent {
   onTest() {
     throwError(() => new Error('myerror')).subscribe();
   }
 }
-
 
 describe('TestComponent', () => {
   beforeEach(() => {
@@ -23,7 +22,7 @@ describe('TestComponent', () => {
   afterEach(() => {
     jest.runAllTicks();
     jest.useRealTimers();
-  })
+  });
 
   it('does not fail', async () => {
     await render(TestComponent);
