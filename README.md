@@ -47,11 +47,14 @@ practices.</p>
   </a>
 </div>
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=137053739)
+
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Table of Contents](#table-of-contents)
 - [The problem](#the-problem)
 - [This solution](#this-solution)
 - [Example](#example)
@@ -60,10 +63,12 @@ practices.</p>
 - [Contributors](#contributors)
 - [Docs](#docs)
 - [FAQ](#faq)
+  - [I am using Reactive Forms and the `jest-dom` matcher `toHaveFormValues` always returns an empty object or there are missing fields. Why?](#i-am-using-reactive-forms-and-the-jest-dom-matcher-tohaveformvalues-always-returns-an-empty-object-or-there-are-missing-fields-why)
 - [Issues](#issues)
   - [🐛 Bugs](#-bugs)
   - [💡 Feature Requests](#-feature-requests)
   - [❓ Questions](#-questions)
+- [Getting started with GitHub Codespaces](#getting-started-with-github-codespaces)
 - [LICENSE](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -250,7 +255,7 @@ Contributions of any kind welcome!
 
 ## FAQ
 
-##### I am using Reactive Forms and the `jest-dom` matcher `toHaveFormValues` always returns an empty object or there are missing fields. Why?
+### I am using Reactive Forms and the `jest-dom` matcher `toHaveFormValues` always returns an empty object or there are missing fields. Why?
 
 Only form elements with a `name` attribute will have their values passed to `toHaveFormsValues`.
 
@@ -279,6 +284,16 @@ instead of filing an issue on GitHub.
 
 - [Discord][discord]
 - [Stack Overflow][stackoverflow]
+
+## Getting started with GitHub Codespaces
+
+To get started, create a codespace for this repository by clicking this 👇
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=137053739)
+
+A codespace will open in a web-based version of Visual Studio Code. The [dev container](.devcontainer/devcontainer.json) is fully configured with software needed for this project.
+
+**Note**: Dev containers is an open spec which is supported by [GitHub Codespaces](https://github.com/codespaces) and [other tools](https://containers.dev/supporting).
 
 ## LICENSE
 
