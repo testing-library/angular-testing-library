@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { WithNgRxMockStoreComponent, selectItems } from './07-with-ngrx-mock-store';
 
 test('works with provideMockStore', async () => {
+  const user = userEvent.setup();
+
   await render(WithNgRxMockStoreComponent, {
     providers: [
       provideMockStore({
@@ -21,7 +24,7 @@ test('works with provideMockStore', async () => {
   const store = TestBed.inject(MockStore);
   store.dispatch = jest.fn();
 
-  fireEvent.click(screen.getByText(/seven/i));
+  await user.click(screen.getByText(/seven/i));
 
   expect(store.dispatch).toHaveBeenCalledWith({ type: '[Item List] send', item: 'Seven' });
 });

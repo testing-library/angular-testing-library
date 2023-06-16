@@ -1,9 +1,12 @@
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { StoreModule } from '@ngrx/store';
+import userEvent from '@testing-library/user-event';
 
 import { WithNgRxStoreComponent, reducer } from './06-with-ngrx-store';
 
 test('works with ngrx store', async () => {
+  const user = userEvent.setup();
+
   await render(WithNgRxStoreComponent, {
     imports: [
       StoreModule.forRoot(
@@ -23,10 +26,10 @@ test('works with ngrx store', async () => {
 
   expect(valueControl).toHaveTextContent('0');
 
-  fireEvent.click(incrementControl);
-  fireEvent.click(incrementControl);
+  await user.click(incrementControl);
+  await user.click(incrementControl);
   expect(valueControl).toHaveTextContent('20');
 
-  fireEvent.click(decrementControl);
+  await user.click(decrementControl);
   expect(valueControl).toHaveTextContent('10');
 });
