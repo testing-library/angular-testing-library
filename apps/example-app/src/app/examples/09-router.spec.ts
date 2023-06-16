@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { DetailComponent, RootComponent, HiddenDetailComponent } from './09-router';
 
 test('it can navigate to routes', async () => {
+  const user = userEvent.setup();
   await render(RootComponent, {
     declarations: [DetailComponent, HiddenDetailComponent],
     routes: [
@@ -25,20 +26,20 @@ test('it can navigate to routes', async () => {
 
   expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
 
-  userEvent.click(screen.getByRole('link', { name: /load one/i }));
+  await user.click(screen.getByRole('link', { name: /load one/i }));
   expect(await screen.findByRole('heading', { name: /Detail one/i })).toBeInTheDocument();
 
-  userEvent.click(screen.getByRole('link', { name: /load three/i }));
+  await user.click(screen.getByRole('link', { name: /load three/i }));
   expect(screen.queryByRole('heading', { name: /Detail one/i })).not.toBeInTheDocument();
   expect(await screen.findByRole('heading', { name: /Detail three/i })).toBeInTheDocument();
 
-  userEvent.click(screen.getByRole('link', { name: /back to parent/i }));
+  await user.click(screen.getByRole('link', { name: /back to parent/i }));
   expect(screen.queryByRole('heading', { name: /Detail three/i })).not.toBeInTheDocument();
 
-  userEvent.click(screen.getByRole('link', { name: /load two/i }));
+  await user.click(screen.getByRole('link', { name: /load two/i }));
   expect(await screen.findByRole('heading', { name: /Detail two/i })).toBeInTheDocument();
 
-  userEvent.click(screen.getByRole('link', { name: /hidden x/i }));
+  await user.click(screen.getByRole('link', { name: /hidden x/i }));
   expect(await screen.findByText(/You found the treasure!/i)).toBeInTheDocument();
 });
 

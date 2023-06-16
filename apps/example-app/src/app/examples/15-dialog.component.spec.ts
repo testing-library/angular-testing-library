@@ -1,10 +1,12 @@
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { DialogComponent, DialogContentComponent, DialogContentComponentModule } from './15-dialog.component';
 
 test('dialog closes', async () => {
+  const user = userEvent.setup();
+
   const closeFn = jest.fn();
   await render(DialogContentComponent, {
     imports: [MatDialogModule],
@@ -19,28 +21,28 @@ test('dialog closes', async () => {
   });
 
   const cancelButton = await screen.findByRole('button', { name: /cancel/i });
-  userEvent.click(cancelButton);
+  await user.click(cancelButton);
 
   expect(closeFn).toHaveBeenCalledTimes(1);
 });
 
 test('closes the dialog via the backdrop', async () => {
+  const user = userEvent.setup();
+
   await render(DialogComponent, {
     imports: [MatDialogModule, DialogContentComponentModule],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
-  userEvent.click(openDialogButton);
+  await user.click(openDialogButton);
 
   const dialogControl = await screen.findByRole('dialog');
   expect(dialogControl).toBeInTheDocument();
   const dialogTitleControl = await screen.findByRole('heading', { name: /dialog title/i });
   expect(dialogTitleControl).toBeInTheDocument();
 
-  // using fireEvent because of:
-  // unable to click element as it has or inherits pointer-events set to "none"
-  // eslint-disable-next-line testing-library/no-node-access, @typescript-eslint/no-non-null-assertion
-  fireEvent.click(document.querySelector('.cdk-overlay-backdrop')!);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, testing-library/no-node-access
+  await user.click(document.querySelector('.cdk-overlay-backdrop')!);
 
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
@@ -49,12 +51,14 @@ test('closes the dialog via the backdrop', async () => {
 });
 
 test('opens and closes the dialog with buttons', async () => {
+  const user = userEvent.setup();
+
   await render(DialogComponent, {
     imports: [MatDialogModule, DialogContentComponentModule],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
-  userEvent.click(openDialogButton);
+  await user.click(openDialogButton);
 
   const dialogControl = await screen.findByRole('dialog');
   expect(dialogControl).toBeInTheDocument();
@@ -62,7 +66,7 @@ test('opens and closes the dialog with buttons', async () => {
   expect(dialogTitleControl).toBeInTheDocument();
 
   const cancelButton = await screen.findByRole('button', { name: /cancel/i });
-  userEvent.click(cancelButton);
+  await user.click(cancelButton);
 
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 

@@ -6,6 +6,7 @@ import user from '@testing-library/user-event';
 
 import { SnackBarComponent } from './20-test-harness';
 
+// eslint-disable-next-line jest/no-disabled-tests
 test.skip('can be used with TestHarness', async () => {
   const view = await render(`<app-harness></app-harness>`, {
     imports: [SnackBarComponent],
@@ -20,6 +21,7 @@ test.skip('can be used with TestHarness', async () => {
   expect(await snackbarHarness.getMessage()).toMatch(/Pizza Party!!!/i);
 });
 
+// eslint-disable-next-line jest/no-disabled-tests
 test.skip('can be used in combination with TestHarness', async () => {
   const view = await render(SnackBarComponent);
   const loader = TestbedHarnessEnvironment.documentRootLoader(view.fixture);
