@@ -1,8 +1,10 @@
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { InputOutputComponent } from './02-input-output';
 
 test('is possible to set input and listen for output', async () => {
+  const user = userEvent.setup();
   const sendValue = jest.fn();
 
   await render(InputOutputComponent, {
@@ -22,17 +24,18 @@ test('is possible to set input and listen for output', async () => {
 
   expect(valueControl).toHaveTextContent('47');
 
-  fireEvent.click(incrementControl);
-  fireEvent.click(incrementControl);
-  fireEvent.click(incrementControl);
+  await user.click(incrementControl);
+  await user.click(incrementControl);
+  await user.click(incrementControl);
   expect(valueControl).toHaveTextContent('50');
 
-  fireEvent.click(sendControl);
+  await user.click(sendControl);
   expect(sendValue).toHaveBeenCalledTimes(1);
   expect(sendValue).toHaveBeenCalledWith(50);
 });
 
 test('is possible to set input and listen for output with the template syntax', async () => {
+  const user = userEvent.setup();
   const sendSpy = jest.fn();
 
   await render('<app-fixture [value]="47" (sendValue)="sendValue($event)" (clicked)="clicked()"></app-fixture>', {
@@ -48,12 +51,12 @@ test('is possible to set input and listen for output with the template syntax', 
 
   expect(valueControl).toHaveTextContent('47');
 
-  fireEvent.click(incrementControl);
-  fireEvent.click(incrementControl);
-  fireEvent.click(incrementControl);
+  await user.click(incrementControl);
+  await user.click(incrementControl);
+  await user.click(incrementControl);
   expect(valueControl).toHaveTextContent('50');
 
-  fireEvent.click(sendControl);
+  await user.click(sendControl);
   expect(sendSpy).toHaveBeenCalledTimes(1);
   expect(sendSpy).toHaveBeenCalledWith(50);
 });

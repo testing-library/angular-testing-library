@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+
 import { SingleComponent } from './00-single-component';
 
 test('renders the current value and can increment and decrement', async () => {
