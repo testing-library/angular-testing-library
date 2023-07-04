@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { timer } from 'rxjs';
-import { render, screen, fireEvent, waitFor } from '../src/public_api';
+import { render, screen, waitFor, fireEvent } from '../src/public_api';
 
 @Component({
   selector: 'atl-fixture',
@@ -24,8 +24,7 @@ test('waits for assertion to become true', async () => {
 
   fireEvent.click(screen.getByTestId('button'));
 
-  await screen.findByText('Success');
-  expect(screen.getByText('Success')).toBeInTheDocument();
+  expect(await screen.findByText('Success')).toBeInTheDocument();
 });
 
 test('allows to override options', async () => {

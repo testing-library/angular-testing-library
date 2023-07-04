@@ -16,7 +16,7 @@ class FixtureComponent implements OnInit {
 test('waits for element to be removed (callback)', async () => {
   await render(FixtureComponent);
 
-  await waitForElementToBeRemoved(() => screen.getByTestId('im-here'));
+  await waitForElementToBeRemoved(() => screen.queryByTestId('im-here'));
 
   expect(screen.queryByTestId('im-here')).not.toBeInTheDocument();
 });
@@ -24,7 +24,7 @@ test('waits for element to be removed (callback)', async () => {
 test('waits for element to be removed (element)', async () => {
   await render(FixtureComponent);
 
-  await waitForElementToBeRemoved(screen.getByTestId('im-here'));
+  await waitForElementToBeRemoved(screen.queryByTestId('im-here'));
 
   expect(screen.queryByTestId('im-here')).not.toBeInTheDocument();
 });
@@ -32,7 +32,7 @@ test('waits for element to be removed (element)', async () => {
 test('allows to override options', async () => {
   await render(FixtureComponent);
 
-  await expect(waitForElementToBeRemoved(() => screen.getByTestId('im-here'), { timeout: 200 })).rejects.toThrow(
+  await expect(waitForElementToBeRemoved(() => screen.queryByTestId('im-here'), { timeout: 200 })).rejects.toThrow(
     /Timed out in waitForElementToBeRemoved/i,
   );
 });

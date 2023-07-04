@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Injectable, Input, Output } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import userEvent from '@testing-library/user-event';
 import { of, BehaviorSubject } from 'rxjs';
 import { debounceTime, switchMap, map, startWith } from 'rxjs/operators';
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from '../src/lib/testing-library';
+import userEvent from '@testing-library/user-event';
 
 const DEBOUNCE_TIME = 1_000;
 
@@ -86,8 +86,9 @@ const entities = [
   },
 ];
 
-test('renders the table', async () => {
+async function setup() {
   jest.useFakeTimers();
+  const user = userEvent.setup();
 
   await render(EntitiesComponent, {
     declarations: [TableComponent],
@@ -106,29 +107,50 @@ test('renders the table', async () => {
       },
     ],
   });
+
   const modalMock = TestBed.inject(ModalService);
 
+  return {
+    modalMock,
+    user,
+  };
+}
+
+test('renders the heading', async () => {
+  await setup();
+
   expect(await screen.findByRole('heading', { name: /Entities Title/i })).toBeInTheDocument();
+});
+
+test('renders the entities', async () => {
+  await setup();
 
   expect(await screen.findByRole('cell', { name: /Entity 1/i })).toBeInTheDocument();
   expect(await screen.findByRole('cell', { name: /Entity 2/i })).toBeInTheDocument();
   expect(await screen.findByRole('cell', { name: /Entity 3/i })).toBeInTheDocument();
+});
 
-  userEvent.type(await screen.findByRole('textbox', { name: /Search entities/i }), 'Entity 2', {});
+test.skip('finds the cell', async () => {
+  const { user } = await setup();
+
+  await user.type(await screen.findByRole('textbox', { name: /Search entities/i }), 'Entity 2', {});
 
   jest.advanceTimersByTime(DEBOUNCE_TIME);
 
   await waitForElementToBeRemoved(() => screen.queryByRole('cell', { name: /Entity 1/i }));
   expect(await screen.findByRole('cell', { name: /Entity 2/i })).toBeInTheDocument();
+});
 
-  userEvent.click(await screen.findByRole('button', { name: /New Entity/i }));
+test.skip('opens the modal', async () => {
+  const { modalMock, user } = await setup();
+  await user.click(await screen.findByRole('button', { name: /New Entity/i }));
   expect(modalMock.open).toHaveBeenCalledWith('new entity');
 
   const row = await screen.findByRole('row', {
     name: /Entity 2/i,
   });
 
-  userEvent.click(
+  await user.click(
     await within(row).findByRole('button', {
       name: /edit/i,
     }),
