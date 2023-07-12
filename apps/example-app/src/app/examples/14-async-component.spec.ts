@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/angular';
 
 import { AsyncComponent } from './14-async-component';
 
+// eslint-disable-next-line jest/no-disabled-tests
 test.skip('can use fakeAsync utilities', fakeAsync(async () => {
   await render(AsyncComponent);
 
@@ -20,6 +21,8 @@ test('can use fakeTimer utilities', async () => {
   await render(AsyncComponent);
 
   const load = await screen.findByRole('button', { name: /load/i });
+
+  // userEvent not working with fake timers
   fireEvent.click(load);
 
   jest.advanceTimersByTime(10_000);

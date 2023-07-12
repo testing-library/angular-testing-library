@@ -1,8 +1,10 @@
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { NestedButtonComponent, NestedValueComponent, NestedContainerComponent } from './01-nested-component';
 
 test('renders the current value and can increment and decrement', async () => {
+  const user = userEvent.setup();
   await render(NestedContainerComponent, {
     declarations: [NestedButtonComponent, NestedValueComponent],
   });
@@ -13,10 +15,10 @@ test('renders the current value and can increment and decrement', async () => {
 
   expect(valueControl).toHaveTextContent('0');
 
-  fireEvent.click(incrementControl);
-  fireEvent.click(incrementControl);
+  await user.click(incrementControl);
+  await user.click(incrementControl);
   expect(valueControl).toHaveTextContent('2');
 
-  fireEvent.click(decrementControl);
+  await user.click(decrementControl);
   expect(valueControl).toHaveTextContent('1');
 });

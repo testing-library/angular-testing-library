@@ -5,6 +5,8 @@ import { MaterialModule } from '../material.module';
 import { MaterialFormsComponent } from './04-forms-with-material';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
+  const user = userEvent.setup();
+
   const { fixture } = await render(MaterialFormsComponent, {
     imports: [MaterialModule],
   });
@@ -22,14 +24,14 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(errors).toContainElement(screen.queryByText('color is required'));
   expect(errors).toContainElement(screen.queryByText('agree is required'));
 
-  userEvent.type(nameControl, 'Tim');
-  userEvent.clear(scoreControl);
-  userEvent.type(scoreControl, '12');
-  userEvent.click(colorControl);
-  userEvent.click(screen.getByText(/green/i));
+  await user.type(nameControl, 'Tim');
+  await user.clear(scoreControl);
+  await user.type(scoreControl, '12');
+  await user.click(colorControl);
+  await user.click(screen.getByText(/green/i));
 
   expect(checkboxControl).not.toBeChecked();
-  userEvent.click(checkboxControl);
+  await user.click(checkboxControl);
   expect(checkboxControl).toBeChecked();
   expect(checkboxControl).toBeValid();
 
@@ -39,11 +41,11 @@ test('is possible to fill in a form and verify error messages (with the help of 
   expect(screen.queryByText('agree is required')).not.toBeInTheDocument();
 
   expect(scoreControl).toBeInvalid();
-  userEvent.clear(scoreControl);
-  userEvent.type(scoreControl, '7');
+  await user.clear(scoreControl);
+  await user.type(scoreControl, '7');
   expect(scoreControl).toBeValid();
 
-  userEvent.type(dateControl, '08/11/2022');
+  await user.type(dateControl, '08/11/2022');
 
   expect(errors).not.toBeInTheDocument();
 
@@ -65,6 +67,8 @@ test('is possible to fill in a form and verify error messages (with the help of 
 });
 
 test('set and show pre-set form values', async () => {
+  const user = userEvent.setup();
+
   const { fixture, detectChanges } = await render(MaterialFormsComponent, {
     imports: [MaterialModule],
   });
@@ -87,7 +91,7 @@ test('set and show pre-set form values', async () => {
   expect(scoreControl).toHaveValue(4);
   expect(colorControl).toHaveTextContent('Blue');
   expect(checkboxControl).toBeChecked();
-  userEvent.click(checkboxControl);
+  await user.click(checkboxControl);
 
   const form = screen.getByRole('form');
   expect(form).toHaveFormValues({
