@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
+  standalone: true,
   name: 'stripHTML',
 })
 class StripHTMLPipe implements PipeTransform {
@@ -19,18 +20,16 @@ test('passes HTML as component properties', async () => {
     componentProperties: {
       stringWithHtml: STRING_WITH_HTML,
     },
-    declarations: [StripHTMLPipe],
+    imports: [StripHTMLPipe],
   });
 
   expect(screen.getByText('Some database field with stripped HTML')).toBeInTheDocument();
 });
 
-
 test('throws when passed HTML is passed in directly', async () => {
   await expect(() =>
     render(`<p data-testid="test"> {{ '${STRING_WITH_HTML}' | stripHTML }} </p>`, {
-      declarations: [StripHTMLPipe],
+      imports: [StripHTMLPipe],
     }),
   ).rejects.toThrow();
 });
-

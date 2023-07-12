@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'app-fixture',
   template: `
     <span data-testid="value">{{ derivedValue }}</span>

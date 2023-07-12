@@ -1,28 +1,33 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 @Component({
+  standalone: true,
+  imports: [RouterLink, RouterOutlet],
   selector: 'app-main',
   template: `
-    <a [routerLink]="'./detail/one'">Load one</a> | <a [routerLink]="'./detail/two'">Load two</a> |
-    <a [routerLink]="'./detail/three'">Load three</a> |
+    <a routerLink="./detail/one">Load one</a> | <a routerLink="./detail/two">Load two</a> |
+    <a routerLink="./detail/three">Load three</a> |
 
     <hr />
 
-    <router-outlet></router-outlet>
+    <router-outlet />
   `,
 })
 export class RootComponent {}
 
 @Component({
+  standalone: true,
+  imports: [RouterLink, AsyncPipe],
   selector: 'app-detail',
   template: `
     <h2>Detail {{ id | async }}</h2>
 
     <p>{{ text | async }} {{ subtext | async }}</p>
 
-    <a [routerLink]="'../..'">Back to parent</a>
+    <a routerLink="../..">Back to parent</a>
     <a routerLink="/hidden-detail">hidden x</a>
   `,
 })
@@ -34,6 +39,7 @@ export class DetailComponent {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-detail-hidden',
   template: ' You found the treasure! ',
 })

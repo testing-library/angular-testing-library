@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MaterialModule } from '../material.module';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [MaterialModule, ReactiveFormsModule, NgForOf, NgIf],
   selector: 'app-fixture',
   template: `
     <form [formGroup]="form" name="form">

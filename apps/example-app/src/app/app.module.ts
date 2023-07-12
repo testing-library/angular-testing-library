@@ -28,8 +28,8 @@ function reducerItems() {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
+  declarations: [AppComponent],
+  imports: [
     SingleComponent,
     NestedButtonComponent,
     NestedValueComponent,
@@ -43,8 +43,6 @@ function reducerItems() {
     RootComponent,
     DetailComponent,
     HiddenDetailComponent,
-  ],
-  imports: [
     BrowserModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,

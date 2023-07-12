@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { createSelector, Store, createAction, createReducer, on, select } from '@ngrx/store';
 
@@ -15,6 +16,8 @@ const selectValue = createSelector(
 );
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe],
   selector: 'app-fixture',
   template: `
     <button (click)="decrement()">Decrement</button>

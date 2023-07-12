@@ -11,7 +11,7 @@ export class StandaloneComponent {}
   selector: 'app-standalone-with-child',
   template: `<h1>Hi {{ name }}</h1>
     <p>This has a child</p>
-    <app-standalone></app-standalone> `,
+    <app-standalone />`,
   standalone: true,
   imports: [StandaloneComponent],
 })

@@ -38,8 +38,8 @@ test('is possible to set input and listen for output with the template syntax', 
   const user = userEvent.setup();
   const sendSpy = jest.fn();
 
-  await render('<app-fixture [value]="47" (sendValue)="sendValue($event)" (clicked)="clicked()"></app-fixture>', {
-    declarations: [InputOutputComponent],
+  await render('<app-fixture [value]="47" (sendValue)="sendValue($event)" />', {
+    imports: [InputOutputComponent],
     componentProperties: {
       sendValue: sendSpy,
     },

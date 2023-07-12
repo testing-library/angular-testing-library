@@ -1,15 +1,14 @@
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { DialogComponent, DialogContentComponent, DialogContentComponentModule } from './15-dialog.component';
+import { DialogComponent, DialogContentComponent } from './15-dialog.component';
 
 test('dialog closes', async () => {
   const user = userEvent.setup();
 
   const closeFn = jest.fn();
   await render(DialogContentComponent, {
-    imports: [MatDialogModule],
     providers: [
       {
         provide: MatDialogRef,
@@ -29,9 +28,7 @@ test('dialog closes', async () => {
 test('closes the dialog via the backdrop', async () => {
   const user = userEvent.setup();
 
-  await render(DialogComponent, {
-    imports: [MatDialogModule, DialogContentComponentModule],
-  });
+  await render(DialogComponent);
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
   await user.click(openDialogButton);
@@ -53,9 +50,7 @@ test('closes the dialog via the backdrop', async () => {
 test('opens and closes the dialog with buttons', async () => {
   const user = userEvent.setup();
 
-  await render(DialogComponent, {
-    imports: [MatDialogModule, DialogContentComponentModule],
-  });
+  await render(DialogComponent);
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
   await user.click(openDialogButton);

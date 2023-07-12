@@ -1,8 +1,11 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { delay, filter, mapTo } from 'rxjs/operators';
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgIf],
   selector: 'app-fixture',
   template: `
     <button (click)="load()">Load</button>

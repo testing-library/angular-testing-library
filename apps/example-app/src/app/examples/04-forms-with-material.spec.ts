@@ -1,15 +1,12 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { MaterialModule } from '../material.module';
 import { MaterialFormsComponent } from './04-forms-with-material';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   const user = userEvent.setup();
 
-  const { fixture } = await render(MaterialFormsComponent, {
-    imports: [MaterialModule],
-  });
+  const { fixture } = await render(MaterialFormsComponent);
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
@@ -69,9 +66,7 @@ test('is possible to fill in a form and verify error messages (with the help of 
 test('set and show pre-set form values', async () => {
   const user = userEvent.setup();
 
-  const { fixture, detectChanges } = await render(MaterialFormsComponent, {
-    imports: [MaterialModule],
-  });
+  const { fixture, detectChanges } = await render(MaterialFormsComponent);
 
   fixture.componentInstance.form.setValue({
     name: 'Max',

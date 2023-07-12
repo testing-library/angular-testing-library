@@ -1,12 +1,9 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/angular';
 
 import { CdkVirtualScrollOverviewExampleComponent } from './13-scrolling.component';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 
 test('should scroll to load more items', async () => {
-  await render(CdkVirtualScrollOverviewExampleComponent, {
-    imports: [ScrollingModule],
-  });
+  await render(CdkVirtualScrollOverviewExampleComponent);
 
   const item0 = await screen.findByText(/Item #0/i);
   expect(item0).toBeVisible();

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-fixture',
+  standalone: true,
   template: `
     <button (click)="value = value - 1">Decrement</button>
     <span data-testid="value">{{ value }}</span>

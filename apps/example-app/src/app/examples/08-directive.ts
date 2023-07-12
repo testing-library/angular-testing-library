@@ -1,6 +1,7 @@
 import { Directive, HostListener, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
+  standalone: true,
   selector: '[appSpoiler]',
 })
 export class SpoilerDirective implements OnInit {
