@@ -1,11 +1,23 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MaterialModule } from '../material.module';
 import { NgForOf, NgIf } from '@angular/common';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @Component({
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule, NgForOf, NgIf],
+  imports: [
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    NgForOf,
+    NgIf,
+  ],
   selector: 'app-fixture',
   template: `
     <form [formGroup]="form" name="form">

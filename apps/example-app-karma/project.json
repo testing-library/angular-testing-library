@@ -13,7 +13,6 @@
         "outputPath": "dist/apps/example-app-karma",
         "index": "apps/example-app-karma/src/index.html",
         "main": "apps/example-app-karma/src/main.ts",
-        "polyfills": "apps/example-app-karma/src/polyfills.ts",
         "tsConfig": "apps/example-app-karma/tsconfig.app.json",
         "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
         "styles": [],
@@ -73,9 +72,7 @@
       "executor": "@angular-devkit/build-angular:karma",
       "options": {
         "main": "apps/example-app-karma/src/test.ts",
-        "tsConfig": "apps/example-app-karma/tsconfig.spec.json",
-        "polyfills": "apps/example-app-karma/src/polyfills.ts",
-        "karmaConfig": "apps/example-app-karma/karma.conf.js"
+        "tsConfig": "apps/example-app-karma/tsconfig.spec.json"
       }
     }
   },
