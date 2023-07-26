@@ -6,7 +6,6 @@ import { DetailComponent, RootComponent, HiddenDetailComponent } from './09-rout
 test('it can navigate to routes', async () => {
   const user = userEvent.setup();
   await render(RootComponent, {
-    declarations: [DetailComponent, HiddenDetailComponent],
     routes: [
       {
         path: '',
@@ -45,7 +44,6 @@ test('it can navigate to routes', async () => {
 
 test('it can navigate to routes - workaround', async () => {
   const { navigate } = await render(RootComponent, {
-    declarations: [DetailComponent, HiddenDetailComponent],
     routes: [
       {
         path: '',
@@ -84,7 +82,6 @@ test('it can navigate to routes - workaround', async () => {
 test('it can navigate to routes with a base path', async () => {
   const basePath = 'base';
   const { navigate } = await render(RootComponent, {
-    declarations: [DetailComponent, HiddenDetailComponent],
     routes: [
       {
         path: basePath,

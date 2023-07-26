@@ -1,3 +1,4 @@
+import { AsyncPipe, NgForOf } from '@angular/common';
 import { Component, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -16,6 +17,8 @@ export class CustomersService {
 }
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgForOf],
   selector: 'app-fixture',
   template: `
     <ul>

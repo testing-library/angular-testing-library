@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'app-fixture',
   template: `
     <button (click)="value = value - 1">Decrement</button>

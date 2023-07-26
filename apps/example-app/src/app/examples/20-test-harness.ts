@@ -10,7 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     <button mat-stroked-button (click)="openSnackBar()" aria-label="Show an example snack-bar">Pizza party</button>
   `,
 })
-export class SnackBarComponent {
+export class HarnessComponent {
   constructor(private snackBar: MatSnackBar) {}
 
   openSnackBar() {

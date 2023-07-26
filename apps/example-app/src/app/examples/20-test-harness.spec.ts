@@ -2,14 +2,14 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatSnackBarHarness } from '@angular/material/snack-bar/testing';
 import { render, screen } from '@testing-library/angular';
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 
-import { SnackBarComponent } from './20-test-harness';
+import { HarnessComponent } from './20-test-harness';
 
 // eslint-disable-next-line jest/no-disabled-tests
 test.skip('can be used with TestHarness', async () => {
-  const view = await render(`<app-harness></app-harness>`, {
-    imports: [SnackBarComponent],
+  const view = await render(`<app-harness />`, {
+    imports: [HarnessComponent],
   });
   const loader = TestbedHarnessEnvironment.documentRootLoader(view.fixture);
 
@@ -23,10 +23,12 @@ test.skip('can be used with TestHarness', async () => {
 
 // eslint-disable-next-line jest/no-disabled-tests
 test.skip('can be used in combination with TestHarness', async () => {
-  const view = await render(SnackBarComponent);
+  const user = userEvent.setup();
+
+  const view = await render(HarnessComponent);
   const loader = TestbedHarnessEnvironment.documentRootLoader(view.fixture);
 
-  user.click(screen.getByRole('button'));
+  await user.click(screen.getByRole('button'));
 
   const snackbarHarness = await loader.getHarness(MatSnackBarHarness);
   expect(await snackbarHarness.getMessage()).toMatch(/Pizza Party!!!/i);

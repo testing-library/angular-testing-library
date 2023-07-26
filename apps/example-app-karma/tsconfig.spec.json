@@ -6,6 +6,6 @@
     "target": "ES2022",
     "useDefineForClassFields": false
   },
-  "files": ["src/test.ts", "src/polyfills.ts"],
+  "files": ["src/test.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

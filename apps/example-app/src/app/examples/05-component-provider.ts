@@ -20,6 +20,7 @@ export class CounterService {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-fixture',
   template: `
     <button (click)="counter.decrement()">Decrement</button>

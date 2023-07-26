@@ -13,7 +13,6 @@
         "outputPath": "dist/apps/example-app-karma",
         "index": "apps/example-app-karma/src/index.html",
         "main": "apps/example-app-karma/src/main.ts",
-        "polyfills": "apps/example-app-karma/src/polyfills.ts",
         "tsConfig": "apps/example-app-karma/tsconfig.app.json",
         "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
         "styles": [],
@@ -25,12 +24,6 @@
             {
               "type": "anyComponentStyle",
               "maximumWarning": "6kb"
-            }
-          ],
-          "fileReplacements": [
-            {
-              "replace": "apps/example-app-karma/src/environments/environment.ts",
-              "with": "apps/example-app-karma/src/environments/environment.prod.ts"
             }
           ],
           "outputHashing": "all"
@@ -74,7 +67,6 @@
       "options": {
         "main": "apps/example-app-karma/src/test.ts",
         "tsConfig": "apps/example-app-karma/tsconfig.spec.json",
-        "polyfills": "apps/example-app-karma/src/polyfills.ts",
         "karmaConfig": "apps/example-app-karma/karma.conf.js"
       }
     }

@@ -1,3 +1,4 @@
+import { AsyncPipe, NgForOf } from '@angular/common';
 import { Component } from '@angular/core';
 import { createSelector, Store, select } from '@ngrx/store';
 
@@ -7,6 +8,8 @@ export const selectItems = createSelector(
 );
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgForOf],
   selector: 'app-fixture',
   template: `
     <ul>

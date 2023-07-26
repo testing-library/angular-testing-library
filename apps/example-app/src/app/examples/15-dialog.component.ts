@@ -1,7 +1,9 @@
-import { Component, NgModule } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+  standalone: true,
+  imports: [MatDialogModule],
   selector: 'app-dialog-overview-example',
   template: '<button (click)="openDialog()">Open dialog</button>',
 })
@@ -14,6 +16,8 @@ export class DialogComponent {
 }
 
 @Component({
+  standalone: true,
+  imports: [MatDialogModule],
   selector: 'app-dialog-overview-example-dialog',
   template: `
     <h1 mat-dialog-title>Dialog Title</h1>
@@ -31,8 +35,3 @@ export class DialogContentComponent {
     this.dialogRef.close();
   }
 }
-
-@NgModule({
-  declarations: [DialogContentComponent],
-})
-export class DialogContentComponentModule {}

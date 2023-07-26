@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
+  standalone: true,
+  imports: [ScrollingModule],
   selector: 'app-cdk-virtual-scroll-overview-example',
   template: `
     <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport" data-testid="scroll-viewport">

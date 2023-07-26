@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 
-it('https://github.com/testing-library/angular-testing-library/issues/222 with rerender', async () => {
+it('can rerender component', async () => {
   const { rerender } = await render(`<div>Hello {{ name}}</div>`, {
     componentProperties: {
       name: 'Sarah',

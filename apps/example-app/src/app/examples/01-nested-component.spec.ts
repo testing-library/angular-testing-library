@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { NestedButtonComponent, NestedValueComponent, NestedContainerComponent } from './01-nested-component';
+import { NestedContainerComponent } from './01-nested-component';
 
 test('renders the current value and can increment and decrement', async () => {
   const user = userEvent.setup();
-  await render(NestedContainerComponent, {
-    declarations: [NestedButtonComponent, NestedValueComponent],
-  });
+  await render(NestedContainerComponent);
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });
   const decrementControl = screen.getByRole('button', { name: /decrement/i });

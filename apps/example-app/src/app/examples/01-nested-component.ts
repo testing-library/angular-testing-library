@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'app-button',
   template: ' <button (click)="raise.emit()">{{ name }}</button> ',
 })
@@ -10,6 +11,7 @@ export class NestedButtonComponent {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-value',
   template: ' <span data-testid="value">{{ value }}</span> ',
 })
@@ -18,12 +20,14 @@ export class NestedValueComponent {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-fixture',
   template: `
-    <app-button (raise)="value = value - 1" name="Decrement"></app-button>
-    <app-value [value]="value"></app-value>
-    <app-button (raise)="value = value + 1" name="Increment"></app-button>
+    <app-button (raise)="value = value - 1" name="Decrement" />
+    <app-value [value]="value" />
+    <app-button (raise)="value = value + 1" name="Increment" />
   `,
+  imports: [NestedButtonComponent, NestedValueComponent],
 })
 export class NestedContainerComponent {
   value = 0;

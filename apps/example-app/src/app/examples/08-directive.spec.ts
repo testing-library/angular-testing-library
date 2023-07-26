@@ -7,7 +7,7 @@ test('it is possible to test directives', async () => {
   const user = userEvent.setup();
 
   await render('<div appSpoiler data-testid="dir"></div>', {
-    declarations: [SpoilerDirective],
+    imports: [SpoilerDirective],
   });
 
   const directive = screen.getByTestId('dir');
@@ -30,7 +30,7 @@ test('it is possible to test directives with props', async () => {
   const visible = 'There is nothing to see here ...';
 
   await render('<div appSpoiler [hidden]="hidden" [visible]="visible"></div>', {
-    declarations: [SpoilerDirective],
+    imports: [SpoilerDirective],
     componentProperties: {
       hidden,
       visible,
@@ -55,7 +55,7 @@ test('it is possible to test directives with props in template', async () => {
   const visible = 'There is nothing to see here ...';
 
   await render(`<div appSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
-    declarations: [SpoilerDirective],
+    imports: [SpoilerDirective],
   });
 
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
