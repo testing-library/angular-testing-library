@@ -1,0 +1,54 @@
+import { Component } from '@angular/core';
+import { render, screen } from '../../src/public_api';
+
+test('child', async () => {
+  await render(FixtureComponent);
+  expect(screen.getByText('Hello from child')).toBeInTheDocument();
+});
+
+test('stub', async () => {
+  await render(FixtureComponent, {
+    componentImports: [StubComponent],
+  });
+
+  expect(screen.getByText('Hello from stub')).toBeInTheDocument();
+});
+
+test('configure', async () => {
+  await render(FixtureComponent, {
+    configureTestBed: (testBed) => {
+      testBed.overrideComponent(FixtureComponent, {
+        add: {
+          imports: [StubComponent],
+        },
+        remove: {
+          imports: [ChildComponent],
+        },
+      });
+    },
+  });
+
+  expect(screen.getByText('Hello from stub')).toBeInTheDocument();
+});
+
+@Component({
+  selector: 'atl-child',
+  template: `Hello from child`,
+  standalone: true,
+})
+class ChildComponent {}
+
+@Component({
+  selector: 'atl-child',
+  template: `Hello from stub`,
+  standalone: true,
+})
+class StubComponent {}
+
+@Component({
+  selector: 'atl-fixture',
+  template: `<atl-child />`,
+  standalone: true,
+  imports: [ChildComponent],
+})
+class FixtureComponent {}

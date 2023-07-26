@@ -1,5 +1,5 @@
 import { Type, DebugElement } from '@angular/core';
-import { ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
 
@@ -74,7 +74,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * true
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  autoDetectChanges: false
    * })
    */
@@ -87,7 +87,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * true
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  detectChangesOnRender: false
    * })
    */
@@ -103,7 +103,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * []
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  declarations: [ CustomerDetailComponent, ButtonComponent ]
    * })
    */
@@ -118,7 +118,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * []
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  providers: [
    *    CustomersService,
    *    {
@@ -140,7 +140,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * `[NoopAnimationsModule]`
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  imports: [
    *    AppSharedModule,
    *    MaterialModule,
@@ -159,7 +159,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * []
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  schemas: [
    *    NO_ERRORS_SCHEMA,
    *  ]
@@ -174,7 +174,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * {}
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  componentProperties: {
    *    counterValue: 10,
    *    send: (value) => { ... }
@@ -190,7 +190,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * {}
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  componentInputs: {
    *    counterValue: 10
    *  }
@@ -206,7 +206,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *
    * @example
    * const sendValue = (value) => { ... }
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  componentOutputs: {
    *    send: {
    *      emit: sendValue
@@ -225,7 +225,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * []
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  componentProviders: [
    *    AppComponentService
    *  ]
@@ -259,7 +259,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * undefined
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *   componentImports: [
    *     MockChildComponent
    *   ]
@@ -277,7 +277,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * import * as customQueries from 'custom-queries'
    * import { queries } from '@testing-library/angular'
    *
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  queries: { ...queries, ...customQueries }
    * })
    */
@@ -291,7 +291,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * false
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  imports: [AppModule], // a module that includes AppComponent
    *  excludeComponentDeclaration: true
    * })
@@ -304,7 +304,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * For more info see https://angular.io/api/router/Routes.
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  declarations: [ChildComponent],
    *  routes: [
    *    {
@@ -326,7 +326,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * Specifies which route should be initially navigated to
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  initialRoute: 'myroute',
    *  routes: [
    *    { path: '', component: HomeComponent },
@@ -344,11 +344,25 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * `false`
    *
    * @example
-   * const component = await render(AppComponent, {
+   * await render(AppComponent, {
    *  removeAngularAttributes: true
    * })
    */
   removeAngularAttributes?: boolean;
+
+  /**
+   * @description
+   * Callback to configure the testbed before the compilation.
+   *
+   * @default
+   * () => {}
+   *
+   * @example
+   * await render(AppComponent, {
+   *  configureTestBed: (testBed) => { }
+   * })
+   */
+  configureTestBed?: (testbed: TestBed) => void;
 }
 
 export interface ComponentOverride<T> {
@@ -368,7 +382,7 @@ export interface RenderTemplateOptions<WrapperType, Properties extends object = 
    * `WrapperComponent`, an empty component that strips the `ng-version` attribute
    *
    * @example
-   * const component = await render(`<div spoiler message='SPOILER'></div>`, {
+   * await render(`<div spoiler message='SPOILER'></div>`, {
    *  declarations: [SpoilerDirective]
    *  wrapper: CustomWrapperComponent
    * })
