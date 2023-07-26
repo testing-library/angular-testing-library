@@ -236,6 +236,7 @@ Thanks goes to these people ([emoji key][emojis]):
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/TrustNoOneElse"><img src="https://avatars.githubusercontent.com/u/25935352?v=4?s=100" width="100px;" alt="Florian Pabst"/><br /><sub><b>Florian Pabst</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=TrustNoOneElse" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://rochesterparks.org"><img src="https://avatars.githubusercontent.com/u/9759954?v=4?s=100" width="100px;" alt="Mark Goho"/><br /><sub><b>Mark Goho</b></sub></a><br /><a href="#maintenance-markgoho" title="Maintenance">🚧</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=markgoho" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
