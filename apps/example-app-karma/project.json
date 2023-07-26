@@ -26,12 +26,6 @@
               "maximumWarning": "6kb"
             }
           ],
-          "fileReplacements": [
-            {
-              "replace": "apps/example-app-karma/src/environments/environment.ts",
-              "with": "apps/example-app-karma/src/environments/environment.prod.ts"
-            }
-          ],
           "outputHashing": "all"
         },
         "development": {
@@ -72,7 +66,8 @@
       "executor": "@angular-devkit/build-angular:karma",
       "options": {
         "main": "apps/example-app-karma/src/test.ts",
-        "tsConfig": "apps/example-app-karma/tsconfig.spec.json"
+        "tsConfig": "apps/example-app-karma/tsconfig.spec.json",
+        "karmaConfig": "apps/example-app-karma/karma.conf.js"
       }
     }
   },
