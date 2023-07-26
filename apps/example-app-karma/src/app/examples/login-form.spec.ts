@@ -4,12 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/angular';
 import { NgIf } from '@angular/common';
 
-const setup = async () => {
-  return render(LoginComponent);
-};
-
 it('should create a component with inputs and a button to submit', async () => {
-  await setup();
+  await render(LoginComponent);
 
   expect(screen.getByRole('textbox', { name: 'email' })).toBeInTheDocument();
   expect(screen.getByLabelText('password')).toBeInTheDocument();
@@ -17,15 +13,15 @@ it('should create a component with inputs and a button to submit', async () => {
 });
 
 it('should display invalid message and submit button must be disabled', async () => {
-  const utils = userEvent.setup();
+  const user = userEvent.setup();
 
-  await setup();
+  await render(LoginComponent);
 
   const email = screen.getByRole('textbox', { name: 'email' });
   const password = screen.getByLabelText('password');
 
-  await utils.type(email, 'foo');
-  await utils.type(password, 's');
+  await user.type(email, 'foo');
+  await user.type(password, 's');
 
   expect(screen.getAllByText(/is invalid/i).length).toBe(2);
   expect(screen.getAllByRole('alert').length).toBe(2);

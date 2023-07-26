@@ -4,12 +4,12 @@ import { MatSnackBarHarness } from '@angular/material/snack-bar/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { SnackBarComponent } from './20-test-harness';
+import { HarnessComponent } from './20-test-harness';
 
 // eslint-disable-next-line jest/no-disabled-tests
 test.skip('can be used with TestHarness', async () => {
   const view = await render(`<app-harness />`, {
-    imports: [SnackBarComponent],
+    imports: [HarnessComponent],
   });
   const loader = TestbedHarnessEnvironment.documentRootLoader(view.fixture);
 
@@ -25,7 +25,7 @@ test.skip('can be used with TestHarness', async () => {
 test.skip('can be used in combination with TestHarness', async () => {
   const user = userEvent.setup();
 
-  const view = await render(SnackBarComponent);
+  const view = await render(HarnessComponent);
   const loader = TestbedHarnessEnvironment.documentRootLoader(view.fixture);
 
   await user.click(screen.getByRole('button'));
