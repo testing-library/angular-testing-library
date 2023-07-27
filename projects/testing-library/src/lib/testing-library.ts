@@ -65,6 +65,9 @@ export async function render<SutType, WrapperType = SutType>(
     removeAngularAttributes = false,
     defaultImports = [],
     initialRoute = '',
+    configureTestBed = () => {
+      /* noop*/
+    },
   } = { ...globalConfig, ...renderOptions };
 
   dtlConfigure({
@@ -93,6 +96,8 @@ export async function render<SutType, WrapperType = SutType>(
   });
   overrideComponentImports(sut, componentImports);
   overrideChildComponentProviders(childComponentOverrides);
+
+  configureTestBed(TestBed);
 
   await TestBed.compileComponents();
 

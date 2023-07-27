@@ -366,3 +366,14 @@ describe('initialRoute', () => {
     expect(screen.getByText('button')).toBeInTheDocument();
   });
 });
+
+describe('configureTestBed', () => {
+  it('invokes configureTestBed', async () => {
+    const configureTestBedFn = jest.fn();
+    await render(FixtureComponent, {
+      configureTestBed: configureTestBedFn,
+    });
+
+    expect(configureTestBedFn).toHaveBeenCalledTimes(1);
+  });
+});
