@@ -14,7 +14,9 @@ import {
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render, fireEvent, screen } from '../src/public_api';
-import { Resolve, RouterModule } from '@angular/router';
+import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
+import { map } from 'rxjs';
+import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'atl-fixture',
@@ -364,6 +366,30 @@ describe('initialRoute', () => {
     expect(resolver.isResolved).toBe(false);
     expect(screen.queryByText('Secondary Component')).not.toBeInTheDocument();
     expect(screen.getByText('button')).toBeInTheDocument();
+  });
+
+  it('allows initially rendering a specific route with query parameters', async () => {
+    @Component({
+      standalone: true,
+      selector: 'atl-query-param-fixture',
+      template: `<p>paramPresent$: {{ paramPresent$ | async }}</p>`,
+      imports: [NgIf, AsyncPipe],
+    })
+    class QueryParamFixtureComponent {
+      constructor(public route: ActivatedRoute) {}
+
+      paramPresent$ = this.route.queryParams.pipe(map((queryParams) => (queryParams?.param ? 'present' : 'missing')));
+    }
+
+    const initialRoute = 'initial-route?param=query';
+    const routes = [{ path: 'initial-route', component: QueryParamFixtureComponent }];
+
+    await render(RouterFixtureComponent, {
+      initialRoute,
+      routes,
+    });
+
+    expect(screen.getByText(/present/i)).toBeVisible();
   });
 });
 

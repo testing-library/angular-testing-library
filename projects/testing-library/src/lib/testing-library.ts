@@ -112,8 +112,45 @@ export async function render<SutType, WrapperType = SutType>(
 
   const zone = safeInject(NgZone);
   const router = safeInject(Router);
+  const _navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
+    const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
+    const [path, params] = (basePath + href).split('?');
+    const queryParams = params
+      ? params.split('&').reduce((qp, q) => {
+          const [key, value] = q.split('=');
+          const currentValue = qp[key];
+          if (typeof currentValue === 'undefined') {
+            qp[key] = value;
+          } else if (Array.isArray(currentValue)) {
+            qp[key] = [...currentValue, value];
+          } else {
+            qp[key] = [currentValue, value];
+          }
+          return qp;
+        }, {} as Record<string, string | string[]>)
+      : undefined;
 
-  if (initialRoute) await router.navigate([initialRoute]);
+    const navigateOptions: NavigationExtras | undefined = queryParams
+      ? {
+          queryParams,
+        }
+      : undefined;
+
+    const doNavigate = () => {
+      return navigateOptions ? router?.navigate([path], navigateOptions) : router?.navigate([path]);
+    };
+
+    let result;
+
+    if (zone) {
+      await zone.run(() => (result = doNavigate()));
+    } else {
+      result = doNavigate();
+    }
+    return result ?? false;
+  };
+
+  if (initialRoute) await _navigate(initialRoute);
 
   if (typeof router?.initialNavigation === 'function') {
     if (zone) {
@@ -167,43 +204,9 @@ export async function render<SutType, WrapperType = SutType>(
   };
 
   const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
-    const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
-    const [path, params] = (basePath + href).split('?');
-    const queryParams = params
-      ? params.split('&').reduce((qp, q) => {
-          const [key, value] = q.split('=');
-          const currentValue = qp[key];
-          if (typeof currentValue === 'undefined') {
-            qp[key] = value;
-          } else if (Array.isArray(currentValue)) {
-            qp[key] = [...currentValue, value];
-          } else {
-            qp[key] = [currentValue, value];
-          }
-          return qp;
-        }, {} as Record<string, string | string[]>)
-      : undefined;
-
-    const navigateOptions: NavigationExtras | undefined = queryParams
-      ? {
-          queryParams,
-        }
-      : undefined;
-
-    const doNavigate = () => {
-      return navigateOptions ? router?.navigate([path], navigateOptions) : router?.navigate([path]);
-    };
-
-    let result;
-
-    if (zone) {
-      await zone.run(() => (result = doNavigate()));
-    } else {
-      result = doNavigate();
-    }
-
+    const result = await _navigate(elementOrPath, basePath);
     detectChanges();
-    return result ?? false;
+    return result;
   };
 
   return {
