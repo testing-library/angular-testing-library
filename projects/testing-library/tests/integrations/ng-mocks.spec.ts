@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 
 import { MockComponent } from 'ng-mocks';
 import { render } from '../../src/public_api';
+import { NgIf } from '@angular/common';
 
 test('sends the correct value to the child input', async () => {
   const utils = await render(TargetComponent, {
@@ -34,6 +35,7 @@ test('sends the correct value to the child input 2', async () => {
   selector: 'atl-child',
   template: 'child',
   standalone: true,
+  imports: [NgIf],
 })
 class ChildComponent {
   @ContentChild('something')
