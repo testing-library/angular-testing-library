@@ -360,6 +360,16 @@
         "maintenance",
         "doc"
       ]
+    },
+    {
+      "login": "jwbaart",
+      "name": "Jan-Willem Baart",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10973990?v=4",
+      "profile": "http://jwbaart.dev",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
