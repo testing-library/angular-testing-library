@@ -1,4 +1,4 @@
-import { Type, DebugElement } from '@angular/core';
+import { Type, DebugElement, ModuleWithProviders, EnvironmentProviders, TypeProvider } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
@@ -65,6 +65,12 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   ) => Promise<void>;
 }
 
+export interface ProviderInterface {
+  provide: any;
+  useValue: any;
+  multi?: boolean;
+}
+
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
   /**
    * @description
@@ -128,7 +134,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  providers?: any[];
+  providers?: Array<ProviderInterface | TypeProvider | EnvironmentProviders>;
   /**
    * @description
    * A collection of imports needed to render the component, for example, shared modules.
@@ -147,7 +153,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  imports?: any[];
+  imports?: Array<Type<any> | ModuleWithProviders<unknown> | any[]>;
   /**
    * @description
    * A collection of schemas needed to render the component.
@@ -231,7 +237,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  componentProviders?: any[];
+  componentProviders?: Array<ProviderInterface | TypeProvider | EnvironmentProviders>;
   /**
    * @description
    * Collection of child component specified providers to override with
