@@ -29,10 +29,10 @@
     "migrations": "./schematics/migrations/migration.json"
   },
   "peerDependencies": {
-    "@angular/common": ">= 15.1.0 || >= 16.0.0",
-    "@angular/platform-browser": ">= 15.1.0 || >= 16.0.0",
-    "@angular/router": ">= 15.1.0 || >= 16.0.0",
-    "@angular/core": ">= 15.1.0 || >= 16.0.0"
+    "@angular/common": ">= 15.1.0 || >= 16.0.0 || >= 17.0.0",
+    "@angular/platform-browser": ">= 15.1.0 || >= 16.0.0 || >= 17.0.0",
+    "@angular/router": ">= 15.1.0 || >= 16.0.0 || >= 17.0.0",
+    "@angular/core": ">= 15.1.0 || >= 16.0.0 || >= 17.0.0"
   },
   "dependencies": {
     "@testing-library/dom": "^9.0.0",

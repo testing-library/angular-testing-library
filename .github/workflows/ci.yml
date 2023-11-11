@@ -33,7 +33,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: install
-        run: npm install
+        # ng-mocks needs to add ng 17 to their peer dependencies
+        run: npm install --force
       - name: build
         run: npm run build -- --skip-nx-cache
       - name: test

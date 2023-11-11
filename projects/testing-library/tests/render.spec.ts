@@ -68,6 +68,8 @@ describe('standalone with child', () => {
     selector: 'atl-child-fixture',
     template: `<span>A mock child fixture</span>`,
     standalone: true,
+    // eslint-disable-next-line @angular-eslint/no-host-metadata-property, @typescript-eslint/naming-convention
+    host: { 'collision-id': MockChildFixtureComponent.name },
   })
   class MockChildFixtureComponent {}
 
@@ -80,16 +82,16 @@ describe('standalone with child', () => {
   })
   class ParentFixtureComponent {}
 
-  it('renders the standalone component with child', async () => {
-    await render(ParentFixtureComponent);
-    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
-    expect(screen.getByText('A child fixture')).toBeInTheDocument();
-  });
-
   it('renders the standalone component with a mocked child', async () => {
     await render(ParentFixtureComponent, { componentImports: [MockChildFixtureComponent] });
     expect(screen.getByText('Parent fixture')).toBeInTheDocument();
     expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
+  });
+
+  it('renders the standalone component with child', async () => {
+    await render(ParentFixtureComponent);
+    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
+    expect(screen.getByText('A child fixture')).toBeInTheDocument();
   });
 
   it('rejects render of template with componentImports set', () => {
