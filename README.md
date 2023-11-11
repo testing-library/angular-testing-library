@@ -164,6 +164,7 @@ You may also be interested in installing `jest-dom` so you can use
 
 | Angular | Angular Testing Library |
 | ------- | ----------------------- |
+| 17.x    | 13.x, 14.x              |
 | 16.x    | 13.x, 14.x              |
 | >= 15.1 | 13.x \|\| 14.x          |
 | < 15.1  | 11.x \|\| 12.x          |
