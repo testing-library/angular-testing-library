@@ -28,6 +28,7 @@
 # misc
 /.angular/cache
 .angular
+.nx
 .cache
 /.sass-cache
 /connect.lock

@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { render, screen } from '../../src/public_api';
 
-test('child', async () => {
-  await render(FixtureComponent);
-  expect(screen.getByText('Hello from child')).toBeInTheDocument();
-});
-
 test('stub', async () => {
   await render(FixtureComponent, {
     componentImports: [StubComponent],
@@ -31,6 +26,11 @@ test('configure', async () => {
   expect(screen.getByText('Hello from stub')).toBeInTheDocument();
 });
 
+test('child', async () => {
+  await render(FixtureComponent);
+  expect(screen.getByText('Hello from child')).toBeInTheDocument();
+});
+
 @Component({
   selector: 'atl-child',
   template: `Hello from child`,
@@ -42,6 +42,8 @@ class ChildComponent {}
   selector: 'atl-child',
   template: `Hello from stub`,
   standalone: true,
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property, @typescript-eslint/naming-convention
+  host: { 'collision-id': StubComponent.name },
 })
 class StubComponent {}
 
