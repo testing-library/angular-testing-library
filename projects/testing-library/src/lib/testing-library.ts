@@ -492,7 +492,7 @@ function cleanupAtFixture(fixture: ComponentFixture<any>) {
 
   if (!fixture.nativeElement.getAttribute('ng-version') && fixture.nativeElement.parentNode === document.body) {
     document.body.removeChild(fixture.nativeElement);
-  } else if (!fixture.nativeElement.getAttribute('id') && document.body.children[0] === fixture.nativeElement) {
+  } else if (!fixture.nativeElement.getAttribute('id') && document.body.children?.[0] === fixture.nativeElement) {
     document.body.removeChild(fixture.nativeElement);
   }
 
