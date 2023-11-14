@@ -1,4 +1,14 @@
-import { Type, DebugElement } from '@angular/core';
+import {
+  Type,
+  DebugElement,
+  ModuleWithProviders,
+  EnvironmentProviders,
+  Provider,
+  ValueProvider,
+  ClassProvider,
+  ExistingProvider,
+  FactoryProvider,
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
@@ -107,7 +117,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  declarations: [ CustomerDetailComponent, ButtonComponent ]
    * })
    */
-  declarations?: any[];
+  declarations?: Array<Type<any> | any[]>;
   /**
    * @description
    * A collection of providers needed to render the component via Dependency Injection, for example, injectable services or tokens.
@@ -128,7 +138,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  providers?: any[];
+  providers?: Array<Provider | EnvironmentProviders>;
   /**
    * @description
    * A collection of imports needed to render the component, for example, shared modules.
@@ -147,7 +157,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  imports?: any[];
+  imports?: Array<Type<any> | ModuleWithProviders<any>>;
   /**
    * @description
    * A collection of schemas needed to render the component.
@@ -231,7 +241,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  componentProviders?: any[];
+  componentProviders?: Array<ValueProvider | ClassProvider | ExistingProvider | FactoryProvider>;
   /**
    * @description
    * Collection of child component specified providers to override with
