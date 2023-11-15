@@ -15,6 +15,8 @@ export class DeferableViewChildComponent {}
         <p>Hello from placeholder</p>
     } @loading {
         <p>Hello from loading</p>
+    } @error {
+        <p>Hello from error</p>
     }
   `,
   imports: [DeferableViewChildComponent],

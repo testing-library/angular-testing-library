@@ -171,7 +171,7 @@ export async function render<SutType, WrapperType = SutType>(
         await renderDeferBlock(fixture, deferBlockState.deferBlockState, deferBlockState.deferBlockIndex);
       }
     } else {
-      await renderDeferBlock(fixture, deferBlockStates, 0);
+      await renderDeferBlock(fixture, deferBlockStates);
     }
   }
 
@@ -224,7 +224,7 @@ export async function render<SutType, WrapperType = SutType>(
     detectChanges: () => detectChanges(),
     navigate,
     rerender,
-    renderDeferBlock: async (deferBlockState: DeferBlockState, deferBlockIndex: number = 0) => {
+    renderDeferBlock: async (deferBlockState: DeferBlockState, deferBlockIndex?: number) => {
       await renderDeferBlock(fixture, deferBlockState, deferBlockIndex);
     },
     debugElement: fixture.debugElement,
@@ -443,17 +443,25 @@ function addAutoImports<SutType>(
 async function renderDeferBlock<SutType>(
   fixture: ComponentFixture<SutType>,
   deferBlockState: DeferBlockState,
-  deferBlockIndex: number,
+  deferBlockIndex?: number,
 ) {
-  if (deferBlockIndex < 0) {
-    throw new Error('deferBlockIndex must be a positive number');
-  }
-  const deferBlockFixture = (await fixture.getDeferBlocks())[deferBlockIndex];
+  const deferBlockFixtures = await fixture.getDeferBlocks();
 
-  if (!deferBlockFixture) {
-    throw new Error(`Could not find deferrable view with index '${deferBlockIndex}'`);
+  if (deferBlockIndex !== undefined) {
+    if (deferBlockIndex < 0) {
+      throw new Error('deferBlockIndex must be a positive number');
+    }
+
+    const deferBlockFixture = deferBlockFixtures[deferBlockIndex];
+    if (!deferBlockFixture) {
+      throw new Error(`Could not find a deferrable block with index '${deferBlockIndex}'`);
+    }
+    await deferBlockFixture.render(deferBlockState);
+  } else {
+    for (const deferBlockFixture of deferBlockFixtures) {
+      await deferBlockFixture.render(deferBlockState);
+    }
   }
-  await deferBlockFixture.render(deferBlockState);
 }
 
 /**

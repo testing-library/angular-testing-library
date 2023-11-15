@@ -16,8 +16,8 @@ test('renders deferred views based on state', async () => {
 
 test('initially renders deferred views based on given state', async () => {
   await render(DeferableViewComponent, {
-    deferBlockStates: DeferBlockState.Complete,
+    deferBlockStates: DeferBlockState.Error,
   });
 
-  expect(screen.getByText(/Hello from deferred child component/i)).toBeInTheDocument();
+  expect(screen.getByText(/Hello from error/i)).toBeInTheDocument();
 });
