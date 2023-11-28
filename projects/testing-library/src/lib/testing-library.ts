@@ -9,7 +9,7 @@ import {
   ApplicationInitStatus,
   isStandalone,
 } from '@angular/core';
-import { ComponentFixture, DeferBlockState, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationExtras, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -65,7 +65,6 @@ export async function render<SutType, WrapperType = SutType>(
     removeAngularAttributes = false,
     defaultImports = [],
     initialRoute = '',
-    deferBlockStates = undefined,
     configureTestBed = () => {
       /* noop*/
     },
@@ -161,19 +160,10 @@ export async function render<SutType, WrapperType = SutType>(
     }
   }
 
+  let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
 
-  const fixture = await renderFixture(componentProperties, componentInputs, componentOutputs);
-
-  if (deferBlockStates) {
-    if (Array.isArray(deferBlockStates)) {
-      for (const deferBlockState of deferBlockStates) {
-        await renderDeferBlock(fixture, deferBlockState.deferBlockState, deferBlockState.deferBlockIndex);
-      }
-    } else {
-      await renderDeferBlock(fixture, deferBlockStates);
-    }
-  }
+  await renderFixture(componentProperties, componentInputs, componentOutputs);
 
   let renderedPropKeys = Object.keys(componentProperties);
   let renderedInputKeys = Object.keys(componentInputs);
@@ -220,61 +210,60 @@ export async function render<SutType, WrapperType = SutType>(
   };
 
   return {
+    // @ts-ignore: fixture assigned
     fixture,
     detectChanges: () => detectChanges(),
     navigate,
     rerender,
-    renderDeferBlock: async (deferBlockState: DeferBlockState, deferBlockIndex?: number) => {
-      await renderDeferBlock(fixture, deferBlockState, deferBlockIndex);
-    },
+    // @ts-ignore: fixture assigned
     debugElement: fixture.debugElement,
+    // @ts-ignore: fixture assigned
     container: fixture.nativeElement,
     debug: (element = fixture.nativeElement, maxLength, options) =>
       Array.isArray(element)
         ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
         : console.log(dtlPrettyDOM(element, maxLength, options)),
+    // @ts-ignore: fixture assigned
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
 
-  async function renderFixture(
-    properties: Partial<SutType>,
-    inputs: Partial<SutType>,
-    outputs: Partial<SutType>,
-  ): Promise<ComponentFixture<SutType>> {
-    const createdFixture = await createComponent(componentContainer);
-    setComponentProperties(createdFixture, properties);
-    setComponentInputs(createdFixture, inputs);
-    setComponentOutputs(createdFixture, outputs);
+  async function renderFixture(properties: Partial<SutType>, inputs: Partial<SutType>, outputs: Partial<SutType>) {
+    if (fixture) {
+      cleanupAtFixture(fixture);
+    }
+
+    fixture = await createComponent(componentContainer);
+    setComponentProperties(fixture, properties);
+    setComponentInputs(fixture, inputs);
+    setComponentOutputs(fixture, outputs);
 
     if (removeAngularAttributes) {
-      createdFixture.nativeElement.removeAttribute('ng-version');
-      const idAttribute = createdFixture.nativeElement.getAttribute('id');
+      fixture.nativeElement.removeAttribute('ng-version');
+      const idAttribute = fixture.nativeElement.getAttribute('id');
       if (idAttribute && idAttribute.startsWith('root')) {
-        createdFixture.nativeElement.removeAttribute('id');
+        fixture.nativeElement.removeAttribute('id');
       }
     }
 
-    mountedFixtures.add(createdFixture);
+    mountedFixtures.add(fixture);
 
     let isAlive = true;
-    createdFixture.componentRef.onDestroy(() => (isAlive = false));
+    fixture.componentRef.onDestroy(() => (isAlive = false));
 
-    if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
+    if (hasOnChangesHook(fixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
-      createdFixture.componentInstance.ngOnChanges(changes);
+      fixture.componentInstance.ngOnChanges(changes);
     }
 
     detectChanges = () => {
       if (isAlive) {
-        createdFixture.detectChanges();
+        fixture.detectChanges();
       }
     };
 
     if (detectChangesOnRender) {
       detectChanges();
     }
-
-    return createdFixture;
   }
 }
 
@@ -438,30 +427,6 @@ function addAutoImports<SutType>(
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
   const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
   return [...imports, ...components(), ...animations(), ...routing()];
-}
-
-async function renderDeferBlock<SutType>(
-  fixture: ComponentFixture<SutType>,
-  deferBlockState: DeferBlockState,
-  deferBlockIndex?: number,
-) {
-  const deferBlockFixtures = await fixture.getDeferBlocks();
-
-  if (deferBlockIndex !== undefined) {
-    if (deferBlockIndex < 0) {
-      throw new Error('deferBlockIndex must be a positive number');
-    }
-
-    const deferBlockFixture = deferBlockFixtures[deferBlockIndex];
-    if (!deferBlockFixture) {
-      throw new Error(`Could not find a deferrable block with index '${deferBlockIndex}'`);
-    }
-    await deferBlockFixture.render(deferBlockState);
-  } else {
-    for (const deferBlockFixture of deferBlockFixtures) {
-      await deferBlockFixture.render(deferBlockState);
-    }
-  }
 }
 
 /**
