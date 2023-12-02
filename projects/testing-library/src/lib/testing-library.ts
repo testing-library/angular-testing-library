@@ -182,10 +182,16 @@ export async function render<SutType, WrapperType = SutType>(
     properties?: Pick<
       RenderTemplateOptions<SutType>,
       'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
-    >,
+    > & { partialUpdate?: boolean },
   ) => {
     const newComponentInputs = properties?.componentInputs ?? {};
-    const changesInComponentInput = update(fixture, renderedInputKeys, newComponentInputs, setComponentInputs);
+    const changesInComponentInput = update(
+      fixture,
+      renderedInputKeys,
+      newComponentInputs,
+      setComponentInputs,
+      properties?.partialUpdate ?? false,
+    );
     renderedInputKeys = Object.keys(newComponentInputs);
 
     const newComponentOutputs = properties?.componentOutputs ?? {};
@@ -198,7 +204,13 @@ export async function render<SutType, WrapperType = SutType>(
     renderedOutputKeys = Object.keys(newComponentOutputs);
 
     const newComponentProps = properties?.componentProperties ?? {};
-    const changesInComponentProps = update(fixture, renderedPropKeys, newComponentProps, setComponentProperties);
+    const changesInComponentProps = update(
+      fixture,
+      renderedPropKeys,
+      newComponentProps,
+      setComponentProperties,
+      properties?.partialUpdate ?? false,
+    );
     renderedPropKeys = Object.keys(newComponentProps);
 
     if (hasOnChangesHook(fixture.componentInstance)) {
@@ -387,12 +399,13 @@ function update<SutType>(
     fixture: ComponentFixture<SutType>,
     values: RenderTemplateOptions<SutType>['componentInputs' | 'componentProperties'],
   ) => void,
+  partialUpdate: boolean,
 ) {
   const componentInstance = fixture.componentInstance as Record<string, any>;
   const simpleChanges: SimpleChanges = {};
 
   for (const key of prevRenderedKeys) {
-    if (!Object.prototype.hasOwnProperty.call(newValues, key)) {
+    if (!partialUpdate && !Object.prototype.hasOwnProperty.call(newValues, key)) {
       simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
       delete componentInstance[key];
     }

@@ -83,6 +83,35 @@ test('rerenders the component with updated inputs and resets other props', async
   });
 });
 
+test('rerenders the component with updated inputs and keeps other props when partial is true', async () => {
+  const firstName = 'Mark';
+  const lastName = 'Peeters';
+  const { rerender } = await render(FixtureComponent, {
+    componentInputs: {
+      firstName,
+      lastName,
+    },
+  });
+
+  expect(screen.getByText(`${firstName} ${lastName}`)).toBeInTheDocument();
+
+  const firstName2 = 'Chris';
+  await rerender({ componentInputs: { firstName: firstName2 }, partialUpdate: true });
+
+  expect(screen.queryByText(firstName)).not.toBeInTheDocument();
+  expect(screen.getByText(`${firstName2} ${lastName}`)).toBeInTheDocument();
+
+  expect(ngOnChangesSpy).toHaveBeenCalledTimes(2); // one time initially and one time for rerender
+  const rerenderedChanges = ngOnChangesSpy.mock.calls[1][0] as SimpleChanges;
+  expect(rerenderedChanges).toEqual({
+    firstName: {
+      previousValue: 'Mark',
+      currentValue: 'Chris',
+      firstChange: false,
+    },
+  });
+});
+
 test('rerenders the component with updated props and resets other props with componentProperties', async () => {
   const firstName = 'Mark';
   const lastName = 'Peeters';
@@ -110,6 +139,35 @@ test('rerenders the component with updated props and resets other props with com
       currentValue: undefined,
       firstChange: false,
     },
+    firstName: {
+      previousValue: 'Mark',
+      currentValue: 'Chris',
+      firstChange: false,
+    },
+  });
+});
+
+test('rerenders the component with updated props keeps other props when partial is true', async () => {
+  const firstName = 'Mark';
+  const lastName = 'Peeters';
+  const { rerender } = await render(FixtureComponent, {
+    componentProperties: {
+      firstName,
+      lastName,
+    },
+  });
+
+  expect(screen.getByText(`${firstName} ${lastName}`)).toBeInTheDocument();
+
+  const firstName2 = 'Chris';
+  await rerender({ componentProperties: { firstName: firstName2 }, partialUpdate: true });
+
+  expect(screen.queryByText(firstName)).not.toBeInTheDocument();
+  expect(screen.getByText(`${firstName2} ${lastName}`)).toBeInTheDocument();
+
+  expect(ngOnChangesSpy).toHaveBeenCalledTimes(2); // one time initially and one time for rerender
+  const rerenderedChanges = ngOnChangesSpy.mock.calls[1][0] as SimpleChanges;
+  expect(rerenderedChanges).toEqual({
     firstName: {
       previousValue: 'Mark',
       currentValue: 'Chris',

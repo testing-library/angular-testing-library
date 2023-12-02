@@ -61,7 +61,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
     properties?: Pick<
       RenderTemplateOptions<ComponentType>,
       'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
-    >,
+    > & { partialUpdate?: boolean },
   ) => Promise<void>;
   /**
    * @description
