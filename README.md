@@ -5,8 +5,8 @@
   <img
     height="80"
     width="80"
-    alt="hedgehog"
-    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/hedgehog.png"
+    alt="Octopus with the Angular logo"
+    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/logo.png"
   />
 </a>
 
