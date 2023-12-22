@@ -5,7 +5,7 @@
   height="80"
   width="80"
   alt="Octopus with the Angular logo"
-  src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/logo-icon.png"
+  src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/logo-icon.svg"
 />
 
 <p>Simple and complete Angular testing utilities that encourage good testing
