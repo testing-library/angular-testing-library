@@ -1,14 +1,12 @@
 <div align="center">
 <h1>@testing-library/angular</h1>
 
-<a href="https://www.emojione.com/emoji/1f994">
-  <img
-    height="80"
-    width="80"
-    alt="Octopus with the Angular logo"
-    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/logo.png"
-  />
-</a>
+<img
+  height="80"
+  width="80"
+  alt="Octopus with the Angular logo"
+  src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/logo-icon.png"
+/>
 
 <p>Simple and complete Angular testing utilities that encourage good testing
 practices.</p>
