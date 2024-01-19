@@ -23,9 +23,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["projects/testing-library/**/*.ts", "projects/testing-library/**/*.html"]
-      },
       "outputs": ["{options.outputFile}"]
     },
     "build": {
