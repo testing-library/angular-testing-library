@@ -27,14 +27,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: install
-        # ng-mocks needs to add ng 17 to their peer dependencies
-        run: npm install --force
+        run: npm install
       - name: build
         run: npm run build -- --skip-nx-cache
       - name: test

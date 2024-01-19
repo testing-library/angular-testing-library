@@ -53,13 +53,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": [
-          "apps/example-app-karma/**/*.ts",
-          "apps/example-app-karma/**/*.html",
-          "apps/example-app-karma/src/**/*.html"
-        ]
-      },
       "outputs": ["{options.outputFile}"]
     },
     "test": {
