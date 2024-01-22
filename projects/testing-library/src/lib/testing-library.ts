@@ -1,32 +1,32 @@
 import {
+  ApplicationInitStatus,
   ChangeDetectorRef,
   Component,
-  Type,
-  NgZone,
-  SimpleChange,
-  OnChanges,
-  SimpleChanges,
-  ApplicationInitStatus,
   isStandalone,
+  NgZone,
+  OnChanges,
+  SimpleChange,
+  SimpleChanges,
+  Type,
 } from '@angular/core';
-import { ComponentFixture, DeferBlockState, TestBed, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NavigationExtras, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import {ComponentFixture, DeferBlockState, TestBed, tick} from '@angular/core/testing';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {NavigationExtras, Router} from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
+import type {BoundFunctions, Queries} from '@testing-library/dom';
 import {
+  configure as dtlConfigure,
   getQueriesForElement as dtlGetQueriesForElement,
   prettyDOM as dtlPrettyDOM,
+  queries as dtlQueries,
+  screen as dtlScreen,
   waitFor as dtlWaitFor,
   waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
-  screen as dtlScreen,
-  within as dtlWithin,
   waitForOptions as dtlWaitForOptions,
-  configure as dtlConfigure,
-  queries as dtlQueries,
+  within as dtlWithin,
 } from '@testing-library/dom';
-import type { Queries, BoundFunctions } from '@testing-library/dom';
-import { RenderComponentOptions, RenderTemplateOptions, RenderResult, ComponentOverride } from './models';
-import { getConfig } from './config';
+import {ComponentOverride, RenderComponentOptions, RenderResult, RenderTemplateOptions} from './models';
+import {getConfig} from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
 const safeInject = TestBed.inject || TestBed.get;
@@ -66,6 +66,7 @@ export async function render<SutType, WrapperType = SutType>(
     defaultImports = [],
     initialRoute = '',
     deferBlockStates = undefined,
+    deferBlockBehavior = undefined,
     configureTestBed = () => {
       /* noop*/
     },
@@ -94,6 +95,7 @@ export async function render<SutType, WrapperType = SutType>(
     }),
     providers: [...providers],
     schemas: [...schemas],
+    deferBlockBehavior: deferBlockBehavior as any
   });
   overrideComponentImports(sut, componentImports);
   overrideChildComponentProviders(childComponentOverrides);

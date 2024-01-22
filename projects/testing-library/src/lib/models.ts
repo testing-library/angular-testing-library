@@ -1,5 +1,5 @@
 import { Type, DebugElement } from '@angular/core';
-import { ComponentFixture, DeferBlockState, TestBed } from '@angular/core/testing';
+import {ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed} from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
 
@@ -369,7 +369,17 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    */
   configureTestBed?: (testbed: TestBed) => void;
 
+  /**
+   * @description
+   * Set the initial state of a deferrable block.
+   */
   deferBlockStates?: DeferBlockState | { deferBlockState: DeferBlockState; deferBlockIndex: number }[];
+
+  /**
+   * @description
+   * Set the defer blocks behavior.
+   */
+  deferBlockBehavior?: DeferBlockBehavior
 }
 
 export interface ComponentOverride<T> {
