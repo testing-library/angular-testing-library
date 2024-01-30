@@ -98,7 +98,7 @@ counter.component.ts
 
 ```ts
 @Component({
-  selector: 'counter',
+  selector: 'app-counter',
   template: `
     <button (click)="decrement()">-</button>
     <span>Current Count: {{ counter }}</span>
@@ -122,7 +122,7 @@ counter.component.spec.ts
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/angular';
-import { CounterComponent } from './counter.component.ts';
+import { CounterComponent } from './counter.component';
 
 describe('Counter', () => {
   test('should render counter', async () => {
@@ -134,7 +134,7 @@ describe('Counter', () => {
   test('should increment the counter on click', async () => {
     await render(CounterComponent, { componentProperties: { counter: 5 } });
 
-    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    const incrementButton = screen.getByRole('button', { name: '+' });
     fireEvent.click(incrementButton);
 
     expect(screen.getByText('Current Count: 6'));
