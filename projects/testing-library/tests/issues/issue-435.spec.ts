@@ -26,15 +26,12 @@ class DemoComponent {
   constructor(@Inject(DemoService) public demoService: DemoService) {}
 }
 
-// Test
-describe('DemoComponent', () => {
-  it('should render button', async () => {
-    await render(DemoComponent);
+test('issue #435', async () => {
+  await render(DemoComponent);
 
-    const button = screen.getByRole('button', {
-      name: /Click me/,
-    });
-
-    expect(button).toBeVisible();
+  const button = screen.getByRole('button', {
+    name: /Click me/,
   });
+
+  expect(button).toBeVisible();
 });
