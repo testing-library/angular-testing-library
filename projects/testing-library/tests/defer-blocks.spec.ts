@@ -1,7 +1,6 @@
-import {Component} from '@angular/core';
-import {DeferBlockBehavior, DeferBlockState} from '@angular/core/testing';
-import {render, screen} from '../src/public_api';
-import {fireEvent} from "@testing-library/dom";
+import { Component } from '@angular/core';
+import { DeferBlockBehavior, DeferBlockState } from '@angular/core/testing';
+import { render, screen, fireEvent } from '../src/public_api';
 
 test('renders a defer block in different states using the official API', async () => {
   const { fixture } = await render(FixtureComponent);
@@ -30,8 +29,8 @@ test('renders a defer block in different states using ATL', async () => {
 });
 
 test('renders a defer block in different states using DeferBlockBehavior.Playthrough', async () => {
-   await render(FixtureComponent, {
-    deferBlockBehavior: DeferBlockBehavior.Playthrough
+  await render(FixtureComponent, {
+    deferBlockBehavior: DeferBlockBehavior.Playthrough,
   });
 
   expect(await screen.findByText(/loading/i)).toBeInTheDocument();
@@ -39,12 +38,12 @@ test('renders a defer block in different states using DeferBlockBehavior.Playthr
 });
 
 test('renders a defer block in different states using DeferBlockBehavior.Playthrough event', async () => {
-  await render(FixtureComponentWithEvents, {
-    deferBlockBehavior: DeferBlockBehavior.Playthrough
+  await render(FixtureComponentWithEventsComponent, {
+    deferBlockBehavior: DeferBlockBehavior.Playthrough,
   });
 
-  const button = screen.getByRole('button', {name: /click/i});
-  fireEvent.click(button)
+  const button = screen.getByRole('button', { name: /click/i });
+  fireEvent.click(button);
 
   expect(screen.getByText(/empty defer block/i)).toBeInTheDocument();
 });
@@ -91,9 +90,8 @@ class FixtureComponent {}
   template: `
     <button #trigger>Click</button>
     @defer(on interaction(trigger)) {
-        <div>empty defer block</div>
+    <div>empty defer block</div>
     }
   `,
 })
-class FixtureComponentWithEvents {}
-
+class FixtureComponentWithEventsComponent {}
