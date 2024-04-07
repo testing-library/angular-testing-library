@@ -9,11 +9,11 @@ import {
   SimpleChanges,
   Type,
 } from '@angular/core';
-import {ComponentFixture, DeferBlockState, TestBed, tick} from '@angular/core/testing';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {NavigationExtras, Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
-import type {BoundFunctions, Queries} from '@testing-library/dom';
+import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NavigationExtras, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import type { BoundFunctions, Queries } from '@testing-library/dom';
 import {
   configure as dtlConfigure,
   getQueriesForElement as dtlGetQueriesForElement,
@@ -25,8 +25,8 @@ import {
   waitForOptions as dtlWaitForOptions,
   within as dtlWithin,
 } from '@testing-library/dom';
-import {ComponentOverride, RenderComponentOptions, RenderResult, RenderTemplateOptions} from './models';
-import {getConfig} from './config';
+import { ComponentOverride, RenderComponentOptions, RenderResult, RenderTemplateOptions } from './models';
+import { getConfig } from './config';
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
 const safeInject = TestBed.inject || TestBed.get;
@@ -95,7 +95,7 @@ export async function render<SutType, WrapperType = SutType>(
     }),
     providers: [...providers],
     schemas: [...schemas],
-    deferBlockBehavior: deferBlockBehavior as any
+    deferBlockBehavior: deferBlockBehavior ?? DeferBlockBehavior.Manual,
   });
   overrideComponentImports(sut, componentImports);
   overrideChildComponentProviders(childComponentOverrides);
