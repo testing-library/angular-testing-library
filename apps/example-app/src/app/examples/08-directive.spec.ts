@@ -1,7 +1,33 @@
+import { Component } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { SpoilerDirective } from './08-directive';
+
+test('it is possible to test directives with container component', async () => {
+  @Component({
+    template: `<div appSpoiler data-testid="dir"></div>`,
+    imports: [SpoilerDirective],
+    standalone: true,
+  })
+  class FixtureComponent {}
+
+  const user = userEvent.setup();
+  await render(FixtureComponent);
+
+  const directive = screen.getByTestId('dir');
+
+  expect(screen.queryByText('I am visible now...')).not.toBeInTheDocument();
+  expect(screen.getByText('SPOILER')).toBeInTheDocument();
+
+  await user.hover(directive);
+  expect(screen.queryByText('SPOILER')).not.toBeInTheDocument();
+  expect(screen.getByText('I am visible now...')).toBeInTheDocument();
+
+  await user.unhover(directive);
+  expect(screen.getByText('SPOILER')).toBeInTheDocument();
+  expect(screen.queryByText('I am visible now...')).not.toBeInTheDocument();
+});
 
 test('it is possible to test directives', async () => {
   const user = userEvent.setup();
