@@ -4,6 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/example-app-karma/src",
   "prefix": "app",
+  "tags": [],
   "generators": {},
   "targets": {
     "build": {
@@ -52,8 +53,7 @@
       "defaultConfiguration": "development"
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@angular-devkit/build-angular:karma",
@@ -63,6 +63,5 @@
         "karmaConfig": "apps/example-app-karma/karma.conf.js"
       }
     }
-  },
-  "tags": []
+  }
 }
