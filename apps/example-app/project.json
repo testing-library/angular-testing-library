@@ -4,6 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/example-app/src",
   "prefix": "app",
+  "tags": [],
   "generators": {},
   "targets": {
     "build": {
@@ -59,8 +60,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -70,6 +70,5 @@
       },
       "outputs": ["{workspaceRoot}/coverage/"]
     }
-  },
-  "tags": []
+  }
 }
