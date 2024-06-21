@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, within } from '@testing-library/angular';
 import { SignalInputComponent } from './22-signal-inputs.component';
 import userEvent from '@testing-library/user-event';
 
@@ -10,7 +10,20 @@ test('works with signal inputs', async () => {
     },
   });
 
-  expect(screen.getByText(/hello world/i)).toBeInTheDocument();
+  const inputValue = within(screen.getByTestId('input-value'));
+  expect(inputValue.getByText(/hello world/i)).toBeInTheDocument();
+});
+
+test('works with computed', async () => {
+  await render(SignalInputComponent, {
+    componentInputs: {
+      greeting: 'Hello',
+      name: 'world',
+    },
+  });
+
+  const computedValue = within(screen.getByTestId('computed-value'));
+  expect(computedValue.getByText(/hello world/i)).toBeInTheDocument();
 });
 
 test('can update signal inputs', async () => {
@@ -21,11 +34,16 @@ test('can update signal inputs', async () => {
     },
   });
 
-  expect(screen.getByText(/hello world/i)).toBeInTheDocument();
+  const inputValue = within(screen.getByTestId('input-value'));
+  const computedValue = within(screen.getByTestId('computed-value'));
+
+  expect(inputValue.getByText(/hello world/i)).toBeInTheDocument();
 
   fixture.componentInstance.name.set('updated');
   // set doesn't trigger change detection within the test, findBy is needed to update the template
-  expect(await screen.findByText(/hello updated/i)).toBeInTheDocument();
+  expect(await inputValue.findByText(/hello updated/i)).toBeInTheDocument();
+  expect(await computedValue.findByText(/hello updated/i)).toBeInTheDocument();
+
   // it's not recommended to access the model directly, but it's possible
   expect(fixture.componentInstance.name()).toBe('updated');
 });
@@ -55,22 +73,29 @@ test('model update also updates the template', async () => {
     },
   });
 
-  expect(screen.getByText(/hello initial/i)).toBeInTheDocument();
+  const inputValue = within(screen.getByTestId('input-value'));
+  const computedValue = within(screen.getByTestId('computed-value'));
+
+  expect(inputValue.getByText(/hello initial/i)).toBeInTheDocument();
+  expect(computedValue.getByText(/hello initial/i)).toBeInTheDocument();
 
   await userEvent.clear(screen.getByRole('textbox'));
   await userEvent.type(screen.getByRole('textbox'), 'updated');
 
-  expect(screen.getByText(/hello updated/i)).toBeInTheDocument();
+  expect(inputValue.getByText(/hello updated/i)).toBeInTheDocument();
+  expect(computedValue.getByText(/hello updated/i)).toBeInTheDocument();
   expect(fixture.componentInstance.name()).toBe('updated');
 
   fixture.componentInstance.name.set('new value');
   // set doesn't trigger change detection within the test, findBy is needed to update the template
-  expect(await screen.findByText(/hello new value/i)).toBeInTheDocument();
+  expect(await inputValue.findByText(/hello new value/i)).toBeInTheDocument();
+  expect(await computedValue.findByText(/hello new value/i)).toBeInTheDocument();
+
   // it's not recommended to access the model directly, but it's possible
   expect(fixture.componentInstance.name()).toBe('new value');
 });
 
-test('works with signal inputs and rerenders', async () => {
+test('works with signal inputs, computed values, and rerenders', async () => {
   const view = await render(SignalInputComponent, {
     componentInputs: {
       greeting: 'Hello',
@@ -78,7 +103,11 @@ test('works with signal inputs and rerenders', async () => {
     },
   });
 
-  expect(screen.getByText(/hello world/i)).toBeInTheDocument();
+  const inputValue = within(screen.getByTestId('input-value'));
+  const computedValue = within(screen.getByTestId('computed-value'));
+
+  expect(inputValue.getByText(/hello world/i)).toBeInTheDocument();
+  expect(computedValue.getByText(/hello world/i)).toBeInTheDocument();
 
   await view.rerender({
     componentInputs: {
@@ -87,5 +116,6 @@ test('works with signal inputs and rerenders', async () => {
     },
   });
 
-  expect(screen.getByText(/bye test/i)).toBeInTheDocument();
+  expect(inputValue.getByText(/bye test/i)).toBeInTheDocument();
+  expect(computedValue.getByText(/bye test/i)).toBeInTheDocument();
 });

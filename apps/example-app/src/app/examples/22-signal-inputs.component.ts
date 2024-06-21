@@ -1,10 +1,11 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, computed, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-signal-input',
   template: `
-    <div>{{ greetings() }} {{ name() }}</div>
+    <div data-testid="input-value">{{ greetings() }} {{ name() }}</div>
+    <div data-testid="computed-value">{{ greetingMessage() }}</div>
     <button (click)="submitName()">Submit</button>
     <input type="text" [(ngModel)]="name" />
   `,
@@ -17,6 +18,8 @@ export class SignalInputComponent {
   });
   name = model.required<string>();
   submit = output<string>();
+
+  greetingMessage = computed(() => `${this.greetings()} ${this.name()}`);
 
   submitName() {
     this.submit.emit(this.name());
