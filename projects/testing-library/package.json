@@ -26,7 +26,7 @@
     "save": "devDependencies"
   },
   "ng-update": {
-    "migrations": "./schematics/migrations/migration.json"
+    "migrations": "./schematics/migrations/migrations.json"
   },
   "peerDependencies": {
     "@angular/common": ">= 17.0.0",
