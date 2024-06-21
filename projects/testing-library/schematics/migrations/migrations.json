@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "atl-add-dtl-as-dev-dependency": {
+      "description": "Add @testing-library/dom as a dev dependency",
+      "version": "17.0.0-beta.3",
+      "factory": "./dtl-as-dev-dependency/index"
+    }
+  }
+}

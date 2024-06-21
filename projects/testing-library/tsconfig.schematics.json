@@ -13,5 +13,6 @@
     "skipLibCheck": true,
     "sourceMap": false
   },
-  "include": ["schematics/**/*.ts"]
+  "include": ["schematics/**/*.ts"],
+  "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts", "jest.config.ts"]
 }
