@@ -147,10 +147,18 @@ describe('Counter', () => {
 ## Installation
 
 This module is distributed via [npm][npm] which is bundled with [node][node] and
-should be installed as one of your project's `devDependencies`:
+should be installed as one of your project's `devDependencies`.
+Starting from ATL version 17, you'll also need to install `@testing-library/dom`:
 
 ```bash
-npm install @testing-library/angular --save-dev
+npm install --save-dev @testing-library/angular @testing-library/dom
+```
+
+Or, you can use the `ng add` command.
+This includes the installation of `@testing-library/dom`.
+
+```bash
+ng add @testing-library/angular
 ```
 
 You may also be interested in installing `jest-dom` so you can use
@@ -160,14 +168,14 @@ You may also be interested in installing `jest-dom` so you can use
 
 ## Version compatibility
 
-| Angular | Angular Testing Library |
-| ------- | ----------------------- |
-| 18.x    | 16.x, 15.x, 14.x, 13.x  |
-| 17.x    | 16.x, 15.x, 14.x, 13.x  |
-| 16.x    | 14.x, 13.x              |
-| >= 15.1 | 14.x, 13.x              |
-| < 15.1  | 12.x, 11.x              |
-| 14.x    | 12.x, 11.x              |
+| Angular | Angular Testing Library      |
+| ------- | ---------------------------- |
+| 18.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
+| 17.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
+| 16.x    | 14.x, 13.x                   |
+| >= 15.1 | 14.x, 13.x                   |
+| < 15.1  | 12.x, 11.x                   |
+| 14.x    | 12.x, 11.x                   |
 
 ## Guiding Principles
 
