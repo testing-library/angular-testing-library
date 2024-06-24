@@ -26,16 +26,16 @@
     "save": "devDependencies"
   },
   "ng-update": {
-    "migrations": "./schematics/migrations/migration.json"
+    "migrations": "./schematics/migrations/migrations.json"
   },
   "peerDependencies": {
     "@angular/common": ">= 17.0.0",
     "@angular/platform-browser": ">= 17.0.0",
     "@angular/router": ">= 17.0.0",
-    "@angular/core": ">= 17.0.0"
+    "@angular/core": ">= 17.0.0",
+    "@testing-library/dom": "^10.0.0"
   },
   "dependencies": {
-    "@testing-library/dom": "^10.0.0",
     "tslib": "^2.3.1"
   },
   "publishConfig": {

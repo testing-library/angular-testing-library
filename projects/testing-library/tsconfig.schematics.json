@@ -8,10 +8,11 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "../../dist/@testing-library/angular/schematics/ng-add",
+    "outDir": "../../dist/@testing-library/angular/schematics",
     "removeComments": true,
     "skipLibCheck": true,
     "sourceMap": false
   },
-  "include": ["schematics/**/*.ts"]
+  "include": ["schematics/**/*.ts"],
+  "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts", "jest.config.ts"]
 }
