@@ -148,14 +148,14 @@ describe('Counter', () => {
 
 This module is distributed via [npm][npm] which is bundled with [node][node] and
 should be installed as one of your project's `devDependencies`.
-Starting from ATL version 17, you'll also need to install `@testing-library/dom`:
+Starting from ATL version 17, you also need to install `@testing-library/dom`:
 
 ```bash
 npm install --save-dev @testing-library/angular @testing-library/dom
 ```
 
 Or, you can use the `ng add` command.
-This includes the installation of `@testing-library/dom`.
+This sets up your project to use Angular Testing Library, which also includes the installation of `@testing-library/dom`.
 
 ```bash
 ng add @testing-library/angular
