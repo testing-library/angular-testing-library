@@ -5,6 +5,8 @@ import {
   isStandalone,
   NgZone,
   OnChanges,
+  OutputRef,
+  OutputRefSubscription,
   SimpleChange,
   SimpleChanges,
   Type,
@@ -25,8 +27,16 @@ import {
   waitForOptions as dtlWaitForOptions,
   within as dtlWithin,
 } from '@testing-library/dom';
-import { ComponentOverride, RenderComponentOptions, RenderResult, RenderTemplateOptions } from './models';
+import {
+  ComponentOverride,
+  RenderComponentOptions,
+  RenderResult,
+  RenderTemplateOptions,
+  SubscribeToOutputsKeysWithCallback,
+} from './models';
 import { getConfig } from './config';
+
+type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, subscription: OutputRefSubscription];
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
 const safeInject = TestBed.inject || TestBed.get;
@@ -57,6 +67,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentInputs = {},
     componentOutputs = {},
+    subscribeToOutputs = {},
     componentProviders = [],
     childComponentOverrides = [],
     componentImports: componentImports,
@@ -165,7 +176,55 @@ export async function render<SutType, WrapperType = SutType>(
 
   let detectChanges: () => void;
 
-  const fixture = await renderFixture(componentProperties, componentInputs, componentOutputs);
+  let renderedPropKeys = Object.keys(componentProperties);
+  let renderedInputKeys = Object.keys(componentInputs);
+  let renderedOutputKeys = Object.keys(componentOutputs);
+  let subscribedOutputs: SubscribedOutput<SutType>[] = [];
+
+  const renderFixture = async (
+    properties: Partial<SutType>,
+    inputs: Partial<SutType>,
+    outputs: Partial<SutType>,
+    subscribeTo: SubscribeToOutputsKeysWithCallback<SutType>,
+  ): Promise<ComponentFixture<SutType>> => {
+    const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer);
+    setComponentProperties(createdFixture, properties);
+    setComponentInputs(createdFixture, inputs);
+    setComponentOutputs(createdFixture, outputs);
+    subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+
+    if (removeAngularAttributes) {
+      createdFixture.nativeElement.removeAttribute('ng-version');
+      const idAttribute = createdFixture.nativeElement.getAttribute('id');
+      if (idAttribute && idAttribute.startsWith('root')) {
+        createdFixture.nativeElement.removeAttribute('id');
+      }
+    }
+
+    mountedFixtures.add(createdFixture);
+
+    let isAlive = true;
+    createdFixture.componentRef.onDestroy(() => (isAlive = false));
+
+    if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
+      const changes = getChangesObj(null, componentProperties);
+      createdFixture.componentInstance.ngOnChanges(changes);
+    }
+
+    detectChanges = () => {
+      if (isAlive) {
+        createdFixture.detectChanges();
+      }
+    };
+
+    if (detectChangesOnRender) {
+      detectChanges();
+    }
+
+    return createdFixture;
+  };
+
+  const fixture = await renderFixture(componentProperties, componentInputs, componentOutputs, subscribeToOutputs);
 
   if (deferBlockStates) {
     if (Array.isArray(deferBlockStates)) {
@@ -177,13 +236,10 @@ export async function render<SutType, WrapperType = SutType>(
     }
   }
 
-  let renderedPropKeys = Object.keys(componentProperties);
-  let renderedInputKeys = Object.keys(componentInputs);
-  let renderedOutputKeys = Object.keys(componentOutputs);
   const rerender = async (
     properties?: Pick<
       RenderTemplateOptions<SutType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'subscribeToOutputs' | 'detectChangesOnRender'
     > & { partialUpdate?: boolean },
   ) => {
     const newComponentInputs = properties?.componentInputs ?? {};
@@ -204,6 +260,22 @@ export async function render<SutType, WrapperType = SutType>(
     }
     setComponentOutputs(fixture, newComponentOutputs);
     renderedOutputKeys = Object.keys(newComponentOutputs);
+
+    // first unsubscribe the no longer available or changed callback-fns
+    const newSubscribeToOutputs: SubscribeToOutputsKeysWithCallback<SutType> = properties?.subscribeToOutputs ?? {};
+    for (const [key, cb, subscription] of subscribedOutputs) {
+      // when no longer provided or when the callback has changed
+      if (!(key in newSubscribeToOutputs) || cb !== (newSubscribeToOutputs as any)[key]) {
+        subscription.unsubscribe();
+      }
+    }
+    // then subscribe the new callback-fns
+    subscribedOutputs = Object.entries(newSubscribeToOutputs).map(([key, cb]) => {
+      const existing = subscribedOutputs.find(([k]) => k === key);
+      return existing && existing[1] === cb
+        ? existing // nothing to do
+        : subscribeToComponentOutput(fixture, key as keyof SutType, cb as (v: any) => void);
+    });
 
     const newComponentProps = properties?.componentProperties ?? {};
     const changesInComponentProps = update(
@@ -249,47 +321,6 @@ export async function render<SutType, WrapperType = SutType>(
         : console.log(dtlPrettyDOM(element, maxLength, options)),
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
-
-  async function renderFixture(
-    properties: Partial<SutType>,
-    inputs: Partial<SutType>,
-    outputs: Partial<SutType>,
-  ): Promise<ComponentFixture<SutType>> {
-    const createdFixture = await createComponent(componentContainer);
-    setComponentProperties(createdFixture, properties);
-    setComponentInputs(createdFixture, inputs);
-    setComponentOutputs(createdFixture, outputs);
-
-    if (removeAngularAttributes) {
-      createdFixture.nativeElement.removeAttribute('ng-version');
-      const idAttribute = createdFixture.nativeElement.getAttribute('id');
-      if (idAttribute && idAttribute.startsWith('root')) {
-        createdFixture.nativeElement.removeAttribute('id');
-      }
-    }
-
-    mountedFixtures.add(createdFixture);
-
-    let isAlive = true;
-    createdFixture.componentRef.onDestroy(() => (isAlive = false));
-
-    if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
-      const changes = getChangesObj(null, componentProperties);
-      createdFixture.componentInstance.ngOnChanges(changes);
-    }
-
-    detectChanges = () => {
-      if (isAlive) {
-        createdFixture.detectChanges();
-      }
-    };
-
-    if (detectChangesOnRender) {
-      detectChanges();
-    }
-
-    return createdFixture;
-  }
 }
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
@@ -353,6 +384,27 @@ function setComponentInputs<SutType>(
   for (const [name, value] of Object.entries(componentInputs)) {
     fixture.componentRef.setInput(name, value);
   }
+}
+
+function subscribeToComponentOutputs<SutType>(
+  fixture: ComponentFixture<SutType>,
+  listeners: SubscribeToOutputsKeysWithCallback<SutType>,
+): SubscribedOutput<SutType>[] {
+  // with Object.entries we lose the type information of the key and callback, therefore we need to cast them
+  return Object.entries(listeners).map(([key, cb]) =>
+    subscribeToComponentOutput(fixture, key as keyof SutType, cb as (v: any) => void),
+  );
+}
+
+function subscribeToComponentOutput<SutType>(
+  fixture: ComponentFixture<SutType>,
+  key: keyof SutType,
+  cb: (val: any) => void,
+): SubscribedOutput<SutType> {
+  const eventEmitter = (fixture.componentInstance as any)[key] as OutputRef<any>;
+  const subscription = eventEmitter.subscribe(cb);
+  fixture.componentRef.onDestroy(subscription.unsubscribe.bind(subscription));
+  return [key, cb, subscription];
 }
 
 function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports: (Type<any> | any[])[] | undefined) {

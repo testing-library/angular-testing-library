@@ -10,12 +10,14 @@ import {
   Injectable,
   EventEmitter,
   Output,
+  ElementRef,
+  inject,
 } from '@angular/core';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render, fireEvent, screen } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
-import { map } from 'rxjs';
+import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
@@ -179,6 +181,73 @@ describe('componentOutputs', () => {
 
     fixture.componentInstance.emitEvent();
 
+    expect(spy).toHaveBeenCalled();
+  });
+});
+
+describe('subscribeToOutputs', () => {
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithEventEmitterComponent {
+    @Output() readonly event = new EventEmitter<void>();
+  }
+
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithDerivedEventComponent {
+    @Output() readonly event = fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click');
+  }
+
+  it('should subscribe passed listener to the component EventEmitter', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithEventEmitterComponent, { subscribeToOutputs: { event: spy } });
+    fixture.componentInstance.event.emit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unsubscribe on rerender without listener', async () => {
+    const spy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      subscribeToOutputs: { event: spy },
+    });
+
+    await rerender({});
+
+    fixture.componentInstance.event.emit();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should not unsubscribe when same listener function is used on rerender', async () => {
+    const spy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      subscribeToOutputs: { event: spy },
+    });
+
+    await rerender({ subscribeToOutputs: { event: spy } });
+
+    fixture.componentInstance.event.emit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unsubscribe old and subscribe new listener function on rerender', async () => {
+    const firstSpy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      subscribeToOutputs: { event: firstSpy },
+    });
+
+    const newSpy = jest.fn();
+    await rerender({ subscribeToOutputs: { event: newSpy } });
+
+    fixture.componentInstance.event.emit();
+
+    expect(firstSpy).not.toHaveBeenCalled();
+    expect(newSpy).toHaveBeenCalled();
+  });
+
+  it('should subscribe passed listener to derived component outputs', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithDerivedEventComponent, {
+      subscribeToOutputs: { event: spy },
+    });
+    fireEvent.click(fixture.nativeElement);
     expect(spy).toHaveBeenCalled();
   });
 });
