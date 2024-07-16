@@ -187,7 +187,7 @@ describe('componentOutputs', () => {
   });
 });
 
-describe('subscribeToOutputs', () => {
+describe('on', () => {
   @Component({ template: ``, standalone: true })
   class TestFixtureWithEventEmitterComponent {
     @Output() readonly event = new EventEmitter<void>();
@@ -205,7 +205,7 @@ describe('subscribeToOutputs', () => {
 
   it('should subscribe passed listener to the component EventEmitter', async () => {
     const spy = jest.fn();
-    const { fixture } = await render(TestFixtureWithEventEmitterComponent, { subscribeToOutputs: { event: spy } });
+    const { fixture } = await render(TestFixtureWithEventEmitterComponent, { on: { event: spy } });
     fixture.componentInstance.event.emit();
     expect(spy).toHaveBeenCalled();
   });
@@ -213,7 +213,7 @@ describe('subscribeToOutputs', () => {
   it('should unsubscribe on rerender without listener', async () => {
     const spy = jest.fn();
     const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
-      subscribeToOutputs: { event: spy },
+      on: { event: spy },
     });
 
     await rerender({});
@@ -225,10 +225,10 @@ describe('subscribeToOutputs', () => {
   it('should not unsubscribe when same listener function is used on rerender', async () => {
     const spy = jest.fn();
     const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
-      subscribeToOutputs: { event: spy },
+      on: { event: spy },
     });
 
-    await rerender({ subscribeToOutputs: { event: spy } });
+    await rerender({ on: { event: spy } });
 
     fixture.componentInstance.event.emit();
     expect(spy).toHaveBeenCalled();
@@ -237,11 +237,11 @@ describe('subscribeToOutputs', () => {
   it('should unsubscribe old and subscribe new listener function on rerender', async () => {
     const firstSpy = jest.fn();
     const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
-      subscribeToOutputs: { event: firstSpy },
+      on: { event: firstSpy },
     });
 
     const newSpy = jest.fn();
-    await rerender({ subscribeToOutputs: { event: newSpy } });
+    await rerender({ on: { event: newSpy } });
 
     fixture.componentInstance.event.emit();
 
@@ -252,7 +252,7 @@ describe('subscribeToOutputs', () => {
   it('should subscribe passed listener to a derived component output', async () => {
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithDerivedEventComponent, {
-      subscribeToOutputs: { event: spy },
+      on: { event: spy },
     });
     fireEvent.click(fixture.nativeElement);
     expect(spy).toHaveBeenCalled();
@@ -261,7 +261,7 @@ describe('subscribeToOutputs', () => {
   it('should subscribe passed listener to a functional component output', async () => {
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithFunctionalOutputComponent, {
-      subscribeToOutputs: { event: spy },
+      on: { event: spy },
     });
     fixture.componentInstance.event.emit('test');
     expect(spy).toHaveBeenCalledWith('test');
@@ -274,7 +274,7 @@ describe('subscribeToOutputs', () => {
     }
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithFunctionalDerivedEventComponent, {
-      subscribeToOutputs: { event: spy },
+      on: { event: spy },
     });
     fireEvent.click(fixture.nativeElement);
     expect(spy).toHaveBeenCalled();

@@ -32,7 +32,7 @@ import {
   RenderComponentOptions,
   RenderResult,
   RenderTemplateOptions,
-  SubscribeToOutputsKeysWithCallback,
+  OutputRefKeysWithCallback,
 } from './models';
 import { getConfig } from './config';
 
@@ -67,7 +67,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentInputs = {},
     componentOutputs = {},
-    subscribeToOutputs = {},
+    on = {},
     componentProviders = [],
     childComponentOverrides = [],
     componentImports: componentImports,
@@ -185,7 +185,7 @@ export async function render<SutType, WrapperType = SutType>(
     properties: Partial<SutType>,
     inputs: Partial<SutType>,
     outputs: Partial<SutType>,
-    subscribeTo: SubscribeToOutputsKeysWithCallback<SutType>,
+    subscribeTo: OutputRefKeysWithCallback<SutType>,
   ): Promise<ComponentFixture<SutType>> => {
     const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer);
     setComponentProperties(createdFixture, properties);
@@ -224,7 +224,7 @@ export async function render<SutType, WrapperType = SutType>(
     return createdFixture;
   };
 
-  const fixture = await renderFixture(componentProperties, componentInputs, componentOutputs, subscribeToOutputs);
+  const fixture = await renderFixture(componentProperties, componentInputs, componentOutputs, on);
 
   if (deferBlockStates) {
     if (Array.isArray(deferBlockStates)) {
@@ -239,7 +239,7 @@ export async function render<SutType, WrapperType = SutType>(
   const rerender = async (
     properties?: Pick<
       RenderTemplateOptions<SutType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'subscribeToOutputs' | 'detectChangesOnRender'
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
     > & { partialUpdate?: boolean },
   ) => {
     const newComponentInputs = properties?.componentInputs ?? {};
@@ -262,15 +262,15 @@ export async function render<SutType, WrapperType = SutType>(
     renderedOutputKeys = Object.keys(newComponentOutputs);
 
     // first unsubscribe the no longer available or changed callback-fns
-    const newSubscribeToOutputs: SubscribeToOutputsKeysWithCallback<SutType> = properties?.subscribeToOutputs ?? {};
+    const newObservableSubscriptions: OutputRefKeysWithCallback<SutType> = properties?.on ?? {};
     for (const [key, cb, subscription] of subscribedOutputs) {
       // when no longer provided or when the callback has changed
-      if (!(key in newSubscribeToOutputs) || cb !== (newSubscribeToOutputs as any)[key]) {
+      if (!(key in newObservableSubscriptions) || cb !== (newObservableSubscriptions as any)[key]) {
         subscription.unsubscribe();
       }
     }
     // then subscribe the new callback-fns
-    subscribedOutputs = Object.entries(newSubscribeToOutputs).map(([key, cb]) => {
+    subscribedOutputs = Object.entries(newObservableSubscriptions).map(([key, cb]) => {
       const existing = subscribedOutputs.find(([k]) => k === key);
       return existing && existing[1] === cb
         ? existing // nothing to do
@@ -388,7 +388,7 @@ function setComponentInputs<SutType>(
 
 function subscribeToComponentOutputs<SutType>(
   fixture: ComponentFixture<SutType>,
-  listeners: SubscribeToOutputsKeysWithCallback<SutType>,
+  listeners: OutputRefKeysWithCallback<SutType>,
 ): SubscribedOutput<SutType>[] {
   // with Object.entries we lose the type information of the key and callback, therefore we need to cast them
   return Object.entries(listeners).map(([key, cb]) =>

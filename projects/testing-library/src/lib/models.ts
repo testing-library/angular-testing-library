@@ -3,7 +3,7 @@ import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
 
-export type SubscribeToOutputsKeysWithCallback<T> = {
+export type OutputRefKeysWithCallback<T> = {
   [key in keyof T as T[key] extends OutputRef<any> ? key : never]?: T[key] extends OutputRef<infer U>
     ? (val: U) => void
     : never;
@@ -66,7 +66,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   rerender: (
     properties?: Pick<
       RenderTemplateOptions<ComponentType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'subscribeToOutputs' | 'detectChangesOnRender'
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
     > & { partialUpdate?: boolean },
   ) => Promise<void>;
   /**
@@ -211,7 +211,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   /**
    * @description
    * An object to set `@Output` properties of the component
-   * @deprecated use the `subscribeToOutputs` option instead. When actually wanting to override properties, use the `componentProperties` option.
+   * @deprecated use the `on` option instead. When it is necessary to override properties, use the `componentProperties` option.
    * @default
    * {}
    *
@@ -237,12 +237,12 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * @example
    * const sendValue = (value) => { ... }
    * await render(AppComponent, {
-   *  subscribeToOutputs: {
+   *  on: {
    *    send: (_v:any) => void
    *  }
    * })
    */
-  subscribeToOutputs?: SubscribeToOutputsKeysWithCallback<ComponentType>;
+  on?: OutputRefKeysWithCallback<ComponentType>;
 
   /**
    * @description
