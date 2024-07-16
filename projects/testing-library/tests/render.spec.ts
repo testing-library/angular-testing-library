@@ -12,7 +12,9 @@ import {
   Output,
   ElementRef,
   inject,
+  output,
 } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render, fireEvent, screen } from '../src/public_api';
@@ -196,6 +198,11 @@ describe('subscribeToOutputs', () => {
     @Output() readonly event = fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click');
   }
 
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithFunctionalOutputComponent {
+    readonly event = output<string>();
+  }
+
   it('should subscribe passed listener to the component EventEmitter', async () => {
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithEventEmitterComponent, { subscribeToOutputs: { event: spy } });
@@ -242,9 +249,31 @@ describe('subscribeToOutputs', () => {
     expect(newSpy).toHaveBeenCalled();
   });
 
-  it('should subscribe passed listener to derived component outputs', async () => {
+  it('should subscribe passed listener to a derived component output', async () => {
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithDerivedEventComponent, {
+      subscribeToOutputs: { event: spy },
+    });
+    fireEvent.click(fixture.nativeElement);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should subscribe passed listener to a functional component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithFunctionalOutputComponent, {
+      subscribeToOutputs: { event: spy },
+    });
+    fixture.componentInstance.event.emit('test');
+    expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  it('should subscribe passed listener to a functional derived component output', async () => {
+    @Component({ template: ``, standalone: true })
+    class TestFixtureWithFunctionalDerivedEventComponent {
+      readonly event = outputFromObservable(fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click'));
+    }
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithFunctionalDerivedEventComponent, {
       subscribeToOutputs: { event: spy },
     });
     fireEvent.click(fixture.nativeElement);
