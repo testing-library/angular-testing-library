@@ -17,7 +17,7 @@ import {
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen } from '../src/public_api';
+import { render, fireEvent, screen, OutputRefKeysWithCallback } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
 import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -203,6 +203,11 @@ describe('on', () => {
     readonly event = output<string>();
   }
 
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithFunctionalDerivedEventComponent {
+    readonly event = outputFromObservable(fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click'));
+  }
+
   it('should subscribe passed listener to the component EventEmitter', async () => {
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithEventEmitterComponent, { on: { event: spy } });
@@ -268,16 +273,41 @@ describe('on', () => {
   });
 
   it('should subscribe passed listener to a functional derived component output', async () => {
-    @Component({ template: ``, standalone: true })
-    class TestFixtureWithFunctionalDerivedEventComponent {
-      readonly event = outputFromObservable(fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click'));
-    }
     const spy = jest.fn();
     const { fixture } = await render(TestFixtureWithFunctionalDerivedEventComponent, {
       on: { event: spy },
     });
     fireEvent.click(fixture.nativeElement);
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('OutputRefKeysWithCallback is correctly typed', () => {
+    const fnWithVoidArg = (_: void) => void 0;
+    const fnWithNumberArg = (_: number) => void 0;
+    const fnWithStringArg = (_: string) => void 0;
+    const fnWithMouseEventArg = (_: MouseEvent) => void 0;
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    function _test<T>(_on: OutputRefKeysWithCallback<T>) {}
+
+    // @ts-expect-error
+    _test<TestFixtureWithEventEmitterComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithEventEmitterComponent>({ event: fnWithVoidArg });
+
+    // @ts-expect-error
+    _test<TestFixtureWithDerivedEventComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithDerivedEventComponent>({ event: fnWithMouseEventArg });
+
+    // @ts-expect-error
+    _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithStringArg });
+
+    // @ts-expect-error
+    _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithMouseEventArg });
+
+    // add a statement so the test succeeds
+    expect(true).toBeTruthy();
   });
 });
 

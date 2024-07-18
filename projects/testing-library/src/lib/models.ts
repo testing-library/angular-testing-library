@@ -1,10 +1,12 @@
-import { Type, DebugElement, OutputRef } from '@angular/core';
+import { Type, DebugElement, OutputRef, EventEmitter } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
 
 export type OutputRefKeysWithCallback<T> = {
-  [key in keyof T as T[key] extends OutputRef<any> ? key : never]?: T[key] extends OutputRef<infer U>
+  [key in keyof T]?: T[key] extends EventEmitter<infer U>
+    ? (val: U) => void
+    : T[key] extends OutputRef<infer U>
     ? (val: U) => void
     : never;
 };
@@ -229,7 +231,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
   /**
    * @description
-   * An object to subscribe to EventEmitters/Observables of the component
+   * An object with callbacks to subscribe to EventEmitters/Observables of the component
    *
    * @default
    * {}
