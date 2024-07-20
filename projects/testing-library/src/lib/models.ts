@@ -1,7 +1,15 @@
-import { Type, DebugElement } from '@angular/core';
-import {ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed} from '@angular/core/testing';
+import { Type, DebugElement, OutputRef, EventEmitter } from '@angular/core';
+import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
+
+export type OutputRefKeysWithCallback<T> = {
+  [key in keyof T]?: T[key] extends EventEmitter<infer U>
+    ? (val: U) => void
+    : T[key] extends OutputRef<infer U>
+    ? (val: U) => void
+    : never;
+};
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
 export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
@@ -60,7 +68,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   rerender: (
     properties?: Pick<
       RenderTemplateOptions<ComponentType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
+      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
     > & { partialUpdate?: boolean },
   ) => Promise<void>;
   /**
@@ -205,12 +213,12 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   /**
    * @description
    * An object to set `@Output` properties of the component
-   *
+   * @deprecated use the `on` option instead. When it is necessary to override properties, use the `componentProperties` option.
    * @default
    * {}
    *
    * @example
-   * const sendValue = (value) => { ... }
+   * const sendValue = new EventEmitter<any>();
    * await render(AppComponent, {
    *  componentOutputs: {
    *    send: {
@@ -220,6 +228,24 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   componentOutputs?: Partial<ComponentType>;
+
+  /**
+   * @description
+   * An object with callbacks to subscribe to EventEmitters/Observables of the component
+   *
+   * @default
+   * {}
+   *
+   * @example
+   * const sendValue = (value) => { ... }
+   * await render(AppComponent, {
+   *  on: {
+   *    send: (_v:any) => void
+   *  }
+   * })
+   */
+  on?: OutputRefKeysWithCallback<ComponentType>;
+
   /**
    * @description
    * A collection of providers to inject dependencies of the component.
@@ -379,7 +405,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * @description
    * Set the defer blocks behavior.
    */
-  deferBlockBehavior?: DeferBlockBehavior
+  deferBlockBehavior?: DeferBlockBehavior;
 }
 
 export interface ComponentOverride<T> {

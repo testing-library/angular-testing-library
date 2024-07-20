@@ -10,12 +10,16 @@ import {
   Injectable,
   EventEmitter,
   Output,
+  ElementRef,
+  inject,
+  output,
 } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen } from '../src/public_api';
+import { render, fireEvent, screen, OutputRefKeysWithCallback } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
-import { map } from 'rxjs';
+import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
@@ -180,6 +184,130 @@ describe('componentOutputs', () => {
     fixture.componentInstance.emitEvent();
 
     expect(spy).toHaveBeenCalled();
+  });
+});
+
+describe('on', () => {
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithEventEmitterComponent {
+    @Output() readonly event = new EventEmitter<void>();
+  }
+
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithDerivedEventComponent {
+    @Output() readonly event = fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click');
+  }
+
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithFunctionalOutputComponent {
+    readonly event = output<string>();
+  }
+
+  @Component({ template: ``, standalone: true })
+  class TestFixtureWithFunctionalDerivedEventComponent {
+    readonly event = outputFromObservable(fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click'));
+  }
+
+  it('should subscribe passed listener to the component EventEmitter', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithEventEmitterComponent, { on: { event: spy } });
+    fixture.componentInstance.event.emit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unsubscribe on rerender without listener', async () => {
+    const spy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      on: { event: spy },
+    });
+
+    await rerender({});
+
+    fixture.componentInstance.event.emit();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should not unsubscribe when same listener function is used on rerender', async () => {
+    const spy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      on: { event: spy },
+    });
+
+    await rerender({ on: { event: spy } });
+
+    fixture.componentInstance.event.emit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unsubscribe old and subscribe new listener function on rerender', async () => {
+    const firstSpy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      on: { event: firstSpy },
+    });
+
+    const newSpy = jest.fn();
+    await rerender({ on: { event: newSpy } });
+
+    fixture.componentInstance.event.emit();
+
+    expect(firstSpy).not.toHaveBeenCalled();
+    expect(newSpy).toHaveBeenCalled();
+  });
+
+  it('should subscribe passed listener to a derived component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithDerivedEventComponent, {
+      on: { event: spy },
+    });
+    fireEvent.click(fixture.nativeElement);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should subscribe passed listener to a functional component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithFunctionalOutputComponent, {
+      on: { event: spy },
+    });
+    fixture.componentInstance.event.emit('test');
+    expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  it('should subscribe passed listener to a functional derived component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithFunctionalDerivedEventComponent, {
+      on: { event: spy },
+    });
+    fireEvent.click(fixture.nativeElement);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('OutputRefKeysWithCallback is correctly typed', () => {
+    const fnWithVoidArg = (_: void) => void 0;
+    const fnWithNumberArg = (_: number) => void 0;
+    const fnWithStringArg = (_: string) => void 0;
+    const fnWithMouseEventArg = (_: MouseEvent) => void 0;
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    function _test<T>(_on: OutputRefKeysWithCallback<T>) {}
+
+    // @ts-expect-error
+    _test<TestFixtureWithEventEmitterComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithEventEmitterComponent>({ event: fnWithVoidArg });
+
+    // @ts-expect-error
+    _test<TestFixtureWithDerivedEventComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithDerivedEventComponent>({ event: fnWithMouseEventArg });
+
+    // @ts-expect-error
+    _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithStringArg });
+
+    // @ts-expect-error
+    _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithMouseEventArg });
+
+    // add a statement so the test succeeds
+    expect(true).toBeTruthy();
   });
 });
 
