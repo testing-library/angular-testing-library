@@ -55,8 +55,8 @@ test('output emits a value', async () => {
       greeting: 'Hello',
       name: 'world',
     },
-    componentOutputs: {
-      submit: { emit: submitFn } as any,
+    on: {
+      submit: submitFn,
     },
   });
 
