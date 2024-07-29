@@ -1,11 +1,11 @@
-import { render, screen, within } from '@testing-library/angular';
+import { aliasedInputWithValue, render, screen, within } from '@testing-library/angular';
 import { SignalInputComponent } from './22-signal-inputs.component';
 import userEvent from '@testing-library/user-event';
 
 test('works with signal inputs', async () => {
   await render(SignalInputComponent, {
-    componentInputs: {
-      greeting: 'Hello',
+    inputs: {
+      greeting: aliasedInputWithValue('Hello'),
       name: 'world',
     },
   });
@@ -16,8 +16,8 @@ test('works with signal inputs', async () => {
 
 test('works with computed', async () => {
   await render(SignalInputComponent, {
-    componentInputs: {
-      greeting: 'Hello',
+    inputs: {
+      greeting: aliasedInputWithValue('Hello'),
       name: 'world',
     },
   });
@@ -28,8 +28,8 @@ test('works with computed', async () => {
 
 test('can update signal inputs', async () => {
   const { fixture } = await render(SignalInputComponent, {
-    componentInputs: {
-      greeting: 'Hello',
+    inputs: {
+      greeting: aliasedInputWithValue('Hello'),
       name: 'world',
     },
   });
@@ -51,8 +51,8 @@ test('can update signal inputs', async () => {
 test('output emits a value', async () => {
   const submitFn = jest.fn();
   await render(SignalInputComponent, {
-    componentInputs: {
-      greeting: 'Hello',
+    inputs: {
+      greeting: aliasedInputWithValue('Hello'),
       name: 'world',
     },
     on: {
@@ -67,8 +67,8 @@ test('output emits a value', async () => {
 
 test('model update also updates the template', async () => {
   const { fixture } = await render(SignalInputComponent, {
-    componentInputs: {
-      greeting: 'Hello',
+    inputs: {
+      greeting: aliasedInputWithValue('Hello'),
       name: 'initial',
     },
   });
@@ -97,8 +97,8 @@ test('model update also updates the template', async () => {
 
 test('works with signal inputs, computed values, and rerenders', async () => {
   const view = await render(SignalInputComponent, {
-    componentInputs: {
-      greeting: 'Hello',
+    inputs: {
+      greeting: aliasedInputWithValue('Hello'),
       name: 'world',
     },
   });
@@ -110,8 +110,8 @@ test('works with signal inputs, computed values, and rerenders', async () => {
   expect(computedValue.getByText(/hello world/i)).toBeInTheDocument();
 
   await view.rerender({
-    componentInputs: {
-      greeting: 'bye',
+    inputs: {
+      greeting: aliasedInputWithValue('bye'),
       name: 'test',
     },
   });

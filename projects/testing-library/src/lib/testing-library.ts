@@ -242,10 +242,10 @@ export async function render<SutType, WrapperType = SutType>(
   const rerender = async (
     properties?: Pick<
       RenderTemplateOptions<SutType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
+      'componentProperties' | 'componentInputs' | 'inputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
     > & { partialUpdate?: boolean },
   ) => {
-    const newComponentInputs = properties?.componentInputs ?? {};
+    const newComponentInputs = { ...properties?.componentInputs, ...properties?.inputs };
     const changesInComponentInput = update(
       fixture,
       renderedInputKeys,
