@@ -67,6 +67,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentInputs = {},
     componentOutputs = {},
+    inputs: newInputs = {},
     on = {},
     componentProviders = [],
     childComponentOverrides = [],
@@ -176,8 +177,10 @@ export async function render<SutType, WrapperType = SutType>(
 
   let detectChanges: () => void;
 
+  const allInputs = { ...componentInputs, ...newInputs };
+
   let renderedPropKeys = Object.keys(componentProperties);
-  let renderedInputKeys = Object.keys(componentInputs);
+  let renderedInputKeys = Object.keys(allInputs);
   let renderedOutputKeys = Object.keys(componentOutputs);
   let subscribedOutputs: SubscribedOutput<SutType>[] = [];
 
@@ -224,7 +227,7 @@ export async function render<SutType, WrapperType = SutType>(
     return createdFixture;
   };
 
-  const fixture = await renderFixture(componentProperties, componentInputs, componentOutputs, on);
+  const fixture = await renderFixture(componentProperties, allInputs, componentOutputs, on);
 
   if (deferBlockStates) {
     if (Array.isArray(deferBlockStates)) {

@@ -13,11 +13,12 @@ import {
   ElementRef,
   inject,
   output,
+  input,
 } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen, OutputRefKeysWithCallback } from '../src/public_api';
+import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInputWithValue } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
 import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -531,5 +532,48 @@ describe('configureTestBed', () => {
     });
 
     expect(configureTestBedFn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('inputs and signals', () => {
+  @Component({
+    selector: 'atl-fixture',
+    template: `<span>{{ myName() }}</span> <span>{{ myJob() }}</span>`,
+  })
+  class InputComponent {
+    myName = input('foo');
+
+    myJob = input('bar', { alias: 'job' });
+  }
+
+  it('should set the input component', async () => {
+    await render(InputComponent, {
+      inputs: {
+        myName: 'Bob',
+        job: aliasedInputWithValue('Builder'),
+      },
+    });
+
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Builder')).toBeInTheDocument();
+  });
+
+  it('should typecheck correctly', async () => {
+    // @ts-expect-error - myName is a string
+    await render(InputComponent, {
+      inputs: {
+        myName: 123,
+      },
+    });
+
+    // @ts-expect-error - job is not using aliasedInputWithValue
+    await render(InputComponent, {
+      inputs: {
+        job: 'not used with aliasedInputWithValue',
+      },
+    });
+
+    // add a statement so the test succeeds
+    expect(true).toBeTruthy();
   });
 });

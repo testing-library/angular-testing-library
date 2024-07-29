@@ -1,4 +1,4 @@
-import { Type, DebugElement, OutputRef, EventEmitter } from '@angular/core';
+import { Type, DebugElement, OutputRef, EventEmitter, Signal } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
@@ -76,6 +76,29 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
    * Set the state of a deferrable block.
    */
   renderDeferBlock: (deferBlockState: DeferBlockState, deferBlockIndex?: number) => Promise<void>;
+}
+
+declare const ALIASED_INPUT_BRAND: unique symbol;
+export type AliasedInput<T> = T & {
+  [ALIASED_INPUT_BRAND]: T;
+};
+export type AliasedInputs = Record<string, AliasedInput<unknown>>;
+
+export type ComponentInput<T> =
+  | {
+      [P in keyof T]?: T[P] extends Signal<infer U>
+        ? U // If the property is a Signal, apply Partial to the inner type
+        : Partial<T[P]>; // Otherwise, apply Partial to the property itself
+    }
+  | AliasedInputs;
+
+/**
+ * @description
+ * Creates an aliased input branded type with a value
+ *
+ */
+export function aliasedInputWithValue<T>(value: T): AliasedInput<T> {
+  return value as AliasedInput<T>;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
@@ -199,6 +222,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * @description
    * An object to set `@Input` properties of the component
    *
+   * @deprecated use the `inputs` option instead. When you need to use aliases, use the `aliasedInputWithValue(...)` helper function.
    * @default
    * {}
    *
@@ -210,6 +234,23 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   componentInputs?: Partial<ComponentType> | { [alias: string]: unknown };
+
+  /**
+   * @description
+   * An object to set `@Input` or `input()` properties of the component
+   *
+   * @default
+   * {}
+   *
+   * @example
+   * await render(AppComponent, {
+   * inputs: {
+   *  counterValue: 10,
+   *  someAlias: aliasedInputWithValue('value')
+   * }
+   */
+  inputs?: ComponentInput<ComponentType>;
+
   /**
    * @description
    * An object to set `@Output` properties of the component
