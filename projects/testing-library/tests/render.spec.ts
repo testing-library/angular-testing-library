@@ -563,7 +563,7 @@ describe('inputs and signals', () => {
     // so we are purposely not calling render
 
     const typeTests = [
-      () => {
+      async () => {
         // @ts-expect-error - myName is a string
         await render(InputComponent, {
           inputs: {
@@ -571,7 +571,7 @@ describe('inputs and signals', () => {
           },
         });
       },
-      () => {
+      async () => {
         // @ts-expect-error - job is not using aliasedInputWithValue
         await render(InputComponent, {
           inputs: {
