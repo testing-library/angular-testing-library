@@ -8,7 +8,7 @@ test('is possible to set input and listen for output', async () => {
   const sendValue = jest.fn();
 
   await render(InputOutputComponent, {
-    componentInputs: {
+    inputs: {
       value: 47,
     },
     on: {
@@ -64,7 +64,7 @@ test('is possible to set input and listen for output (deprecated)', async () => 
   const sendValue = jest.fn();
 
   await render(InputOutputComponent, {
-    componentInputs: {
+    inputs: {
       value: 47,
     },
     componentOutputs: {
