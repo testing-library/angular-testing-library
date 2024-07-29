@@ -101,19 +101,19 @@ counter.component.ts
   selector: 'app-counter',
   template: `
     <button (click)="decrement()">-</button>
-    <span>Current Count: {{ counter }}</span>
+    <span>Current Count: {{ counter() }}</span>
     <button (click)="increment()">+</button>
   `,
 })
 export class CounterComponent {
-  @Input() counter = 0;
+  counter = model(0);
 
   increment() {
-    this.counter += 1;
+    this.counter.set(this.counter() + 1);
   }
 
   decrement() {
-    this.counter -= 1;
+    this.counter.set(this.counter() + 1);
   }
 }
 ```
@@ -126,13 +126,13 @@ import { CounterComponent } from './counter.component';
 
 describe('Counter', () => {
   test('should render counter', async () => {
-    await render(CounterComponent, { componentProperties: { counter: 5 } });
+    await render(CounterComponent, { inputs: { counter: 5 } });
 
     expect(screen.getByText('Current Count: 5'));
   });
 
   test('should increment the counter on click', async () => {
-    await render(CounterComponent, { componentProperties: { counter: 5 } });
+    await render(CounterComponent, { inputs: { counter: 5 } });
 
     const incrementButton = screen.getByRole('button', { name: '+' });
     fireEvent.click(incrementButton);
