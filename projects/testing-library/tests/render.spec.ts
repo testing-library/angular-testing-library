@@ -564,10 +564,26 @@ describe('inputs and signals', () => {
 
     const typeTests = [
       async () => {
+        // OK:
+        await render(InputComponent, {
+          inputs: {
+            myName: 'OK',
+          },
+        });
+      },
+      async () => {
         // @ts-expect-error - myName is a string
         await render(InputComponent, {
           inputs: {
             myName: 123,
+          },
+        });
+      },
+      async () => {
+        // OK:
+        await render(InputComponent, {
+          inputs: {
+            job: aliasedInputWithValue('OK'),
           },
         });
       },
