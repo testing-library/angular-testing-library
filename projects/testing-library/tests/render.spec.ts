@@ -559,21 +559,29 @@ describe('inputs and signals', () => {
   });
 
   it('should typecheck correctly', async () => {
-    // @ts-expect-error - myName is a string
-    await render(InputComponent, {
-      inputs: {
-        myName: 123,
-      },
-    });
+    // we only want to check the types here
+    // so we are purposely not calling render
 
-    // @ts-expect-error - job is not using aliasedInputWithValue
-    await render(InputComponent, {
-      inputs: {
-        job: 'not used with aliasedInputWithValue',
+    const typeTests = [
+      () => {
+        // @ts-expect-error - myName is a string
+        await render(InputComponent, {
+          inputs: {
+            myName: 123,
+          },
+        });
       },
-    });
+      () => {
+        // @ts-expect-error - job is not using aliasedInputWithValue
+        await render(InputComponent, {
+          inputs: {
+            job: 'not used with aliasedInputWithValue',
+          },
+        });
+      },
+    ];
 
     // add a statement so the test succeeds
-    expect(true).toBeTruthy();
+    expect(typeTests).toBeTruthy();
   });
 });

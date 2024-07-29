@@ -86,9 +86,7 @@ export type AliasedInputs = Record<string, AliasedInput<unknown>>;
 
 export type ComponentInput<T> =
   | {
-      [P in keyof T]?: T[P] extends Signal<infer U>
-        ? U // If the property is a Signal, apply Partial to the inner type
-        : Partial<T[P]>; // Otherwise, apply Partial to the property itself
+      [P in keyof T]?: T[P] extends Signal<infer U> ? U : T[P];
     }
   | AliasedInputs;
 
