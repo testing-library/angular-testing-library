@@ -115,7 +115,7 @@ export class CounterComponent {
   }
 
   decrement() {
-    this.counter.set(this.counter() + 1);
+    this.counter.set(this.counter() - 1);
   }
 }
 ```

@@ -623,7 +623,7 @@ describe('README examples', () => {
       }
 
       decrement() {
-        this.counter.set(this.counter() + 1);
+        this.counter.set(this.counter() - 1);
       }
     }
 
