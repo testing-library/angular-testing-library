@@ -106,7 +106,7 @@ counter.component.ts
     <button (click)="increment()">+</button>
   `,
 })
-class CounterComponent {
+export class CounterComponent {
   counter = model(0);
   hello = input('Hi', { alias: 'greeting' });
 
