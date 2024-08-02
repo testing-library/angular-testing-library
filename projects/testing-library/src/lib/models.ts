@@ -95,8 +95,8 @@ export type ComponentInput<T> =
  * Creates an aliased input branded type with a value
  *
  */
-export function aliasedInputWithValue<T>(value: T): AliasedInput<T> {
-  return value as AliasedInput<T>;
+export function aliasedInput<TAlias extends string, T>(alias: TAlias, value: T): Record<TAlias, AliasedInput<T>> {
+  return { [alias]: value } as Record<TAlias, AliasedInput<T>>;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
@@ -220,7 +220,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * @description
    * An object to set `@Input` properties of the component
    *
-   * @deprecated use the `inputs` option instead. When you need to use aliases, use the `aliasedInputWithValue(...)` helper function.
+   * @deprecated use the `inputs` option instead. When you need to use aliases, use the `aliasedInput(...)` helper function.
    * @default
    * {}
    *
@@ -245,7 +245,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * inputs: {
    *  counterValue: 10,
    *  // explicitly define aliases this way:
-   *  someAlias: aliasedInputWithValue('value')
+   *  ...aliasedInput('someAlias', 'someValue')
    * })
    */
   inputs?: ComponentInput<ComponentType>;

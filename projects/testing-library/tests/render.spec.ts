@@ -14,11 +14,12 @@ import {
   inject,
   output,
   input,
+  model,
 } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInputWithValue } from '../src/public_api';
+import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInput } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
 import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -550,7 +551,7 @@ describe('inputs and signals', () => {
     await render(InputComponent, {
       inputs: {
         myName: 'Bob',
-        job: aliasedInputWithValue('Builder'),
+        ...aliasedInput('job', 'Builder'),
       },
     });
 
@@ -583,15 +584,15 @@ describe('inputs and signals', () => {
         // OK:
         await render(InputComponent, {
           inputs: {
-            job: aliasedInputWithValue('OK'),
+            ...aliasedInput('job', 'OK'),
           },
         });
       },
       async () => {
-        // @ts-expect-error - job is not using aliasedInputWithValue
+        // @ts-expect-error - job is not using aliasedInput
         await render(InputComponent, {
           inputs: {
-            job: 'not used with aliasedInputWithValue',
+            job: 'not used with aliasedInput',
           },
         });
       },
@@ -599,5 +600,52 @@ describe('inputs and signals', () => {
 
     // add a statement so the test succeeds
     expect(typeTests).toBeTruthy();
+  });
+});
+
+describe('README examples', () => {
+  describe('Counter', () => {
+    @Component({
+      selector: 'atl-counter',
+      template: `
+        <span>{{ hello() }}</span>
+        <button (click)="decrement()">-</button>
+        <span>Current Count: {{ counter() }}</span>
+        <button (click)="increment()">+</button>
+      `,
+    })
+    class CounterComponent {
+      counter = model(0);
+      hello = input('Hi', { alias: 'greeting' });
+
+      increment() {
+        this.counter.set(this.counter() + 1);
+      }
+
+      decrement() {
+        this.counter.set(this.counter() + 1);
+      }
+    }
+
+    it('should render counter', async () => {
+      await render(CounterComponent, {
+        inputs: {
+          counter: 5,
+          ...aliasedInput('greeting', 'Hello Alias!'),
+        },
+      });
+
+      expect(screen.getByText('Current Count: 5')).toBeVisible();
+      expect(screen.getByText('Hello Alias!')).toBeVisible();
+    });
+
+    it('should increment the counter on click', async () => {
+      await render(CounterComponent, { inputs: { counter: 5 } });
+
+      const incrementButton = screen.getByRole('button', { name: '+' });
+      fireEvent.click(incrementButton);
+
+      expect(screen.getByText('Current Count: 6')).toBeVisible();
+    });
   });
 });
