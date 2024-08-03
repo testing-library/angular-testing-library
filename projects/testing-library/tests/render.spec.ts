@@ -13,11 +13,13 @@ import {
   ElementRef,
   inject,
   output,
+  input,
+  model,
 } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen, OutputRefKeysWithCallback } from '../src/public_api';
+import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInput } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
 import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -531,5 +533,119 @@ describe('configureTestBed', () => {
     });
 
     expect(configureTestBedFn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('inputs and signals', () => {
+  @Component({
+    selector: 'atl-fixture',
+    template: `<span>{{ myName() }}</span> <span>{{ myJob() }}</span>`,
+  })
+  class InputComponent {
+    myName = input('foo');
+
+    myJob = input('bar', { alias: 'job' });
+  }
+
+  it('should set the input component', async () => {
+    await render(InputComponent, {
+      inputs: {
+        myName: 'Bob',
+        ...aliasedInput('job', 'Builder'),
+      },
+    });
+
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Builder')).toBeInTheDocument();
+  });
+
+  it('should typecheck correctly', async () => {
+    // we only want to check the types here
+    // so we are purposely not calling render
+
+    const typeTests = [
+      async () => {
+        // OK:
+        await render(InputComponent, {
+          inputs: {
+            myName: 'OK',
+          },
+        });
+      },
+      async () => {
+        // @ts-expect-error - myName is a string
+        await render(InputComponent, {
+          inputs: {
+            myName: 123,
+          },
+        });
+      },
+      async () => {
+        // OK:
+        await render(InputComponent, {
+          inputs: {
+            ...aliasedInput('job', 'OK'),
+          },
+        });
+      },
+      async () => {
+        // @ts-expect-error - job is not using aliasedInput
+        await render(InputComponent, {
+          inputs: {
+            job: 'not used with aliasedInput',
+          },
+        });
+      },
+    ];
+
+    // add a statement so the test succeeds
+    expect(typeTests).toBeTruthy();
+  });
+});
+
+describe('README examples', () => {
+  describe('Counter', () => {
+    @Component({
+      selector: 'atl-counter',
+      template: `
+        <span>{{ hello() }}</span>
+        <button (click)="decrement()">-</button>
+        <span>Current Count: {{ counter() }}</span>
+        <button (click)="increment()">+</button>
+      `,
+    })
+    class CounterComponent {
+      counter = model(0);
+      hello = input('Hi', { alias: 'greeting' });
+
+      increment() {
+        this.counter.set(this.counter() + 1);
+      }
+
+      decrement() {
+        this.counter.set(this.counter() - 1);
+      }
+    }
+
+    it('should render counter', async () => {
+      await render(CounterComponent, {
+        inputs: {
+          counter: 5,
+          ...aliasedInput('greeting', 'Hello Alias!'),
+        },
+      });
+
+      expect(screen.getByText('Current Count: 5')).toBeVisible();
+      expect(screen.getByText('Hello Alias!')).toBeVisible();
+    });
+
+    it('should increment the counter on click', async () => {
+      await render(CounterComponent, { inputs: { counter: 5 } });
+
+      const incrementButton = screen.getByRole('button', { name: '+' });
+      fireEvent.click(incrementButton);
+
+      expect(screen.getByText('Current Count: 6')).toBeVisible();
+    });
   });
 });

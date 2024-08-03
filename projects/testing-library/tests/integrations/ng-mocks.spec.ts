@@ -8,7 +8,7 @@ import { NgIf } from '@angular/common';
 test('sends the correct value to the child input', async () => {
   const utils = await render(TargetComponent, {
     imports: [MockComponent(ChildComponent)],
-    componentInputs: { value: 'foo' },
+    inputs: { value: 'foo' },
   });
 
   const children = utils.fixture.debugElement.queryAll(By.directive(ChildComponent));
@@ -21,7 +21,7 @@ test('sends the correct value to the child input', async () => {
 test('sends the correct value to the child input 2', async () => {
   const utils = await render(TargetComponent, {
     imports: [MockComponent(ChildComponent)],
-    componentInputs: { value: 'bar' },
+    inputs: { value: 'bar' },
   });
 
   const children = utils.fixture.debugElement.queryAll(By.directive(ChildComponent));

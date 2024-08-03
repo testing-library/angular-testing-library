@@ -100,20 +100,22 @@ counter.component.ts
 @Component({
   selector: 'app-counter',
   template: `
+    <span>{{ hello() }}</span>
     <button (click)="decrement()">-</button>
-    <span>Current Count: {{ counter }}</span>
+    <span>Current Count: {{ counter() }}</span>
     <button (click)="increment()">+</button>
   `,
 })
 export class CounterComponent {
-  @Input() counter = 0;
+  counter = model(0);
+  hello = input('Hi', { alias: 'greeting' });
 
   increment() {
-    this.counter += 1;
+    this.counter.set(this.counter() + 1);
   }
 
   decrement() {
-    this.counter -= 1;
+    this.counter.set(this.counter() - 1);
   }
 }
 ```
@@ -121,23 +123,30 @@ export class CounterComponent {
 counter.component.spec.ts
 
 ```typescript
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen, fireEvent, aliasedInput } from '@testing-library/angular';
 import { CounterComponent } from './counter.component';
 
 describe('Counter', () => {
-  test('should render counter', async () => {
-    await render(CounterComponent, { componentProperties: { counter: 5 } });
+  it('should render counter', async () => {
+    await render(CounterComponent, {
+      inputs: {
+        counter: 5,
+        // aliases need to be specified this way
+        ...aliasedInput('greeting', 'Hello Alias!'),
+      },
+    });
 
-    expect(screen.getByText('Current Count: 5'));
+    expect(screen.getByText('Current Count: 5')).toBeVisible();
+    expect(screen.getByText('Hello Alias!')).toBeVisible();
   });
 
-  test('should increment the counter on click', async () => {
-    await render(CounterComponent, { componentProperties: { counter: 5 } });
+  it('should increment the counter on click', async () => {
+    await render(CounterComponent, { inputs: { counter: 5 } });
 
     const incrementButton = screen.getByRole('button', { name: '+' });
     fireEvent.click(incrementButton);
 
-    expect(screen.getByText('Current Count: 6'));
+    expect(screen.getByText('Current Count: 6')).toBeVisible();
   });
 });
 ```
