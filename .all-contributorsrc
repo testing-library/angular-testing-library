@@ -380,6 +380,17 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "andreialecu",
+      "name": "Andrei Alecu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/697707?v=4",
+      "profile": "https://lets.poker/",
+      "contributions": [
+        "code",
+        "ideas",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
