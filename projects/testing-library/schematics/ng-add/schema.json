@@ -3,6 +3,18 @@
   "$id": "SchematicsTestingLibraryAngular",
   "title": "testing-library-angular",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "installJestDom": {
+      "type": "boolean",
+      "description": "Would you like to install jest-dom?",
+      "default": false
+    },
+    "installUserEvent": {
+      "type": "boolean",
+      "description": "Would you like to install user-event?",
+      "default": false
+    }
+  },
+  "additionalProperties": false,
   "required": []
 }
