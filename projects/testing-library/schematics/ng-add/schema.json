@@ -6,7 +6,7 @@
   "properties": {
     "installJestDom": {
       "type": "boolean",
-      "description": "Would you like to install jest-dom?",
+      "description": "Install jest-dom as a dependency.",
       "$default": {
         "$source": "argv",
         "index": 0
@@ -16,7 +16,7 @@
     },
     "installUserEvent": {
       "type": "boolean",
-      "description": "Would you like to install user-event?",
+      "description": "Install user-event as a dependency.",
       "$default": {
         "$source": "argv",
         "index": 1
