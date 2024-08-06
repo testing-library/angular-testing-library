@@ -3,6 +3,28 @@
   "$id": "SchematicsTestingLibraryAngular",
   "title": "testing-library-angular",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "installJestDom": {
+      "type": "boolean",
+      "description": "Install jest-dom as a dependency.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "default": false,
+      "x-prompt": "Would you like to install jest-dom?"
+    },
+    "installUserEvent": {
+      "type": "boolean",
+      "description": "Install user-event as a dependency.",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "default": false,
+      "x-prompt": "Would you like to install user-event?"
+    }
+  },
+  "additionalProperties": false,
   "required": []
 }
