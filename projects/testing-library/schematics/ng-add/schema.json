@@ -7,12 +7,22 @@
     "installJestDom": {
       "type": "boolean",
       "description": "Would you like to install jest-dom?",
-      "default": false
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "default": false,
+      "x-prompt": "Would you like to install jest-dom?"
     },
     "installUserEvent": {
       "type": "boolean",
       "description": "Would you like to install user-event?",
-      "default": false
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "default": false,
+      "x-prompt": "Would you like to install user-event?"
     }
   },
   "additionalProperties": false,
