@@ -1,7 +1,15 @@
-import { Type, DebugElement, OutputRef, EventEmitter, Signal } from '@angular/core';
+import { Type, DebugElement, EventEmitter, Signal } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
+
+// TODO: import from Angular (is a breaking change)
+interface OutputRef<T> {
+  subscribe(callback: (value: T) => void): OutputRefSubscription;
+}
+interface OutputRefSubscription {
+  unsubscribe(): void;
+}
 
 export type OutputRefKeysWithCallback<T> = {
   [key in keyof T]?: T[key] extends EventEmitter<infer U>
