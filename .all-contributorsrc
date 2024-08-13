@@ -400,6 +400,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mlz11",
+      "name": "Mahdi Lazraq",
+      "avatar_url": "https://avatars.githubusercontent.com/u/94069699?v=4",
+      "profile": "https://github.com/mlz11",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
