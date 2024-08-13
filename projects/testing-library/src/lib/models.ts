@@ -1,4 +1,4 @@
-import { Type, DebugElement, EventEmitter, Signal } from '@angular/core';
+import { Type, DebugElement, EventEmitter, Signal, InputSignalWithTransform } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
@@ -94,7 +94,11 @@ export type AliasedInputs = Record<string, AliasedInput<unknown>>;
 
 export type ComponentInput<T> =
   | {
-      [P in keyof T]?: T[P] extends Signal<infer U> ? U : T[P];
+      [P in keyof T]?: T[P] extends InputSignalWithTransform<any, infer U>
+        ? U
+        : T[P] extends Signal<infer U>
+        ? U
+        : T[P];
     }
   | AliasedInputs;
 
