@@ -215,7 +215,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   /**
    * @description
    * An object to set properties of the component
-   *
+   * @deprecated use the `on` or `inputs` option instead.
    * @default
    * {}
    *
