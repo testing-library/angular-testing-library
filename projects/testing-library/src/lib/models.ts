@@ -254,10 +254,11 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *
    * @example
    * await render(AppComponent, {
-   * inputs: {
-   *  counterValue: 10,
-   *  // explicitly define aliases this way:
-   *  ...aliasedInput('someAlias', 'someValue')
+   *  inputs: {
+   *    counterValue: 10,
+   *    // explicitly define aliases using aliasedInput
+   *    ...aliasedInput('someAlias', 'someValue')
+   *  }
    * })
    */
   inputs?: ComponentInput<ComponentType>;
@@ -292,7 +293,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * const sendValue = (value) => { ... }
    * await render(AppComponent, {
    *  on: {
-   *    send: (_v:any) => void
+   *    send: (value) => sendValue(value)
    *  }
    * })
    */
