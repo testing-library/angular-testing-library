@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, Injectable } from '@angular/core';
-import { render, screen, waitFor } from '../../src/public_api';
+import { render, screen } from '../../src/public_api';
 import { Observable, BehaviorSubject, map } from 'rxjs';
 
 test('displays username', async () => {
@@ -21,13 +21,13 @@ test('displays username', async () => {
   });
 
   // assert first username emitted is rendered
-  expect(await screen.findByRole('heading')).toHaveTextContent('username 1');
+  expect(await screen.findByRole('heading', { name: 'username 1' })).toBeInTheDocument();
 
   // emitting a second username
   user.next({ name: 'username 2' });
 
   // assert the second username is rendered
-  await waitFor(() => expect(screen.getByRole('heading')).toHaveTextContent('username 2'));
+  expect(await screen.findByRole('heading', { name: 'username 2' })).toBeInTheDocument();
 });
 
 @Component({
