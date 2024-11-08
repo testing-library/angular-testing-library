@@ -473,6 +473,7 @@ export interface RenderTemplateOptions<WrapperType, Properties extends object = 
    * @description
    * An Angular component to wrap the component in.
    * The template will be overridden with the `template` option.
+   * NOTE: A standalone component cannot be used as a wrapper.
    *
    * @default
    * `WrapperComponent`, an empty component that strips the `ng-version` attribute

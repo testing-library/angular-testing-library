@@ -616,7 +616,7 @@ if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
   }
 }
 
-@Component({ selector: 'atl-wrapper-component', template: '' })
+@Component({ selector: 'atl-wrapper-component', template: '', standalone: false })
 class WrapperComponent {}
 
 /**
