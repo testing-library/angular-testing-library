@@ -2,7 +2,6 @@ import {
   ApplicationInitStatus,
   ChangeDetectorRef,
   Component,
-  isStandalone,
   NgZone,
   OnChanges,
   OutputRef,
@@ -10,6 +9,7 @@ import {
   SimpleChange,
   SimpleChanges,
   Type,
+  isStandalone,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,14 +27,14 @@ import {
   waitForOptions as dtlWaitForOptions,
   within as dtlWithin,
 } from '@testing-library/dom';
+import { getConfig } from './config';
 import {
   ComponentOverride,
+  OutputRefKeysWithCallback,
   RenderComponentOptions,
   RenderResult,
   RenderTemplateOptions,
-  OutputRefKeysWithCallback,
 } from './models';
-import { getConfig } from './config';
 
 type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, subscription: OutputRefSubscription];
 
@@ -71,7 +71,7 @@ export async function render<SutType, WrapperType = SutType>(
     on = {},
     componentProviders = [],
     childComponentOverrides = [],
-    componentImports: componentImports,
+    componentImports,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,
@@ -116,12 +116,9 @@ export async function render<SutType, WrapperType = SutType>(
 
   await TestBed.compileComponents();
 
-  componentProviders
-    .reduce((acc, provider) => acc.concat(provider), [] as any[])
-    .forEach((p: any) => {
-      const { provide, ...provider } = p;
-      TestBed.overrideProvider(provide, provider);
-    });
+  for (const { provide, ...provider } of componentProviders) {
+    TestBed.overrideProvider(provide, provider);
+  }
 
   const componentContainer = createComponentFixture(sut, wrapper);
 
@@ -158,7 +155,9 @@ export async function render<SutType, WrapperType = SutType>(
     let result;
 
     if (zone) {
-      await zone.run(() => (result = doNavigate()));
+      await zone.run(() => {
+        result = doNavigate();
+      });
     } else {
       result = doNavigate();
     }
@@ -199,7 +198,7 @@ export async function render<SutType, WrapperType = SutType>(
     if (removeAngularAttributes) {
       createdFixture.nativeElement.removeAttribute('ng-version');
       const idAttribute = createdFixture.nativeElement.getAttribute('id');
-      if (idAttribute && idAttribute.startsWith('root')) {
+      if (idAttribute?.startsWith('root')) {
         createdFixture.nativeElement.removeAttribute('id');
       }
     }
@@ -207,7 +206,9 @@ export async function render<SutType, WrapperType = SutType>(
     mountedFixtures.add(createdFixture);
 
     let isAlive = true;
-    createdFixture.componentRef.onDestroy(() => (isAlive = false));
+    createdFixture.componentRef.onDestroy(() => {
+      isAlive = false;
+    });
 
     if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
@@ -318,10 +319,15 @@ export async function render<SutType, WrapperType = SutType>(
     },
     debugElement: fixture.debugElement,
     container: fixture.nativeElement,
-    debug: (element = fixture.nativeElement, maxLength, options) =>
-      Array.isArray(element)
-        ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
-        : console.log(dtlPrettyDOM(element, maxLength, options)),
+    debug: (element = fixture.nativeElement, maxLength, options) => {
+      if (Array.isArray(element)) {
+        for (const e of element) {
+          console.log(dtlPrettyDOM(e, maxLength, options));
+        }
+      } else {
+        console.log(dtlPrettyDOM(element, maxLength, options));
+      }
+    },
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
 }
@@ -423,9 +429,11 @@ function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports:
 }
 
 function overrideChildComponentProviders(componentOverrides: ComponentOverride<any>[]) {
-  componentOverrides?.forEach(({ component, providers }) => {
-    TestBed.overrideComponent(component, { set: { providers } });
-  });
+  if (componentOverrides) {
+    for (const { component, providers } of componentOverrides) {
+      TestBed.overrideComponent(component, { set: { providers } });
+    }
+  }
 }
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
@@ -439,13 +447,10 @@ function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstanc
 
 function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<string, any>) {
   const isFirstChange = oldProps === null;
-  return Object.keys(newProps).reduce<SimpleChanges>(
-    (changes, key) => ({
-      ...changes,
-      [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange),
-    }),
-    {} as Record<string, any>,
-  );
+  return Object.keys(newProps).reduce<SimpleChanges>((changes, key) => {
+    changes[key] = new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange);
+    return changes;
+  }, {} as Record<string, any>);
 }
 
 function update<SutType>(
@@ -461,10 +466,12 @@ function update<SutType>(
   const componentInstance = fixture.componentInstance as Record<string, any>;
   const simpleChanges: SimpleChanges = {};
 
-  for (const key of prevRenderedKeys) {
-    if (!partialUpdate && !Object.prototype.hasOwnProperty.call(newValues, key)) {
-      simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
-      delete componentInstance[key];
+  if (!partialUpdate) {
+    for (const key of prevRenderedKeys) {
+      if (!Object.prototype.hasOwnProperty.call(newValues, key)) {
+        simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
+        delete componentInstance[key];
+      }
     }
   }
 
@@ -643,7 +650,7 @@ function replaceFindWithFindAndDetectChanges<T extends Record<string, any>>(orig
  * Call detectChanges for all fixtures
  */
 function detectChangesForMountedFixtures() {
-  mountedFixtures.forEach((fixture) => {
+  for (const fixture of mountedFixtures) {
     try {
       fixture.detectChanges();
     } catch (err: any) {
@@ -651,7 +658,7 @@ function detectChangesForMountedFixtures() {
         throw err;
       }
     }
-  });
+  }
 }
 
 /**
