@@ -29,6 +29,7 @@
 /.angular/cache
 .angular
 .nx
+migrations.json
 .cache
 /.sass-cache
 /connect.lock
