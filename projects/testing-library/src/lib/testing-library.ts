@@ -499,6 +499,9 @@ function addAutoDeclarations<SutType>(
 ) {
   const nonStandaloneDeclarations = declarations?.filter((d) => !isStandalone(d));
   if (typeof sut === 'string') {
+    if (wrapper && isStandalone(wrapper)) {
+      return nonStandaloneDeclarations;
+    }
     return [...nonStandaloneDeclarations, wrapper];
   }
 
