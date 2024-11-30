@@ -33,6 +33,7 @@ import {
   RenderResult,
   RenderTemplateOptions,
   OutputRefKeysWithCallback,
+  Config,
 } from './models';
 import { getConfig } from './config';
 
@@ -82,7 +83,9 @@ export async function render<SutType, WrapperType = SutType>(
     configureTestBed = () => {
       /* noop*/
     },
-  } = { ...globalConfig, ...renderOptions };
+  } = { ...globalConfig, ...renderOptions } as RenderComponentOptions<SutType> &
+    RenderTemplateOptions<WrapperType> &
+    Config;
 
   dtlConfigure({
     eventWrapper: (cb) => {
@@ -227,7 +230,7 @@ export async function render<SutType, WrapperType = SutType>(
     return createdFixture;
   };
 
-  const fixture = await renderFixture(componentProperties, allInputs, componentOutputs, on);
+  const fixture = await renderFixture(componentProperties, allInputs as any, componentOutputs, on);
 
   if (deferBlockStates) {
     if (Array.isArray(deferBlockStates)) {
@@ -487,12 +490,13 @@ function addAutoDeclarations<SutType>(
     wrapper,
   }: Pick<RenderTemplateOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'wrapper'>,
 ) {
+  const nonStandaloneDeclarations = declarations?.filter((d) => !isStandalone(d));
   if (typeof sut === 'string') {
-    return [...declarations, wrapper];
+    return [...nonStandaloneDeclarations, wrapper];
   }
 
   const components = () => (excludeComponentDeclaration || isStandalone(sut) ? [] : [sut]);
-  return [...declarations, ...components()];
+  return [...nonStandaloneDeclarations, ...components()];
 }
 
 function addAutoImports<SutType>(

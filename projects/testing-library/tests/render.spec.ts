@@ -47,33 +47,31 @@ describe('DTL functionality', () => {
   });
 });
 
-describe('standalone', () => {
+describe('components', () => {
   @Component({
     selector: 'atl-fixture',
     template: ` {{ name }} `,
   })
-  class StandaloneFixtureComponent {
+  class FixtureWithInputComponent {
     @Input() name = '';
   }
 
-  it('renders standalone component', async () => {
-    await render(StandaloneFixtureComponent, { componentProperties: { name: 'Bob' } });
+  it('renders component', async () => {
+    await render(FixtureWithInputComponent, { componentProperties: { name: 'Bob' } });
     expect(screen.getByText('Bob')).toBeInTheDocument();
   });
 });
 
-describe('standalone with child', () => {
+describe('component with child', () => {
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>A child fixture</span>`,
-    standalone: true,
   })
   class ChildFixtureComponent {}
 
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>A mock child fixture</span>`,
-    standalone: true,
     // eslint-disable-next-line @angular-eslint/no-host-metadata-property, @typescript-eslint/naming-convention
     host: { 'collision-id': MockChildFixtureComponent.name },
   })
@@ -83,18 +81,17 @@ describe('standalone with child', () => {
     selector: 'atl-parent-fixture',
     template: `<h1>Parent fixture</h1>
       <div><atl-child-fixture></atl-child-fixture></div> `,
-    standalone: true,
     imports: [ChildFixtureComponent],
   })
   class ParentFixtureComponent {}
 
-  it('renders the standalone component with a mocked child', async () => {
+  it('renders the component with a mocked child', async () => {
     await render(ParentFixtureComponent, { componentImports: [MockChildFixtureComponent] });
     expect(screen.getByText('Parent fixture')).toBeInTheDocument();
     expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
   });
 
-  it('renders the standalone component with child', async () => {
+  it('renders the component with child', async () => {
     await render(ParentFixtureComponent);
     expect(screen.getByText('Parent fixture')).toBeInTheDocument();
     expect(screen.getByText('A child fixture')).toBeInTheDocument();
@@ -118,7 +115,6 @@ describe('childComponentOverrides', () => {
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>{{ simpleService.value }}</span>`,
-    standalone: true,
     providers: [MySimpleService],
   })
   class NestedChildFixtureComponent {
@@ -128,7 +124,6 @@ describe('childComponentOverrides', () => {
   @Component({
     selector: 'atl-parent-fixture',
     template: `<atl-child-fixture></atl-child-fixture>`,
-    standalone: true,
     imports: [NestedChildFixtureComponent],
   })
   class ParentFixtureComponent {}
@@ -190,22 +185,22 @@ describe('componentOutputs', () => {
 });
 
 describe('on', () => {
-  @Component({ template: ``, standalone: true })
+  @Component({ template: `` })
   class TestFixtureWithEventEmitterComponent {
     @Output() readonly event = new EventEmitter<void>();
   }
 
-  @Component({ template: ``, standalone: true })
+  @Component({ template: `` })
   class TestFixtureWithDerivedEventComponent {
     @Output() readonly event = fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click');
   }
 
-  @Component({ template: ``, standalone: true })
+  @Component({ template: `` })
   class TestFixtureWithFunctionalOutputComponent {
     readonly event = output<string>();
   }
 
-  @Component({ template: ``, standalone: true })
+  @Component({ template: `` })
   class TestFixtureWithFunctionalDerivedEventComponent {
     readonly event = outputFromObservable(fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click'));
   }
@@ -313,20 +308,31 @@ describe('on', () => {
   });
 });
 
-describe('animationModule', () => {
+describe('excludeComponentDeclaration', () => {
+  @Component({
+    selector: 'atl-fixture',
+    template: `
+      <input type="text" data-testid="input" />
+      <button>button</button>
+    `,
+    standalone: false,
+  })
+  class NotStandaloneFixtureComponent {}
+
   @NgModule({
-    declarations: [FixtureComponent],
+    declarations: [NotStandaloneFixtureComponent],
   })
   class FixtureModule {}
-  describe('excludeComponentDeclaration', () => {
-    it('does not throw if component is declared in an imported module', async () => {
-      await render(FixtureComponent, {
-        imports: [FixtureModule],
-        excludeComponentDeclaration: true,
-      });
+
+  it('does not throw if component is declared in an imported module', async () => {
+    await render(NotStandaloneFixtureComponent, {
+      imports: [FixtureModule],
+      excludeComponentDeclaration: true,
     });
   });
+});
 
+describe('animationModule', () => {
   it('adds NoopAnimationsModule by default', async () => {
     await render(FixtureComponent);
     const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
@@ -458,14 +464,12 @@ describe('DebugElement', () => {
 
 describe('initialRoute', () => {
   @Component({
-    standalone: true,
     selector: 'atl-fixture2',
     template: `<button>Secondary Component</button>`,
   })
   class SecondaryFixtureComponent {}
 
   @Component({
-    standalone: true,
     selector: 'atl-router-fixture',
     template: `<router-outlet></router-outlet>`,
     imports: [RouterModule],
@@ -502,7 +506,6 @@ describe('initialRoute', () => {
 
   it('allows initially rendering a specific route with query parameters', async () => {
     @Component({
-      standalone: true,
       selector: 'atl-query-param-fixture',
       template: `<p>paramPresent$: {{ paramPresent$ | async }}</p>`,
       imports: [NgIf, AsyncPipe],

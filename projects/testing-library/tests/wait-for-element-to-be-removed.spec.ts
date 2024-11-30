@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { render, screen, waitForElementToBeRemoved } from '../src/public_api';
 import { timer } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'atl-fixture',
   template: ` <div *ngIf="visible" data-testid="im-here">👋</div> `,
+  imports: [NgIf],
 })
 class FixtureComponent implements OnInit {
   visible = true;
