@@ -34,7 +34,6 @@ import {
   RenderComponentOptions,
   RenderResult,
   RenderTemplateOptions,
-  OutputRefKeysWithCallback,
   Config,
 } from './models';
 
