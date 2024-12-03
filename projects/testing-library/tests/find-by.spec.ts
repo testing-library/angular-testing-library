@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { timer } from 'rxjs';
 import { render, screen } from '../src/public_api';
 import { mapTo } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'atl-fixture',
   template: ` <div>{{ result | async }}</div> `,
+  imports: [AsyncPipe],
 })
 class FixtureComponent {
   result = timer(30).pipe(mapTo('I am visible'));
