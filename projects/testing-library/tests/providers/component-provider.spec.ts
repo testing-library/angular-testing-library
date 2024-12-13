@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Provider } from '@angular/core';
 import { Component } from '@angular/core';
 import { render, screen } from '../../src/public_api';
 
@@ -37,6 +37,24 @@ test('shows the provided service value with template syntax', async () => {
         },
       },
     ],
+  });
+
+  expect(screen.getByText('bar')).toBeInTheDocument();
+});
+
+test('flatten the nested array of component providers', async () => {
+  const provideService = (): Provider => [
+    {
+      provide: Service,
+      useValue: {
+        foo() {
+          return 'bar';
+        },
+      },
+    },
+  ];
+  await render(FixtureComponent, {
+    componentProviders: [provideService()],
   });
 
   expect(screen.getByText('bar')).toBeInTheDocument();

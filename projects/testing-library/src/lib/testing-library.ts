@@ -119,7 +119,8 @@ export async function render<SutType, WrapperType = SutType>(
 
   await TestBed.compileComponents();
 
-  for (const { provide, ...provider } of componentProviders) {
+  // Angular supports nested arrays of providers, so we need to flatten them to emulate the same behavior.
+  for (const { provide, ...provider } of componentProviders.flat(Infinity)) {
     TestBed.overrideProvider(provide, provider);
   }
 
