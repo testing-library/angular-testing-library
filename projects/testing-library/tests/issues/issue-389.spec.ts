@@ -6,7 +6,6 @@ import { render, screen } from '../../src/public_api';
   template: `Hello {{ name }}`,
 })
 class TestComponent {
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('aliasName') name = '';
 }
 

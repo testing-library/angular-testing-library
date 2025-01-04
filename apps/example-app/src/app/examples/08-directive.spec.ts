@@ -6,7 +6,7 @@ import { SpoilerDirective } from './08-directive';
 
 test('it is possible to test directives with container component', async () => {
   @Component({
-    template: `<div appSpoiler data-testid="dir"></div>`,
+    template: `<div atlSpoiler data-testid="dir"></div>`,
     imports: [SpoilerDirective],
     standalone: true,
   })
@@ -32,7 +32,7 @@ test('it is possible to test directives with container component', async () => {
 test('it is possible to test directives', async () => {
   const user = userEvent.setup();
 
-  await render('<div appSpoiler data-testid="dir"></div>', {
+  await render('<div atlSpoiler data-testid="dir"></div>', {
     imports: [SpoilerDirective],
   });
 
@@ -55,7 +55,7 @@ test('it is possible to test directives with props', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  await render('<div appSpoiler [hidden]="hidden" [visible]="visible"></div>', {
+  await render('<div atlSpoiler [hidden]="hidden" [visible]="visible"></div>', {
     imports: [SpoilerDirective],
     componentProperties: {
       hidden,
@@ -80,7 +80,7 @@ test('it is possible to test directives with props in template', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  await render(`<div appSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
+  await render(`<div atlSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
     imports: [SpoilerDirective],
   });
 

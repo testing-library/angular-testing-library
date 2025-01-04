@@ -37,7 +37,7 @@ describe('DTL functionality', () => {
   it('creates queries and events', async () => {
     const view = await render(FixtureComponent);
 
-    /// We wish to test the utility function from `render` here.
+    // We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
     // eslint-disable-next-line testing-library/prefer-screen-queries
@@ -72,7 +72,6 @@ describe('component with child', () => {
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>A mock child fixture</span>`,
-    // eslint-disable-next-line @angular-eslint/no-host-metadata-property, @typescript-eslint/naming-convention
     host: { 'collision-id': MockChildFixtureComponent.name },
   })
   class MockChildFixtureComponent {}
@@ -287,19 +286,19 @@ describe('on', () => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     function _test<T>(_on: OutputRefKeysWithCallback<T>) {}
 
-    // @ts-expect-error
+    // @ts-expect-error wrong event type
     _test<TestFixtureWithEventEmitterComponent>({ event: fnWithNumberArg });
     _test<TestFixtureWithEventEmitterComponent>({ event: fnWithVoidArg });
 
-    // @ts-expect-error
+    // @ts-expect-error wrong event type
     _test<TestFixtureWithDerivedEventComponent>({ event: fnWithNumberArg });
     _test<TestFixtureWithDerivedEventComponent>({ event: fnWithMouseEventArg });
 
-    // @ts-expect-error
+    // @ts-expect-error wrong event type
     _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithNumberArg });
     _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithStringArg });
 
-    // @ts-expect-error
+    // @ts-expect-error wrong event type
     _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithNumberArg });
     _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithMouseEventArg });
 
@@ -392,11 +391,11 @@ describe('Angular component life-cycle hooks', () => {
 
     const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    /// We wish to test the utility function from `render` here.
+    // We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     expect(view.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
-    /// expect `nameChanged` to be called before `nameInitialized`
+    // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
     expect(nameChanged).toHaveBeenCalledTimes(1);
   });
@@ -408,11 +407,11 @@ describe('Angular component life-cycle hooks', () => {
 
     const view = await render(FixtureWithNgOnChangesComponent, { componentInputs: componentInput });
 
-    /// We wish to test the utility function from `render` here.
+    // We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     expect(view.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
-    /// expect `nameChanged` to be called before `nameInitialized`
+    // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
     expect(nameChanged).toHaveBeenCalledTimes(1);
   });

@@ -5,7 +5,7 @@ import { ComponentWithAttributeSelectorComponent } from './17-component-with-att
 // for components with attribute selectors!
 test('is possible to set input of component with attribute selector through template', async () => {
   await render(
-    `<app-fixture-component-with-attribute-selector [value]="42"></app-fixture-component-with-attribute-selector>`,
+    `<atl-fixture-component-with-attribute-selector [value]="42"></atl-fixture-component-with-attribute-selector>`,
     {
       imports: [ComponentWithAttributeSelectorComponent],
     },

@@ -560,7 +560,7 @@ async function waitForWrapper<T>(
   let inFakeAsync = true;
   try {
     tick(0);
-  } catch (err) {
+  } catch {
     inFakeAsync = false;
   }
 

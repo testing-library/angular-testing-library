@@ -98,7 +98,7 @@ counter.component.ts
 
 ```ts
 @Component({
-  selector: 'app-counter',
+  selector: 'atl-counter',
   template: `
     <span>{{ hello() }}</span>
     <button (click)="decrement()">-</button>

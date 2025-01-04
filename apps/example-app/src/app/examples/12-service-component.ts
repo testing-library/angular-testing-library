@@ -19,7 +19,7 @@ export class CustomersService {
 @Component({
   standalone: true,
   imports: [AsyncPipe, NgForOf],
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <ul>
       <li *ngFor="let customer of customers$ | async">

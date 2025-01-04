@@ -10,10 +10,12 @@ export const selectItems = createSelector(
 @Component({
   standalone: true,
   imports: [AsyncPipe, NgForOf],
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <ul>
-      <li *ngFor="let item of items | async" (click)="send(item)">{{ item }}</li>
+      <li *ngFor="let item of items | async">
+        <button (click)="send(item)">{{ item }}</button>
+      </li>
     </ul>
   `,
 })

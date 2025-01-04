@@ -38,7 +38,7 @@ test('closes the dialog via the backdrop', async () => {
   const dialogTitleControl = await screen.findByRole('heading', { name: /dialog title/i });
   expect(dialogTitleControl).toBeInTheDocument();
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, testing-library/no-node-access
+  // eslint-disable-next-line testing-library/no-node-access
   await user.click(document.querySelector('.cdk-overlay-backdrop')!);
 
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();

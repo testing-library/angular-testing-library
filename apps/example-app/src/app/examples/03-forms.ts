@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   standalone: true,
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   imports: [ReactiveFormsModule, NgForOf, NgIf],
   template: `
     <form [formGroup]="form" name="form">

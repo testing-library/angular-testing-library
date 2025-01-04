@@ -48,12 +48,12 @@ test('navigate to second page and back', async () => {
   expect(await screen.findByText('Navigate')).toBeInTheDocument();
   expect(await screen.findByText('first page')).toBeInTheDocument();
 
-  userEvent.click(await screen.findByText('go to second'));
+  await userEvent.click(await screen.findByText('go to second'));
 
   expect(await screen.findByText('second page')).toBeInTheDocument();
   expect(await screen.findByText('navigate back')).toBeInTheDocument();
 
-  userEvent.click(await screen.findByText('navigate back'));
+  await userEvent.click(await screen.findByText('navigate back'));
 
   expect(await screen.findByText('first page')).toBeInTheDocument();
 });

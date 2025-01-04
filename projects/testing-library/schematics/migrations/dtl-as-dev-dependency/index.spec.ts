@@ -16,7 +16,6 @@ test('adds DTL to devDependencies', async () => {
 });
 
 test('ignores if DTL is already listed as a dev dependency', async () => {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const tree = await setup({ devDependencies: { '@testing-library/dom': '^9.0.0' } });
   const pkg = tree.readContent('package.json');
 
@@ -24,7 +23,6 @@ test('ignores if DTL is already listed as a dev dependency', async () => {
 });
 
 test('ignores if DTL is already listed as a dependency', async () => {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const tree = await setup({ dependencies: { '@testing-library/dom': '^11.0.0' } });
   const pkg = tree.readContent('package.json');
 

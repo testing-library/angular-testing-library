@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-deferable-view-child',
+  selector: 'atl-deferable-view-child',
   template: ` <p>Hello from deferred child component</p> `,
   standalone: true,
 })
@@ -10,7 +10,7 @@ export class DeferableViewChildComponent {}
 @Component({
   template: `
     @defer (on timer(2s)) {
-        <app-deferable-view-child />
+        <atl-deferable-view-child />
     } @placeholder {
         <p>Hello from placeholder</p>
     } @loading {

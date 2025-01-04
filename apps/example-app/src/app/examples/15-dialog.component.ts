@@ -4,7 +4,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 @Component({
   standalone: true,
   imports: [MatDialogModule],
-  selector: 'app-dialog-overview-example',
+  selector: 'atl-dialog-overview-example',
   template: '<button (click)="openDialog()">Open dialog</button>',
 })
 export class DialogComponent {
@@ -18,7 +18,7 @@ export class DialogComponent {
 @Component({
   standalone: true,
   imports: [MatDialogModule],
-  selector: 'app-dialog-overview-example-dialog',
+  selector: 'atl-dialog-overview-example-dialog',
   template: `
     <h1 mat-dialog-title>Dialog Title</h1>
     <div mat-dialog-content>Dialog content</div>

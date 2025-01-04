@@ -42,7 +42,6 @@ class ChildComponent {}
   selector: 'atl-child',
   template: `Hello from stub`,
   standalone: true,
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property, @typescript-eslint/naming-convention
   host: { 'collision-id': StubComponent.name },
 })
 class StubComponent {}
