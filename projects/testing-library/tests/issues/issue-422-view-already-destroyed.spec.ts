@@ -9,6 +9,7 @@ test('declaration specific dependencies should be available for components', asy
     template: `<div>Test</div>`,
   })
   class TestComponent {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor(_elementRef: ElementRef) {}
   }
 

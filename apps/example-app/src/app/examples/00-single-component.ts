@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   standalone: true,
   template: `
     <button (click)="value = value - 1">Decrement</button>

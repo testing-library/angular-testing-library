@@ -15,9 +15,7 @@ test('should re-create the app', async () => {
   selector: 'atl-fixture',
   standalone: true,
   template: '<h1>My title</h1>',
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   host: {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     '[attr.id]': 'null', // this breaks the cleaning up of tests
   },
 })

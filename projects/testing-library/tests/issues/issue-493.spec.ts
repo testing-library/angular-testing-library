@@ -22,6 +22,6 @@ test('succeeds', async () => {
 })
 class DummyComponent {
   value = input.required<string>();
-  // @ts-ignore
+  // @ts-expect-error http is unused but needed for the test
   constructor(private http: HttpClient) {}
 }

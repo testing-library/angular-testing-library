@@ -12,8 +12,6 @@ export default tseslint.config(
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
-      ...jestDom.configs.recommended,
-      ...testingLibrary.configs.angular,
     ],
     processor: angular.processInlineTemplates,
     rules: {
@@ -33,8 +31,28 @@ export default tseslint.config(
           style: "kebab-case",
         },
       ],
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+      // These are needed for test cases
+      "@angular-eslint/prefer-standalone": "off",
+      "@angular-eslint/no-input-rename": "off",
+      "@angular-eslint/no-input-rename": "off",
     },
   },
+  {
+    files: ["**/*.spec.ts"],
+    extends: [
+      jestDom.configs["flat/recommended"],
+      testingLibrary.configs["flat/angular"],
+    ],
+  },    
   {
     files: ["**/*.html"],
     extends: [

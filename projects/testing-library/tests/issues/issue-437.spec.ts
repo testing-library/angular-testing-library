@@ -24,7 +24,6 @@ test('issue #437', async () => {
     { imports: [MatSidenavModule] },
   );
 
-  // eslint-disable-next-line testing-library/prefer-explicit-assert
   await screen.findByTestId('test-button');
 
   await user.click(screen.getByTestId('test-button'));
@@ -51,7 +50,6 @@ test('issue #437 with fakeTimers', async () => {
     { imports: [MatSidenavModule] },
   );
 
-  // eslint-disable-next-line testing-library/prefer-explicit-assert
   await screen.findByTestId('test-button');
 
   await user.click(screen.getByTestId('test-button'));

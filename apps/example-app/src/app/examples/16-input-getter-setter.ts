@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   standalone: true,
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <span data-testid="value">{{ derivedValue }}</span>
     <span data-testid="value-getter">{{ value }}</span>

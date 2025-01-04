@@ -36,7 +36,7 @@ test.skip('is possible to set input and listen for output with the template synt
   const user = userEvent.setup();
   const sendSpy = jest.fn();
 
-  await render('<app-fixture [value]="47" (sendValue)="sendValue($event)" />', {
+  await render('<atl-fixture [value]="47" (sendValue)="sendValue($event)" />', {
     imports: [InputOutputComponent],
     on: {
       sendValue: sendSpy,
@@ -94,7 +94,7 @@ test('is possible to set input and listen for output with the template syntax (d
   const user = userEvent.setup();
   const sendSpy = jest.fn();
 
-  await render('<app-fixture [value]="47" (sendValue)="sendValue($event)" />', {
+  await render('<atl-fixture [value]="47" (sendValue)="sendValue($event)" />', {
     imports: [InputOutputComponent],
     componentProperties: {
       sendValue: sendSpy,

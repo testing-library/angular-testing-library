@@ -243,7 +243,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  }
    * })
    */
-  componentInputs?: Partial<ComponentType> | { [alias: string]: unknown };
+  componentInputs?: Partial<ComponentType> | Record<string, unknown>;
 
   /**
    * @description
@@ -466,7 +466,7 @@ export interface ComponentOverride<T> {
   providers: any[];
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RenderTemplateOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
   extends RenderComponentOptions<Properties, Q> {
   /**

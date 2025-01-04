@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 @Component({
   standalone: true,
   imports: [RouterLink, RouterOutlet],
-  selector: 'app-main',
+  selector: 'atl-main',
   template: `
     <a routerLink="./detail/one">Load one</a> | <a routerLink="./detail/two">Load two</a> |
     <a routerLink="./detail/three">Load three</a> |
@@ -21,7 +21,7 @@ export class RootComponent {}
 @Component({
   standalone: true,
   imports: [RouterLink, AsyncPipe],
-  selector: 'app-detail',
+  selector: 'atl-detail',
   template: `
     <h2>Detail {{ id | async }}</h2>
 
@@ -40,7 +40,7 @@ export class DetailComponent {
 
 @Component({
   standalone: true,
-  selector: 'app-detail-hidden',
+  selector: 'atl-detail-hidden',
   template: ' You found the treasure! ',
 })
 export class HiddenDetailComponent {}

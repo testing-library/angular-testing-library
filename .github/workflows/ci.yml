@@ -38,6 +38,8 @@ jobs:
         run: npm run build -- --skip-nx-cache
       - name: test
         run: npm run test
+      - name: lint
+        run: npm run lint
       - name: Release
         if: github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta')
         run: npx semantic-release

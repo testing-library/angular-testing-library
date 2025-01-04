@@ -6,7 +6,7 @@ import { delay, filter, mapTo } from 'rxjs/operators';
 @Component({
   standalone: true,
   imports: [AsyncPipe, NgIf],
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <button (click)="load()">Load</button>
     <div *ngIf="data$ | async as data">{{ data }}</div>

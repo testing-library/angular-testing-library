@@ -60,7 +60,7 @@ test('output emits a value', async () => {
       age: '45',
     },
     on: {
-      submit: submitFn,
+      submitValue: submitFn,
     },
   });
 

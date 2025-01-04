@@ -14,11 +14,11 @@ test('debug', async () => {
   jest.spyOn(console, 'log').mockImplementation();
   const { debug } = await render(FixtureComponent);
 
-  // eslint-disable-next-line testing-library/no-debug
+  // eslint-disable-next-line testing-library/no-debugging-utils
   debug();
 
   expect(console.log).toHaveBeenCalledWith(expect.stringContaining('rawr'));
-  (<any>console.log).mockRestore();
+  (console.log as any).mockRestore();
 });
 
 test('debug allows to be called with an element', async () => {
@@ -26,10 +26,10 @@ test('debug allows to be called with an element', async () => {
   const { debug } = await render(FixtureComponent);
   const btn = screen.getByTestId('btn');
 
-  // eslint-disable-next-line testing-library/no-debug
+  // eslint-disable-next-line testing-library/no-debugging-utils
   debug(btn);
 
   expect(console.log).not.toHaveBeenCalledWith(expect.stringContaining('rawr'));
   expect(console.log).toHaveBeenCalledWith(expect.stringContaining(`I'm a button`));
-  (<any>console.log).mockRestore();
+  (console.log as any).mockRestore();
 });
