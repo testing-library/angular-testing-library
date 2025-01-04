@@ -77,7 +77,6 @@
     "autoprefixer": "^10.4.20",
     "cpy-cli": "^5.0.0",
     "eslint": "^9.8.0",
-    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-jest-dom": "~5.5.0",
     "eslint-plugin-testing-library": "~7.1.1",
     "jasmine-core": "4.2.0",
