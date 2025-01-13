@@ -273,6 +273,7 @@ Thanks goes to these people ([emoji key][emojis]):
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://arthurpetrie.com"><img src="https://avatars.githubusercontent.com/u/16376476?v=4?s=100" width="100px;" alt="Arthur Petrie"/><br /><sub><b>Arthur Petrie</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=Arthie" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/FabienDehopre"><img src="https://avatars.githubusercontent.com/u/97023?v=4?s=100" width="100px;" alt="Fabien Dehopré"/><br /><sub><b>Fabien Dehopré</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=FabienDehopre" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
