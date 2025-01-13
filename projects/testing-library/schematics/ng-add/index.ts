@@ -32,9 +32,9 @@ function addDependency(packageName: string, version: string, dependencyType: Nod
   };
 }
 
-export function installDependencies(packageManager = 'npm') {
+export function installDependencies() {
   return (_tree: Tree, context: SchematicContext) => {
-    context.addTask(new NodePackageInstallTask({ packageManager }));
+    context.addTask(new NodePackageInstallTask());
 
     context.logger.info(
       `Correctly installed @testing-library/angular.
