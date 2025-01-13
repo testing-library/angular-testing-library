@@ -419,6 +419,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "FabienDehopre",
+      "name": "Fabien Dehopré",
+      "avatar_url": "https://avatars.githubusercontent.com/u/97023?v=4",
+      "profile": "https://github.com/FabienDehopre",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
