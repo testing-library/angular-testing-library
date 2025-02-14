@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json.
 {
   "name": "angular-testing-library",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-22-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bullseye",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
@@ -13,7 +13,7 @@
   // "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm i",
+  "postCreateCommand": "npm install --force",
   "onCreateCommand": "sudo cp .devcontainer/welcome-message.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt",
   "waitFor": "postCreateCommand",
 
