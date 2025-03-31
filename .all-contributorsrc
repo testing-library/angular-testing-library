@@ -428,6 +428,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jvereecken",
+      "name": "Jamie Vereecken",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108937550?v=4",
+      "profile": "https://github.com/jvereecken",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
