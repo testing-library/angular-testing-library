@@ -42,6 +42,14 @@ type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, s
 const mountedFixtures = new Set<ComponentFixture<any>>();
 const safeInject = TestBed.inject || TestBed.get;
 
+export function getInstanceWithProviders<T>(serviceClass: Type<T>, providers: any[]): T {
+  TestBed.configureTestingModule({
+    providers: [serviceClass, ...providers],
+  });
+
+  return TestBed.inject(serviceClass);
+}
+
 export async function render<ComponentType>(
   component: Type<ComponentType>,
   renderOptions?: RenderComponentOptions<ComponentType>,
