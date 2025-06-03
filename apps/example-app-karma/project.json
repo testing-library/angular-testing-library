@@ -50,7 +50,8 @@
           "buildTarget": "example-app-karma:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "lint": {
       "executor": "@nx/eslint:lint"
