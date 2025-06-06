@@ -40,7 +40,6 @@ import {
 type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, subscription: OutputRefSubscription];
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-const safeInject = TestBed.inject || TestBed.get;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -126,8 +125,8 @@ export async function render<SutType, WrapperType = SutType>(
 
   const componentContainer = createComponentFixture(sut, wrapper);
 
-  const zone = safeInject(NgZone);
-  const router = safeInject(Router);
+  const zone = TestBed.inject(NgZone);
+  const router = TestBed.inject(Router);
   const _navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
     const [path, params] = (basePath + href).split('?');
@@ -338,7 +337,7 @@ export async function render<SutType, WrapperType = SutType>(
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
-  await safeInject(ApplicationInitStatus).donePromise;
+  await TestBed.inject(ApplicationInitStatus).donePromise;
   return TestBed.createComponent(component);
 }
 
