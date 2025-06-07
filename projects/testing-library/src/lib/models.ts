@@ -178,12 +178,11 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   /**
    * @description
    * A collection of imports needed to render the component, for example, shared modules.
-   * Adds `NoopAnimationsModule` by default if `BrowserAnimationsModule` isn't added to the collection.
    *
    * For more info see https://angular.io/api/core/NgModule#imports
    *
    * @default
-   * `[NoopAnimationsModule]`
+   * `[]`
    *
    * @example
    * await render(AppComponent, {

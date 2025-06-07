@@ -12,7 +12,6 @@ import {
   isStandalone,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationExtras, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import type { BoundFunctions, Queries } from '@testing-library/dom';
@@ -513,15 +512,9 @@ function addAutoImports<SutType>(
   sut: Type<SutType> | string,
   { imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>,
 ) {
-  const animations = () => {
-    const animationIsDefined =
-      imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
-    return animationIsDefined ? [] : [NoopAnimationsModule];
-  };
-
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
   const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
-  return [...imports, ...components(), ...animations(), ...routing()];
+  return [...imports, ...components(), ...routing()];
 }
 
 async function renderDeferBlock<SutType>(
