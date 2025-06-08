@@ -497,4 +497,11 @@ export interface Config extends Pick<RenderComponentOptions<any>, 'excludeCompon
    * Imports that are added to the imports
    */
   defaultImports: any[];
+  /**
+   * Set to `true` to use zoneless change detection.
+   * This automatically adds `provideZonelessChangeDetection` to the default imports.
+   *
+   * @default false
+   */
+  zoneless?: boolean;
 }
