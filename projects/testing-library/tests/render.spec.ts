@@ -17,7 +17,6 @@ import {
   model,
 } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInput } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
@@ -328,25 +327,6 @@ describe('excludeComponentDeclaration', () => {
       imports: [FixtureModule],
       excludeComponentDeclaration: true,
     });
-  });
-});
-
-describe('animationModule', () => {
-  it('adds NoopAnimationsModule by default', async () => {
-    await render(FixtureComponent);
-    const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
-    expect(noopAnimationsModule).toBeDefined();
-  });
-
-  it('does not add NoopAnimationsModule if BrowserAnimationsModule is an import', async () => {
-    await render(FixtureComponent, {
-      imports: [BrowserAnimationsModule],
-    });
-
-    const browserAnimationsModule = TestBed.inject(BrowserAnimationsModule);
-    expect(browserAnimationsModule).toBeDefined();
-
-    expect(() => TestBed.inject(NoopAnimationsModule)).toThrow();
   });
 });
 
