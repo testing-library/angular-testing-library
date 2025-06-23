@@ -13,6 +13,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
       </div>
     </form>
   `,
+  standalone: false,
 })
 class FormsComponent {
   form = this.formBuilder.group({

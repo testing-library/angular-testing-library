@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/angular';
 
 import { AsyncComponent } from './14-async-component';
 
-// eslint-disable-next-line jest/no-disabled-tests
 test.skip('can use fakeAsync utilities', fakeAsync(async () => {
   await render(AsyncComponent);
 

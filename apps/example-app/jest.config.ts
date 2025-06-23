@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: {
     name: 'Example App',

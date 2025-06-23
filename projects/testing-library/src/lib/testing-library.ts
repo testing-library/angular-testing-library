@@ -1,35 +1,45 @@
 import {
+  ApplicationInitStatus,
   ChangeDetectorRef,
   Component,
-  Type,
   NgZone,
-  SimpleChange,
   OnChanges,
+  OutputRef,
+  OutputRefSubscription,
+  SimpleChange,
   SimpleChanges,
-  ApplicationInitStatus,
+  Type,
   isStandalone,
+  provideZonelessChangeDetection,
 } from '@angular/core';
-import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { NavigationExtras, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import type { BoundFunctions, Queries } from '@testing-library/dom';
 import {
+  configure as dtlConfigure,
   getQueriesForElement as dtlGetQueriesForElement,
   prettyDOM as dtlPrettyDOM,
+  queries as dtlQueries,
+  screen as dtlScreen,
   waitFor as dtlWaitFor,
   waitForElementToBeRemoved as dtlWaitForElementToBeRemoved,
-  screen as dtlScreen,
-  within as dtlWithin,
   waitForOptions as dtlWaitForOptions,
-  configure as dtlConfigure,
-  queries as dtlQueries,
+  within as dtlWithin,
 } from '@testing-library/dom';
-import type { Queries, BoundFunctions } from '@testing-library/dom';
-import { RenderComponentOptions, RenderTemplateOptions, RenderResult, ComponentOverride } from './models';
 import { getConfig } from './config';
+import {
+  ComponentOverride,
+  OutputRefKeysWithCallback,
+  RenderComponentOptions,
+  RenderResult,
+  RenderTemplateOptions,
+  Config,
+} from './models';
+
+type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, subscription: OutputRefSubscription];
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-const safeInject = TestBed.inject || TestBed.get;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -57,18 +67,25 @@ export async function render<SutType, WrapperType = SutType>(
     componentProperties = {},
     componentInputs = {},
     componentOutputs = {},
+    inputs: newInputs = {},
+    on = {},
     componentProviders = [],
     childComponentOverrides = [],
-    componentImports: componentImports,
+    componentImports,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,
     defaultImports = [],
     initialRoute = '',
+    deferBlockStates = undefined,
+    deferBlockBehavior = undefined,
+    zoneless = false,
     configureTestBed = () => {
       /* noop*/
     },
-  } = { ...globalConfig, ...renderOptions };
+  } = { ...globalConfig, ...renderOptions } as RenderComponentOptions<SutType> &
+    RenderTemplateOptions<WrapperType> &
+    Config;
 
   dtlConfigure({
     eventWrapper: (cb) => {
@@ -90,9 +107,11 @@ export async function render<SutType, WrapperType = SutType>(
     imports: addAutoImports(sut, {
       imports: imports.concat(defaultImports),
       routes,
+      zoneless,
     }),
     providers: [...providers],
     schemas: [...schemas],
+    deferBlockBehavior: deferBlockBehavior ?? DeferBlockBehavior.Manual,
   });
   overrideComponentImports(sut, componentImports);
   overrideChildComponentProviders(childComponentOverrides);
@@ -101,17 +120,15 @@ export async function render<SutType, WrapperType = SutType>(
 
   await TestBed.compileComponents();
 
-  componentProviders
-    .reduce((acc, provider) => acc.concat(provider), [] as any[])
-    .forEach((p: any) => {
-      const { provide, ...provider } = p;
-      TestBed.overrideProvider(provide, provider);
-    });
+  // Angular supports nested arrays of providers, so we need to flatten them to emulate the same behavior.
+  for (const { provide, ...provider } of componentProviders.flat(Infinity)) {
+    TestBed.overrideProvider(provide, provider);
+  }
 
   const componentContainer = createComponentFixture(sut, wrapper);
 
-  const zone = safeInject(NgZone);
-  const router = safeInject(Router);
+  const zone = TestBed.inject(NgZone);
+  const router = TestBed.inject(Router);
   const _navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
     const [path, params] = (basePath + href).split('?');
@@ -143,7 +160,9 @@ export async function render<SutType, WrapperType = SutType>(
     let result;
 
     if (zone) {
-      await zone.run(() => (result = doNavigate()));
+      await zone.run(() => {
+        result = doNavigate();
+      });
     } else {
       result = doNavigate();
     }
@@ -160,22 +179,86 @@ export async function render<SutType, WrapperType = SutType>(
     }
   }
 
-  let fixture: ComponentFixture<SutType>;
   let detectChanges: () => void;
 
-  await renderFixture(componentProperties, componentInputs, componentOutputs);
+  const allInputs = { ...componentInputs, ...newInputs };
 
   let renderedPropKeys = Object.keys(componentProperties);
-  let renderedInputKeys = Object.keys(componentInputs);
+  let renderedInputKeys = Object.keys(allInputs);
   let renderedOutputKeys = Object.keys(componentOutputs);
+  let subscribedOutputs: SubscribedOutput<SutType>[] = [];
+
+  const renderFixture = async (
+    properties: Partial<SutType>,
+    inputs: Partial<SutType>,
+    outputs: Partial<SutType>,
+    subscribeTo: OutputRefKeysWithCallback<SutType>,
+  ): Promise<ComponentFixture<SutType>> => {
+    const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer);
+    setComponentProperties(createdFixture, properties);
+    setComponentInputs(createdFixture, inputs);
+    setComponentOutputs(createdFixture, outputs);
+    subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+
+    if (removeAngularAttributes) {
+      createdFixture.nativeElement.removeAttribute('ng-version');
+      const idAttribute = createdFixture.nativeElement.getAttribute('id');
+      if (idAttribute?.startsWith('root')) {
+        createdFixture.nativeElement.removeAttribute('id');
+      }
+    }
+
+    mountedFixtures.add(createdFixture);
+
+    let isAlive = true;
+    createdFixture.componentRef.onDestroy(() => {
+      isAlive = false;
+    });
+
+    if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
+      const changes = getChangesObj(null, componentProperties);
+      createdFixture.componentInstance.ngOnChanges(changes);
+    }
+
+    detectChanges = () => {
+      if (isAlive) {
+        createdFixture.detectChanges();
+      }
+    };
+
+    if (detectChangesOnRender) {
+      detectChanges();
+    }
+
+    return createdFixture;
+  };
+
+  const fixture = await renderFixture(componentProperties, allInputs as any, componentOutputs, on);
+
+  if (deferBlockStates) {
+    if (Array.isArray(deferBlockStates)) {
+      for (const deferBlockState of deferBlockStates) {
+        await renderDeferBlock(fixture, deferBlockState.deferBlockState, deferBlockState.deferBlockIndex);
+      }
+    } else {
+      await renderDeferBlock(fixture, deferBlockStates);
+    }
+  }
+
   const rerender = async (
     properties?: Pick<
       RenderTemplateOptions<SutType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
-    >,
+      'componentProperties' | 'componentInputs' | 'inputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
+    > & { partialUpdate?: boolean },
   ) => {
-    const newComponentInputs = properties?.componentInputs ?? {};
-    const changesInComponentInput = update(fixture, renderedInputKeys, newComponentInputs, setComponentInputs);
+    const newComponentInputs = { ...properties?.componentInputs, ...properties?.inputs };
+    const changesInComponentInput = update(
+      fixture,
+      renderedInputKeys,
+      newComponentInputs,
+      setComponentInputs,
+      properties?.partialUpdate ?? false,
+    );
     renderedInputKeys = Object.keys(newComponentInputs);
 
     const newComponentOutputs = properties?.componentOutputs ?? {};
@@ -187,8 +270,30 @@ export async function render<SutType, WrapperType = SutType>(
     setComponentOutputs(fixture, newComponentOutputs);
     renderedOutputKeys = Object.keys(newComponentOutputs);
 
+    // first unsubscribe the no longer available or changed callback-fns
+    const newObservableSubscriptions: OutputRefKeysWithCallback<SutType> = properties?.on ?? {};
+    for (const [key, cb, subscription] of subscribedOutputs) {
+      // when no longer provided or when the callback has changed
+      if (!(key in newObservableSubscriptions) || cb !== (newObservableSubscriptions as any)[key]) {
+        subscription.unsubscribe();
+      }
+    }
+    // then subscribe the new callback-fns
+    subscribedOutputs = Object.entries(newObservableSubscriptions).map(([key, cb]) => {
+      const existing = subscribedOutputs.find(([k]) => k === key);
+      return existing && existing[1] === cb
+        ? existing // nothing to do
+        : subscribeToComponentOutput(fixture, key as keyof SutType, cb as (v: any) => void);
+    });
+
     const newComponentProps = properties?.componentProperties ?? {};
-    const changesInComponentProps = update(fixture, renderedPropKeys, newComponentProps, setComponentProperties);
+    const changesInComponentProps = update(
+      fixture,
+      renderedPropKeys,
+      newComponentProps,
+      setComponentProperties,
+      properties?.partialUpdate ?? false,
+    );
     renderedPropKeys = Object.keys(newComponentProps);
 
     if (hasOnChangesHook(fixture.componentInstance)) {
@@ -210,66 +315,31 @@ export async function render<SutType, WrapperType = SutType>(
   };
 
   return {
-    // @ts-ignore: fixture assigned
     fixture,
     detectChanges: () => detectChanges(),
     navigate,
     rerender,
-    // @ts-ignore: fixture assigned
+    renderDeferBlock: async (deferBlockState: DeferBlockState, deferBlockIndex?: number) => {
+      await renderDeferBlock(fixture, deferBlockState, deferBlockIndex);
+    },
     debugElement: fixture.debugElement,
-    // @ts-ignore: fixture assigned
     container: fixture.nativeElement,
-    debug: (element = fixture.nativeElement, maxLength, options) =>
-      Array.isArray(element)
-        ? element.forEach((e) => console.log(dtlPrettyDOM(e, maxLength, options)))
-        : console.log(dtlPrettyDOM(element, maxLength, options)),
-    // @ts-ignore: fixture assigned
+    debug: (element = fixture.nativeElement, maxLength, options) => {
+      if (Array.isArray(element)) {
+        for (const e of element) {
+          console.log(dtlPrettyDOM(e, maxLength, options));
+        }
+      } else {
+        console.log(dtlPrettyDOM(element, maxLength, options));
+      }
+    },
     ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
   };
-
-  async function renderFixture(properties: Partial<SutType>, inputs: Partial<SutType>, outputs: Partial<SutType>) {
-    if (fixture) {
-      cleanupAtFixture(fixture);
-    }
-
-    fixture = await createComponent(componentContainer);
-    setComponentProperties(fixture, properties);
-    setComponentInputs(fixture, inputs);
-    setComponentOutputs(fixture, outputs);
-
-    if (removeAngularAttributes) {
-      fixture.nativeElement.removeAttribute('ng-version');
-      const idAttribute = fixture.nativeElement.getAttribute('id');
-      if (idAttribute && idAttribute.startsWith('root')) {
-        fixture.nativeElement.removeAttribute('id');
-      }
-    }
-
-    mountedFixtures.add(fixture);
-
-    let isAlive = true;
-    fixture.componentRef.onDestroy(() => (isAlive = false));
-
-    if (hasOnChangesHook(fixture.componentInstance) && Object.keys(properties).length > 0) {
-      const changes = getChangesObj(null, componentProperties);
-      fixture.componentInstance.ngOnChanges(changes);
-    }
-
-    detectChanges = () => {
-      if (isAlive) {
-        fixture.detectChanges();
-      }
-    };
-
-    if (detectChangesOnRender) {
-      detectChanges();
-    }
-  }
 }
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
-  await safeInject(ApplicationInitStatus).donePromise;
+  await TestBed.inject(ApplicationInitStatus).donePromise;
   return TestBed.createComponent(component);
 }
 
@@ -330,6 +400,27 @@ function setComponentInputs<SutType>(
   }
 }
 
+function subscribeToComponentOutputs<SutType>(
+  fixture: ComponentFixture<SutType>,
+  listeners: OutputRefKeysWithCallback<SutType>,
+): SubscribedOutput<SutType>[] {
+  // with Object.entries we lose the type information of the key and callback, therefore we need to cast them
+  return Object.entries(listeners).map(([key, cb]) =>
+    subscribeToComponentOutput(fixture, key as keyof SutType, cb as (v: any) => void),
+  );
+}
+
+function subscribeToComponentOutput<SutType>(
+  fixture: ComponentFixture<SutType>,
+  key: keyof SutType,
+  cb: (val: any) => void,
+): SubscribedOutput<SutType> {
+  const eventEmitter = (fixture.componentInstance as any)[key] as OutputRef<any>;
+  const subscription = eventEmitter.subscribe(cb);
+  fixture.componentRef.onDestroy(subscription.unsubscribe.bind(subscription));
+  return [key, cb, subscription];
+}
+
 function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports: (Type<any> | any[])[] | undefined) {
   if (imports) {
     if (typeof sut === 'function' && isStandalone(sut)) {
@@ -343,9 +434,11 @@ function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports:
 }
 
 function overrideChildComponentProviders(componentOverrides: ComponentOverride<any>[]) {
-  componentOverrides?.forEach(({ component, providers }) => {
-    TestBed.overrideComponent(component, { set: { providers } });
-  });
+  if (componentOverrides) {
+    for (const { component, providers } of componentOverrides) {
+      TestBed.overrideComponent(component, { set: { providers } });
+    }
+  }
 }
 
 function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstance is SutType & OnChanges {
@@ -359,13 +452,10 @@ function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstanc
 
 function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<string, any>) {
   const isFirstChange = oldProps === null;
-  return Object.keys(newProps).reduce<SimpleChanges>(
-    (changes, key) => ({
-      ...changes,
-      [key]: new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange),
-    }),
-    {} as Record<string, any>,
-  );
+  return Object.keys(newProps).reduce<SimpleChanges>((changes, key) => {
+    changes[key] = new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange);
+    return changes;
+  }, {} as Record<string, any>);
 }
 
 function update<SutType>(
@@ -376,14 +466,17 @@ function update<SutType>(
     fixture: ComponentFixture<SutType>,
     values: RenderTemplateOptions<SutType>['componentInputs' | 'componentProperties'],
   ) => void,
+  partialUpdate: boolean,
 ) {
   const componentInstance = fixture.componentInstance as Record<string, any>;
   const simpleChanges: SimpleChanges = {};
 
-  for (const key of prevRenderedKeys) {
-    if (!Object.prototype.hasOwnProperty.call(newValues, key)) {
-      simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
-      delete componentInstance[key];
+  if (!partialUpdate) {
+    for (const key of prevRenderedKeys) {
+      if (!Object.prototype.hasOwnProperty.call(newValues, key)) {
+        simpleChanges[key] = new SimpleChange(componentInstance[key], undefined, false);
+        delete componentInstance[key];
+      }
     }
   }
 
@@ -406,27 +499,54 @@ function addAutoDeclarations<SutType>(
     wrapper,
   }: Pick<RenderTemplateOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'wrapper'>,
 ) {
+  const nonStandaloneDeclarations = declarations?.filter((d) => !isStandalone(d));
   if (typeof sut === 'string') {
-    return [...declarations, wrapper];
+    if (wrapper && isStandalone(wrapper)) {
+      return nonStandaloneDeclarations;
+    }
+    return [...nonStandaloneDeclarations, wrapper];
   }
 
   const components = () => (excludeComponentDeclaration || isStandalone(sut) ? [] : [sut]);
-  return [...declarations, ...components()];
+  return [...nonStandaloneDeclarations, ...components()];
 }
 
 function addAutoImports<SutType>(
   sut: Type<SutType> | string,
-  { imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>,
+  {
+    imports = [],
+    routes,
+    zoneless,
+  }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'> & Pick<Config, 'zoneless'>,
 ) {
-  const animations = () => {
-    const animationIsDefined =
-      imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
-    return animationIsDefined ? [] : [NoopAnimationsModule];
-  };
-
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
   const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
-  return [...imports, ...components(), ...animations(), ...routing()];
+  const provideZoneless = () => (zoneless ? [provideZonelessChangeDetection()] : []);
+  return [...imports, ...components(), ...routing(), ...provideZoneless()];
+}
+
+async function renderDeferBlock<SutType>(
+  fixture: ComponentFixture<SutType>,
+  deferBlockState: DeferBlockState,
+  deferBlockIndex?: number,
+) {
+  const deferBlockFixtures = await fixture.getDeferBlocks();
+
+  if (deferBlockIndex !== undefined) {
+    if (deferBlockIndex < 0) {
+      throw new Error('deferBlockIndex must be a positive number');
+    }
+
+    const deferBlockFixture = deferBlockFixtures[deferBlockIndex];
+    if (!deferBlockFixture) {
+      throw new Error(`Could not find a deferrable block with index '${deferBlockIndex}'`);
+    }
+    await deferBlockFixture.render(deferBlockState);
+  } else {
+    for (const deferBlockFixture of deferBlockFixtures) {
+      await deferBlockFixture.render(deferBlockState);
+    }
+  }
 }
 
 /**
@@ -440,7 +560,7 @@ async function waitForWrapper<T>(
   let inFakeAsync = true;
   try {
     tick(0);
-  } catch (err) {
+  } catch {
     inFakeAsync = false;
   }
 
@@ -492,7 +612,10 @@ function cleanupAtFixture(fixture: ComponentFixture<any>) {
 
   if (!fixture.nativeElement.getAttribute('ng-version') && fixture.nativeElement.parentNode === document.body) {
     document.body.removeChild(fixture.nativeElement);
+  } else if (!fixture.nativeElement.getAttribute('id') && document.body.children?.[0] === fixture.nativeElement) {
+    document.body.removeChild(fixture.nativeElement);
   }
+
   mountedFixtures.delete(fixture);
 }
 
@@ -508,7 +631,7 @@ if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
   }
 }
 
-@Component({ selector: 'atl-wrapper-component', template: '' })
+@Component({ selector: 'atl-wrapper-component', template: '', standalone: false })
 class WrapperComponent {}
 
 /**
@@ -535,7 +658,7 @@ function replaceFindWithFindAndDetectChanges<T extends Record<string, any>>(orig
  * Call detectChanges for all fixtures
  */
 function detectChangesForMountedFixtures() {
-  mountedFixtures.forEach((fixture) => {
+  for (const fixture of mountedFixtures) {
     try {
       fixture.detectChanges();
     } catch (err: any) {
@@ -543,7 +666,7 @@ function detectChangesForMountedFixtures() {
         throw err;
       }
     }
-  });
+  }
 }
 
 /**

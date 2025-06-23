@@ -1,12 +1,38 @@
+import { Component } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { SpoilerDirective } from './08-directive';
 
+test('it is possible to test directives with container component', async () => {
+  @Component({
+    template: `<div atlSpoiler data-testid="dir"></div>`,
+    imports: [SpoilerDirective],
+    standalone: true,
+  })
+  class FixtureComponent {}
+
+  const user = userEvent.setup();
+  await render(FixtureComponent);
+
+  const directive = screen.getByTestId('dir');
+
+  expect(screen.queryByText('I am visible now...')).not.toBeInTheDocument();
+  expect(screen.getByText('SPOILER')).toBeInTheDocument();
+
+  await user.hover(directive);
+  expect(screen.queryByText('SPOILER')).not.toBeInTheDocument();
+  expect(screen.getByText('I am visible now...')).toBeInTheDocument();
+
+  await user.unhover(directive);
+  expect(screen.getByText('SPOILER')).toBeInTheDocument();
+  expect(screen.queryByText('I am visible now...')).not.toBeInTheDocument();
+});
+
 test('it is possible to test directives', async () => {
   const user = userEvent.setup();
 
-  await render('<div appSpoiler data-testid="dir"></div>', {
+  await render('<div atlSpoiler data-testid="dir"></div>', {
     imports: [SpoilerDirective],
   });
 
@@ -29,7 +55,7 @@ test('it is possible to test directives with props', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  await render('<div appSpoiler [hidden]="hidden" [visible]="visible"></div>', {
+  await render('<div atlSpoiler [hidden]="hidden" [visible]="visible"></div>', {
     imports: [SpoilerDirective],
     componentProperties: {
       hidden,
@@ -54,7 +80,7 @@ test('it is possible to test directives with props in template', async () => {
   const hidden = 'SPOILER ALERT';
   const visible = 'There is nothing to see here ...';
 
-  await render(`<div appSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
+  await render(`<div atlSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
     imports: [SpoilerDirective],
   });
 

@@ -2,7 +2,7 @@ import { Directive, HostListener, ElementRef, Input, OnInit } from '@angular/cor
 
 @Directive({
   standalone: true,
-  selector: '[appSpoiler]',
+  selector: '[atlSpoiler]',
 })
 export class SpoilerDirective implements OnInit {
   @Input() hidden = 'SPOILER';

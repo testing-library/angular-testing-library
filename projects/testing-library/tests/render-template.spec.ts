@@ -45,7 +45,7 @@ class GreetingComponent {
 
 test('the directive renders', async () => {
   const view = await render('<div onOff></div>', {
-    declarations: [OnOffDirective],
+    imports: [OnOffDirective],
   });
 
   // eslint-disable-next-line testing-library/no-container
@@ -54,7 +54,7 @@ test('the directive renders', async () => {
 
 test('the component renders', async () => {
   const view = await render('<greeting name="Angular"></greeting>', {
-    declarations: [GreetingComponent],
+    imports: [GreetingComponent],
   });
 
   // eslint-disable-next-line testing-library/no-container
@@ -64,7 +64,7 @@ test('the component renders', async () => {
 
 test('uses the default props', async () => {
   await render('<div onOff></div>', {
-    declarations: [OnOffDirective],
+    imports: [OnOffDirective],
   });
 
   fireEvent.click(screen.getByText('init'));
@@ -74,7 +74,7 @@ test('uses the default props', async () => {
 
 test('overrides input properties', async () => {
   await render('<div onOff on="hello"></div>', {
-    declarations: [OnOffDirective],
+    imports: [OnOffDirective],
   });
 
   fireEvent.click(screen.getByText('init'));
@@ -85,7 +85,7 @@ test('overrides input properties', async () => {
 test('overrides input properties via a wrapper', async () => {
   // `bar` will be set as a property on the wrapper component, the property will be used to pass to the directive
   await render('<div onOff [on]="bar"></div>', {
-    declarations: [OnOffDirective],
+    imports: [OnOffDirective],
     componentProperties: {
       bar: 'hello',
     },
@@ -100,7 +100,7 @@ test('overrides output properties', async () => {
   const clicked = jest.fn();
 
   await render('<div onOff (clicked)="clicked($event)"></div>', {
-    declarations: [OnOffDirective],
+    imports: [OnOffDirective],
     componentProperties: {
       clicked,
     },
@@ -116,7 +116,7 @@ test('overrides output properties', async () => {
 describe('removeAngularAttributes', () => {
   it('should remove angular attributes', async () => {
     await render('<div onOff (clicked)="clicked($event)"></div>', {
-      declarations: [OnOffDirective],
+      imports: [OnOffDirective],
       removeAngularAttributes: true,
     });
 
@@ -126,7 +126,7 @@ describe('removeAngularAttributes', () => {
 
   it('is disabled by default', async () => {
     await render('<div onOff (clicked)="clicked($event)"></div>', {
-      declarations: [OnOffDirective],
+      imports: [OnOffDirective],
     });
 
     expect(document.querySelector('[ng-version]')).not.toBeNull();
@@ -136,7 +136,7 @@ describe('removeAngularAttributes', () => {
 
 test('updates properties and invokes change detection', async () => {
   const view = await render<{ value: string }>('<div [update]="value" ></div>', {
-    declarations: [UpdateInputDirective],
+    imports: [UpdateInputDirective],
     componentProperties: {
       value: 'value1',
     },

@@ -29,7 +29,7 @@ it('should display invalid message and submit button must be disabled', async ()
 });
 
 @Component({
-  selector: 'app-login',
+  selector: 'atl-login',
   standalone: true,
   imports: [ReactiveFormsModule, NgIf],
   template: `
@@ -52,15 +52,6 @@ class LoginComponent {
 
   constructor(private fb: FormBuilder) {}
 
-  blurred() {
-    console.log('aaaaaaaaac');
-    console.log('aaaaaaaaac');
-    console.log('aaaaaaaaac');
-    console.log('aaaaaaaaac');
-    console.log('aaaaaaaaac');
-    console.log('aaaaaaaaac');
-    console.log('aaaaaaaaac');
-  }
   get email(): FormControl {
     return this.form.get('email') as FormControl;
   }

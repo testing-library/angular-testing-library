@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   standalone: true,
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <p>
       <ng-content></ng-content>

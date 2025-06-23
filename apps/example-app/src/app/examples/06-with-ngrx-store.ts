@@ -18,7 +18,7 @@ const selectValue = createSelector(
 @Component({
   standalone: true,
   imports: [AsyncPipe],
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <button (click)="decrement()">Decrement</button>
     <span data-testid="value">{{ value | async }}</span>

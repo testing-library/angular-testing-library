@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { render, waitFor, screen } from '../../src/public_api';
+import { NgClass } from '@angular/common';
 
 @Component({
   template: ` <button [ngClass]="classes">Load</button> `,
+  imports: [NgClass],
 })
 class LoopComponent {
   get classes() {
@@ -17,7 +19,7 @@ test('wait does not end up in a loop', async () => {
 
   await expect(
     waitFor(() => {
-      expect(true).toEqual(false);
+      expect(true).toBe(false);
     }),
   ).rejects.toThrow();
 });

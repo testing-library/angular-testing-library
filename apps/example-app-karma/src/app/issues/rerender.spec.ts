@@ -7,9 +7,9 @@ it('can rerender component', async () => {
     },
   });
 
-  expect(screen.getByText('Hello Sarah')).toBeTruthy();
+  expect(screen.getByText('Hello Sarah')).toBeInTheDocument();
 
   await rerender({ componentProperties: { name: 'Mark' } });
 
-  expect(screen.getByText('Hello Mark')).toBeTruthy();
+  expect(screen.getByText('Hello Mark')).toBeInTheDocument();
 });

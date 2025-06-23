@@ -21,7 +21,7 @@ export class CounterService {
 
 @Component({
   standalone: true,
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <button (click)="counter.decrement()">Decrement</button>
     <span data-testid="value">{{ counter.value() }}</span>

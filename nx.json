@@ -1,8 +1,4 @@
 {
-  "npmScope": "testing-library",
-  "affected": {
-    "defaultBase": "main"
-  },
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "projects"
@@ -17,13 +13,9 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx-cloud",
       "options": {
-        "accessToken": "M2Q4YjlkNjMtMzY1NC00ZjkwLTk1ZjgtZjg5Y2VkMzFjM2FifHJlYWQtd3JpdGU=",
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
         "canTrackAnalytics": false,
-        "showUsageWarnings": true,
-        "parallel": 3
+        "showUsageWarnings": true
       }
     }
   },
@@ -69,13 +61,29 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "cache": true
     },
     "test": {
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "cache": true
     },
-    "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+    "@nx/jest:jest": {
+      "inputs": ["default", "^production"],
+      "cache": true,
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "@nx/eslint:lint": {
+      "inputs": ["default", "{workspaceRoot}/eslint.config.cjs"],
+      "cache": true
     }
   },
   "namedInputs": {
@@ -88,7 +96,12 @@
       "!{projectRoot}/karma.conf.js",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/eslint.config.cjs",
+      "!{projectRoot}/src/test-setup.[jt]s"
     ]
-  }
+  },
+  "nxCloudAccessToken": "M2Q4YjlkNjMtMzY1NC00ZjkwLTk1ZjgtZjg5Y2VkMzFjM2FifHJlYWQtd3JpdGU=",
+  "parallel": 3,
+  "useInferencePlugins": false,
+  "defaultBase": "main"
 }

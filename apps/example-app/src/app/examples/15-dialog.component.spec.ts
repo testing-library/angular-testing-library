@@ -1,4 +1,5 @@
 import { MatDialogRef } from '@angular/material/dialog';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -9,6 +10,7 @@ test('dialog closes', async () => {
 
   const closeFn = jest.fn();
   await render(DialogContentComponent, {
+    imports: [NoopAnimationsModule],
     providers: [
       {
         provide: MatDialogRef,
@@ -28,7 +30,9 @@ test('dialog closes', async () => {
 test('closes the dialog via the backdrop', async () => {
   const user = userEvent.setup();
 
-  await render(DialogComponent);
+  await render(DialogComponent, {
+    imports: [NoopAnimationsModule],
+  });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
   await user.click(openDialogButton);
@@ -38,7 +42,7 @@ test('closes the dialog via the backdrop', async () => {
   const dialogTitleControl = await screen.findByRole('heading', { name: /dialog title/i });
   expect(dialogTitleControl).toBeInTheDocument();
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, testing-library/no-node-access
+  // eslint-disable-next-line testing-library/no-node-access
   await user.click(document.querySelector('.cdk-overlay-backdrop')!);
 
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -50,7 +54,9 @@ test('closes the dialog via the backdrop', async () => {
 test('opens and closes the dialog with buttons', async () => {
   const user = userEvent.setup();
 
-  await render(DialogComponent);
+  await render(DialogComponent, {
+    imports: [NoopAnimationsModule],
+  });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
   await user.click(openDialogButton);

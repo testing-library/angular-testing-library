@@ -1,14 +1,12 @@
 <div align="center">
 <h1>@testing-library/angular</h1>
 
-<a href="https://www.emojione.com/emoji/1f994">
-  <img
-    height="80"
-    width="80"
-    alt="hedgehog"
-    src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/hedgehog.png"
-  />
-</a>
+<img
+  height="80"
+  width="80"
+  alt="Octopus with the Angular logo"
+  src="https://raw.githubusercontent.com/testing-library/angular-testing-library/main/other/logo-icon.svg"
+/>
 
 <p>Simple and complete Angular testing utilities that encourage good testing
 practices.</p>
@@ -28,7 +26,7 @@ practices.</p>
 [![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/github/all-contributors/testing-library/angular-testing-library?color=ee8449&style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs] [![Code of Conduct][coc-badge]][coc]
 [![Discord][discord-badge]][discord]
 
@@ -100,22 +98,24 @@ counter.component.ts
 
 ```ts
 @Component({
-  selector: 'counter',
+  selector: 'atl-counter',
   template: `
+    <span>{{ hello() }}</span>
     <button (click)="decrement()">-</button>
-    <span>Current Count: {{ counter }}</span>
+    <span>Current Count: {{ counter() }}</span>
     <button (click)="increment()">+</button>
   `,
 })
 export class CounterComponent {
-  @Input() counter = 0;
+  counter = model(0);
+  hello = input('Hi', { alias: 'greeting' });
 
   increment() {
-    this.counter += 1;
+    this.counter.set(this.counter() + 1);
   }
 
   decrement() {
-    this.counter -= 1;
+    this.counter.set(this.counter() - 1);
   }
 }
 ```
@@ -123,23 +123,30 @@ export class CounterComponent {
 counter.component.spec.ts
 
 ```typescript
-import { render, screen, fireEvent } from '@testing-library/angular';
-import { CounterComponent } from './counter.component.ts';
+import { render, screen, fireEvent, aliasedInput } from '@testing-library/angular';
+import { CounterComponent } from './counter.component';
 
 describe('Counter', () => {
-  test('should render counter', async () => {
-    await render(CounterComponent, { componentProperties: { counter: 5 } });
+  it('should render counter', async () => {
+    await render(CounterComponent, {
+      inputs: {
+        counter: 5,
+        // aliases need to be specified this way
+        ...aliasedInput('greeting', 'Hello Alias!'),
+      },
+    });
 
-    expect(screen.getByText('Current Count: 5'));
+    expect(screen.getByText('Current Count: 5')).toBeVisible();
+    expect(screen.getByText('Hello Alias!')).toBeVisible();
   });
 
-  test('should increment the counter on click', async () => {
-    await render(CounterComponent, { componentProperties: { counter: 5 } });
+  it('should increment the counter on click', async () => {
+    await render(CounterComponent, { inputs: { counter: 5 } });
 
-    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    const incrementButton = screen.getByRole('button', { name: '+' });
     fireEvent.click(incrementButton);
 
-    expect(screen.getByText('Current Count: 6'));
+    expect(screen.getByText('Current Count: 6')).toBeVisible();
   });
 });
 ```
@@ -149,10 +156,18 @@ describe('Counter', () => {
 ## Installation
 
 This module is distributed via [npm][npm] which is bundled with [node][node] and
-should be installed as one of your project's `devDependencies`:
+should be installed as one of your project's `devDependencies`.
+Starting from ATL version 17, you also need to install `@testing-library/dom`:
 
 ```bash
-npm install @testing-library/angular --save-dev
+npm install --save-dev @testing-library/angular @testing-library/dom
+```
+
+Or, you can use the `ng add` command.
+This sets up your project to use Angular Testing Library, which also includes the installation of `@testing-library/dom`.
+
+```bash
+ng add @testing-library/angular
 ```
 
 You may also be interested in installing `jest-dom` so you can use
@@ -162,12 +177,15 @@ You may also be interested in installing `jest-dom` so you can use
 
 ## Version compatibility
 
-| Angular | Angular Testing Library |
-| ------- | ----------------------- |
-| 16.x    | 13.x, 14.x              |
-| >= 15.1 | 13.x \|\| 14.x          |
-| < 15.1  | 11.x \|\| 12.x          |
-| 14.x    | 11.x \|\| 12.x          |
+| Angular | Angular Testing Library      |
+| ------- | ---------------------------- |
+| 19.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
+| 18.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
+| 17.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
+| 16.x    | 14.x, 13.x                   |
+| >= 15.1 | 14.x, 13.x                   |
+| < 15.1  | 12.x, 11.x                   |
+| 14.x    | 12.x, 11.x                   |
 
 ## Guiding Principles
 
@@ -248,6 +266,15 @@ Thanks goes to these people ([emoji key][emojis]):
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/TrustNoOneElse"><img src="https://avatars.githubusercontent.com/u/25935352?v=4?s=100" width="100px;" alt="Florian Pabst"/><br /><sub><b>Florian Pabst</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=TrustNoOneElse" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://rochesterparks.org"><img src="https://avatars.githubusercontent.com/u/9759954?v=4?s=100" width="100px;" alt="Mark Goho"/><br /><sub><b>Mark Goho</b></sub></a><br /><a href="#maintenance-markgoho" title="Maintenance">🚧</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=markgoho" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://jwbaart.dev"><img src="https://avatars.githubusercontent.com/u/10973990?v=4?s=100" width="100px;" alt="Jan-Willem Baart"/><br /><sub><b>Jan-Willem Baart</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=jwbaart" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=jwbaart" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mumenthalers"><img src="https://avatars.githubusercontent.com/u/3604424?v=4?s=100" width="100px;" alt="S. Mumenthaler"/><br /><sub><b>S. Mumenthaler</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=mumenthalers" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=mumenthalers" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://lets.poker/"><img src="https://avatars.githubusercontent.com/u/697707?v=4?s=100" width="100px;" alt="Andrei Alecu"/><br /><sub><b>Andrei Alecu</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=andreialecu" title="Code">💻</a> <a href="#ideas-andreialecu" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=andreialecu" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Hyperxq"><img src="https://avatars.githubusercontent.com/u/22332354?v=4?s=100" width="100px;" alt="Daniel Ramírez Barrientos"/><br /><sub><b>Daniel Ramírez Barrientos</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=Hyperxq" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mlz11"><img src="https://avatars.githubusercontent.com/u/94069699?v=4?s=100" width="100px;" alt="Mahdi Lazraq"/><br /><sub><b>Mahdi Lazraq</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=mlz11" title="Code">💻</a> <a href="https://github.com/testing-library/angular-testing-library/commits?author=mlz11" title="Tests">⚠️</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://arthurpetrie.com"><img src="https://avatars.githubusercontent.com/u/16376476?v=4?s=100" width="100px;" alt="Arthur Petrie"/><br /><sub><b>Arthur Petrie</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=Arthie" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/FabienDehopre"><img src="https://avatars.githubusercontent.com/u/97023?v=4?s=100" width="100px;" alt="Fabien Dehopré"/><br /><sub><b>Fabien Dehopré</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=FabienDehopre" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jvereecken"><img src="https://avatars.githubusercontent.com/u/108937550?v=4?s=100" width="100px;" alt="Jamie Vereecken"/><br /><sub><b>Jamie Vereecken</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=jvereecken" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

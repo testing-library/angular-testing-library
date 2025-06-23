@@ -10,12 +10,17 @@ import {
   Injectable,
   EventEmitter,
   Output,
+  ElementRef,
+  inject,
+  output,
+  input,
+  model,
 } from '@angular/core';
-import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { TestBed } from '@angular/core/testing';
-import { render, fireEvent, screen } from '../src/public_api';
+import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInput } from '../src/public_api';
 import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
-import { map } from 'rxjs';
+import { fromEvent, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
@@ -31,7 +36,7 @@ describe('DTL functionality', () => {
   it('creates queries and events', async () => {
     const view = await render(FixtureComponent);
 
-    /// We wish to test the utility function from `render` here.
+    // We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     fireEvent.input(view.getByTestId('input'), { target: { value: 'a super awesome input' } });
     // eslint-disable-next-line testing-library/prefer-screen-queries
@@ -41,33 +46,32 @@ describe('DTL functionality', () => {
   });
 });
 
-describe('standalone', () => {
+describe('components', () => {
   @Component({
     selector: 'atl-fixture',
     template: ` {{ name }} `,
   })
-  class StandaloneFixtureComponent {
+  class FixtureWithInputComponent {
     @Input() name = '';
   }
 
-  it('renders standalone component', async () => {
-    await render(StandaloneFixtureComponent, { componentProperties: { name: 'Bob' } });
+  it('renders component', async () => {
+    await render(FixtureWithInputComponent, { componentProperties: { name: 'Bob' } });
     expect(screen.getByText('Bob')).toBeInTheDocument();
   });
 });
 
-describe('standalone with child', () => {
+describe('component with child', () => {
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>A child fixture</span>`,
-    standalone: true,
   })
   class ChildFixtureComponent {}
 
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>A mock child fixture</span>`,
-    standalone: true,
+    host: { 'collision-id': MockChildFixtureComponent.name },
   })
   class MockChildFixtureComponent {}
 
@@ -75,21 +79,20 @@ describe('standalone with child', () => {
     selector: 'atl-parent-fixture',
     template: `<h1>Parent fixture</h1>
       <div><atl-child-fixture></atl-child-fixture></div> `,
-    standalone: true,
     imports: [ChildFixtureComponent],
   })
   class ParentFixtureComponent {}
 
-  it('renders the standalone component with child', async () => {
-    await render(ParentFixtureComponent);
-    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
-    expect(screen.getByText('A child fixture')).toBeInTheDocument();
-  });
-
-  it('renders the standalone component with a mocked child', async () => {
+  it('renders the component with a mocked child', async () => {
     await render(ParentFixtureComponent, { componentImports: [MockChildFixtureComponent] });
     expect(screen.getByText('Parent fixture')).toBeInTheDocument();
     expect(screen.getByText('A mock child fixture')).toBeInTheDocument();
+  });
+
+  it('renders the component with child', async () => {
+    await render(ParentFixtureComponent);
+    expect(screen.getByText('Parent fixture')).toBeInTheDocument();
+    expect(screen.getByText('A child fixture')).toBeInTheDocument();
   });
 
   it('rejects render of template with componentImports set', () => {
@@ -110,7 +113,6 @@ describe('childComponentOverrides', () => {
   @Component({
     selector: 'atl-child-fixture',
     template: `<span>{{ simpleService.value }}</span>`,
-    standalone: true,
     providers: [MySimpleService],
   })
   class NestedChildFixtureComponent {
@@ -120,7 +122,6 @@ describe('childComponentOverrides', () => {
   @Component({
     selector: 'atl-parent-fixture',
     template: `<atl-child-fixture></atl-child-fixture>`,
-    standalone: true,
     imports: [NestedChildFixtureComponent],
   })
   class ParentFixtureComponent {}
@@ -181,35 +182,151 @@ describe('componentOutputs', () => {
   });
 });
 
-describe('animationModule', () => {
+describe('on', () => {
+  @Component({ template: `` })
+  class TestFixtureWithEventEmitterComponent {
+    @Output() readonly event = new EventEmitter<void>();
+  }
+
+  @Component({ template: `` })
+  class TestFixtureWithDerivedEventComponent {
+    @Output() readonly event = fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click');
+  }
+
+  @Component({ template: `` })
+  class TestFixtureWithFunctionalOutputComponent {
+    readonly event = output<string>();
+  }
+
+  @Component({ template: `` })
+  class TestFixtureWithFunctionalDerivedEventComponent {
+    readonly event = outputFromObservable(fromEvent<MouseEvent>(inject(ElementRef).nativeElement, 'click'));
+  }
+
+  it('should subscribe passed listener to the component EventEmitter', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithEventEmitterComponent, { on: { event: spy } });
+    fixture.componentInstance.event.emit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unsubscribe on rerender without listener', async () => {
+    const spy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      on: { event: spy },
+    });
+
+    await rerender({});
+
+    fixture.componentInstance.event.emit();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should not unsubscribe when same listener function is used on rerender', async () => {
+    const spy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      on: { event: spy },
+    });
+
+    await rerender({ on: { event: spy } });
+
+    fixture.componentInstance.event.emit();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unsubscribe old and subscribe new listener function on rerender', async () => {
+    const firstSpy = jest.fn();
+    const { fixture, rerender } = await render(TestFixtureWithEventEmitterComponent, {
+      on: { event: firstSpy },
+    });
+
+    const newSpy = jest.fn();
+    await rerender({ on: { event: newSpy } });
+
+    fixture.componentInstance.event.emit();
+
+    expect(firstSpy).not.toHaveBeenCalled();
+    expect(newSpy).toHaveBeenCalled();
+  });
+
+  it('should subscribe passed listener to a derived component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithDerivedEventComponent, {
+      on: { event: spy },
+    });
+    fireEvent.click(fixture.nativeElement);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should subscribe passed listener to a functional component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithFunctionalOutputComponent, {
+      on: { event: spy },
+    });
+    fixture.componentInstance.event.emit('test');
+    expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  it('should subscribe passed listener to a functional derived component output', async () => {
+    const spy = jest.fn();
+    const { fixture } = await render(TestFixtureWithFunctionalDerivedEventComponent, {
+      on: { event: spy },
+    });
+    fireEvent.click(fixture.nativeElement);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('OutputRefKeysWithCallback is correctly typed', () => {
+    const fnWithVoidArg = (_: void) => void 0;
+    const fnWithNumberArg = (_: number) => void 0;
+    const fnWithStringArg = (_: string) => void 0;
+    const fnWithMouseEventArg = (_: MouseEvent) => void 0;
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    function _test<T>(_on: OutputRefKeysWithCallback<T>) {}
+
+    // @ts-expect-error wrong event type
+    _test<TestFixtureWithEventEmitterComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithEventEmitterComponent>({ event: fnWithVoidArg });
+
+    // @ts-expect-error wrong event type
+    _test<TestFixtureWithDerivedEventComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithDerivedEventComponent>({ event: fnWithMouseEventArg });
+
+    // @ts-expect-error wrong event type
+    _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithFunctionalOutputComponent>({ event: fnWithStringArg });
+
+    // @ts-expect-error wrong event type
+    _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithNumberArg });
+    _test<TestFixtureWithFunctionalDerivedEventComponent>({ event: fnWithMouseEventArg });
+
+    // add a statement so the test succeeds
+    expect(true).toBeTruthy();
+  });
+});
+
+describe('excludeComponentDeclaration', () => {
+  @Component({
+    selector: 'atl-fixture',
+    template: `
+      <input type="text" data-testid="input" />
+      <button>button</button>
+    `,
+    standalone: false,
+  })
+  class NotStandaloneFixtureComponent {}
+
   @NgModule({
-    declarations: [FixtureComponent],
+    declarations: [NotStandaloneFixtureComponent],
   })
   class FixtureModule {}
-  describe('excludeComponentDeclaration', () => {
-    it('does not throw if component is declared in an imported module', async () => {
-      await render(FixtureComponent, {
-        imports: [FixtureModule],
-        excludeComponentDeclaration: true,
-      });
+
+  it('does not throw if component is declared in an imported module', async () => {
+    await render(NotStandaloneFixtureComponent, {
+      imports: [FixtureModule],
+      excludeComponentDeclaration: true,
     });
-  });
-
-  it('adds NoopAnimationsModule by default', async () => {
-    await render(FixtureComponent);
-    const noopAnimationsModule = TestBed.inject(NoopAnimationsModule);
-    expect(noopAnimationsModule).toBeDefined();
-  });
-
-  it('does not add NoopAnimationsModule if BrowserAnimationsModule is an import', async () => {
-    await render(FixtureComponent, {
-      imports: [BrowserAnimationsModule],
-    });
-
-    const browserAnimationsModule = TestBed.inject(BrowserAnimationsModule);
-    expect(browserAnimationsModule).toBeDefined();
-
-    expect(() => TestBed.inject(NoopAnimationsModule)).toThrow();
   });
 });
 
@@ -254,11 +371,11 @@ describe('Angular component life-cycle hooks', () => {
 
     const view = await render(FixtureWithNgOnChangesComponent, { componentProperties });
 
-    /// We wish to test the utility function from `render` here.
+    // We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     expect(view.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
-    /// expect `nameChanged` to be called before `nameInitialized`
+    // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
     expect(nameChanged).toHaveBeenCalledTimes(1);
   });
@@ -270,11 +387,11 @@ describe('Angular component life-cycle hooks', () => {
 
     const view = await render(FixtureWithNgOnChangesComponent, { componentInputs: componentInput });
 
-    /// We wish to test the utility function from `render` here.
+    // We wish to test the utility function from `render` here.
     // eslint-disable-next-line testing-library/prefer-screen-queries
     expect(view.getByText('Sarah')).toBeInTheDocument();
     expect(nameChanged).toHaveBeenCalledWith('Sarah', true);
-    /// expect `nameChanged` to be called before `nameInitialized`
+    // expect `nameChanged` to be called before `nameInitialized`
     expect(nameChanged.mock.invocationCallOrder[0]).toBeLessThan(nameInitialized.mock.invocationCallOrder[0]);
     expect(nameChanged).toHaveBeenCalledTimes(1);
   });
@@ -326,14 +443,12 @@ describe('DebugElement', () => {
 
 describe('initialRoute', () => {
   @Component({
-    standalone: true,
     selector: 'atl-fixture2',
     template: `<button>Secondary Component</button>`,
   })
   class SecondaryFixtureComponent {}
 
   @Component({
-    standalone: true,
     selector: 'atl-router-fixture',
     template: `<router-outlet></router-outlet>`,
     imports: [RouterModule],
@@ -370,7 +485,6 @@ describe('initialRoute', () => {
 
   it('allows initially rendering a specific route with query parameters', async () => {
     @Component({
-      standalone: true,
       selector: 'atl-query-param-fixture',
       template: `<p>paramPresent$: {{ paramPresent$ | async }}</p>`,
       imports: [NgIf, AsyncPipe],
@@ -401,5 +515,119 @@ describe('configureTestBed', () => {
     });
 
     expect(configureTestBedFn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('inputs and signals', () => {
+  @Component({
+    selector: 'atl-fixture',
+    template: `<span>{{ myName() }}</span> <span>{{ myJob() }}</span>`,
+  })
+  class InputComponent {
+    myName = input('foo');
+
+    myJob = input('bar', { alias: 'job' });
+  }
+
+  it('should set the input component', async () => {
+    await render(InputComponent, {
+      inputs: {
+        myName: 'Bob',
+        ...aliasedInput('job', 'Builder'),
+      },
+    });
+
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Builder')).toBeInTheDocument();
+  });
+
+  it('should typecheck correctly', async () => {
+    // we only want to check the types here
+    // so we are purposely not calling render
+
+    const typeTests = [
+      async () => {
+        // OK:
+        await render(InputComponent, {
+          inputs: {
+            myName: 'OK',
+          },
+        });
+      },
+      async () => {
+        // @ts-expect-error - myName is a string
+        await render(InputComponent, {
+          inputs: {
+            myName: 123,
+          },
+        });
+      },
+      async () => {
+        // OK:
+        await render(InputComponent, {
+          inputs: {
+            ...aliasedInput('job', 'OK'),
+          },
+        });
+      },
+      async () => {
+        // @ts-expect-error - job is not using aliasedInput
+        await render(InputComponent, {
+          inputs: {
+            job: 'not used with aliasedInput',
+          },
+        });
+      },
+    ];
+
+    // add a statement so the test succeeds
+    expect(typeTests).toBeTruthy();
+  });
+});
+
+describe('README examples', () => {
+  describe('Counter', () => {
+    @Component({
+      selector: 'atl-counter',
+      template: `
+        <span>{{ hello() }}</span>
+        <button (click)="decrement()">-</button>
+        <span>Current Count: {{ counter() }}</span>
+        <button (click)="increment()">+</button>
+      `,
+    })
+    class CounterComponent {
+      counter = model(0);
+      hello = input('Hi', { alias: 'greeting' });
+
+      increment() {
+        this.counter.set(this.counter() + 1);
+      }
+
+      decrement() {
+        this.counter.set(this.counter() - 1);
+      }
+    }
+
+    it('should render counter', async () => {
+      await render(CounterComponent, {
+        inputs: {
+          counter: 5,
+          ...aliasedInput('greeting', 'Hello Alias!'),
+        },
+      });
+
+      expect(screen.getByText('Current Count: 5')).toBeVisible();
+      expect(screen.getByText('Hello Alias!')).toBeVisible();
+    });
+
+    it('should increment the counter on click', async () => {
+      await render(CounterComponent, { inputs: { counter: 5 } });
+
+      const incrementButton = screen.getByRole('button', { name: '+' });
+      fireEvent.click(incrementButton);
+
+      expect(screen.getByText('Current Count: 6')).toBeVisible();
+    });
   });
 });

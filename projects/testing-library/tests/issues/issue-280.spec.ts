@@ -1,19 +1,21 @@
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterLink, RouterModule, RouterOutlet, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../src/public_api';
 
 @Component({
-  template: `<div>Navigate</div>
+  template: ` <div>Navigate</div>
     <router-outlet></router-outlet>`,
+  imports: [RouterOutlet],
 })
 class MainComponent {}
 
 @Component({
-  template: `<div>first page</div>
+  template: ` <div>first page</div>
     <a routerLink="/second">go to second</a>`,
+  imports: [RouterLink],
 })
 class FirstComponent {}
 
@@ -35,7 +37,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [FirstComponent, SecondComponent],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
@@ -47,12 +48,12 @@ test('navigate to second page and back', async () => {
   expect(await screen.findByText('Navigate')).toBeInTheDocument();
   expect(await screen.findByText('first page')).toBeInTheDocument();
 
-  userEvent.click(await screen.findByText('go to second'));
+  await userEvent.click(await screen.findByText('go to second'));
 
   expect(await screen.findByText('second page')).toBeInTheDocument();
   expect(await screen.findByText('navigate back')).toBeInTheDocument();
 
-  userEvent.click(await screen.findByText('navigate back'));
+  await userEvent.click(await screen.findByText('navigate back'));
 
   expect(await screen.findByText('first page')).toBeInTheDocument();
 });

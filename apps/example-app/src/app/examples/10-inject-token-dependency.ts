@@ -4,7 +4,7 @@ export const DATA = new InjectionToken<{ text: string }>('Components Data');
 
 @Component({
   standalone: true,
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: ' {{ data.text }} ',
 })
 export class DataInjectedComponent {

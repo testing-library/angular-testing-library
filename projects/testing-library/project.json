@@ -4,13 +4,13 @@
   "projectType": "library",
   "sourceRoot": "projects/testing-library/src",
   "prefix": "lib",
+  "tags": [],
   "targets": {
     "build-package": {
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/@testing-library/angular"],
       "options": {
-        "project": "projects/testing-library/ng-package.json",
-        "updateBuildableProjectDepsInPackageJson": false
+        "project": "projects/testing-library/ng-package.json"
       },
       "configurations": {
         "production": {
@@ -23,11 +23,7 @@
       "defaultConfiguration": "production"
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["projects/testing-library/**/*.ts", "projects/testing-library/**/*.html"]
-      },
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "build": {
       "executor": "nx:run-commands",
@@ -49,10 +45,10 @@
     "test": {
       "executor": "@nx/jest:jest",
       "options": {
-        "jestConfig": "projects/testing-library/jest.config.ts"
+        "jestConfig": "projects/testing-library/jest.config.ts",
+        "passWithNoTests": false
       },
       "outputs": ["{workspaceRoot}/coverage/projects/testing-library"]
     }
-  },
-  "tags": []
+  }
 }

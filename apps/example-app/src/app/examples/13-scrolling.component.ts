@@ -4,7 +4,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   standalone: true,
   imports: [ScrollingModule],
-  selector: 'app-cdk-virtual-scroll-overview-example',
+  selector: 'atl-cdk-virtual-scroll-overview-example',
   template: `
     <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport" data-testid="scroll-viewport">
       <div *cdkVirtualFor="let item of items" class="example-item">{{ item }}</div>

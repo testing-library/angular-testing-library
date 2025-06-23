@@ -18,7 +18,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     NgForOf,
     NgIf,
   ],
-  selector: 'app-fixture',
+  selector: 'atl-fixture',
   template: `
     <form [formGroup]="form" name="form">
       <mat-form-field>

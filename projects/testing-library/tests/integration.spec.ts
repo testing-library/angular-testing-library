@@ -4,6 +4,7 @@ import { of, BehaviorSubject } from 'rxjs';
 import { debounceTime, switchMap, map, startWith } from 'rxjs/operators';
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from '../src/lib/testing-library';
 import userEvent from '@testing-library/user-event';
+import { AsyncPipe, NgForOf } from '@angular/common';
 
 const DEBOUNCE_TIME = 1_000;
 
@@ -22,6 +23,25 @@ class ModalService {
 }
 
 @Component({
+  selector: 'atl-table',
+  template: `
+    <table>
+      <tr *ngFor="let entity of entities">
+        <td>{{ entity.name }}</td>
+        <td>
+          <button (click)="edit.next(entity.name)">Edit</button>
+        </td>
+      </tr>
+    </table>
+  `,
+  imports: [NgForOf],
+})
+class TableComponent {
+  @Input() entities: any[] = [];
+  @Output() edit = new EventEmitter<string>();
+}
+
+@Component({
   template: `
     <h1>Entities Title</h1>
     <button (click)="newEntityClicked()">Create New Entity</button>
@@ -31,6 +51,7 @@ class ModalService {
     </label>
     <atl-table [entities]="entities | async" (edit)="editEntityClicked($event)"></atl-table>
   `,
+  imports: [TableComponent, AsyncPipe],
 })
 class EntitiesComponent {
   query = new BehaviorSubject<string>('');
@@ -55,22 +76,6 @@ class EntitiesComponent {
   }
 }
 
-@Component({
-  selector: 'atl-table',
-  template: `
-    <table>
-      <tr *ngFor="let entity of entities">
-        <td>{{ entity.name }}</td>
-        <td><button (click)="edit.next(entity.name)">Edit</button></td>
-      </tr>
-    </table>
-  `,
-})
-class TableComponent {
-  @Input() entities: any[] = [];
-  @Output() edit = new EventEmitter<string>();
-}
-
 const entities = [
   {
     id: 1,
@@ -91,7 +96,6 @@ async function setup() {
   const user = userEvent.setup();
 
   await render(EntitiesComponent, {
-    declarations: [TableComponent],
     providers: [
       {
         provide: EntitiesService,

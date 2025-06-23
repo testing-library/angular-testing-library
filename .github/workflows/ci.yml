@@ -22,22 +22,24 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[16]' || '[16, 18]') }}
+        node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[22]' || '[20, 22, 24]') }}
         os: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '["ubuntu-latest"]' || '["ubuntu-latest", "windows-latest"]') }}
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: install
-        run: npm install
+        run: npm install --force
       - name: build
         run: npm run build -- --skip-nx-cache
       - name: test
         run: npm run test
+      - name: lint
+        run: npm run lint
       - name: Release
         if: github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta')
         run: npx semantic-release

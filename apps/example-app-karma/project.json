@@ -4,6 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/example-app-karma/src",
   "prefix": "app",
+  "tags": [],
   "generators": {},
   "targets": {
     "build": {
@@ -43,24 +44,17 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "example-app-karma:build:production"
+          "buildTarget": "example-app-karma:build:production"
         },
         "development": {
-          "browserTarget": "example-app-karma:build:development"
+          "buildTarget": "example-app-karma:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "apps/example-app-karma/**/*.ts",
-          "apps/example-app-karma/**/*.html",
-          "apps/example-app-karma/src/**/*.html"
-        ]
-      },
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@angular-devkit/build-angular:karma",
@@ -70,6 +64,5 @@
         "karmaConfig": "apps/example-app-karma/karma.conf.js"
       }
     }
-  },
-  "tags": []
+  }
 }

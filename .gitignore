@@ -28,6 +28,8 @@
 # misc
 /.angular/cache
 .angular
+.nx
+migrations.json
 .cache
 /.sass-cache
 /connect.lock
@@ -42,3 +44,6 @@ yarn.lock
 # System Files
 .DS_Store
 Thumbs.db
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
+.history

@@ -2,16 +2,35 @@ import {
   Type,
   DebugElement,
   ModuleWithProviders,
+  EventEmitter,
   EnvironmentProviders,
   Provider,
   ValueProvider,
   ClassProvider,
   ExistingProvider,
   FactoryProvider,
+  Signal,
+  InputSignalWithTransform
 } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
+
+// TODO: import from Angular (is a breaking change)
+interface OutputRef<T> {
+  subscribe(callback: (value: T) => void): OutputRefSubscription;
+}
+interface OutputRefSubscription {
+  unsubscribe(): void;
+}
+
+export type OutputRefKeysWithCallback<T> = {
+  [key in keyof T]?: T[key] extends EventEmitter<infer U>
+    ? (val: U) => void
+    : T[key] extends OutputRef<infer U>
+    ? (val: U) => void
+    : never;
+};
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
 export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
@@ -70,9 +89,39 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
   rerender: (
     properties?: Pick<
       RenderTemplateOptions<ComponentType>,
-      'componentProperties' | 'componentInputs' | 'componentOutputs' | 'detectChangesOnRender'
-    >,
+      'componentProperties' | 'componentInputs' | 'inputs' | 'componentOutputs' | 'on' | 'detectChangesOnRender'
+    > & { partialUpdate?: boolean },
   ) => Promise<void>;
+  /**
+   * @description
+   * Set the state of a deferrable block.
+   */
+  renderDeferBlock: (deferBlockState: DeferBlockState, deferBlockIndex?: number) => Promise<void>;
+}
+
+declare const ALIASED_INPUT_BRAND: unique symbol;
+export type AliasedInput<T> = T & {
+  [ALIASED_INPUT_BRAND]: T;
+};
+export type AliasedInputs = Record<string, AliasedInput<unknown>>;
+
+export type ComponentInput<T> =
+  | {
+      [P in keyof T]?: T[P] extends InputSignalWithTransform<any, infer U>
+        ? U
+        : T[P] extends Signal<infer U>
+        ? U
+        : T[P];
+    }
+  | AliasedInputs;
+
+/**
+ * @description
+ * Creates an aliased input branded type with a value
+ *
+ */
+export function aliasedInput<TAlias extends string, T>(alias: TAlias, value: T): Record<TAlias, AliasedInput<T>> {
+  return { [alias]: value } as Record<TAlias, AliasedInput<T>>;
 }
 
 export interface RenderComponentOptions<ComponentType, Q extends Queries = typeof queries> {
@@ -142,12 +191,11 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   /**
    * @description
    * A collection of imports needed to render the component, for example, shared modules.
-   * Adds `NoopAnimationsModule` by default if `BrowserAnimationsModule` isn't added to the collection.
    *
    * For more info see https://angular.io/api/core/NgModule#imports
    *
    * @default
-   * `[NoopAnimationsModule]`
+   * `[]`
    *
    * @example
    * await render(AppComponent, {
@@ -196,6 +244,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * @description
    * An object to set `@Input` properties of the component
    *
+   * @deprecated use the `inputs` option instead. When you need to use aliases, use the `aliasedInput(...)` helper function.
    * @default
    * {}
    *
@@ -206,16 +255,35 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  }
    * })
    */
-  componentInputs?: Partial<ComponentType> | { [alias: string]: unknown };
+  componentInputs?: Partial<ComponentType> | Record<string, unknown>;
+
   /**
    * @description
-   * An object to set `@Output` properties of the component
+   * An object to set `@Input` or `input()` properties of the component
    *
    * @default
    * {}
    *
    * @example
-   * const sendValue = (value) => { ... }
+   * await render(AppComponent, {
+   *  inputs: {
+   *    counterValue: 10,
+   *    // explicitly define aliases using aliasedInput
+   *    ...aliasedInput('someAlias', 'someValue')
+   *  }
+   * })
+   */
+  inputs?: ComponentInput<ComponentType>;
+
+  /**
+   * @description
+   * An object to set `@Output` properties of the component
+   * @deprecated use the `on` option instead. When it is necessary to override properties, use the `componentProperties` option.
+   * @default
+   * {}
+   *
+   * @example
+   * const sendValue = new EventEmitter<any>();
    * await render(AppComponent, {
    *  componentOutputs: {
    *    send: {
@@ -225,6 +293,24 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   componentOutputs?: Partial<ComponentType>;
+
+  /**
+   * @description
+   * An object with callbacks to subscribe to EventEmitters/Observables of the component
+   *
+   * @default
+   * {}
+   *
+   * @example
+   * const sendValue = (value) => { ... }
+   * await render(AppComponent, {
+   *  on: {
+   *    send: (value) => sendValue(value)
+   *  }
+   * })
+   */
+  on?: OutputRefKeysWithCallback<ComponentType>;
+
   /**
    * @description
    * A collection of providers to inject dependencies of the component.
@@ -373,6 +459,18 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   configureTestBed?: (testbed: TestBed) => void;
+
+  /**
+   * @description
+   * Set the initial state of a deferrable block.
+   */
+  deferBlockStates?: DeferBlockState | { deferBlockState: DeferBlockState; deferBlockIndex: number }[];
+
+  /**
+   * @description
+   * Set the defer blocks behavior.
+   */
+  deferBlockBehavior?: DeferBlockBehavior;
 }
 
 export interface ComponentOverride<T> {
@@ -380,13 +478,14 @@ export interface ComponentOverride<T> {
   providers: any[];
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RenderTemplateOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
   extends RenderComponentOptions<Properties, Q> {
   /**
    * @description
    * An Angular component to wrap the component in.
    * The template will be overridden with the `template` option.
+   * NOTE: A standalone component cannot be used as a wrapper.
    *
    * @default
    * `WrapperComponent`, an empty component that strips the `ng-version` attribute
@@ -411,4 +510,11 @@ export interface Config extends Pick<RenderComponentOptions<any>, 'excludeCompon
    * Imports that are added to the imports
    */
   defaultImports: any[];
+  /**
+   * Set to `true` to use zoneless change detection.
+   * This automatically adds `provideZonelessChangeDetection` to the default imports.
+   *
+   * @default false
+   */
+  zoneless?: boolean;
 }
