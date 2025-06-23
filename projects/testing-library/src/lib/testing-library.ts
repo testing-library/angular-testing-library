@@ -6,6 +6,7 @@ import {
   OnChanges,
   OutputRef,
   OutputRefSubscription,
+  Provider,
   SimpleChange,
   SimpleChanges,
   Type,
@@ -436,7 +437,7 @@ function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports:
 function overrideChildComponentProviders(componentOverrides: ComponentOverride<any>[]) {
   if (componentOverrides) {
     for (const { component, providers } of componentOverrides) {
-      TestBed.overrideComponent(component, { set: { providers } });
+      TestBed.overrideComponent(component, { set: { providers: providers as Provider[] } });
     }
   }
 }
@@ -499,7 +500,7 @@ function addAutoDeclarations<SutType>(
     wrapper,
   }: Pick<RenderTemplateOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'wrapper'>,
 ) {
-  const nonStandaloneDeclarations = declarations?.filter((d) => !isStandalone(d));
+  const nonStandaloneDeclarations = declarations.filter((d) => !isStandalone(d as Type<any>));
   if (typeof sut === 'string') {
     if (wrapper && isStandalone(wrapper)) {
       return nonStandaloneDeclarations;

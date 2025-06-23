@@ -5,12 +5,8 @@ import {
   EventEmitter,
   EnvironmentProviders,
   Provider,
-  ValueProvider,
-  ClassProvider,
-  ExistingProvider,
-  FactoryProvider,
   Signal,
-  InputSignalWithTransform
+  InputSignalWithTransform,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
@@ -166,7 +162,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  declarations: [ CustomerDetailComponent, ButtonComponent ]
    * })
    */
-  declarations?: Array<Type<any> | any[]>;
+  declarations?: (Type<unknown> | unknown[])[];
   /**
    * @description
    * A collection of providers needed to render the component via Dependency Injection, for example, injectable services or tokens.
@@ -187,7 +183,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  providers?: Array<Provider | EnvironmentProviders>;
+  providers?: (Provider | EnvironmentProviders)[];
   /**
    * @description
    * A collection of imports needed to render the component, for example, shared modules.
@@ -205,7 +201,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  imports?: Array<Type<any> | ModuleWithProviders<any>>;
+  imports?: (Type<unknown> | ModuleWithProviders<unknown>)[];
   /**
    * @description
    * A collection of schemas needed to render the component.
@@ -327,7 +323,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  componentProviders?: Array<ValueProvider | ClassProvider | ExistingProvider | FactoryProvider>;
+  componentProviders?: Provider[];
   /**
    * @description
    * Collection of child component specified providers to override with
@@ -361,7 +357,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *   ]
    * })
    */
-  componentImports?: (Type<any> | any[])[];
+  componentImports?: (Type<unknown> | unknown[])[];
   /**
    * @description
    * Queries to bind. Overrides the default set from DOM Testing Library unless merged.
@@ -475,7 +471,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
 export interface ComponentOverride<T> {
   component: Type<T>;
-  providers: any[];
+  providers: (Provider | EnvironmentProviders)[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -509,7 +505,7 @@ export interface Config extends Pick<RenderComponentOptions<any>, 'excludeCompon
   /**
    * Imports that are added to the imports
    */
-  defaultImports: any[];
+  defaultImports?: (Type<unknown> | ModuleWithProviders<unknown>)[];
   /**
    * Set to `true` to use zoneless change detection.
    * This automatically adds `provideZonelessChangeDetection` to the default imports.
