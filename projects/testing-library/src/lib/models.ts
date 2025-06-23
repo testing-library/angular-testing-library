@@ -471,7 +471,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
 export interface ComponentOverride<T> {
   component: Type<T>;
-  providers: (Provider | EnvironmentProviders)[];
+  providers: Provider[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
