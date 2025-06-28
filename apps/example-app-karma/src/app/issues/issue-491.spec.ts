@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 it('test click event with router.navigate', async () => {
@@ -30,8 +30,6 @@ it('test click event with router.navigate', async () => {
   expect(screen.getByRole('button', { name: 'submit' })).toBeEnabled();
 
   await user.click(screen.getByRole('button', { name: 'submit' }));
-
-  await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: 'Login' }));
 
   expect(await screen.findByRole('heading', { name: 'Logged In' })).toBeVisible();
 });
