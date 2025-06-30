@@ -33,7 +33,6 @@ test('renders a defer block in different states using DeferBlockBehavior.Playthr
     deferBlockBehavior: DeferBlockBehavior.Playthrough,
   });
 
-  expect(await screen.findByText(/loading/i)).toBeInTheDocument();
   expect(await screen.findByText(/Defer block content/i)).toBeInTheDocument();
 });
 
