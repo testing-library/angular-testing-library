@@ -108,9 +108,11 @@ export async function render<SutType, WrapperType = SutType>(
     imports: addAutoImports(sut, {
       imports: imports.concat(defaultImports),
       routes,
+    }),
+    providers: addAutoProviders({
+      providers: [...providers],
       zoneless,
     }),
-    providers: [...providers],
     schemas: [...schemas],
     deferBlockBehavior: deferBlockBehavior ?? DeferBlockBehavior.Manual,
   });
@@ -514,16 +516,19 @@ function addAutoDeclarations<SutType>(
 
 function addAutoImports<SutType>(
   sut: Type<SutType> | string,
-  {
-    imports = [],
-    routes,
-    zoneless,
-  }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'> & Pick<Config, 'zoneless'>,
+  { imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>,
 ) {
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
   const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
+  return [...imports, ...components(), ...routing()];
+}
+
+function addAutoProviders({
+  providers = [],
+  zoneless,
+}: Pick<RenderTemplateOptions<any>, 'providers'> & Pick<Config, 'zoneless'>) {
   const provideZoneless = () => (zoneless ? [provideZonelessChangeDetection()] : []);
-  return [...imports, ...components(), ...routing(), ...provideZoneless()];
+  return [...providers, ...provideZoneless()];
 }
 
 async function renderDeferBlock<SutType>(
