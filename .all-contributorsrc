@@ -447,6 +447,16 @@
         "code",
         "review"
       ]
+    },
+    {
+      "login": "mikeshtro",
+      "name": "Michal Štrajt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93714867?v=4",
+      "profile": "https://github.com/mikeshtro",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
