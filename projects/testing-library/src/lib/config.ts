@@ -3,7 +3,6 @@ import { Config } from './models';
 let config: Config = {
   dom: {},
   defaultImports: [],
-  zoneless: false,
 };
 
 export function configure(newConfig: Partial<Config> | ((config: Partial<Config>) => Partial<Config>)) {

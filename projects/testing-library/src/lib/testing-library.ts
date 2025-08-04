@@ -11,7 +11,6 @@ import {
   SimpleChanges,
   Type,
   isStandalone,
-  provideZonelessChangeDetection,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { NavigationExtras, Router } from '@angular/router';
@@ -80,7 +79,6 @@ export async function render<SutType, WrapperType = SutType>(
     initialRoute = '',
     deferBlockStates = undefined,
     deferBlockBehavior = undefined,
-    zoneless = false,
     configureTestBed = () => {
       /* noop*/
     },
@@ -109,10 +107,7 @@ export async function render<SutType, WrapperType = SutType>(
       imports: imports.concat(defaultImports),
       routes,
     }),
-    providers: addAutoProviders({
-      providers: [...providers],
-      zoneless,
-    }),
+    providers,
     schemas: [...schemas],
     deferBlockBehavior: deferBlockBehavior ?? DeferBlockBehavior.Manual,
   });
@@ -521,14 +516,6 @@ function addAutoImports<SutType>(
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
   const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
   return [...imports, ...components(), ...routing()];
-}
-
-function addAutoProviders({
-  providers = [],
-  zoneless,
-}: Pick<RenderTemplateOptions<any>, 'providers'> & Pick<Config, 'zoneless'>) {
-  const provideZoneless = () => (zoneless ? [provideZonelessChangeDetection()] : []);
-  return [...providers, ...provideZoneless()];
 }
 
 async function renderDeferBlock<SutType>(
