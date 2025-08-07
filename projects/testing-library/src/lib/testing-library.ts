@@ -6,13 +6,13 @@ import {
   OnChanges,
   OutputRef,
   OutputRefSubscription,
+  Provider,
   SimpleChange,
   SimpleChanges,
   Type,
   isStandalone,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationExtras, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import type { BoundFunctions, Queries } from '@testing-library/dom';
@@ -40,7 +40,6 @@ import {
 type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, subscription: OutputRefSubscription];
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
-const safeInject = TestBed.inject || TestBed.get;
 
 export async function render<ComponentType>(
   component: Type<ComponentType>,
@@ -108,7 +107,7 @@ export async function render<SutType, WrapperType = SutType>(
       imports: imports.concat(defaultImports),
       routes,
     }),
-    providers: [...providers],
+    providers,
     schemas: [...schemas],
     deferBlockBehavior: deferBlockBehavior ?? DeferBlockBehavior.Manual,
   });
@@ -126,8 +125,8 @@ export async function render<SutType, WrapperType = SutType>(
 
   const componentContainer = createComponentFixture(sut, wrapper);
 
-  const zone = safeInject(NgZone);
-  const router = safeInject(Router);
+  const zone = TestBed.inject(NgZone);
+  const router = TestBed.inject(Router);
   const _navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
     const [path, params] = (basePath + href).split('?');
@@ -338,7 +337,7 @@ export async function render<SutType, WrapperType = SutType>(
 
 async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
-  await safeInject(ApplicationInitStatus).donePromise;
+  await TestBed.inject(ApplicationInitStatus).donePromise;
   return TestBed.createComponent(component);
 }
 
@@ -435,7 +434,7 @@ function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports:
 function overrideChildComponentProviders(componentOverrides: ComponentOverride<any>[]) {
   if (componentOverrides) {
     for (const { component, providers } of componentOverrides) {
-      TestBed.overrideComponent(component, { set: { providers } });
+      TestBed.overrideComponent(component, { set: { providers: providers as Provider[] } });
     }
   }
 }
@@ -498,7 +497,7 @@ function addAutoDeclarations<SutType>(
     wrapper,
   }: Pick<RenderTemplateOptions<any>, 'declarations' | 'excludeComponentDeclaration' | 'wrapper'>,
 ) {
-  const nonStandaloneDeclarations = declarations?.filter((d) => !isStandalone(d));
+  const nonStandaloneDeclarations = declarations.filter((d) => !isStandalone(d as Type<any>));
   if (typeof sut === 'string') {
     if (wrapper && isStandalone(wrapper)) {
       return nonStandaloneDeclarations;
@@ -514,15 +513,9 @@ function addAutoImports<SutType>(
   sut: Type<SutType> | string,
   { imports = [], routes }: Pick<RenderComponentOptions<any>, 'imports' | 'routes'>,
 ) {
-  const animations = () => {
-    const animationIsDefined =
-      imports.indexOf(NoopAnimationsModule) > -1 || imports.indexOf(BrowserAnimationsModule) > -1;
-    return animationIsDefined ? [] : [NoopAnimationsModule];
-  };
-
   const routing = () => (routes ? [RouterTestingModule.withRoutes(routes)] : []);
   const components = () => (typeof sut !== 'string' && isStandalone(sut) ? [sut] : []);
-  return [...imports, ...components(), ...animations(), ...routing()];
+  return [...imports, ...components(), ...routing()];
 }
 
 async function renderDeferBlock<SutType>(

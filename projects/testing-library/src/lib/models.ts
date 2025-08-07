@@ -1,4 +1,13 @@
-import { Type, DebugElement, EventEmitter, Signal, InputSignalWithTransform } from '@angular/core';
+import {
+  Type,
+  DebugElement,
+  ModuleWithProviders,
+  EventEmitter,
+  EnvironmentProviders,
+  Provider,
+  Signal,
+  InputSignalWithTransform,
+} from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
 import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
@@ -153,7 +162,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  declarations: [ CustomerDetailComponent, ButtonComponent ]
    * })
    */
-  declarations?: any[];
+  declarations?: (Type<unknown> | unknown[])[];
   /**
    * @description
    * A collection of providers needed to render the component via Dependency Injection, for example, injectable services or tokens.
@@ -174,16 +183,15 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  providers?: any[];
+  providers?: (Provider | EnvironmentProviders)[];
   /**
    * @description
    * A collection of imports needed to render the component, for example, shared modules.
-   * Adds `NoopAnimationsModule` by default if `BrowserAnimationsModule` isn't added to the collection.
    *
    * For more info see https://angular.io/api/core/NgModule#imports
    *
    * @default
-   * `[NoopAnimationsModule]`
+   * `[]`
    *
    * @example
    * await render(AppComponent, {
@@ -193,7 +201,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  imports?: any[];
+  imports?: (Type<unknown> | ModuleWithProviders<unknown>)[];
   /**
    * @description
    * A collection of schemas needed to render the component.
@@ -315,7 +323,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *  ]
    * })
    */
-  componentProviders?: any[];
+  componentProviders?: Provider[];
   /**
    * @description
    * Collection of child component specified providers to override with
@@ -349,7 +357,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    *   ]
    * })
    */
-  componentImports?: (Type<any> | any[])[];
+  componentImports?: (Type<unknown> | unknown[])[];
   /**
    * @description
    * Queries to bind. Overrides the default set from DOM Testing Library unless merged.
@@ -463,7 +471,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
 export interface ComponentOverride<T> {
   component: Type<T>;
-  providers: any[];
+  providers: Provider[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -497,5 +505,5 @@ export interface Config extends Pick<RenderComponentOptions<any>, 'excludeCompon
   /**
    * Imports that are added to the imports
    */
-  defaultImports: any[];
+  defaultImports?: (Type<unknown> | ModuleWithProviders<unknown>)[];
 }
