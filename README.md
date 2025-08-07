@@ -177,15 +177,16 @@ You may also be interested in installing `jest-dom` so you can use
 
 ## Version compatibility
 
-| Angular | Angular Testing Library      |
-| ------- | ---------------------------- |
-| 19.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
-| 18.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
-| 17.x    | 17.x, 16.x, 15.x, 14.x, 13.x |
-| 16.x    | 14.x, 13.x                   |
-| >= 15.1 | 14.x, 13.x                   |
-| < 15.1  | 12.x, 11.x                   |
-| 14.x    | 12.x, 11.x                   |
+| Angular | Angular Testing Library            |
+| ------- | ---------------------------------- |
+| 20.x    | 18.x, 17.x, 16.x, 15.x, 14.x, 13.x |
+| 19.x    | 17.x, 16.x, 15.x, 14.x, 13.x       |
+| 18.x    | 17.x, 16.x, 15.x, 14.x, 13.x       |
+| 17.x    | 17.x, 16.x, 15.x, 14.x, 13.x       |
+| 16.x    | 14.x, 13.x                         |
+| >= 15.1 | 14.x, 13.x                         |
+| < 15.1  | 12.x, 11.x                         |
+| 14.x    | 12.x, 11.x                         |
 
 ## Guiding Principles
 
