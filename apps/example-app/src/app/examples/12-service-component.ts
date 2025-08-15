@@ -1,5 +1,5 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { Component, Injectable } from '@angular/core';
+import { Component, inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export class Customer {
@@ -29,6 +29,6 @@ export class CustomersService {
   `,
 })
 export class CustomersComponent {
+  private service = inject(CustomersService);
   customers$ = this.service.load();
-  constructor(private service: CustomersService) {}
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -43,7 +43,7 @@ it('test click event with router.navigate', async () => {
   `,
 })
 class LoginComponent {
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
   onSubmit(): void {
     this.router.navigate(['logged-in']);
   }

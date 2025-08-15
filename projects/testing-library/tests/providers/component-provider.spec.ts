@@ -1,4 +1,4 @@
-import { Injectable, Provider } from '@angular/core';
+import { inject, Injectable, Provider } from '@angular/core';
 import { Component } from '@angular/core';
 import { render, screen } from '../../src/public_api';
 
@@ -73,5 +73,5 @@ class Service {
   providers: [Service],
 })
 class FixtureComponent {
-  constructor(public service: Service) {}
+  protected readonly service = inject(Service);
 }

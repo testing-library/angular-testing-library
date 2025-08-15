@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
-import { Component, Inject, Injectable } from '@angular/core';
+import { Component, inject, Injectable } from '@angular/core';
 import { screen, render } from '../../src/public_api';
 
 // Service
@@ -23,7 +23,7 @@ class DemoService {
   `,
 })
 class DemoComponent {
-  constructor(@Inject(DemoService) public demoService: DemoService) {}
+  protected readonly demoService = inject(DemoService);
 }
 
 test('issue #435', async () => {

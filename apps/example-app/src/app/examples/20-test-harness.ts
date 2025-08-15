@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -11,7 +11,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   `,
 })
 export class HarnessComponent {
-  constructor(private snackBar: MatSnackBar) {}
+  private snackBar = inject(MatSnackBar);
 
   openSnackBar() {
     return this.snackBar.open('Pizza Party!!!');
