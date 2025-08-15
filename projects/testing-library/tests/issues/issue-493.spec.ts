@@ -1,6 +1,6 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { render, screen } from '../../src/public_api';
 
 test('succeeds', async () => {
@@ -21,7 +21,7 @@ test('succeeds', async () => {
   template: '<p>{{ value() }}</p>',
 })
 class DummyComponent {
+  // @ts-expect-error - testing purpose
+  private _http = inject(HttpClient);
   value = input.required<string>();
-  // @ts-expect-error http is unused but needed for the test
-  constructor(private http: HttpClient) {}
 }

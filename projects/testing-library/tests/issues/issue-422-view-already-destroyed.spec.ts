@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { render } from '../../src/public_api';
 
@@ -9,8 +9,8 @@ test('declaration specific dependencies should be available for components', asy
     template: `<div>Test</div>`,
   })
   class TestComponent {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    constructor(_elementRef: ElementRef) {}
+    // @ts-expect-error - testing purpose
+    private _el = inject(ElementRef);
   }
 
   await expect(async () => await render(TestComponent)).not.toThrow();

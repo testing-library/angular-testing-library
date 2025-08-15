@@ -1,4 +1,4 @@
-import { Component, InjectionToken, Inject } from '@angular/core';
+import { Component, InjectionToken, inject } from '@angular/core';
 
 export const DATA = new InjectionToken<{ text: string }>('Components Data');
 
@@ -8,5 +8,5 @@ export const DATA = new InjectionToken<{ text: string }>('Components Data');
   template: ' {{ data.text }} ',
 })
 export class DataInjectedComponent {
-  constructor(@Inject(DATA) public data: { text: string }) {}
+  protected data = inject(DATA);
 }

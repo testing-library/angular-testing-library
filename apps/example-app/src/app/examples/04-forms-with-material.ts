@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -84,6 +84,8 @@ import { MatNativeDateModule } from '@angular/material/core';
   ],
 })
 export class MaterialFormsComponent {
+  private formBuilder = inject(FormBuilder);
+
   colors = [
     { id: 'R', value: 'Red' },
     { id: 'B', value: 'Blue' },
@@ -96,8 +98,6 @@ export class MaterialFormsComponent {
     date: [null as Date | null, Validators.required],
     agree: [false, Validators.requiredTrue],
   });
-
-  constructor(private formBuilder: FormBuilder) {}
 
   get colorControlDisplayValue(): string | undefined {
     const selectedId = this.form.get('color')?.value;

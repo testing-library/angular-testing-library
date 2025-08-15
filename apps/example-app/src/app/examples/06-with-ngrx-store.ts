@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { createSelector, Store, createAction, createReducer, on, select } from '@ngrx/store';
 
 const increment = createAction('increment');
@@ -26,8 +26,9 @@ const selectValue = createSelector(
   `,
 })
 export class WithNgRxStoreComponent {
+  private store = inject(Store);
+
   value = this.store.pipe(select(selectValue));
-  constructor(private store: Store<any>) {}
 
   increment() {
     this.store.dispatch(increment());

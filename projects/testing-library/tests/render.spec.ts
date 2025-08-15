@@ -116,7 +116,7 @@ describe('childComponentOverrides', () => {
     providers: [MySimpleService],
   })
   class NestedChildFixtureComponent {
-    public constructor(public simpleService: MySimpleService) {}
+    protected simpleService = inject(MySimpleService);
   }
 
   @Component({
@@ -490,7 +490,7 @@ describe('initialRoute', () => {
       imports: [NgIf, AsyncPipe],
     })
     class QueryParamFixtureComponent {
-      constructor(public route: ActivatedRoute) {}
+      private readonly route = inject(ActivatedRoute);
 
       paramPresent$ = this.route.queryParams.pipe(map((queryParams) => (queryParams?.param ? 'present' : 'missing')));
     }

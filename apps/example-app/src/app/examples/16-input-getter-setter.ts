@@ -8,7 +8,6 @@ import { Component, Input } from '@angular/core';
     <span data-testid="value-getter">{{ value }}</span>
   `,
 })
-// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class InputGetterSetter {
   @Input() set value(value: string) {
     this.originalValue = value;

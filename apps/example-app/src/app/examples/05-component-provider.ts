@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, inject, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +30,5 @@ export class CounterService {
   providers: [CounterService],
 })
 export class ComponentWithProviderComponent {
-  constructor(public counter: CounterService) {}
+  protected counter = inject(CounterService);
 }

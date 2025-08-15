@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { fireEvent, render, screen } from '@testing-library/angular';
 
@@ -21,7 +21,7 @@ class FixtureService {
   template: ` <button (click)="print()">Print</button> `,
 })
 class FixtureComponent {
-  constructor(private service: FixtureService) {}
+  private service = inject(FixtureService);
 
   print() {
     this.service.print();

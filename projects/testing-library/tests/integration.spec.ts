@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injectable, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Injectable, Input, Output } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { of, BehaviorSubject } from 'rxjs';
 import { debounceTime, switchMap, map, startWith } from 'rxjs/operators';
@@ -54,6 +54,8 @@ class TableComponent {
   imports: [TableComponent, AsyncPipe],
 })
 class EntitiesComponent {
+  private entitiesService = inject(EntitiesService);
+  private modalService = inject(ModalService);
   query = new BehaviorSubject<string>('');
   readonly entities = this.query.pipe(
     debounceTime(DEBOUNCE_TIME),
@@ -62,8 +64,6 @@ class EntitiesComponent {
     ),
     startWith(entities),
   );
-
-  constructor(private entitiesService: EntitiesService, private modalService: ModalService) {}
 
   newEntityClicked() {
     this.modalService.open('new entity');

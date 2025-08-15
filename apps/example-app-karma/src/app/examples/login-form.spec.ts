@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/angular';
@@ -45,12 +45,12 @@ it('should display invalid message and submit button must be disabled', async ()
   `,
 })
 class LoginComponent {
+  private fb = inject(FormBuilder);
+
   form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
-
-  constructor(private fb: FormBuilder) {}
 
   get email(): FormControl {
     return this.form.get('email') as FormControl;

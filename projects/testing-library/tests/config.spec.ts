@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { render, configure, Config } from '../src/public_api';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
@@ -16,11 +16,10 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
   standalone: false,
 })
 class FormsComponent {
+  private formBuilder = inject(FormBuilder);
   form = this.formBuilder.group({
     name: [''],
   });
-
-  constructor(private formBuilder: FormBuilder) {}
 }
 
 let originalConfig: Config;
