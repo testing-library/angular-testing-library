@@ -1,5 +1,5 @@
 import { MatDialogRef } from '@angular/material/dialog';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -10,8 +10,8 @@ test('dialog closes', async () => {
 
   const closeFn = jest.fn();
   await render(DialogContentComponent, {
-    imports: [NoopAnimationsModule],
     providers: [
+      provideNoopAnimations(),
       {
         provide: MatDialogRef,
         useValue: {
@@ -31,7 +31,7 @@ test('closes the dialog via the backdrop', async () => {
   const user = userEvent.setup();
 
   await render(DialogComponent, {
-    imports: [NoopAnimationsModule],
+    providers: [provideNoopAnimations()],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
@@ -55,7 +55,7 @@ test('opens and closes the dialog with buttons', async () => {
   const user = userEvent.setup();
 
   await render(DialogComponent, {
-    imports: [NoopAnimationsModule],
+    providers: [provideNoopAnimations()],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });

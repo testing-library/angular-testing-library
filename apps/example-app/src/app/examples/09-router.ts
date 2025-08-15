@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs/operators';
 
@@ -32,10 +32,10 @@ export class RootComponent {}
   `,
 })
 export class DetailComponent {
+  private route = inject(ActivatedRoute);
   id = this.route.paramMap.pipe(map((params) => params.get('id')));
   text = this.route.queryParams.pipe(map((params) => params['text']));
   subtext = this.route.queryParams.pipe(map((params) => params['subtext']));
-  constructor(private route: ActivatedRoute) {}
 }
 
 @Component({

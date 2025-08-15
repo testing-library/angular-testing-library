@@ -1,4 +1,4 @@
-import { Component, Directive, Input, OnInit } from '@angular/core';
+import { Component, Directive, inject, Input, OnInit } from '@angular/core';
 import { render, screen } from '../../src/public_api';
 
 test('the value set in the directive constructor is overriden by the input binding', async () => {
@@ -48,7 +48,8 @@ class FixtureComponent {
   standalone: true,
 })
 class InputOverrideViaConstructorDirective {
-  constructor(private fixture: FixtureComponent) {
+  private readonly fixture = inject(FixtureComponent);
+  constructor() {
     this.fixture.input = 'set by directive constructor';
   }
 }
@@ -59,7 +60,7 @@ class InputOverrideViaConstructorDirective {
   standalone: true,
 })
 class InputOverrideViaOnInitDirective implements OnInit {
-  constructor(private fixture: FixtureComponent) {}
+  private readonly fixture = inject(FixtureComponent);
 
   ngOnInit(): void {
     this.fixture.input = 'set by directive ngOnInit';

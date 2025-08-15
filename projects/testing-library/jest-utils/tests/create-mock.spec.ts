@@ -21,7 +21,7 @@ class FixtureService {
   template: ` <button (click)="print()">Print</button> `,
 })
 class FixtureComponent {
-  constructor(private service: FixtureService) {}
+  private service = inject(FixtureService);
 
   print() {
     this.service.print();

@@ -16,11 +16,10 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
   standalone: false,
 })
 class FormsComponent {
+  private formBuilder = inject(FormBuilder);
   form = this.formBuilder.group({
     name: [''],
   });
-
-  constructor(private formBuilder: FormBuilder) {}
 }
 
 let originalConfig: Config;

@@ -1,4 +1,4 @@
-import { Directive, HostListener, ElementRef, Input, Output, EventEmitter, Component } from '@angular/core';
+import { Directive, HostListener, ElementRef, Input, Output, EventEmitter, Component, inject } from '@angular/core';
 
 import { render, fireEvent, screen } from '../src/public_api';
 
@@ -7,11 +7,12 @@ import { render, fireEvent, screen } from '../src/public_api';
   selector: '[onOff]',
 })
 class OnOffDirective {
+  private el = inject(ElementRef);
   @Input() on = 'on';
   @Input() off = 'off';
   @Output() clicked = new EventEmitter<string>();
 
-  constructor(private el: ElementRef) {
+  constructor() {
     this.el.nativeElement.textContent = 'init';
   }
 
@@ -26,12 +27,11 @@ class OnOffDirective {
   selector: '[update]',
 })
 class UpdateInputDirective {
+  private readonly el = inject(ElementRef);
   @Input()
   set update(value: any) {
     this.el.nativeElement.textContent = value;
   }
-
-  constructor(private el: ElementRef) {}
 }
 
 @Component({

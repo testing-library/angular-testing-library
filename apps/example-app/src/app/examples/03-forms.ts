@@ -1,5 +1,5 @@
 import { NgForOf, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -33,6 +33,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   `,
 })
 export class FormsComponent {
+  private formBuilder = inject(FormBuilder);
+
   colors = [
     { id: 'R', value: 'Red' },
     { id: 'B', value: 'Blue' },
@@ -44,8 +46,6 @@ export class FormsComponent {
     score: [0, { validators: [Validators.min(1), Validators.max(10)], updateOn: 'blur' }],
     color: [null as string | null, Validators.required],
   });
-
-  constructor(private formBuilder: FormBuilder) {}
 
   get formErrors() {
     return Object.keys(this.form.controls)
