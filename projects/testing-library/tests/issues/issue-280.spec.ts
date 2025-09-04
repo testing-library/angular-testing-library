@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component, inject, NgModule } from '@angular/core';
 import { RouterLink, RouterModule, RouterOutlet, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import userEvent from '@testing-library/user-event';
@@ -24,7 +24,7 @@ class FirstComponent {}
     <button (click)="goBack()">navigate back</button>`,
 })
 class SecondComponent {
-  constructor(private location: Location) {}
+  private location = inject(Location);
   goBack() {
     this.location.back();
   }

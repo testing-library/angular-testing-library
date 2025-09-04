@@ -1,5 +1,5 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { createSelector, Store, select } from '@ngrx/store';
 
 export const selectItems = createSelector(
@@ -20,8 +20,9 @@ export const selectItems = createSelector(
   `,
 })
 export class WithNgRxMockStoreComponent {
+  private store = inject(Store);
+
   items = this.store.pipe(select(selectItems));
-  constructor(private store: Store<any>) {}
 
   send(item: string) {
     this.store.dispatch({ type: '[Item List] send', item });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,7 +8,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
   template: '<button (click)="openDialog()">Open dialog</button>',
 })
 export class DialogComponent {
-  constructor(public dialog: MatDialog) {}
+  private dialog = inject(MatDialog);
 
   openDialog(): void {
     this.dialog.open(DialogContentComponent);
@@ -29,7 +29,7 @@ export class DialogComponent {
   `,
 })
 export class DialogContentComponent {
-  constructor(public dialogRef: MatDialogRef<DialogContentComponent>) {}
+  private dialogRef = inject<MatDialogRef<DialogContentComponent>>(MatDialogRef);
 
   cancel(): void {
     this.dialogRef.close();

@@ -1,12 +1,11 @@
-import { Component, Directive, ElementRef, input, OnInit } from '@angular/core';
+import { Component, Directive, ElementRef, inject, input, OnInit } from '@angular/core';
 
 @Directive({
   selector: '[atlText]',
 })
 export class TextDirective implements OnInit {
+  private el = inject(ElementRef);
   atlText = input<string>('');
-
-  constructor(private el: ElementRef) {}
 
   ngOnInit() {
     this.el.nativeElement.textContent = this.atlText();
