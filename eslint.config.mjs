@@ -45,7 +45,6 @@ export default tseslint.config(
       // These are needed for test cases
       "@angular-eslint/prefer-standalone": "off",
       "@angular-eslint/no-input-rename": "off",
-      "@angular-eslint/no-input-rename": "off",
     },
   },
   {
