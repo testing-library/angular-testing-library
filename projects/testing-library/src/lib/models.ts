@@ -7,6 +7,7 @@ import {
   Provider,
   Signal,
   InputSignalWithTransform,
+  Binding,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
@@ -306,6 +307,26 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * })
    */
   on?: OutputRefKeysWithCallback<ComponentType>;
+
+  /**
+   * @description
+   * An array of bindings to apply to the component using Angular v20+'s native bindings API.
+   * This provides a more direct way to bind inputs and outputs compared to the `inputs` and `on` options.
+   *
+   * @default
+   * []
+   *
+   * @example
+   * import { inputBinding, outputBinding } from '@angular/core';
+   *
+   * await render(AppComponent, {
+   *   bindings: [
+   *     inputBinding('value', () => 'test value'),
+   *     outputBinding('click', (event) => console.log(event))
+   *   ]
+   * })
+   */
+  bindings?: Binding[];
 
   /**
    * @description

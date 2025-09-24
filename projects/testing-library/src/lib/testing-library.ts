@@ -11,6 +11,7 @@ import {
   SimpleChanges,
   Type,
   isStandalone,
+  Binding,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { NavigationExtras, Router } from '@angular/router';
@@ -69,6 +70,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentOutputs = {},
     inputs: newInputs = {},
     on = {},
+    bindings = [],
     componentProviders = [],
     childComponentOverrides = [],
     componentImports,
@@ -192,11 +194,19 @@ export async function render<SutType, WrapperType = SutType>(
     outputs: Partial<SutType>,
     subscribeTo: OutputRefKeysWithCallback<SutType>,
   ): Promise<ComponentFixture<SutType>> => {
-    const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer);
-    setComponentProperties(createdFixture, properties);
-    setComponentInputs(createdFixture, inputs);
-    setComponentOutputs(createdFixture, outputs);
-    subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+    const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer, bindings);
+
+    // Only use traditional input/output setting if no bindings are provided
+    // When bindings are used, they handle inputs and outputs natively
+    if (!bindings || bindings.length === 0) {
+      setComponentProperties(createdFixture, properties);
+      setComponentInputs(createdFixture, inputs);
+      setComponentOutputs(createdFixture, outputs);
+      subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+    } else {
+      // With bindings, we still need to handle componentProperties for non-input properties
+      setComponentProperties(createdFixture, properties);
+    }
 
     if (removeAngularAttributes) {
       createdFixture.nativeElement.removeAttribute('ng-version');
@@ -335,9 +345,18 @@ export async function render<SutType, WrapperType = SutType>(
   };
 }
 
-async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
+async function createComponent<SutType>(
+  component: Type<SutType>,
+  bindings?: Binding[],
+): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
   await TestBed.inject(ApplicationInitStatus).donePromise;
+
+  // Use the new bindings API if available and bindings are provided
+  if (bindings && bindings.length > 0) {
+    return TestBed.createComponent(component, { bindings });
+  }
+
   return TestBed.createComponent(component);
 }
 
