@@ -151,12 +151,13 @@ describe('Counter', () => {
 });
 ```
 
-### Angular v20+ Bindings API
+### Angular Bindings API
 
-Angular Testing Library also supports Angular v20's native bindings API, which provides a more direct way to bind inputs and outputs:
+Angular Testing Library also supports Angular's native bindings API, which provides a more direct way to bind inputs and outputs:
 
 ```typescript
-import { render, screen, inputBinding, outputBinding } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import { inputBinding, outputBinding } from '@angular/core';
 import { CounterComponent } from './counter.component';
 
 describe('Counter with Bindings API', () => {

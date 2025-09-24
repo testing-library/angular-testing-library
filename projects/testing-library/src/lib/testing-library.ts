@@ -196,16 +196,35 @@ export async function render<SutType, WrapperType = SutType>(
   ): Promise<ComponentFixture<SutType>> => {
     const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer, bindings);
 
-    // Only use traditional input/output setting if no bindings are provided
-    // When bindings are used, they handle inputs and outputs natively
-    if (!bindings || bindings.length === 0) {
-      setComponentProperties(createdFixture, properties);
-      setComponentInputs(createdFixture, inputs);
+    // Always apply componentProperties (non-input properties)
+    setComponentProperties(createdFixture, properties);
+
+    // Angular doesn't allow mixing setInput with bindings
+    // So we use bindings OR traditional approach, but not both for inputs
+    if (bindings && bindings.length > 0) {
+      // When bindings are used, warn if traditional inputs/outputs are also specified
+      if (Object.keys(inputs).length > 0) {
+        console.warn(
+          'ATL: You specified both bindings and traditional inputs. ' +
+            'Angular does not allow mixing setInput() with inputBinding(). ' +
+            'Only bindings will be used for inputs. Use bindings for all inputs to avoid this warning.',
+        );
+      }
+      if (Object.keys(subscribeTo).length > 0) {
+        console.warn(
+          'ATL: You specified both bindings and traditional output listeners. ' +
+            'Consider using outputBinding() for all outputs for consistency.',
+        );
+      }
+
+      // Only apply traditional outputs, as bindings handle inputs
       setComponentOutputs(createdFixture, outputs);
       subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
     } else {
-      // With bindings, we still need to handle componentProperties for non-input properties
-      setComponentProperties(createdFixture, properties);
+      // Use traditional approach when no bindings
+      setComponentInputs(createdFixture, inputs);
+      setComponentOutputs(createdFixture, outputs);
+      subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
     }
 
     if (removeAngularAttributes) {

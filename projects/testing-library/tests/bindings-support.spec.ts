@@ -1,5 +1,5 @@
-import { Component, input, output } from '@angular/core';
-import { render, screen, inputBinding, outputBinding } from '../src/public_api';
+import { Component, input, output, inputBinding, outputBinding } from '@angular/core';
+import { render, screen, aliasedInput } from '../src/public_api';
 
 describe('ATL Bindings API Support', () => {
   @Component({
@@ -37,5 +37,46 @@ describe('ATL Bindings API Support', () => {
     button.click();
 
     expect(clickHandler).toHaveBeenCalledWith('clicked: bound-value');
+  });
+
+  it('should warn when mixing bindings with traditional inputs but still work', async () => {
+    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const clickHandler = jest.fn();
+    const bindingClickHandler = jest.fn();
+
+    await render(BindingsTestComponent, {
+      bindings: [inputBinding('value', () => 'binding-value'), outputBinding('clicked', bindingClickHandler)],
+      inputs: {
+        ...aliasedInput('greet', 'traditional-greeting'), // This will be ignored due to bindings
+      },
+      on: {
+        clicked: clickHandler, // This should still work alongside bindings
+      },
+    });
+
+    // Only binding should work for inputs
+    expect(screen.getByTestId('value')).toHaveTextContent('binding-value');
+    expect(screen.getByTestId('greeting')).toHaveTextContent('hello'); // Default value, not traditional
+
+    const button = screen.getByTestId('emit-button');
+    button.click();
+
+    // Both binding and traditional handlers should be called for outputs
+    expect(bindingClickHandler).toHaveBeenCalledWith('clicked: binding-value');
+    expect(clickHandler).toHaveBeenCalledWith('clicked: binding-value');
+
+    // Should show warning about mixed usage for inputs
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'ATL: You specified both bindings and traditional inputs. ' +
+        'Angular does not allow mixing setInput() with inputBinding(). ' +
+        'Only bindings will be used for inputs. Use bindings for all inputs to avoid this warning.',
+    );
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'ATL: You specified both bindings and traditional output listeners. ' +
+        'Consider using outputBinding() for all outputs for consistency.',
+    );
+
+    consoleSpy.mockRestore();
   });
 });

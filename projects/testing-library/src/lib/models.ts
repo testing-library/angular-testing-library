@@ -310,7 +310,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
   /**
    * @description
-   * An array of bindings to apply to the component using Angular v20+'s native bindings API.
+   * An array of bindings to apply to the component using Angular's native bindings API.
    * This provides a more direct way to bind inputs and outputs compared to the `inputs` and `on` options.
    *
    * @default
