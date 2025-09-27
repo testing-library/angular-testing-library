@@ -317,12 +317,14 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * []
    *
    * @example
-   * import { inputBinding, outputBinding } from '@angular/core';
+   * import { inputBinding, outputBinding, twoWayBinding } from '@angular/core';
+   * import { signal } from '@angular/core';
    *
    * await render(AppComponent, {
    *   bindings: [
    *     inputBinding('value', () => 'test value'),
-   *     outputBinding('click', (event) => console.log(event))
+   *     outputBinding('click', (event) => console.log(event)),
+   *     twoWayBinding('name', signal('initial value'))
    *   ]
    * })
    */

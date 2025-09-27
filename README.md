@@ -157,7 +157,7 @@ Angular Testing Library also supports Angular's native bindings API, which provi
 
 ```typescript
 import { render, screen } from '@testing-library/angular';
-import { inputBinding, outputBinding } from '@angular/core';
+import { inputBinding, outputBinding, twoWayBinding, signal } from '@angular/core';
 import { CounterComponent } from './counter.component';
 
 describe('Counter with Bindings API', () => {
@@ -181,6 +181,23 @@ describe('Counter with Bindings API', () => {
     fireEvent.click(incrementButton);
 
     expect(clickHandler).toHaveBeenCalledWith(1);
+  });
+
+  it('should handle two-way binding with signals', async () => {
+    const counterSignal = signal(0);
+
+    await render(CounterComponent, {
+      bindings: [twoWayBinding('counter', counterSignal)],
+    });
+
+    expect(screen.getByText('Current Count: 0')).toBeVisible();
+
+    const incrementButton = screen.getByRole('button', { name: '+' });
+    fireEvent.click(incrementButton);
+
+    // Two-way binding updates the external signal
+    expect(counterSignal()).toBe(1);
+    expect(screen.getByText('Current Count: 1')).toBeVisible();
   });
 });
 ```
