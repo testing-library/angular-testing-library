@@ -1,7 +1,7 @@
 import { Component, input, output, inputBinding, outputBinding, twoWayBinding, signal, model } from '@angular/core';
 import { render, screen, aliasedInput } from '../src/public_api';
 
-describe('ATL Bindings API Support', () => {
+describe('Bindings API Support', () => {
   @Component({
     selector: 'atl-bindings-test',
     template: `
@@ -34,7 +34,7 @@ describe('ATL Bindings API Support', () => {
     }
   }
 
-  it('should support inputBinding for regular inputs', async () => {
+  it('supports inputBinding for regular inputs', async () => {
     await render(BindingsTestComponent, {
       bindings: [inputBinding('value', () => 'test-value'), inputBinding('greet', () => 'hi there')],
     });
@@ -43,7 +43,7 @@ describe('ATL Bindings API Support', () => {
     expect(screen.getByTestId('greeting')).toHaveTextContent('hi there');
   });
 
-  it('should support outputBinding for outputs', async () => {
+  it('supports outputBinding for outputs', async () => {
     const clickHandler = jest.fn();
 
     await render(BindingsTestComponent, {
@@ -56,7 +56,7 @@ describe('ATL Bindings API Support', () => {
     expect(clickHandler).toHaveBeenCalledWith('clicked: bound-value');
   });
 
-  it('should support inputBinding with writable signal for re-rendering scenario', async () => {
+  it('supports inputBinding with writable signal for re-rendering scenario', async () => {
     const valueSignal = signal('initial-value');
 
     await render(BindingsTestComponent, {
@@ -73,7 +73,7 @@ describe('ATL Bindings API Support', () => {
     expect(await screen.findByText('updated-value')).toBeInTheDocument();
   });
 
-  it('should support twoWayBinding for model signals', async () => {
+  it('supports twoWayBinding for model signals', async () => {
     const nameSignal = signal('initial name');
 
     await render(TwoWayBindingTestComponent, {
@@ -99,7 +99,7 @@ describe('ATL Bindings API Support', () => {
     expect(nameSignal()).toBe('updated from component');
   });
 
-  it('should warn when mixing bindings with traditional inputs but still work', async () => {
+  it('warns when mixing bindings with traditional inputs but still works', async () => {
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
     const clickHandler = jest.fn();
     const bindingClickHandler = jest.fn();
@@ -121,19 +121,18 @@ describe('ATL Bindings API Support', () => {
     const button = screen.getByTestId('emit-button');
     button.click();
 
-    // Both binding and traditional handlers should be called for outputs
+    // Both binding and traditional handlers are called for outputs
     expect(bindingClickHandler).toHaveBeenCalledWith('clicked: binding-value');
     expect(clickHandler).toHaveBeenCalledWith('clicked: binding-value');
 
-    // Should show warning about mixed usage for inputs
+    // Shows warning about mixed usage for inputs
     expect(consoleSpy).toHaveBeenCalledWith(
-      'ATL: You specified both bindings and traditional inputs. ' +
-        'Angular does not allow mixing setInput() with inputBinding(). ' +
+      '[@testing-library/angular]: You specified both bindings and traditional inputs. ' +
         'Only bindings will be used for inputs. Use bindings for all inputs to avoid this warning.',
     );
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      'ATL: You specified both bindings and traditional output listeners. ' +
+      '[@testing-library/angular]: You specified both bindings and traditional output listeners. ' +
         'Consider using outputBinding() for all outputs for consistency.',
     );
 

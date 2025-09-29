@@ -151,65 +151,6 @@ describe('Counter', () => {
 });
 ```
 
-### Angular Bindings API
-
-Angular Testing Library also supports Angular's native bindings API, which provides a more direct way to bind inputs and outputs:
-
-```typescript
-import { render, screen } from '@testing-library/angular';
-import { inputBinding, outputBinding, twoWayBinding, signal } from '@angular/core';
-import { CounterComponent } from './counter.component';
-
-describe('Counter with Bindings API', () => {
-  it('should render counter using bindings', async () => {
-    await render(CounterComponent, {
-      bindings: [inputBinding('counter', () => 5), inputBinding('greeting', () => 'Hello Bindings!')],
-    });
-
-    expect(screen.getByText('Current Count: 5')).toBeVisible();
-    expect(screen.getByText('Hello Bindings!')).toBeVisible();
-  });
-
-  it('should handle outputs with bindings', async () => {
-    const clickHandler = jest.fn();
-
-    await render(CounterComponent, {
-      bindings: [inputBinding('counter', () => 0), outputBinding('counterChange', clickHandler)],
-    });
-
-    const incrementButton = screen.getByRole('button', { name: '+' });
-    fireEvent.click(incrementButton);
-
-    expect(clickHandler).toHaveBeenCalledWith(1);
-  });
-
-  it('should handle two-way binding with signals', async () => {
-    const counterSignal = signal(0);
-
-    await render(CounterComponent, {
-      bindings: [twoWayBinding('counter', counterSignal)],
-    });
-
-    expect(screen.getByText('Current Count: 0')).toBeVisible();
-
-    const incrementButton = screen.getByRole('button', { name: '+' });
-    fireEvent.click(incrementButton);
-
-    // Two-way binding updates the external signal
-    expect(counterSignal()).toBe(1);
-    expect(screen.getByText('Current Count: 1')).toBeVisible();
-  });
-});
-```
-
-The new bindings API provides several benefits:
-
-- **Native Angular Integration**: Uses Angular's official bindings API
-- **Better Performance**: Bindings are handled natively by Angular
-- **Improved Type Safety**: Leverages Angular's built-in type checking
-
-Both approaches are supported and can be used interchangeably based on your preference and Angular version.
-
 [See more examples](https://github.com/testing-library/angular-testing-library/tree/main/apps/example-app/src/app/examples)
 
 ## Installation
