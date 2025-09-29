@@ -11,6 +11,7 @@ import {
   SimpleChanges,
   Type,
   isStandalone,
+  Binding,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { NavigationExtras, Router } from '@angular/router';
@@ -69,6 +70,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentOutputs = {},
     inputs: newInputs = {},
     on = {},
+    bindings = [],
     componentProviders = [],
     childComponentOverrides = [],
     componentImports,
@@ -192,11 +194,37 @@ export async function render<SutType, WrapperType = SutType>(
     outputs: Partial<SutType>,
     subscribeTo: OutputRefKeysWithCallback<SutType>,
   ): Promise<ComponentFixture<SutType>> => {
-    const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer);
+    const createdFixture: ComponentFixture<SutType> = await createComponent(componentContainer, bindings);
+
+    // Always apply componentProperties (non-input properties)
     setComponentProperties(createdFixture, properties);
-    setComponentInputs(createdFixture, inputs);
-    setComponentOutputs(createdFixture, outputs);
-    subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+
+    // Angular doesn't allow mixing setInput with bindings
+    // So we use bindings OR traditional approach, but not both for inputs
+    if (bindings && bindings.length > 0) {
+      // When bindings are used, warn if traditional inputs/outputs are also specified
+      if (Object.keys(inputs).length > 0) {
+        console.warn(
+          '[@testing-library/angular]: You specified both bindings and traditional inputs. ' +
+            'Only bindings will be used for inputs. Use bindings for all inputs to avoid this warning.',
+        );
+      }
+      if (Object.keys(subscribeTo).length > 0) {
+        console.warn(
+          '[@testing-library/angular]: You specified both bindings and traditional output listeners. ' +
+            'Consider using outputBinding() for all outputs for consistency.',
+        );
+      }
+
+      // Only apply traditional outputs, as bindings handle inputs
+      setComponentOutputs(createdFixture, outputs);
+      subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+    } else {
+      // Use traditional approach when no bindings
+      setComponentInputs(createdFixture, inputs);
+      setComponentOutputs(createdFixture, outputs);
+      subscribedOutputs = subscribeToComponentOutputs(createdFixture, subscribeTo);
+    }
 
     if (removeAngularAttributes) {
       createdFixture.nativeElement.removeAttribute('ng-version');
@@ -335,9 +363,18 @@ export async function render<SutType, WrapperType = SutType>(
   };
 }
 
-async function createComponent<SutType>(component: Type<SutType>): Promise<ComponentFixture<SutType>> {
+async function createComponent<SutType>(
+  component: Type<SutType>,
+  bindings?: Binding[],
+): Promise<ComponentFixture<SutType>> {
   /* Make sure angular application is initialized before creating component */
   await TestBed.inject(ApplicationInitStatus).donePromise;
+
+  // Use the new bindings API if available and bindings are provided
+  if (bindings && bindings.length > 0) {
+    return TestBed.createComponent(component, { bindings });
+  }
+
   return TestBed.createComponent(component);
 }
 
