@@ -34,7 +34,7 @@ describe('Bindings API Support', () => {
     }
   }
 
-  it('supports inputBinding for regular inputs', async () => {
+  test('supports inputBinding for regular inputs', async () => {
     await render(BindingsTestComponent, {
       bindings: [inputBinding('value', () => 'test-value'), inputBinding('greet', () => 'hi there')],
     });
@@ -43,7 +43,7 @@ describe('Bindings API Support', () => {
     expect(screen.getByTestId('greeting')).toHaveTextContent('hi there');
   });
 
-  it('supports outputBinding for outputs', async () => {
+  test('supports outputBinding for outputs', async () => {
     const clickHandler = jest.fn();
 
     await render(BindingsTestComponent, {
@@ -56,7 +56,7 @@ describe('Bindings API Support', () => {
     expect(clickHandler).toHaveBeenCalledWith('clicked: bound-value');
   });
 
-  it('supports inputBinding with writable signal for re-rendering scenario', async () => {
+  test('supports inputBinding with writable signal for re-rendering scenario', async () => {
     const valueSignal = signal('initial-value');
 
     await render(BindingsTestComponent, {
@@ -73,7 +73,7 @@ describe('Bindings API Support', () => {
     expect(await screen.findByText('updated-value')).toBeInTheDocument();
   });
 
-  it('supports twoWayBinding for model signals', async () => {
+  test('supports twoWayBinding for model signals', async () => {
     const nameSignal = signal('initial name');
 
     await render(TwoWayBindingTestComponent, {
@@ -99,7 +99,7 @@ describe('Bindings API Support', () => {
     expect(nameSignal()).toBe('updated from component');
   });
 
-  it('warns when mixing bindings with traditional inputs but still works', async () => {
+  test('warns when mixing bindings with traditional inputs but still works', async () => {
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
     const clickHandler = jest.fn();
     const bindingClickHandler = jest.fn();
