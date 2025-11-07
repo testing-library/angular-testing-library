@@ -36,7 +36,7 @@ export interface RenderResult<ComponentType, WrapperType = ComponentType> extend
    * The containing DOM node of your rendered Angular Component.
    * This is a regular DOM node, so you can call container.querySelector etc. to inspect the children.
    */
-  container: Element;
+  container: HTMLElement;
   /**
    * @description
    * Prints out the component's DOM with syntax highlighting.
