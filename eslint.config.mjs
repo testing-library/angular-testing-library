@@ -53,6 +53,8 @@ export default tseslint.config(
   {
     files: ['**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    rules: {},
+    rules: {
+      "@angular-eslint/template/prefer-control-flow": "off",
+    },
   },
 );

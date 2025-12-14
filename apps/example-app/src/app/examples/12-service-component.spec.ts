@@ -1,6 +1,7 @@
 import { of } from 'rxjs';
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
-import { createMock } from '@testing-library/angular/jest-utils';
+import { createMock } from '@testing-library/angular/vitest-utils';
 
 import { Customer, CustomersComponent, CustomersService } from './12-service-component';
 
@@ -47,7 +48,7 @@ test('renders the provided customers with createMock', async () => {
   ];
 
   const customersService = createMock(CustomersService);
-  customersService.load = jest.fn(() => of(customers));
+  customersService.load = vi.fn(() => of(customers)) as any;
 
   await render(CustomersComponent, {
     componentProviders: [

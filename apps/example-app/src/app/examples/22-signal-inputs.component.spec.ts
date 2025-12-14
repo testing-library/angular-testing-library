@@ -1,3 +1,4 @@
+import { test, expect, vi } from 'vitest';
 import { aliasedInput, render, screen, within } from '@testing-library/angular';
 import { SignalInputComponent } from './22-signal-inputs.component';
 import userEvent from '@testing-library/user-event';
@@ -52,7 +53,7 @@ test('can update signal inputs', async () => {
 });
 
 test('output emits a value', async () => {
-  const submitFn = jest.fn();
+  const submitFn = vi.fn();
   await render(SignalInputComponent, {
     inputs: {
       ...aliasedInput('greeting', 'Hello'),

@@ -2,9 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "types": ["jest", "node", "@testing-library/jest-dom"]
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "types": ["node"]
   },
-  "files": ["src/test-setup.ts"],
-  "include": ["**/*.spec.ts", "**/*.test.ts", "**/*.d.ts", "jest.config.ts"]
+  "include": ["**/*.ts"]
 }

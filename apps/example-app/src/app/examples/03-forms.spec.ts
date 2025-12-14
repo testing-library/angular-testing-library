@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 

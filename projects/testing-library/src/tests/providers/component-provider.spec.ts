@@ -1,0 +1,78 @@
+import { inject, Injectable, Provider } from '@angular/core';
+import { Component } from '@angular/core';
+import { test, expect } from 'vitest';
+import { render, screen } from '../../public_api';
+
+test('shows the service value', async () => {
+  await render(FixtureComponent);
+
+  expect(screen.getByText('foo')).toBeInTheDocument();
+});
+
+test('shows the provided service value', async () => {
+  await render(FixtureComponent, {
+    componentProviders: [
+      {
+        provide: Service,
+        useValue: {
+          foo() {
+            return 'bar';
+          },
+        },
+      },
+    ],
+  });
+
+  expect(screen.getByText('bar')).toBeInTheDocument();
+});
+
+test('shows the provided service value with template syntax', async () => {
+  await render(FixtureComponent, {
+    componentProviders: [
+      {
+        provide: Service,
+        useValue: {
+          foo() {
+            return 'bar';
+          },
+        },
+      },
+    ],
+  });
+
+  expect(screen.getByText('bar')).toBeInTheDocument();
+});
+
+test('flatten the nested array of component providers', async () => {
+  const provideService = (): Provider => [
+    {
+      provide: Service,
+      useValue: {
+        foo() {
+          return 'bar';
+        },
+      },
+    },
+  ];
+  await render(FixtureComponent, {
+    componentProviders: [provideService()],
+  });
+
+  expect(screen.getByText('bar')).toBeInTheDocument();
+});
+
+@Injectable()
+class Service {
+  foo() {
+    return 'foo';
+  }
+}
+
+@Component({
+  selector: 'atl-fixture',
+  template: '{{service.foo()}}',
+  providers: [Service],
+})
+class FixtureComponent {
+  protected readonly service = inject(Service);
+}

@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { aliasedInput, render, screen } from '@testing-library/angular';
 import { HostDirectiveComponent } from './23-host-directive';
 

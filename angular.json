@@ -18,7 +18,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/testing-library/ng-package.json"
           },
@@ -33,9 +33,9 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-builders/jest:run",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "configPath": "projects/testing-library/jest.config.ts"
+            "setupFiles": ["projects/testing-library/test-setup.ts"]
           }
         },
         "lint": {
@@ -53,16 +53,17 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/apps/example-app",
+            "outputPath": {
+              "base": "dist/apps/example-app"
+            },
             "index": "apps/example-app/src/index.html",
-            "main": "apps/example-app/src/main.ts",
-            "polyfills": "apps/example-app/src/polyfills.ts",
             "tsConfig": "apps/example-app/tsconfig.app.json",
             "assets": ["apps/example-app/src/favicon.ico", "apps/example-app/src/assets"],
-            "styles": ["apps/example-app/src/styles.css"],
-            "scripts": []
+            "styles": [],
+            "scripts": [],
+            "browser": "apps/example-app/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -75,9 +76,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -86,7 +85,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "example-app:build:production"
@@ -97,22 +96,77 @@
           },
           "defaultConfiguration": "development"
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "example-app:build"
-          }
-        },
         "test": {
-          "builder": "@angular-builders/jest:run",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "configPath": "apps/example-app/jest.config.ts"
+            "setupFiles": ["apps/example-app/test-setup.ts"]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["apps/example-app/**/*.ts", "apps/example-app/**/*.html"]
+          }
+        }
+      }
+    },
+    "example-app-jest": {
+      "projectType": "application",
+      "root": "apps/example-app-jest",
+      "sourceRoot": "apps/example-app-jest/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": {
+              "base": "dist/apps/example-app-jest"
+            },
+            "index": "apps/example-app-jest/src/index.html",
+            "tsConfig": "apps/example-app-jest/tsconfig.app.json",
+            "assets": ["apps/example-app-jest/src/favicon.ico", "apps/example-app-jest/src/assets"],
+            "styles": [],
+            "scripts": [],
+            "browser": "apps/example-app-jest/src/main.ts"
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "example-app-jest:build:production"
+            },
+            "development": {
+              "buildTarget": "example-app-jest:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["apps/example-app-jest/**/*.ts", "apps/example-app-jest/**/*.html"]
           }
         }
       }
@@ -124,15 +178,17 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/apps/example-app-karma",
+            "outputPath": {
+              "base": "dist/apps/example-app-karma"
+            },
             "index": "apps/example-app-karma/src/index.html",
-            "main": "apps/example-app-karma/src/main.ts",
             "tsConfig": "apps/example-app-karma/tsconfig.app.json",
             "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
             "styles": [],
-            "scripts": []
+            "scripts": [],
+            "browser": "apps/example-app-karma/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -145,9 +201,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -156,7 +210,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "example-app-karma:build:production"
@@ -168,7 +222,7 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "main": "apps/example-app-karma/src/test.ts",
             "tsConfig": "apps/example-app-karma/tsconfig.spec.json",

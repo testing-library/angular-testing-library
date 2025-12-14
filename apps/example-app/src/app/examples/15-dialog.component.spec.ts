@@ -1,5 +1,6 @@
 import { MatDialogRef } from '@angular/material/dialog';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -8,7 +9,7 @@ import { DialogComponent, DialogContentComponent } from './15-dialog.component';
 test('dialog closes', async () => {
   const user = userEvent.setup();
 
-  const closeFn = jest.fn();
+  const closeFn = vi.fn();
   await render(DialogContentComponent, {
     providers: [
       provideNoopAnimations(),

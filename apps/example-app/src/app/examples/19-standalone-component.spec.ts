@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { StandaloneComponent, StandaloneWithChildComponent } from './19-standalone-component';
 

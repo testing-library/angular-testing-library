@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { Component } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';

@@ -1,6 +1,7 @@
+import { test, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
-import { provideMock, Mock, createMock } from '@testing-library/angular/jest-utils';
+import { provideMock, Mock, createMock } from '@testing-library/angular/vitest-utils';
 import userEvent from '@testing-library/user-event';
 
 import { ComponentWithProviderComponent, CounterService } from './05-component-provider';
@@ -31,7 +32,7 @@ test('renders the current value and can increment and decrement', async () => {
   expect(valueControl).toHaveTextContent('1');
 });
 
-test('renders the current value and can increment and decrement with a mocked jest-utils service', async () => {
+test('renders the current value and can increment and decrement with a mocked vitest-utils service', async () => {
   const user = userEvent.setup();
 
   const counter = createMock(CounterService);
@@ -63,7 +64,7 @@ test('renders the current value and can increment and decrement with a mocked je
   expect(valueControl).toHaveTextContent('60');
 });
 
-test('renders the current value and can increment and decrement with provideMocked from jest-utils', async () => {
+test('renders the current value and can increment and decrement with provideMocked from vitest-utils', async () => {
   const user = userEvent.setup();
 
   await render(ComponentWithProviderComponent, {
