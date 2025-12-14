@@ -1,3 +1,4 @@
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -5,7 +6,7 @@ import { InputOutputComponent } from './02-input-output';
 
 test('is possible to set input and listen for output', async () => {
   const user = userEvent.setup();
-  const sendValue = jest.fn();
+  const sendValue = vi.fn();
 
   await render(InputOutputComponent, {
     inputs: {
@@ -34,7 +35,7 @@ test('is possible to set input and listen for output', async () => {
 
 test.skip('is possible to set input and listen for output with the template syntax', async () => {
   const user = userEvent.setup();
-  const sendSpy = jest.fn();
+  const sendSpy = vi.fn();
 
   await render('<atl-fixture [value]="47" (sendValue)="sendValue($event)" />', {
     imports: [InputOutputComponent],
@@ -61,7 +62,7 @@ test.skip('is possible to set input and listen for output with the template synt
 
 test('is possible to set input and listen for output (deprecated)', async () => {
   const user = userEvent.setup();
-  const sendValue = jest.fn();
+  const sendValue = vi.fn();
 
   await render(InputOutputComponent, {
     inputs: {
@@ -92,7 +93,7 @@ test('is possible to set input and listen for output (deprecated)', async () => 
 
 test('is possible to set input and listen for output with the template syntax (deprecated)', async () => {
   const user = userEvent.setup();
-  const sendSpy = jest.fn();
+  const sendSpy = vi.fn();
 
   await render('<atl-fixture [value]="47" (sendValue)="sendValue($event)" />', {
     imports: [InputOutputComponent],

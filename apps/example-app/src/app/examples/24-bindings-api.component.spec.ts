@@ -1,4 +1,5 @@
 import { signal, inputBinding, outputBinding, twoWayBinding } from '@angular/core';
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { BindingsApiExampleComponent } from './24-bindings-api.component';
 
@@ -17,7 +18,7 @@ test('displays computed greeting message with input values', async () => {
 });
 
 test('emits submitValue output when submit button is clicked', async () => {
-  const submitHandler = jest.fn();
+  const submitHandler = vi.fn();
   const nameSignal = signal('Alice');
 
   await render(BindingsApiExampleComponent, {
@@ -35,7 +36,7 @@ test('emits submitValue output when submit button is clicked', async () => {
 });
 
 test('emits ageChanged output when increment button is clicked', async () => {
-  const ageChangedHandler = jest.fn();
+  const ageChangedHandler = vi.fn();
 
   await render(BindingsApiExampleComponent, {
     bindings: [
@@ -111,8 +112,8 @@ test('updates computed value when inputs change', async () => {
 });
 
 test('handles multiple output emissions correctly', async () => {
-  const submitHandler = jest.fn();
-  const ageChangedHandler = jest.fn();
+  const submitHandler = vi.fn();
+  const ageChangedHandler = vi.fn();
   const nameSignal = signal('Emma');
 
   await render(BindingsApiExampleComponent, {

@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { DeferBlockState } from '@angular/core/testing';
 import { DeferableViewComponent } from './21-deferable-view.component';

@@ -1,9 +1,12 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "files": [],
   "include": [],
   "compilerOptions": {
-    "target": "es2020"
+    "target": "es2020",
+    "paths": {
+      "@testing-library/angular": ["projects/testing-library"]
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

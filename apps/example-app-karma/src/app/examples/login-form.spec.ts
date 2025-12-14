@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/angular';
-import { NgIf } from '@angular/common';
 
 it('should create a component with inputs and a button to submit', async () => {
   await render(LoginComponent);
@@ -31,15 +30,19 @@ it('should display invalid message and submit button must be disabled', async ()
 @Component({
   selector: 'atl-login',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule],
   template: `
     <h1>Login</h1>
 
     <form [formGroup]="form" (submit)="onSubmit(form)">
       <input type="email" aria-label="email" formControlName="email" />
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" role="alert">Email is invalid</div>
+      @if (email.invalid && (email.dirty || email.touched)) {
+      <div role="alert">Email is invalid</div>
+      }
       <input type="password" aria-label="password" formControlName="password" />
-      <div *ngIf="password.invalid && (password.dirty || password.touched)" role="alert">Password is invalid</div>
+      @if (password.invalid && (password.dirty || password.touched)) {
+      <div role="alert">Password is invalid</div>
+      }
       <button type="submit" aria-label="submit" [disabled]="form.invalid">Submit</button>
     </form>
   `,

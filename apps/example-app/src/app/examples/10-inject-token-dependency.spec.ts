@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 
 import { DataInjectedComponent, DATA } from './10-inject-token-dependency';
