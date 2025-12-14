@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Subject, takeUntil } from 'rxjs';
-import { render } from '@testing-library/angular';
+import { render } from '../../src/public_api';
 
 @Component({
   selector: 'atl-app-fixture',
