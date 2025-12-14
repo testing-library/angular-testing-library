@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { fireEvent, render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen } from '../../src/public_api';
 
 import { createMock, provideMock, provideMockWithValues, Mock } from '../src/public_api';
 

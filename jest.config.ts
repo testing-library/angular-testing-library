@@ -1,5 +1,2 @@
-const { getJestProjectsAsync } = require('@nx/jest');
-
-export default async () => ({
-  projects: await getJestProjectsAsync(),
-});
+// Root jest configuration - not used directly, projects have their own configs
+export default {};
