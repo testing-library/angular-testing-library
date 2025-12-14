@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.json",
+  "files": [],
+  "include": [],
+  "compilerOptions": {
+    "target": "es2020",
+    "paths": {
+      "@testing-library/angular": ["projects/testing-library"],
+      "@testing-library/angular/jest-utils": ["projects/testing-library/jest-utils"]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -22,7 +23,7 @@ test('works with provideMockStore', async () => {
   });
 
   const store = TestBed.inject(MockStore);
-  store.dispatch = jest.fn();
+  store.dispatch = vi.fn();
 
   await user.click(screen.getByText(/seven/i));
 

@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/angular';
 
 import { CdkVirtualScrollOverviewExampleComponent } from './13-scrolling.component';

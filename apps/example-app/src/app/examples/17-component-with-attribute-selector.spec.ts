@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ComponentWithAttributeSelectorComponent } from './17-component-with-attribute-selector';
 

@@ -35,11 +35,23 @@ jobs:
       - name: install
         run: npm install --force
       - name: build
-        run: npm run build -- --skip-nx-cache
-      - name: test
-        run: npm run test
+        run: npm run build
+        timeout-minutes: 5
+      - name: test-library
+        run: npm run test:testing-library
+        timeout-minutes: 5
+      - name: test-examples
+        run: npm run test:example-app
+        timeout-minutes: 5
+      - name: test-examples-jest
+        run: npm run test:jest-app
+        timeout-minutes: 5
+      - name: test-karma-examples
+        run: npm run test:karma-app -- --watch=false --no-progress
+        timeout-minutes: 5
       - name: lint
         run: npm run lint
+        timeout-minutes: 5
       - name: Release
         if: github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta')
         run: npx semantic-release

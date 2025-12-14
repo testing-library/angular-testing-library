@@ -12,6 +12,7 @@ import {
   Type,
   isStandalone,
   Binding,
+  ApplicationRef,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { NavigationExtras, Router } from '@angular/router';
@@ -236,20 +237,13 @@ export async function render<SutType, WrapperType = SutType>(
 
     mountedFixtures.add(createdFixture);
 
-    let isAlive = true;
-    createdFixture.componentRef.onDestroy(() => {
-      isAlive = false;
-    });
-
     if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
       const changes = getChangesObj(null, componentProperties);
       createdFixture.componentInstance.ngOnChanges(changes);
     }
 
     detectChanges = () => {
-      if (isAlive) {
-        createdFixture.detectChanges();
-      }
+      safeDetectChanges(createdFixture);
     };
 
     if (detectChangesOnRender) {
@@ -400,7 +394,7 @@ function setComponentProperties<SutType>(
     const extendedSetter = (value: any) => {
       _value = value;
       descriptor?.set?.call(fixture.componentInstance, _value);
-      fixture.detectChanges();
+      fixture.changeDetectorRef.detectChanges();
     };
 
     Object.defineProperty(fixture.componentInstance, key, {
@@ -653,7 +647,7 @@ function cleanupAtFixture(fixture: ComponentFixture<any>) {
 // then we'll automatically run cleanup afterEach test
 // this ensures that tests run in isolation from each other
 // if you don't like this, set the ATL_SKIP_AUTO_CLEANUP env variable to 'true'
-if (typeof process === 'undefined' || !process.env?.ATL_SKIP_AUTO_CLEANUP) {
+if (typeof process === 'undefined' || !process?.env?.['ATL_SKIP_AUTO_CLEANUP']) {
   if (typeof afterEach === 'function') {
     afterEach(() => {
       cleanup();
@@ -689,12 +683,20 @@ function replaceFindWithFindAndDetectChanges<T extends Record<string, any>>(orig
  */
 function detectChangesForMountedFixtures() {
   for (const fixture of mountedFixtures) {
-    try {
+    safeDetectChanges(fixture);
+  }
+}
+
+function safeDetectChanges<T>(fixture: ComponentFixture<T>) {
+  try {
+    const appRef = fixture.componentRef.injector.get(ApplicationRef);
+    if (!appRef.destroyed) {
+      fixture.changeDetectorRef.markForCheck();
       fixture.detectChanges();
-    } catch (err: any) {
-      if (!err.message.startsWith('ViewDestroyedError')) {
-        throw err;
-      }
+    }
+  } catch (err: any) {
+    if (!err.message.startsWith('ViewDestroyedError') && !err.message.startsWith('NG0205')) {
+      throw err;
     }
   }
 }
