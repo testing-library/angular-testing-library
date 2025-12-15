@@ -10,9 +10,9 @@ import { Schema } from './schema';
 export default function ({ installJestDom, installUserEvent }: Schema): Rule {
   return () => {
     return chain([
-      addDependency('@testing-library/dom', '^10.0.0', NodeDependencyType.Dev),
-      installJestDom ? addDependency('@testing-library/jest-dom', '^6.4.8', NodeDependencyType.Dev) : noop(),
-      installUserEvent ? addDependency('@testing-library/user-event', '^14.5.2', NodeDependencyType.Dev) : noop(),
+      addDependency('@testing-library/dom', '^10.4.1', NodeDependencyType.Dev),
+      installJestDom ? addDependency('@testing-library/jest-dom', '^6.9.1', NodeDependencyType.Dev) : noop(),
+      installUserEvent ? addDependency('@testing-library/user-event', '^14.6.1', NodeDependencyType.Dev) : noop(),
       installDependencies(),
     ]);
   };
