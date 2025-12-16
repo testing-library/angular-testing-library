@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -21,6 +22,7 @@ test('it can navigate to routes', async () => {
         ],
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
@@ -59,6 +61,7 @@ test('it can navigate to routes - workaround', async () => {
         ],
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.queryByText(/Detail one/i)).not.toBeInTheDocument();
@@ -97,6 +100,7 @@ test('it can navigate to routes with a base path', async () => {
         ],
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.queryByRole('heading', { name: /Detail one/i })).not.toBeInTheDocument();

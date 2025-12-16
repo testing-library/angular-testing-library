@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -6,7 +7,9 @@ import { MaterialFormsComponent } from './04-forms-with-material';
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   const user = userEvent.setup();
 
-  const { fixture } = await render(MaterialFormsComponent);
+  const { fixture } = await render(MaterialFormsComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   const nameControl = screen.getByLabelText(/name/i);
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });
@@ -66,7 +69,9 @@ test('is possible to fill in a form and verify error messages (with the help of 
 test('set and show pre-set form values', async () => {
   const user = userEvent.setup();
 
-  const { fixture, detectChanges } = await render(MaterialFormsComponent);
+  const { fixture, detectChanges } = await render(MaterialFormsComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   fixture.componentInstance.form.setValue({
     name: 'Max',

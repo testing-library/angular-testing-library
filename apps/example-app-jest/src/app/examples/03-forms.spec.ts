@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen, fireEvent } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -5,7 +6,9 @@ import { FormsComponent } from './03-forms';
 
 test('is possible to fill in a form and verify error messages (with the help of jest-dom https://testing-library.com/docs/ecosystem-jest-dom)', async () => {
   const user = userEvent.setup();
-  await render(FormsComponent);
+  await render(FormsComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   const nameControl = screen.getByRole('textbox', { name: /name/i });
   const scoreControl = screen.getByRole('spinbutton', { name: /score/i });

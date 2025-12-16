@@ -3,11 +3,14 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/apps/example-app-jest/src/test-setup.ts'],
   modulePathIgnorePatterns: ['<rootDir>/dist'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/apps/example-app-jest/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.(html|svg)$',
-    },
+  transform: {
+    '^.+.ts?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/apps/example-app-jest/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      },
+    ],
   },
   coverageDirectory: 'coverage/apps/example-app-jest',
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],

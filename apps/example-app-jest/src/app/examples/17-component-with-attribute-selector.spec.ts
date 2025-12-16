@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { ComponentWithAttributeSelectorComponent } from './17-component-with-attribute-selector';
 
@@ -8,6 +9,7 @@ test('is possible to set input of component with attribute selector through temp
     `<atl-fixture-component-with-attribute-selector [value]="42"></atl-fixture-component-with-attribute-selector>`,
     {
       imports: [ComponentWithAttributeSelectorComponent],
+      providers: [provideZoneChangeDetection()],
     },
   );
 

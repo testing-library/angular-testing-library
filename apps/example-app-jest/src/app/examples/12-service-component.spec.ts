@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/angular';
 import { createMock } from '@testing-library/angular/jest-utils';
 
 import { Customer, CustomersComponent, CustomersService } from './12-service-component';
+import { provideZoneChangeDetection } from '@angular/core';
 
 test('renders the provided customers with manual mock', async () => {
   const customers: Customer[] = [
@@ -26,6 +27,7 @@ test('renders the provided customers with manual mock', async () => {
         },
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const listItems = screen.getAllByRole('listitem');
@@ -56,6 +58,7 @@ test('renders the provided customers with createMock', async () => {
         useValue: customersService,
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const listItems = screen.getAllByRole('listitem');

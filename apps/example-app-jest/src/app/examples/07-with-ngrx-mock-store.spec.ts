@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { WithNgRxMockStoreComponent, selectItems } from './07-with-ngrx-mock-store';
+import { provideZoneChangeDetection } from '@angular/core';
 
 test('works with provideMockStore', async () => {
   const user = userEvent.setup();
@@ -18,6 +19,7 @@ test('works with provideMockStore', async () => {
           },
         ],
       }),
+      provideZoneChangeDetection(),
     ],
   });
 

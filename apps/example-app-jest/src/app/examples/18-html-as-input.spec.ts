@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/angular';
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 
 @Pipe({
   standalone: true,
@@ -21,6 +21,7 @@ test('passes HTML as component properties', async () => {
       stringWithHtml: STRING_WITH_HTML,
     },
     imports: [StripHTMLPipe],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.getByText('Some database field with stripped HTML')).toBeInTheDocument();
@@ -30,6 +31,7 @@ test('throws when passed HTML is passed in directly', async () => {
   await expect(() =>
     render(`<p data-testid="test"> {{ '${STRING_WITH_HTML}' | stripHTML }} </p>`, {
       imports: [StripHTMLPipe],
+      providers: [provideZoneChangeDetection()],
     }),
   ).rejects.toThrow();
 });

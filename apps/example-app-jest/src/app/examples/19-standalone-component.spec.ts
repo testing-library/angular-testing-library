@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 import { StandaloneComponent, StandaloneWithChildComponent } from './19-standalone-component';
+import { provideZoneChangeDetection } from '@angular/core';
 
 test('can render a standalone component', async () => {
-  await render(StandaloneComponent);
+  await render(StandaloneComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   const content = screen.getByTestId('standalone');
 
@@ -12,6 +15,7 @@ test('can render a standalone component', async () => {
 test('can render a standalone component with a child', async () => {
   await render(StandaloneWithChildComponent, {
     componentProperties: { name: 'Bob' },
+    providers: [provideZoneChangeDetection()],
   });
 
   const childContent = screen.getByTestId('standalone');

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -34,6 +34,7 @@ test('it is possible to test directives', async () => {
 
   await render('<div atlSpoiler data-testid="dir"></div>', {
     imports: [SpoilerDirective],
+    providers: [provideZoneChangeDetection()],
   });
 
   const directive = screen.getByTestId('dir');
@@ -61,6 +62,7 @@ test('it is possible to test directives with props', async () => {
       hidden,
       visible,
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
@@ -82,6 +84,7 @@ test('it is possible to test directives with props in template', async () => {
 
   await render(`<div atlSpoiler hidden="${hidden}" visible="${visible}"></div>`, {
     imports: [SpoilerDirective],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.queryByText(visible)).not.toBeInTheDocument();
