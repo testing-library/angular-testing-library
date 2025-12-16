@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { vi, test, expect, afterEach } from 'vitest';
 import { of, BehaviorSubject } from 'rxjs';
 import { debounceTime, switchMap, map, startWith } from 'rxjs/operators';
-import { render, screen, waitFor, waitForElementToBeRemoved, within } from '../lib/testing-library';
+import { render, screen, waitForElementToBeRemoved, within } from '../lib/testing-library';
 import userEvent from '@testing-library/user-event';
 import { AsyncPipe, NgForOf } from '@angular/common';
 
@@ -98,7 +98,9 @@ afterEach(() => {
 
 async function setup() {
   vi.useFakeTimers();
-  const user = userEvent.setup();
+  const user = userEvent.setup({
+    advanceTimers: vi.advanceTimersByTime,
+  });
 
   await render(EntitiesComponent, {
     providers: [
@@ -139,7 +141,7 @@ test('renders the entities', async () => {
   expect(await screen.findByRole('cell', { name: /Entity 3/i })).toBeInTheDocument();
 });
 
-test.skip('finds the cell', async () => {
+test('finds the cell', async () => {
   const { user } = await setup();
 
   await user.type(await screen.findByRole('textbox', { name: /Search entities/i }), 'Entity 2', {});
@@ -150,9 +152,10 @@ test.skip('finds the cell', async () => {
   expect(await screen.findByRole('cell', { name: /Entity 2/i })).toBeInTheDocument();
 });
 
-test.skip('opens the modal', async () => {
+test('opens the modal', async () => {
   const { modalMock, user } = await setup();
-  await user.click(await screen.findByRole('button', { name: /New Entity/i }));
+
+  await user.click(await screen.findByRole('button', { name: /Create New Entity/i }));
   expect(modalMock.open).toHaveBeenCalledWith('new entity');
 
   const row = await screen.findByRole('row', {
@@ -164,5 +167,6 @@ test.skip('opens the modal', async () => {
       name: /edit/i,
     }),
   );
-  await waitFor(() => expect(modalMock.open).toHaveBeenCalledWith('edit entity', 'Entity 2'));
+
+  await vi.waitFor(() => expect(modalMock.open).toHaveBeenCalledWith('edit entity', 'Entity 2'));
 });

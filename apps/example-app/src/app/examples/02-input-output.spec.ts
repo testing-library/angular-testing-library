@@ -33,13 +33,13 @@ test('is possible to set input and listen for output', async () => {
   expect(sendValue).toHaveBeenCalledWith(50);
 });
 
-test.skip('is possible to set input and listen for output with the template syntax', async () => {
+test('is possible to set input and listen for output with the template syntax', async () => {
   const user = userEvent.setup();
   const sendSpy = vi.fn();
 
   await render('<atl-fixture [value]="47" (sendValue)="sendValue($event)" />', {
     imports: [InputOutputComponent],
-    on: {
+    componentProperties: {
       sendValue: sendSpy,
     },
   });
