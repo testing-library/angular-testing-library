@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { provideMock, Mock, createMock } from '@testing-library/angular/jest-utils';
@@ -15,6 +16,7 @@ test('renders the current value and can increment and decrement', async () => {
         useValue: new CounterService(),
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });
@@ -47,6 +49,7 @@ test('renders the current value and can increment and decrement with a mocked je
         useValue: counter,
       },
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });
@@ -68,6 +71,7 @@ test('renders the current value and can increment and decrement with provideMock
 
   await render(ComponentWithProviderComponent, {
     componentProviders: [provideMock(CounterService)],
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });

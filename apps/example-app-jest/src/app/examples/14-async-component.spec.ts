@@ -1,14 +1,17 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { render, screen, fireEvent } from '@testing-library/angular';
-
 import { AsyncComponent } from './14-async-component';
 
 test.skip('can use fakeAsync utilities', fakeAsync(async () => {
-  await render(AsyncComponent);
+  await render(AsyncComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   const load = await screen.findByRole('button', { name: /load/i });
   fireEvent.click(load);
 
+  // Error: The code should be running in the fakeAsync zone to call this function
   tick(10_000);
 
   const hello = await screen.findByText('Hello world');
@@ -17,7 +20,9 @@ test.skip('can use fakeAsync utilities', fakeAsync(async () => {
 
 test('can use fakeTimer utilities', async () => {
   jest.useFakeTimers();
-  await render(AsyncComponent);
+  await render(AsyncComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   const load = await screen.findByRole('button', { name: /load/i });
 

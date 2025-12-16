@@ -1,9 +1,12 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { DeferBlockState } from '@angular/core/testing';
 import { DeferableViewComponent } from './21-deferable-view.component';
 
 test('renders deferred views based on state', async () => {
-  const { renderDeferBlock } = await render(DeferableViewComponent);
+  const { renderDeferBlock } = await render(DeferableViewComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   expect(screen.getByText(/Hello from placeholder/i)).toBeInTheDocument();
 
@@ -17,6 +20,7 @@ test('renders deferred views based on state', async () => {
 test('initially renders deferred views based on given state', async () => {
   await render(DeferableViewComponent, {
     deferBlockStates: DeferBlockState.Error,
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.getByText(/Hello from error/i)).toBeInTheDocument();

@@ -3,6 +3,7 @@ import { StoreModule } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 
 import { WithNgRxStoreComponent, reducer } from './06-with-ngrx-store';
+import { provideZoneChangeDetection } from '@angular/core';
 
 test('works with ngrx store', async () => {
   const user = userEvent.setup();
@@ -18,6 +19,7 @@ test('works with ngrx store', async () => {
         },
       ),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });

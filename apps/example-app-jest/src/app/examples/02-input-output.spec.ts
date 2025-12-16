@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -14,6 +15,7 @@ test('is possible to set input and listen for output', async () => {
     on: {
       sendValue,
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });
@@ -32,33 +34,6 @@ test('is possible to set input and listen for output', async () => {
   expect(sendValue).toHaveBeenCalledWith(50);
 });
 
-test.skip('is possible to set input and listen for output with the template syntax', async () => {
-  const user = userEvent.setup();
-  const sendSpy = jest.fn();
-
-  await render('<atl-fixture [value]="47" (sendValue)="sendValue($event)" />', {
-    imports: [InputOutputComponent],
-    on: {
-      sendValue: sendSpy,
-    },
-  });
-
-  const incrementControl = screen.getByRole('button', { name: /increment/i });
-  const sendControl = screen.getByRole('button', { name: /send/i });
-  const valueControl = screen.getByTestId('value');
-
-  expect(valueControl).toHaveTextContent('47');
-
-  await user.click(incrementControl);
-  await user.click(incrementControl);
-  await user.click(incrementControl);
-  expect(valueControl).toHaveTextContent('50');
-
-  await user.click(sendControl);
-  expect(sendSpy).toHaveBeenCalledTimes(1);
-  expect(sendSpy).toHaveBeenCalledWith(50);
-});
-
 test('is possible to set input and listen for output (deprecated)', async () => {
   const user = userEvent.setup();
   const sendValue = jest.fn();
@@ -72,6 +47,7 @@ test('is possible to set input and listen for output (deprecated)', async () => 
         emit: sendValue,
       } as any,
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });
@@ -99,6 +75,7 @@ test('is possible to set input and listen for output with the template syntax (d
     componentProperties: {
       sendValue: sendSpy,
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });

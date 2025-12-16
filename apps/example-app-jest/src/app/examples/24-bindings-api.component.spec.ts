@@ -1,4 +1,4 @@
-import { signal, inputBinding, outputBinding, twoWayBinding } from '@angular/core';
+import { signal, inputBinding, outputBinding, twoWayBinding, provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { BindingsApiExampleComponent } from './24-bindings-api.component';
 
@@ -9,6 +9,7 @@ test('displays computed greeting message with input values', async () => {
       inputBinding('age', () => 25),
       twoWayBinding('name', signal('John')),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.getByTestId('input-value')).toHaveTextContent('Hello John of 25 years old');
@@ -27,6 +28,7 @@ test('emits submitValue output when submit button is clicked', async () => {
       twoWayBinding('name', nameSignal),
       outputBinding('submitValue', submitHandler),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const submitButton = screen.getByTestId('submit-button');
@@ -44,6 +46,7 @@ test('emits ageChanged output when increment button is clicked', async () => {
       twoWayBinding('name', signal('Charlie')),
       outputBinding('ageChanged', ageChangedHandler),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const incrementButton = screen.getByTestId('increment-button');
@@ -61,6 +64,7 @@ test('updates name through two-way binding when input changes', async () => {
       inputBinding('age', () => 25),
       twoWayBinding('name', nameSignal),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   const nameInput = screen.getByTestId('name-input') as HTMLInputElement;
@@ -89,6 +93,7 @@ test('updates computed value when inputs change', async () => {
       inputBinding('age', ageSignal),
       twoWayBinding('name', nameSignal),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   // Initial state
@@ -123,6 +128,7 @@ test('handles multiple output emissions correctly', async () => {
       outputBinding('submitValue', submitHandler),
       outputBinding('ageChanged', ageChangedHandler),
     ],
+    providers: [provideZoneChangeDetection()],
   });
 
   // Click submit button multiple times

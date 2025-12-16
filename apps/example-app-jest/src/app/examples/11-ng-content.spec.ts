@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 
 import { CellComponent } from './11-ng-content';
@@ -7,6 +8,7 @@ test('it is possible to test ng-content without selector', async () => {
 
   await render(`<atl-fixture data-testid="one-cell-with-ng-content">${projection}</atl-fixture>`, {
     imports: [CellComponent],
+    providers: [provideZoneChangeDetection()],
   });
 
   expect(screen.getByText(projection)).toBeInTheDocument();

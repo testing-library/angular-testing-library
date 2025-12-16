@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen } from '@testing-library/angular';
@@ -18,6 +19,7 @@ test('dialog closes', async () => {
           close: closeFn,
         },
       },
+      provideZoneChangeDetection(),
     ],
   });
 
@@ -55,7 +57,7 @@ test('opens and closes the dialog with buttons', async () => {
   const user = userEvent.setup();
 
   await render(DialogComponent, {
-    providers: [provideNoopAnimations()],
+    providers: [provideNoopAnimations(), provideZoneChangeDetection()],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });

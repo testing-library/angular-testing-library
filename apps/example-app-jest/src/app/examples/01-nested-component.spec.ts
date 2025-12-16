@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -5,7 +6,9 @@ import { NestedContainerComponent } from './01-nested-component';
 
 test('renders the current value and can increment and decrement', async () => {
   const user = userEvent.setup();
-  await render(NestedContainerComponent);
+  await render(NestedContainerComponent, {
+    providers: [provideZoneChangeDetection()],
+  });
 
   const incrementControl = screen.getByRole('button', { name: /increment/i });
   const decrementControl = screen.getByRole('button', { name: /decrement/i });

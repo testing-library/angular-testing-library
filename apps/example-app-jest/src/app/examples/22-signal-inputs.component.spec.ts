@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { aliasedInput, render, screen, within } from '@testing-library/angular';
 import { SignalInputComponent } from './22-signal-inputs.component';
 import userEvent from '@testing-library/user-event';
@@ -9,6 +10,7 @@ test('works with signal inputs', async () => {
       name: 'world',
       age: '45',
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const inputValue = within(screen.getByTestId('input-value'));
@@ -22,6 +24,7 @@ test('works with computed', async () => {
       name: 'world',
       age: '45',
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const computedValue = within(screen.getByTestId('computed-value'));
@@ -35,6 +38,7 @@ test('can update signal inputs', async () => {
       name: 'world',
       age: '45',
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const inputValue = within(screen.getByTestId('input-value'));
@@ -62,6 +66,7 @@ test('output emits a value', async () => {
     on: {
       submitValue: submitFn,
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   await userEvent.click(screen.getByRole('button'));
@@ -76,6 +81,7 @@ test('model update also updates the template', async () => {
       name: 'initial',
       age: '45',
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const inputValue = within(screen.getByTestId('input-value'));
@@ -107,6 +113,7 @@ test('works with signal inputs, computed values, and rerenders', async () => {
       name: 'world',
       age: '45',
     },
+    providers: [provideZoneChangeDetection()],
   });
 
   const inputValue = within(screen.getByTestId('input-value'));
