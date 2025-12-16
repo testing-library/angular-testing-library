@@ -25,7 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[22]' || '[20, 22, 24]') }}
+        node-version: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '[24]' || '[20, 22, 24]') }}
         os: ${{ fromJSON((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && '["ubuntu-latest"]' || '["ubuntu-latest", "windows-latest"]') }}
     runs-on: ${{ matrix.os }}
 
@@ -36,6 +36,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
+      - name: Update npm
+        run: npm install -g npm@latest
       - name: install
         run: npm install --force
       - name: build
@@ -58,7 +60,7 @@ jobs:
         timeout-minutes: 5
       - name: 🚀 Release
         if: github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta')
-        uses: cycjimmy/semantic-release-action@v5
+        uses: cycjimmy/semantic-release-action@v6
         with:
           semantic_version: 25
           working_directory: './dist/@testing-library/angular'
