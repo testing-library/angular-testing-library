@@ -8,8 +8,7 @@ on:
   pull_request: {}
   workflow_dispatch:
 
-permissions:
-  id-token: write
+permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
