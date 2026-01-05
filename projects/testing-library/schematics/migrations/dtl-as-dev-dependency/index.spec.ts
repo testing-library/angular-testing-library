@@ -1,6 +1,7 @@
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
 import { EmptyTree } from '@angular-devkit/schematics';
+import { test, expect } from 'vitest';
 
 test('adds DTL to devDependencies', async () => {
   const tree = await setup({});

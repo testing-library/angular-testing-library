@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "MigrateToZonelessSchema",
+  "title": "Migrate to Zoneless Schema",
+  "type": "object",
+  "description": "Migrate imports from @testing-library/angular to @testing-library/angular/zoneless",
+  "properties": {},
+  "required": []
+}
