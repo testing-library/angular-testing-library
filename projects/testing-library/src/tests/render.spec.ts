@@ -45,6 +45,29 @@ describe('DTL functionality', () => {
     // eslint-disable-next-line testing-library/prefer-screen-queries
     fireEvent.click(view.getByText('button'));
   });
+
+  test('render result queries should support generic type parameter', async () => {
+    const view = await render(FixtureComponent);
+
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    const inputByTestId: HTMLInputElement = view.getByTestId<HTMLInputElement>('input');
+    expect(inputByTestId).toBeInTheDocument();
+
+    // screen.getByTestId should also accept a generic type parameter
+    const inputByScreen: HTMLInputElement = screen.getByTestId<HTMLInputElement>('input');
+    expect(inputByScreen).toBeInTheDocument();
+
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    const button: HTMLButtonElement = view.getByRole<HTMLButtonElement>('button');
+    expect(button).toBeInTheDocument();
+
+    // @ts-expect-error - generic narrows the type, so assigning HTMLInputElement to HTMLButtonElement should fail
+    // eslint-disable-next-line testing-library/prefer-screen-queries
+    const _wrongType: HTMLButtonElement = view.getByTestId<HTMLInputElement>('input');
+    void _wrongType;
+
+    expect(true).toBeTruthy();
+  });
 });
 
 describe('components', () => {

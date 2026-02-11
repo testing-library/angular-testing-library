@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import { BoundFunction, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
+import { BoundFunctions, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
 
 // TODO: import from Angular (is a breaking change)
 interface OutputRef<T> {
@@ -29,7 +29,7 @@ export type OutputRefKeysWithCallback<T> = {
     : never;
 };
 
-export type RenderResultQueries<Q extends Queries = typeof queries> = { [P in keyof Q]: BoundFunction<Q[P]> };
+export type RenderResultQueries<Q extends Queries = typeof queries> = BoundFunctions<Q>;
 export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
   /**
    * @description
