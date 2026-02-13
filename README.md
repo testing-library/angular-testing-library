@@ -282,6 +282,9 @@ Thanks goes to these people ([emoji key][emojis]):
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jdegand"><img src="https://avatars.githubusercontent.com/u/70610011?v=4?s=100" width="100px;" alt="J. Degand"/><br /><sub><b>J. Degand</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=jdegand" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/artaommahe"><img src="https://avatars.githubusercontent.com/u/1944061?v=4?s=100" width="100px;" alt="Maksim Popov"/><br /><sub><b>Maksim Popov</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=artaommahe" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MattijsE"><img src="https://avatars.githubusercontent.com/u/9746064?v=4?s=100" width="100px;" alt="MattijsE"/><br /><sub><b>MattijsE</b></sub></a><br /><a href="https://github.com/testing-library/angular-testing-library/commits?author=MattijsE" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
