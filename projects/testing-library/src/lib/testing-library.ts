@@ -589,7 +589,7 @@ async function waitForWrapper<T>(
   }
 
   return await dtlWaitFor(() => {
-    setTimeout(() => detectChanges(), 0);
+    queueMicrotask(() => detectChanges());
     if (inFakeAsync) {
       tick(0);
     }
