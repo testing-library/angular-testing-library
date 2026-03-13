@@ -484,6 +484,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jonaskuske",
+      "name": "Jonas Kuske",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30421456?v=4",
+      "profile": "https://jonaskuske.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
