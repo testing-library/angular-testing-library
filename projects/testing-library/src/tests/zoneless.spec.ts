@@ -85,9 +85,9 @@ test('renders and interacts with the component', async () => {
   expect(valueControl).toHaveTextContent('6');
 });
 
-test('renders and interacts with the component with skipWaitForStableOnRender set to true', async () => {
+test('renders and interacts with the component with skipDetectChanges set to true', async () => {
   const user = userEvent.setup();
-  await render(FixtureComponent, { skipWaitForStableOnRender: true });
+  await render(FixtureComponent, { skipDetectChanges: true });
 
   const incrementControl = screen.getByRole('button', { name: '+' });
   const decrementControl = screen.getByRole('button', { name: '-' });

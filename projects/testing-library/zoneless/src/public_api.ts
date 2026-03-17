@@ -77,6 +77,20 @@ export interface RenderOptions<Q extends Queries = typeof queries> {
 
   /**
    * @description
+   * Determines whether `fixture.detectChanges()` is called after the component is rendered.
+   *
+   * @default
+   * true
+   *
+   * @example
+   * await render(AppComponent, {
+   *  skipDetectChanges: false
+   * })
+   */
+  skipDetectChanges?: boolean;
+
+  /**
+   * @description
    * Determines whether `fixture.whenStable()` is called after the component is rendered.
    *
    * @default
@@ -84,10 +98,10 @@ export interface RenderOptions<Q extends Queries = typeof queries> {
    *
    * @example
    * await render(AppComponent, {
-   *  skipWaitForStableOnRender: false
+   *  waitForStableOnRender: false
    * })
    */
-  skipWaitForStableOnRender?: boolean;
+  waitForStableOnRender?: boolean;
 
   /**
    * @description
@@ -188,7 +202,11 @@ export async function render<ComponentType, WrapperType = ComponentType>(
       ? await createWrapperFixture(componentOrTemplate, (renderOptions ?? {}) as RenderTemplateOptions<WrapperType>)
       : await createComponentFixture(componentOrTemplate, (renderOptions ?? {}) as RenderComponentOptions);
 
-  if (renderOptions.skipWaitForStableOnRender !== true) {
+  if (renderOptions.skipDetectChanges !== true) {
+    fixture.detectChanges();
+  }
+
+  if (renderOptions.waitForStableOnRender === true) {
     await fixture.whenStable();
   }
 
