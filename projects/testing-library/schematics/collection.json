@@ -5,6 +5,11 @@
       "factory": "./ng-add",
       "schema": "./ng-add/schema.json",
       "description": "Add @testing-library/angular to your application"
+    },
+    "migrate-to-zoneless": {
+      "factory": "./migrate-to-zoneless",
+      "schema": "./migrate-to-zoneless/schema.json",
+      "description": "Migrate imports from @testing-library/angular to @testing-library/angular/zoneless"
     }
   }
 }
