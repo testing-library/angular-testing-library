@@ -1,17 +1,17 @@
 import {
-  Type,
+  Binding,
   DebugElement,
-  ModuleWithProviders,
-  EventEmitter,
   EnvironmentProviders,
+  EventEmitter,
+  InputSignalWithTransform,
+  ModuleWithProviders,
   Provider,
   Signal,
-  InputSignalWithTransform,
-  Binding,
+  Type,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Routes } from '@angular/router';
-import { BoundFunctions, Queries, queries, Config as dtlConfig, PrettyDOMOptions } from '@testing-library/dom';
+import { BoundFunctions, Config as dtlConfig, PrettyDOMOptions, Queries, queries } from '@testing-library/dom';
 
 // TODO: import from Angular (is a breaking change)
 interface OutputRef<T> {
@@ -383,6 +383,24 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
   componentImports?: (Type<unknown> | unknown[])[];
   /**
    * @description
+   * Replace specific imports on a standalone component without replacing the entire imports array.
+   * Unlike `componentImports`, which replaces all imports, this option lets you swap out targeted
+   * child components without needing to enumerate all other imports.
+   * Mutually exclusive with `componentImports`.
+   *
+   * @default
+   * undefined
+   *
+   * @example
+   * await render(AppComponent, {
+   *   importOverrides: [
+   *     { replace: RealChildComponent, with: MockChildComponent }
+   *   ]
+   * })
+   */
+  importOverrides?: ImportOverride[];
+  /**
+   * @description
    * Queries to bind. Overrides the default set from DOM Testing Library unless merged.
    *
    * @default
@@ -490,6 +508,13 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * Set the defer blocks behavior.
    */
   deferBlockBehavior?: DeferBlockBehavior;
+}
+
+export interface ImportOverride {
+  /** The import to replace (matched by identity) */
+  replace: Type<unknown>;
+  /** The replacement import to use instead */
+  with: Type<unknown> | unknown[];
 }
 
 export interface ComponentOverride<T> {

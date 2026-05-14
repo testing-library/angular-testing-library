@@ -1,5 +1,7 @@
 import {
   ApplicationInitStatus,
+  ApplicationRef,
+  Binding,
   ChangeDetectorRef,
   Component,
   NgZone,
@@ -11,8 +13,6 @@ import {
   SimpleChanges,
   Type,
   isStandalone,
-  Binding,
-  ApplicationRef,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
 import { NavigationExtras, Router } from '@angular/router';
@@ -32,11 +32,12 @@ import {
 import { getConfig } from './config';
 import {
   ComponentOverride,
+  Config,
+  ImportOverride,
   OutputRefKeysWithCallback,
   RenderComponentOptions,
   RenderResult,
   RenderTemplateOptions,
-  Config,
 } from './models';
 
 type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, subscription: OutputRefSubscription];
@@ -75,6 +76,7 @@ export async function render<SutType, WrapperType = SutType>(
     componentProviders = [],
     childComponentOverrides = [],
     componentImports,
+    importOverrides,
     excludeComponentDeclaration = false,
     routes = [],
     removeAngularAttributes = false,
@@ -100,6 +102,12 @@ export async function render<SutType, WrapperType = SutType>(
     ...domConfig,
   });
 
+  if (componentImports && importOverrides) {
+    throw new Error(
+      `Cannot specify both componentImports and importOverrides. Use componentImports for full replacement, or importOverrides for targeted replacement.`,
+    );
+  }
+
   TestBed.configureTestingModule({
     declarations: addAutoDeclarations(sut, {
       declarations,
@@ -115,6 +123,7 @@ export async function render<SutType, WrapperType = SutType>(
     deferBlockBehavior: deferBlockBehavior ?? DeferBlockBehavior.Manual,
   });
   overrideComponentImports(sut, componentImports);
+  applyImportOverrides(sut, importOverrides);
   overrideChildComponentProviders(childComponentOverrides);
 
   configureTestBed(TestBed);
@@ -457,6 +466,21 @@ function overrideComponentImports<SutType>(sut: Type<SutType> | string, imports:
     } else {
       throw new Error(
         `Error while rendering ${sut}: Cannot specify componentImports on a template or non-standalone component.`,
+      );
+    }
+  }
+}
+
+function applyImportOverrides<SutType>(sut: Type<SutType> | string, overrides: ImportOverride[] | undefined) {
+  if (overrides?.length) {
+    if (typeof sut === 'function' && isStandalone(sut)) {
+      TestBed.overrideComponent(sut, {
+        remove: { imports: overrides.map((o) => o.replace) },
+        add: { imports: overrides.map((o) => o.with) },
+      });
+    } else {
+      throw new Error(
+        `Error while rendering ${sut}: Cannot specify importOverrides on a template or non-standalone component.`,
       );
     }
   }
