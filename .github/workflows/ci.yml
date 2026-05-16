@@ -8,20 +8,16 @@ on:
   pull_request: {}
   workflow_dispatch:
 
-permissions: {}
-
+permissions:
+  contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build_test_release:
+  build_test:
     permissions:
-      id-token: write # to enable use of OIDC (npm trusted publishing and provenance)
-      actions: write #  to cancel/stop running workflows (styfle/cancel-workflow-action)
-      contents: write #  to create release tags (cycjimmy/semantic-release-action)
-      issues: write # to post release that resolves an issue (cycjimmy/semantic-release-action)
-      pull-requests: write # to be able to comment on released pull requests
+      contents: read
 
     strategy:
       matrix:
@@ -58,8 +54,66 @@ jobs:
       - name: lint
         run: npm run lint
         timeout-minutes: 5
+
+  build-release-artifact:
+    needs: build_test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: ${{ github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && github.event_name == 'push' }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Setup node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: npm install --force --ignore-scripts
+
+      - name: 📦 Prepare package
+        run: npm run build
+        timeout-minutes: 5
+
+      - name: 📦 Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-package-dist
+          path: dist/@testing-library/angular
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    needs: build-release-artifact
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # to enable use of OIDC (npm trusted publishing and provenance)
+      contents: write # to create release tags (cycjimmy/semantic-release-action)
+      issues: write # to post release that resolves an issue (cycjimmy/semantic-release-action)
+      pull-requests: write # to be able to comment on released pull requests
+    if: ${{ github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta') && github.event_name == 'push' }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Setup node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 📦 Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-package-dist
+          path: dist/@testing-library/angular
+
       - name: 🚀 Release
-        if: github.repository == 'testing-library/angular-testing-library' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta')
         uses: cycjimmy/semantic-release-action@v6
         with:
           semantic_version: 25
