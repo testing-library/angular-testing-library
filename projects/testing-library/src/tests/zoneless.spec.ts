@@ -154,6 +154,81 @@ test('renders and interacts with the component using a template', async () => {
   await vi.waitFor(() => expect(valueControl).toHaveTextContent('20'));
 });
 
+@Component({
+  selector: 'atl-child',
+  template: `<span data-testid="child">Real Child</span>`,
+})
+class ChildComponent {}
+
+@Component({
+  selector: 'atl-child',
+  template: `<span data-testid="child">Mock Child</span>`,
+})
+class MockChildComponent {}
+
+@Component({
+  selector: 'atl-other',
+  template: `<span data-testid="other">Other</span>`,
+})
+class OtherComponent {}
+
+@Component({
+  selector: 'atl-parent',
+  template: `<atl-child /><atl-other />`,
+  imports: [ChildComponent, OtherComponent],
+})
+class ParentComponent {}
+
+@Component({
+  selector: 'atl-non-standalone',
+  template: `non-standalone`,
+  standalone: false,
+})
+class NonStandaloneComponent {}
+
+test('replaces an import with importOverrides', async () => {
+  await render(ParentComponent, {
+    importOverrides: [{ replace: ChildComponent, with: MockChildComponent }],
+  });
+
+  expect(screen.getByTestId('child')).toHaveTextContent('Mock Child');
+});
+
+test('importOverrides leaves other imports intact', async () => {
+  await render(ParentComponent, {
+    importOverrides: [{ replace: ChildComponent, with: MockChildComponent }],
+  });
+
+  expect(screen.getByTestId('child')).toHaveTextContent('Mock Child');
+  expect(screen.getByTestId('other')).toHaveTextContent('Other');
+});
+
+test('importOverrides throws on non-standalone component', async () => {
+  await expect(
+    render(NonStandaloneComponent, {
+      importOverrides: [{ replace: ChildComponent, with: MockChildComponent }],
+    } as any),
+  ).rejects.toThrow(/Cannot specify importOverrides on a template or non-standalone component/);
+});
+
+test('throws when importOverrides is used on a template', async () => {
+  await expect(
+    render(`<atl-parent />`, {
+      imports: [ParentComponent],
+      importOverrides: [{ replace: ChildComponent, with: MockChildComponent }],
+    } as any),
+  ).rejects.toThrow(/Cannot specify importOverrides on a template or non-standalone component/);
+});
+
+test('importOverrides empty array is a no-op', async () => {
+  await render(ParentComponent, {
+    importOverrides: [],
+  });
+
+  expect(screen.getByTestId('child')).toHaveTextContent('Real Child');
+  expect(screen.getByTestId('other')).toHaveTextContent('Other');
+});
+
 test('can provide custom service providers', async () => {
   const user = userEvent.setup();
   await render(ServiceFixtureComponent, {
