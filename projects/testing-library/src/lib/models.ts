@@ -370,6 +370,7 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
    * @description
    * A collection of imports to override a standalone component's imports with.
    *
+   * @deprecated use the `importOverrides` option instead.
    * @default
    * undefined
    *

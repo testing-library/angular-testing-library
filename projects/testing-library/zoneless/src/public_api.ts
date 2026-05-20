@@ -1,4 +1,11 @@
-import { Component, type Type, type Binding, type Provider, type EnvironmentProviders } from '@angular/core';
+import {
+  Component,
+  isStandalone,
+  type Binding,
+  type EnvironmentProviders,
+  type Provider,
+  type Type,
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   getQueriesForElement,
@@ -110,6 +117,13 @@ export interface RenderOptions<Q extends Queries = typeof queries> {
   providers?: (Provider | EnvironmentProviders)[];
 }
 
+export interface ImportOverride {
+  /** The import to replace (matched by identity) */
+  replace: Type<unknown>;
+  /** The replacement import to use instead */
+  with: Type<unknown> | unknown[];
+}
+
 export interface RenderComponentOptions<Q extends Queries = typeof queries> extends RenderOptions<Q> {
   /**
    * @description
@@ -132,6 +146,22 @@ export interface RenderComponentOptions<Q extends Queries = typeof queries> exte
    * })
    */
   bindings?: Binding[];
+
+  /**
+   * @description
+   * Replace specific imports on a standalone component. This is useful for mocking dependencies of the component under test.
+   *
+   * @default
+   * undefined
+   *
+   * @example
+   * await render(AppComponent, {
+   *   importOverrides: [
+   *     { replace: RealChildComponent, with: MockChildComponent }
+   *   ]
+   * })
+   */
+  importOverrides?: ImportOverride[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -193,6 +223,21 @@ export async function render<ComponentType, WrapperType = ComponentType>(
     imports: 'imports' in renderOptions ? renderOptions.imports : [],
     providers: renderOptions.providers ?? [],
   });
+
+  if ('importOverrides' in renderOptions && (renderOptions as RenderComponentOptions).importOverrides?.length) {
+    const sut = componentOrTemplate as Type<unknown>;
+    if (typeof sut === 'function' && isStandalone(sut)) {
+      const overrides = (renderOptions as RenderComponentOptions).importOverrides!;
+      TestBed.overrideComponent(sut, {
+        remove: { imports: overrides.map((o) => o.replace) },
+        add: { imports: overrides.map((o) => o.with) },
+      });
+    } else {
+      throw new Error(
+        `Error while rendering: Cannot specify importOverrides on a template or non-standalone component.`,
+      );
+    }
+  }
 
   renderOptions.configureTestBed?.(TestBed);
   await TestBed.compileComponents();
