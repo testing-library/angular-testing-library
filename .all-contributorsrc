@@ -493,6 +493,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rpd10",
+      "name": "Ryan Diehl",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27014655?v=4",
+      "profile": "https://github.com/rpd10",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
