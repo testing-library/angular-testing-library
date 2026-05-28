@@ -272,7 +272,11 @@ function setWrapperProperties<SutType>(
   return fixture;
 }
 
-@Component({ selector: 'atl-wrapper-component', template: '', standalone: false })
+@Component({
+  selector: 'atl-wrapper-component',
+  template: '',
+  standalone: false,
+})
 class WrapperComponent {}
 
 export * from '@testing-library/dom';

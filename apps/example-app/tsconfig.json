@@ -5,8 +5,8 @@
   "compilerOptions": {
     "target": "es2020",
     "paths": {
-      "@testing-library/angular": ["projects/testing-library"],
-      "@testing-library/angular/vitest-utils": ["projects/testing-library/vitest-utils"]
+      "@testing-library/angular": ["./../../projects/testing-library"],
+      "@testing-library/angular/vitest-utils": ["./../../projects/testing-library/vitest-utils"]
     }
   },
   "angularCompilerOptions": {

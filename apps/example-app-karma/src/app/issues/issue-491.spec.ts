@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -35,6 +35,7 @@ it('test click event with router.navigate', async () => {
 });
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h1>Login</h1>
     <button type="submit" (click)="onSubmit()">submit</button>
@@ -50,6 +51,7 @@ class LoginComponent {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <h1>Logged In</h1> `,
 })
 class LoggedInComponent {}

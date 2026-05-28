@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { timer } from 'rxjs';
 import { test } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '../public_api';
@@ -7,14 +7,14 @@ import { render, screen, waitFor, fireEvent } from '../public_api';
   selector: 'atl-fixture',
   template: `
     <button data-testid="button" (click)="load()">Load</button>
-    <div>{{ result }}</div>
+    <div>{{ result() }}</div>
   `,
 })
 class FixtureComponent {
-  result = '';
+  result = signal<string>('');
 
   load() {
-    timer(500).subscribe(() => (this.result = 'Success'));
+    timer(500).subscribe(() => this.result.set('Success'));
   }
 }
 
