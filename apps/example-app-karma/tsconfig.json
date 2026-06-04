@@ -5,7 +5,7 @@
   "compilerOptions": {
     "target": "es2020",
     "paths": {
-      "@testing-library/angular": ["projects/testing-library"]
+      "@testing-library/angular": ["./../../projects/testing-library"]
     }
   },
   "angularCompilerOptions": {
