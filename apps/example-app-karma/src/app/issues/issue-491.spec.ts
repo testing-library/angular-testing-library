@@ -35,6 +35,7 @@ it('test click event with router.navigate', async () => {
 });
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h1>Login</h1>
@@ -51,6 +52,7 @@ class LoginComponent {
 }
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <h1>Logged In</h1> `,
 })
