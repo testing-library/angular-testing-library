@@ -4,7 +4,7 @@
   "cli": {
     "analytics": false,
     "cache": {
-      "enabled": true,
+      "enabled": false,
       "path": "./.cache/angular",
       "environment": "all"
     }
@@ -32,9 +32,17 @@
           },
           "defaultConfiguration": "production"
         },
+        "test-build-zoneless": {
+          "builder": "@angular/build:application",
+          "options": {
+            "polyfills": [],
+            "tsConfig": "projects/testing-library/tsconfig.spec.json"
+          }
+        },
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
+            "buildTarget": "testing-library:test-build-zoneless",
             "setupFiles": ["projects/testing-library/test-setup.ts"]
           }
         },
