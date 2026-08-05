@@ -2,6 +2,7 @@ import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/te
 import * as path from 'path';
 import { EmptyTree } from '@angular-devkit/schematics';
 import { test, expect } from 'vitest';
+import addDtlAsDevDependency from './index';
 
 test('adds DTL to devDependencies', async () => {
   const tree = await setup({});
@@ -37,7 +38,11 @@ async function setup(packageJson: object) {
   const tree = new UnitTestTree(new EmptyTree());
   tree.create('package.json', JSON.stringify(packageJson));
 
-  await schematicRunner.runSchematic(`atl-add-dtl-as-dev-dependency`, {}, tree);
+  // Call the rule directly instead of resolving it through the collection,
+  // as the collection's factory only exists in compiled output.
+  await new Promise((resolve, reject) => {
+    schematicRunner.callRule(addDtlAsDevDependency(), tree).subscribe({ complete: () => resolve(tree), error: reject });
+  });
 
   return tree;
 }

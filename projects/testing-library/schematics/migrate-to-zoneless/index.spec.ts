@@ -2,6 +2,7 @@ import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/te
 import * as path from 'path';
 import { EmptyTree } from '@angular-devkit/schematics';
 import { test, expect } from 'vitest';
+import migrateToZoneless from './index';
 
 test('migrates imports from @testing-library/angular to @testing-library/angular/zoneless', async () => {
   const before = `
@@ -115,7 +116,7 @@ test('migrates multiple files', async () => {
 });
 
 async function setup(files: Record<string, string>) {
-  const collectionPath = path.join(__dirname, '../../../../dist/@testing-library/angular/schematics/collection.json');
+  const collectionPath = path.join(__dirname, '../collection.json');
   const schematicRunner = new SchematicTestRunner('schematics', collectionPath);
 
   const tree = new UnitTestTree(new EmptyTree());
@@ -124,7 +125,11 @@ async function setup(files: Record<string, string>) {
     tree.create(filePath, content);
   }
 
-  await schematicRunner.runSchematic('migrate-to-zoneless', {}, tree);
+  // Call the rule directly instead of resolving it through the collection,
+  // as the collection's factory only exists in compiled output.
+  await new Promise((resolve, reject) => {
+    schematicRunner.callRule(migrateToZoneless(), tree).subscribe({ complete: () => resolve(tree), error: reject });
+  });
 
   return tree;
 }

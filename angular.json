@@ -43,7 +43,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "buildTarget": "testing-library:test-build-zoneless",
-            "setupFiles": ["projects/testing-library/test-setup.ts"]
+            "setupFiles": ["projects/testing-library/test-setup.ts"],
+            "include": ["**/*.spec.ts", "../zoneless/**/*.spec.ts", "../schematics/**/*.spec.ts"]
           }
         },
         "lint": {

@@ -1,7 +1,7 @@
 import { Component, inject, Injectable, model, output, outputBinding, signal, twoWayBinding } from '@angular/core';
 import { test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '../../zoneless';
+import { render, screen } from '../index';
 
 @Injectable()
 class CounterService {
