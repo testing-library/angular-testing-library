@@ -1,7 +1,7 @@
 import { Component, inject, Injectable, model, output, outputBinding, signal, twoWayBinding } from '@angular/core';
 import { test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '../index';
+import { render, screen, queries, queryHelpers } from '../index';
 
 @Injectable()
 class CounterService {
@@ -249,4 +249,25 @@ test('can provide custom service providers', async () => {
 
   await user.click(decrementControl);
   expect(counterControl).toHaveTextContent('1');
+});
+
+@Component({
+  selector: 'atl-custom-query-fixture',
+  template: `<div data-test-id="my-fixture">Hello world</div>`,
+})
+class CustomQueryFixtureComponent {}
+
+test('custom queries passed to render are available on the render result', async () => {
+  const myQueryByTestId = queryHelpers.queryByAttribute.bind(null, 'data-test-id');
+
+  const view = await render(CustomQueryFixtureComponent, {
+    queries: {
+      ...queries,
+      myQueryByTestId,
+    },
+  });
+
+  expect(view.myQueryByTestId('my-fixture')).not.toBeNull();
+  // eslint-disable-next-line testing-library/prefer-screen-queries
+  expect(view.myQueryByTestId('my-fixture')).toBe(view.getByText('Hello world'));
 });

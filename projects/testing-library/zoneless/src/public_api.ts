@@ -18,7 +18,13 @@ import {
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = BoundFunctions<Q>;
 
-export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
+export type RenderResult<
+  ComponentType,
+  WrapperType = ComponentType,
+  Q extends Queries = typeof queries,
+> = RenderResultQueries<Q> & BaseRenderResult<ComponentType, WrapperType>;
+
+interface BaseRenderResult<ComponentType, WrapperType = ComponentType> {
   /**
    * @description
    * The containing DOM node of your rendered Angular Component.
@@ -206,28 +212,28 @@ export interface RenderTemplateOptions<WrapperType, Properties extends object = 
   imports?: any[];
 }
 
-export async function render<ComponentType>(
+export async function render<ComponentType, Q extends Queries = typeof queries>(
   component: Type<ComponentType>,
-  renderOptions?: RenderComponentOptions,
-): Promise<RenderResult<ComponentType, ComponentType>>;
-export async function render<WrapperType = WrapperComponent>(
+  renderOptions?: RenderComponentOptions<Q>,
+): Promise<RenderResult<ComponentType, ComponentType, Q>>;
+export async function render<WrapperType = WrapperComponent, Q extends Queries = typeof queries>(
   template: string,
-  renderOptions?: RenderTemplateOptions<WrapperType>,
-): Promise<RenderResult<WrapperType>>;
-export async function render<ComponentType, WrapperType = ComponentType>(
+  renderOptions?: RenderTemplateOptions<WrapperType, object, Q>,
+): Promise<RenderResult<WrapperType, WrapperType, Q>>;
+export async function render<ComponentType, WrapperType = ComponentType, Q extends Queries = typeof queries>(
   componentOrTemplate: Type<ComponentType> | string,
-  renderOptions: RenderComponentOptions | RenderTemplateOptions<WrapperType> = {},
-): Promise<RenderResult<ComponentType, ComponentType | WrapperType>> {
+  renderOptions: RenderComponentOptions<Q> | RenderTemplateOptions<WrapperType, object, Q> = {},
+): Promise<RenderResult<ComponentType, ComponentType | WrapperType, Q>> {
   TestBed.configureTestingModule({
     declarations: [WrapperComponent],
     imports: 'imports' in renderOptions ? renderOptions.imports : [],
     providers: renderOptions.providers ?? [],
   });
 
-  if ('importOverrides' in renderOptions && (renderOptions as RenderComponentOptions).importOverrides?.length) {
+  if ('importOverrides' in renderOptions && (renderOptions as RenderComponentOptions<Q>).importOverrides?.length) {
     const sut = componentOrTemplate as Type<unknown>;
     if (typeof sut === 'function' && isStandalone(sut)) {
-      const overrides = (renderOptions as RenderComponentOptions).importOverrides!;
+      const overrides = (renderOptions as RenderComponentOptions<Q>).importOverrides!;
       TestBed.overrideComponent(sut, {
         remove: { imports: overrides.map((o) => o.replace) },
         add: { imports: overrides.map((o) => o.with) },
@@ -267,8 +273,8 @@ export async function render<ComponentType, WrapperType = ComponentType>(
         console.log(prettyDOM(element, maxLength, options));
       }
     },
-    ...getQueriesForElement(fixture.nativeElement, renderOptions?.queries),
-  };
+    ...getQueriesForElement<Q>(fixture.nativeElement, renderOptions?.queries),
+  } as RenderResult<ComponentType, ComponentType | WrapperType, Q>;
 }
 
 async function createComponentFixture<SutType>(
