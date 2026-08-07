@@ -30,7 +30,13 @@ export type OutputRefKeysWithCallback<T> = {
 };
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = BoundFunctions<Q>;
-export interface RenderResult<ComponentType, WrapperType = ComponentType> extends RenderResultQueries {
+export type RenderResult<
+  ComponentType,
+  WrapperType = ComponentType,
+  Q extends Queries = typeof queries,
+> = RenderResultQueries<Q> & BaseRenderResult<ComponentType, WrapperType>;
+
+interface BaseRenderResult<ComponentType, WrapperType = ComponentType> {
   /**
    * @description
    * The containing DOM node of your rendered Angular Component.

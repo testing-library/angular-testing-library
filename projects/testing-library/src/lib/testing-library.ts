@@ -44,19 +44,19 @@ type SubscribedOutput<T> = readonly [key: keyof T, callback: (v: any) => void, s
 
 const mountedFixtures = new Set<ComponentFixture<any>>();
 
-export async function render<ComponentType>(
+export async function render<ComponentType, Q extends Queries = typeof dtlQueries>(
   component: Type<ComponentType>,
-  renderOptions?: RenderComponentOptions<ComponentType>,
-): Promise<RenderResult<ComponentType, ComponentType>>;
-export async function render<WrapperType = WrapperComponent>(
+  renderOptions?: RenderComponentOptions<ComponentType, Q>,
+): Promise<RenderResult<ComponentType, ComponentType, Q>>;
+export async function render<WrapperType = WrapperComponent, Q extends Queries = typeof dtlQueries>(
   template: string,
-  renderOptions?: RenderTemplateOptions<WrapperType>,
-): Promise<RenderResult<WrapperType>>;
+  renderOptions?: RenderTemplateOptions<WrapperType, object, Q>,
+): Promise<RenderResult<WrapperType, WrapperType, Q>>;
 
-export async function render<SutType, WrapperType = SutType>(
+export async function render<SutType, WrapperType = SutType, Q extends Queries = typeof dtlQueries>(
   sut: Type<SutType> | string,
-  renderOptions: RenderComponentOptions<SutType> | RenderTemplateOptions<WrapperType> = {},
-): Promise<RenderResult<SutType>> {
+  renderOptions: RenderComponentOptions<SutType, Q> | RenderTemplateOptions<WrapperType, object, Q> = {},
+): Promise<RenderResult<SutType, SutType, Q>> {
   const { dom: domConfig, ...globalConfig } = getConfig();
   const {
     detectChangesOnRender = true,
@@ -87,8 +87,8 @@ export async function render<SutType, WrapperType = SutType>(
     configureTestBed = () => {
       /* noop*/
     },
-  } = { ...globalConfig, ...renderOptions } as RenderComponentOptions<SutType> &
-    RenderTemplateOptions<WrapperType> &
+  } = { ...globalConfig, ...renderOptions } as RenderComponentOptions<SutType, Q> &
+    RenderTemplateOptions<WrapperType, object, Q> &
     Config;
 
   dtlConfigure({
@@ -362,8 +362,8 @@ export async function render<SutType, WrapperType = SutType>(
         console.log(dtlPrettyDOM(element, maxLength, options));
       }
     },
-    ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement(fixture.nativeElement, queries)),
-  };
+    ...replaceFindWithFindAndDetectChanges(dtlGetQueriesForElement<Q>(fixture.nativeElement, queries)),
+  } as RenderResult<SutType, SutType, Q>;
 }
 
 async function createComponent<SutType>(
