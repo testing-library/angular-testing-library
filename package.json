@@ -27,7 +27,6 @@
     "@angular/core": "22.0.2",
     "@angular/material": "22.0.0",
     "@angular/platform-browser": "22.0.2",
-    "@angular/platform-browser-dynamic": "22.0.2",
     "@angular/router": "22.0.2",
     "@ngrx/store": "21.1.0",
     "@testing-library/dom": "^10.4.1",
