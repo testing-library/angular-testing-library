@@ -1,6 +1,6 @@
 import { provideZoneChangeDetection } from '@angular/core';
+import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -12,7 +12,7 @@ test('dialog closes', async () => {
   const closeFn = jest.fn();
   await render(DialogContentComponent, {
     providers: [
-      provideNoopAnimations(),
+      { provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } },
       {
         provide: MatDialogRef,
         useValue: {
@@ -33,7 +33,7 @@ test('closes the dialog via the backdrop', async () => {
   const user = userEvent.setup();
 
   await render(DialogComponent, {
-    providers: [provideNoopAnimations()],
+    providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });
@@ -57,7 +57,7 @@ test('opens and closes the dialog with buttons', async () => {
   const user = userEvent.setup();
 
   await render(DialogComponent, {
-    providers: [provideNoopAnimations(), provideZoneChangeDetection()],
+    providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }, provideZoneChangeDetection()],
   });
 
   const openDialogButton = await screen.findByRole('button', { name: /open dialog/i });

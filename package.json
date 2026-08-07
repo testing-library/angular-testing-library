@@ -27,7 +27,6 @@
     "@angular/core": "22.0.2",
     "@angular/material": "22.0.0",
     "@angular/platform-browser": "22.0.2",
-    "@angular/platform-browser-dynamic": "22.0.2",
     "@angular/router": "22.0.2",
     "@ngrx/store": "21.1.0",
     "@testing-library/dom": "^10.4.1",
@@ -36,7 +35,7 @@
     "zone.js": "^0.15.1"
   },
   "devDependencies": {
-    "@angular-builders/jest": "^20.0.0",
+    "@angular-builders/jest": "^22.0.1",
     "@angular-devkit/core": "22.0.0",
     "@angular-devkit/schematics": "22.0.0",
     "@angular-eslint/builder": "22.0.0",
@@ -70,7 +69,8 @@
     "jasmine-core": "4.2.0",
     "jasmine-spec-reporter": "7.0.0",
     "jest": "30.2.0",
-    "jest-preset-angular": "^16.0.0",
+    "jest-environment-jsdom": "30.2.0",
+    "jest-preset-angular": "^17.0.0",
     "jsdom": "^27.3.0",
     "karma": "6.4.0",
     "karma-chrome-launcher": "^3.2.0",
