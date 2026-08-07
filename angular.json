@@ -170,7 +170,10 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular-builders/jest:run"
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "zoneless": false
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
