@@ -20,7 +20,6 @@
     "prepare": "git config core.hookspath .githooks"
   },
   "dependencies": {
-    "@angular/animations": "22.0.2",
     "@angular/cdk": "22.0.0",
     "@angular/common": "22.0.2",
     "@angular/compiler": "22.0.2",
