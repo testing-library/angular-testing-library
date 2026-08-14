@@ -61,53 +61,17 @@
       "sourceRoot": "apps/example-app/src",
       "prefix": "app",
       "architect": {
-        "build": {
+        "test-build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": {
-              "base": "dist/apps/example-app"
-            },
-            "index": "apps/example-app/src/index.html",
-            "tsConfig": "apps/example-app/tsconfig.app.json",
-            "assets": ["apps/example-app/src/favicon.ico", "apps/example-app/src/assets"],
-            "styles": [],
-            "scripts": [],
-            "browser": "apps/example-app/src/main.ts"
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "example-app:build:production"
-            },
-            "development": {
-              "buildTarget": "example-app:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
+            "polyfills": [],
+            "tsConfig": "apps/example-app/tsconfig.spec.json"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
+            "buildTarget": "example-app:test-build",
             "setupFiles": ["apps/example-app/test-setup.ts"]
           }
         },
@@ -125,50 +89,6 @@
       "sourceRoot": "apps/example-app-jest/src",
       "prefix": "app",
       "architect": {
-        "build": {
-          "builder": "@angular/build:application",
-          "options": {
-            "outputPath": {
-              "base": "dist/apps/example-app-jest"
-            },
-            "index": "apps/example-app-jest/src/index.html",
-            "tsConfig": "apps/example-app-jest/tsconfig.app.json",
-            "assets": ["apps/example-app-jest/src/favicon.ico", "apps/example-app-jest/src/assets"],
-            "styles": [],
-            "scripts": [],
-            "browser": "apps/example-app-jest/src/main.ts"
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "example-app-jest:build:production"
-            },
-            "development": {
-              "buildTarget": "example-app-jest:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
@@ -189,50 +109,6 @@
       "sourceRoot": "apps/example-app-karma/src",
       "prefix": "app",
       "architect": {
-        "build": {
-          "builder": "@angular/build:application",
-          "options": {
-            "outputPath": {
-              "base": "dist/apps/example-app-karma"
-            },
-            "index": "apps/example-app-karma/src/index.html",
-            "tsConfig": "apps/example-app-karma/tsconfig.app.json",
-            "assets": ["apps/example-app-karma/src/favicon.ico", "apps/example-app-karma/src/assets"],
-            "styles": [],
-            "scripts": [],
-            "browser": "apps/example-app-karma/src/main.ts"
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "example-app-karma:build:production"
-            },
-            "development": {
-              "buildTarget": "example-app-karma:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
         "test": {
           "builder": "@angular/build:karma",
           "options": {

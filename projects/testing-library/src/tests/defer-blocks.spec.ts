@@ -78,9 +78,9 @@ test('renders a defer block in an initial state using the array syntax', async (
 @Component({
   template: `
     @defer {
-    <p>Defer block content</p>
+      <p>Defer block content</p>
     } @loading {
-    <p>Loading...</p>
+      <p>Loading...</p>
     }
   `,
 })
@@ -89,8 +89,8 @@ class FixtureComponent {}
 @Component({
   template: `
     <button #trigger>Click</button>
-    @defer(on interaction(trigger)) {
-    <div>empty defer block</div>
+    @defer (on interaction(trigger)) {
+      <div>empty defer block</div>
     }
   `,
 })

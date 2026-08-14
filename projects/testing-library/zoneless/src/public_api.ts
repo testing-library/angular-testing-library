@@ -90,28 +90,28 @@ export interface RenderOptions<Q extends Queries = typeof queries> {
 
   /**
    * @description
-   * Determines whether `fixture.detectChanges()` is called after the component is rendered.
+   * Determines whether the initial `fixture.detectChanges()` after the component is rendered is skipped.
    *
    * @default
-   * true
+   * false
    *
    * @example
    * await render(AppComponent, {
-   *  skipDetectChanges: false
+   *  skipDetectChanges: true
    * })
    */
   skipDetectChanges?: boolean;
 
   /**
    * @description
-   * Determines whether `fixture.whenStable()` is called after the component is rendered.
+   * Determines whether `fixture.whenStable()` is awaited after the component is rendered.
    *
    * @default
-   * true
+   * false
    *
    * @example
    * await render(AppComponent, {
-   *  waitForStableOnRender: false
+   *  waitForStableOnRender: true
    * })
    */
   waitForStableOnRender?: boolean;
@@ -170,9 +170,12 @@ export interface RenderComponentOptions<Q extends Queries = typeof queries> exte
   importOverrides?: ImportOverride[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface RenderTemplateOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
-  extends RenderOptions<Q> {
+export interface RenderTemplateOptions<
+  WrapperType,
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  Properties extends object = {},
+  Q extends Queries = typeof queries,
+> extends RenderOptions<Q> {
   /**
    * @description
    * An Angular component to wrap the component in.

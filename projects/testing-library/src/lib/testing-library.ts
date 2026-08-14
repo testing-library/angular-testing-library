@@ -143,18 +143,21 @@ export async function render<SutType, WrapperType = SutType, Q extends Queries =
     const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
     const [path, params] = (basePath + href).split('?');
     const queryParams = params
-      ? params.split('&').reduce((qp, q) => {
-          const [key, value] = q.split('=');
-          const currentValue = qp[key];
-          if (typeof currentValue === 'undefined') {
-            qp[key] = value;
-          } else if (Array.isArray(currentValue)) {
-            qp[key] = [...currentValue, value];
-          } else {
-            qp[key] = [currentValue, value];
-          }
-          return qp;
-        }, {} as Record<string, string | string[]>)
+      ? params.split('&').reduce(
+          (qp, q) => {
+            const [key, value] = q.split('=');
+            const currentValue = qp[key];
+            if (typeof currentValue === 'undefined') {
+              qp[key] = value;
+            } else if (Array.isArray(currentValue)) {
+              qp[key] = [...currentValue, value];
+            } else {
+              qp[key] = [currentValue, value];
+            }
+            return qp;
+          },
+          {} as Record<string, string | string[]>,
+        )
       : undefined;
 
     const navigateOptions: NavigationExtras | undefined = queryParams
@@ -247,7 +250,7 @@ export async function render<SutType, WrapperType = SutType, Q extends Queries =
     mountedFixtures.add(createdFixture);
 
     if (hasOnChangesHook(createdFixture.componentInstance) && Object.keys(properties).length > 0) {
-      const changes = getChangesObj(null, componentProperties);
+      const changes = getChangesObj(null, properties);
       createdFixture.componentInstance.ngOnChanges(changes);
     }
 
@@ -505,10 +508,13 @@ function hasOnChangesHook<SutType>(componentInstance: SutType): componentInstanc
 
 function getChangesObj(oldProps: Record<string, any> | null, newProps: Record<string, any>) {
   const isFirstChange = oldProps === null;
-  return Object.keys(newProps).reduce<SimpleChanges>((changes, key) => {
-    changes[key] = new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange);
-    return changes;
-  }, {} as Record<string, any>);
+  return Object.keys(newProps).reduce<SimpleChanges>(
+    (changes, key) => {
+      changes[key] = new SimpleChange(isFirstChange ? null : oldProps[key], newProps[key], isFirstChange);
+      return changes;
+    },
+    {} as Record<string, any>,
+  );
 }
 
 function update<SutType>(
@@ -690,20 +696,23 @@ class WrapperComponent {}
  * Wrap findBy queries to poke the Angular change detection cycle
  */
 function replaceFindWithFindAndDetectChanges<T extends Record<string, any>>(originalQueriesForContainer: T): T {
-  return Object.keys(originalQueriesForContainer).reduce((newQueries, key) => {
-    const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
-    if (key.startsWith('find') && getByQuery) {
-      newQueries[key] = async (...queryOptions: any[]) => {
-        const waitOptions = queryOptions.length === 3 ? queryOptions.pop() : undefined;
-        // original implementation at https://github.com/testing-library/dom-testing-library/blob/main/src/query-helpers.js
-        return await waitForWrapper(detectChangesForMountedFixtures, () => getByQuery(...queryOptions), waitOptions);
-      };
-    } else {
-      newQueries[key] = originalQueriesForContainer[key];
-    }
+  return Object.keys(originalQueriesForContainer).reduce(
+    (newQueries, key) => {
+      const getByQuery = originalQueriesForContainer[key.replace('find', 'get')];
+      if (key.startsWith('find') && getByQuery) {
+        newQueries[key] = async (...queryOptions: any[]) => {
+          const waitOptions = queryOptions.length === 3 ? queryOptions.pop() : undefined;
+          // original implementation at https://github.com/testing-library/dom-testing-library/blob/main/src/query-helpers.js
+          return await waitForWrapper(detectChangesForMountedFixtures, () => getByQuery(...queryOptions), waitOptions);
+        };
+      } else {
+        newQueries[key] = originalQueriesForContainer[key];
+      }
 
-    return newQueries;
-  }, {} as Record<string, any>) as T;
+      return newQueries;
+    },
+    {} as Record<string, any>,
+  ) as T;
 }
 
 /**
@@ -723,7 +732,8 @@ function safeDetectChanges<T>(fixture: ComponentFixture<T>) {
       fixture.detectChanges();
     }
   } catch (err: any) {
-    if (!err.message.startsWith('ViewDestroyedError') && !err.message.startsWith('NG0205')) {
+    const message = typeof err?.message === 'string' ? err.message : '';
+    if (!message.startsWith('ViewDestroyedError') && !message.startsWith('NG0205')) {
       throw err;
     }
   }

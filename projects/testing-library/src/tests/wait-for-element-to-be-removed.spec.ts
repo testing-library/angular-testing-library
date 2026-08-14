@@ -7,7 +7,7 @@ import { test, expect } from 'vitest';
   selector: 'atl-fixture',
   template: `
     @if (visible()) {
-    <div data-testid="im-here">👋</div>
+      <div data-testid="im-here">👋</div>
     }
   `,
 })
