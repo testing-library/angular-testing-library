@@ -42,6 +42,4 @@ yarn.lock
 # System Files
 .DS_Store
 Thumbs.db
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
 .history

@@ -42,8 +42,8 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      "@angular-eslint/prefer-standalone": "off",
-      "@angular-eslint/no-input-rename": "off",
+      '@angular-eslint/prefer-standalone': 'off',
+      '@angular-eslint/no-input-rename': 'off',
     },
   },
   {
@@ -54,7 +54,7 @@ export default tseslint.config(
     files: ['**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
-      "@angular-eslint/template/prefer-control-flow": "off",
+      '@angular-eslint/template/prefer-control-flow': 'off',
     },
   },
 );

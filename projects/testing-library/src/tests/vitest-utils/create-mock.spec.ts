@@ -5,7 +5,10 @@ import { fireEvent, render, screen } from '../../public_api';
 import { createMock, provideMock, provideMockWithValues } from '../../../vitest-utils';
 
 class FixtureService {
-  constructor(private foo: string, public bar: string) {}
+  constructor(
+    private foo: string,
+    public bar: string,
+  ) {}
 
   print() {
     console.log(this.foo, this.bar);

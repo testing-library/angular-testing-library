@@ -10,13 +10,13 @@ export class DeferableViewChildComponent {}
 @Component({
   template: `
     @defer (on timer(2s)) {
-        <atl-deferable-view-child />
+      <atl-deferable-view-child />
     } @placeholder {
-        <p>Hello from placeholder</p>
+      <p>Hello from placeholder</p>
     } @loading {
-        <p>Hello from loading</p>
+      <p>Hello from loading</p>
     } @error {
-        <p>Hello from error</p>
+      <p>Hello from error</p>
     }
   `,
   imports: [DeferableViewChildComponent],

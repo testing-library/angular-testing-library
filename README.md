@@ -55,6 +55,7 @@ practices.</p>
 - [Table of Contents](#table-of-contents)
 - [The problem](#the-problem)
 - [This solution](#this-solution)
+- [Zoneless support](#zoneless-support)
 - [Example](#example)
 - [Installation](#installation)
 - [Version compatibility](#version-compatibility)
@@ -91,6 +92,20 @@ primary guiding principle is:
 
 > [The more your tests resemble the way your software is used, the more
 > confidence they can give you.][guiding-principle]
+
+## Zoneless support
+
+For zoneless applications, Angular Testing Library provides a dedicated slim entry point:
+
+```ts
+import { render } from '@testing-library/angular/zoneless';
+```
+
+A schematic is available to migrate existing tests:
+
+```bash
+ng generate @testing-library/angular:migrate-to-zoneless
+```
 
 ## Example
 

@@ -37,11 +37,11 @@ it('should display invalid message and submit button must be disabled', async ()
     <form [formGroup]="form" (submit)="onSubmit(form)">
       <input type="email" aria-label="email" formControlName="email" />
       @if (email.invalid && (email.dirty || email.touched)) {
-      <div role="alert">Email is invalid</div>
+        <div role="alert">Email is invalid</div>
       }
       <input type="password" aria-label="password" formControlName="password" />
       @if (password.invalid && (password.dirty || password.touched)) {
-      <div role="alert">Password is invalid</div>
+        <div role="alert">Password is invalid</div>
       }
       <button type="submit" aria-label="submit" [disabled]="form.invalid">Submit</button>
     </form>

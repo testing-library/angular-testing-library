@@ -25,8 +25,8 @@ export type OutputRefKeysWithCallback<T> = {
   [key in keyof T]?: T[key] extends EventEmitter<infer U>
     ? (val: U) => void
     : T[key] extends OutputRef<infer U>
-    ? (val: U) => void
-    : never;
+      ? (val: U) => void
+      : never;
 };
 
 export type RenderResultQueries<Q extends Queries = typeof queries> = BoundFunctions<Q>;
@@ -113,8 +113,8 @@ export type ComponentInput<T> =
       [P in keyof T]?: T[P] extends InputSignalWithTransform<any, infer U>
         ? U
         : T[P] extends Signal<infer U>
-        ? U
-        : T[P];
+          ? U
+          : T[P];
     }
   | AliasedInputs;
 
@@ -529,9 +529,12 @@ export interface ComponentOverride<T> {
   providers: Provider[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface RenderTemplateOptions<WrapperType, Properties extends object = {}, Q extends Queries = typeof queries>
-  extends RenderComponentOptions<Properties, Q> {
+export interface RenderTemplateOptions<
+  WrapperType,
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  Properties extends object = {},
+  Q extends Queries = typeof queries,
+> extends RenderComponentOptions<Properties, Q> {
   /**
    * @description
    * An Angular component to wrap the component in.
