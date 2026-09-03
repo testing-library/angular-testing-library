@@ -3,7 +3,10 @@
   "compilerOptions": {
     "types": ["node"],
     "target": "ES2022",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "@testing-library/angular": ["./index.ts"]
+    }
   },
   "include": ["**/*.ts"]
 }
