@@ -5,6 +5,8 @@ import tseslint from 'typescript-eslint';
 import angular from 'angular-eslint';
 import jestDom from 'eslint-plugin-jest-dom';
 import testingLibrary from 'eslint-plugin-testing-library';
+import browserSecurity from 'eslint-plugin-browser-security';
+import secureCoding from 'eslint-plugin-secure-coding';
 
 export default tseslint.config(
   {
@@ -44,6 +46,21 @@ export default tseslint.config(
       ],
       '@angular-eslint/prefer-standalone': 'off',
       '@angular-eslint/no-input-rename': 'off',
+    },
+  },
+  // Security rules, CWE- and CVSS-tagged. Scoped to library source: the spec
+  // files below are fixtures, and a fixture states the insecure thing on
+  // purpose. Measured against this repository before proposing: 0 findings.
+  {
+    files: ['**/*.ts'],
+    ignores: ['**/*.spec.ts'],
+    plugins: {
+      'browser-security': browserSecurity,
+      'secure-coding': secureCoding,
+    },
+    rules: {
+      ...browserSecurity.configs.recommended.rules,
+      ...secureCoding.configs.recommended.rules,
     },
   },
   {
