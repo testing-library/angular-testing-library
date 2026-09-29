@@ -10,7 +10,7 @@ import {
   Type,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
-import { Routes } from '@angular/router';
+import { Router, Routes, UrlTree } from '@angular/router';
 import { BoundFunctions, Config as dtlConfig, PrettyDOMOptions, Queries, queries } from '@testing-library/dom';
 
 // TODO: import from Angular (is a breaking change)
@@ -80,10 +80,25 @@ interface BaseRenderResult<ComponentType, WrapperType = ComponentType> {
   fixture: ComponentFixture<WrapperType>;
   /**
    * @description
-   * Navigates to the href of the element or to the path.
+   * Navigates to the href of the element, to the path, or to the provided `UrlTree`.
    *
+   * Paths and hrefs are prefixed with `basePath` and split into a path and query parameters by a simple parser:
+   * fragments are not supported and query parameter values are not decoded.
+   *
+   * Pass a `UrlTree` (e.g. from `router.createUrlTree` or `router.parseUrl`) to navigate with Angular's own URL handling.
+   * `basePath` is not supported with a `UrlTree`.
+   *
+   * @example
+   * await navigate(screen.getByRole('link', { name: /docs/i }));
+   * await navigate('docs?lang=en');
+   *
+   * const router = TestBed.inject(Router);
+   * await navigate(router.createUrlTree(['docs'], { queryParams: { lang: 'en' }, fragment: 'getting-started' }));
    */
-  navigate: (elementOrPath: Element | string, basePath?: string) => Promise<boolean>;
+  navigate: {
+    (urlTree: UrlTree): Promise<boolean>;
+    (elementOrPath: Element | string, basePath?: string): Promise<boolean>;
+  };
   /**
    * @description
    * Re-render the same component with different properties.
@@ -463,18 +478,29 @@ export interface RenderComponentOptions<ComponentType, Q extends Queries = typeo
 
   /**
    * @description
-   * Specifies which route should be initially navigated to
+   * Specifies which route should be initially navigated to.
+   * Accepts a path, a `UrlTree`, or a function that receives Angular's `Router` and returns a `UrlTree`.
+   *
+   * A path is split into a path and query parameters by a simple parser: fragments are not supported and query parameter values are not decoded.
+   * Use a `UrlTree`, or a function returning one, to navigate with Angular's own URL handling.
    *
    * @example
    * await render(AppComponent, {
-   *  initialRoute: 'myroute',
+   *  initialRoute: 'docs',
    *  routes: [
-   *    { path: '', component: HomeComponent },
-   *    { path: 'myroute', component: SecondaryComponent }
+   *    { path: 'docs', component: DocsComponent },
+   *  ]
+   * })
+   *
+   * @example
+   * await render(AppComponent, {
+   *  initialRoute: (router) => router.createUrlTree(['docs'], { queryParams: { lang: 'en' }, fragment: 'getting-started' }),
+   *  routes: [
+   *    { path: 'docs', component: DocsComponent },
    *  ]
    * })
    */
-  initialRoute?: string;
+  initialRoute?: string | UrlTree | ((router: Router) => UrlTree);
 
   /**
    * @description
