@@ -40,3 +40,41 @@ test('should pass queryParams if provided', async () => {
     },
   });
 });
+
+test('should navigate from UrlTree', async () => {
+  const { navigate } = await render(FixtureComponent, {
+    routes: [{ path: 'docs', component: FixtureComponent }],
+  });
+
+  const router = TestBed.inject(Router);
+
+  const result = await navigate(router.createUrlTree(['docs']));
+
+  expect(result).toBe(true);
+  expect(router.url).toBe('/docs');
+});
+
+test('should use query params and fragment from UrlTree', async () => {
+  const { navigate } = await render(FixtureComponent, {
+    routes: [{ path: 'docs', component: FixtureComponent }],
+  });
+
+  const router = TestBed.inject(Router);
+
+  await navigate(router.createUrlTree(['docs'], { queryParams: { lang: 'en' }, fragment: 'getting-started' }));
+
+  expect(router.url).toBe('/docs?lang=en#getting-started');
+});
+
+test('should not accept basePath when UrlTree is provided', async () => {
+  const { navigate } = await render(FixtureComponent, {
+    routes: [{ path: 'docs', component: FixtureComponent }],
+  });
+
+  const router = TestBed.inject(Router);
+
+  // @ts-expect-error basePath is not part of the UrlTree overload
+  await navigate(router.createUrlTree(['docs']), 'base/');
+
+  expect(router.url).toBe('/docs');
+});
