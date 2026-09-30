@@ -15,7 +15,7 @@ import {
   isStandalone,
 } from '@angular/core';
 import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed, tick } from '@angular/core/testing';
-import { NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router, UrlTree } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import type { BoundFunctions, Queries } from '@testing-library/dom';
 import {
@@ -139,34 +139,38 @@ export async function render<SutType, WrapperType = SutType, Q extends Queries =
 
   const zone = TestBed.inject(NgZone);
   const router = TestBed.inject(Router);
-  const _navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
-    const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
-    const [path, params] = (basePath + href).split('?');
-    const queryParams = params
-      ? params.split('&').reduce(
-          (qp, q) => {
-            const [key, value] = q.split('=');
-            const currentValue = qp[key];
-            if (typeof currentValue === 'undefined') {
-              qp[key] = value;
-            } else if (Array.isArray(currentValue)) {
-              qp[key] = [...currentValue, value];
-            } else {
-              qp[key] = [currentValue, value];
-            }
-            return qp;
-          },
-          {} as Record<string, string | string[]>,
-        )
-      : undefined;
-
-    const navigateOptions: NavigationExtras | undefined = queryParams
-      ? {
-          queryParams,
-        }
-      : undefined;
-
+  const _navigate = async (elementOrPath: Element | string | UrlTree, basePath = ''): Promise<boolean> => {
     const doNavigate = () => {
+      if (elementOrPath instanceof UrlTree) {
+        return router?.navigateByUrl(elementOrPath);
+      }
+
+      const href = typeof elementOrPath === 'string' ? elementOrPath : elementOrPath.getAttribute('href');
+      const [path, params] = (basePath + href).split('?');
+      const queryParams = params
+        ? params.split('&').reduce(
+            (qp, q) => {
+              const [key, value] = q.split('=');
+              const currentValue = qp[key];
+              if (typeof currentValue === 'undefined') {
+                qp[key] = value;
+              } else if (Array.isArray(currentValue)) {
+                qp[key] = [...currentValue, value];
+              } else {
+                qp[key] = [currentValue, value];
+              }
+              return qp;
+            },
+            {} as Record<string, string | string[]>,
+          )
+        : undefined;
+
+      const navigateOptions: NavigationExtras | undefined = queryParams
+        ? {
+            queryParams,
+          }
+        : undefined;
+
       return navigateOptions ? router?.navigate([path], navigateOptions) : router?.navigate([path]);
     };
 
@@ -182,7 +186,7 @@ export async function render<SutType, WrapperType = SutType, Q extends Queries =
     return result ?? false;
   };
 
-  if (initialRoute) await _navigate(initialRoute);
+  if (initialRoute) await _navigate(typeof initialRoute === 'function' ? initialRoute(router) : initialRoute);
 
   if (typeof router?.initialNavigation === 'function') {
     if (zone) {
@@ -340,7 +344,7 @@ export async function render<SutType, WrapperType = SutType, Q extends Queries =
     }
   };
 
-  const navigate = async (elementOrPath: Element | string, basePath = ''): Promise<boolean> => {
+  const navigate = async (elementOrPath: Element | string | UrlTree, basePath = ''): Promise<boolean> => {
     const result = await _navigate(elementOrPath, basePath);
     detectChanges();
     return result;

@@ -20,7 +20,7 @@ import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { TestBed } from '@angular/core/testing';
 import { vi, describe, test } from 'vitest';
 import { render, fireEvent, screen, OutputRefKeysWithCallback, aliasedInput } from '../public_api';
-import { ActivatedRoute, Resolve, RouterModule } from '@angular/router';
+import { ActivatedRoute, DefaultUrlSerializer, Resolve, Router, RouterModule } from '@angular/router';
 import { fromEvent, map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
@@ -530,6 +530,44 @@ describe('initialRoute', () => {
     });
 
     expect(screen.getByText(/present/i)).toBeVisible();
+  });
+
+  @Component({
+    selector: 'atl-url-tree-fixture',
+    template: `<div data-testid="langQueryParam">{{ langQueryParam }}</div>
+      <div data-testid="fragment">{{ fragment }}</div>`,
+  })
+  class UrlTreeFixtureComponent {
+    readonly #route = inject(ActivatedRoute).snapshot;
+    readonly langQueryParam = this.#route.queryParamMap.get('lang');
+    readonly fragment = this.#route.fragment;
+  }
+
+  test('allows initial route rendering from UrlTree', async () => {
+    await render(RouterFixtureComponent, {
+      initialRoute: new DefaultUrlSerializer().parse('/docs?lang=en#getting-started'),
+      routes: [{ path: 'docs', component: UrlTreeFixtureComponent }],
+    });
+
+    const router = TestBed.inject(Router);
+
+    expect(router.url).toBe('/docs?lang=en#getting-started');
+    expect(screen.getByTestId('langQueryParam')).toHaveTextContent('en');
+    expect(screen.getByTestId('fragment')).toHaveTextContent('getting-started');
+  });
+
+  test('allows initial route rendering from UrlTree created with router', async () => {
+    await render(RouterFixtureComponent, {
+      initialRoute: (router) =>
+        router.createUrlTree(['docs'], { queryParams: { lang: 'en' }, fragment: 'getting-started' }),
+      routes: [{ path: 'docs', component: UrlTreeFixtureComponent }],
+    });
+
+    const router = TestBed.inject(Router);
+
+    expect(router.url).toBe('/docs?lang=en#getting-started');
+    expect(screen.getByTestId('langQueryParam')).toHaveTextContent('en');
+    expect(screen.getByTestId('fragment')).toHaveTextContent('getting-started');
   });
 });
 
